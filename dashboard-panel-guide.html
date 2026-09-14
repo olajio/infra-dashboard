@@ -1,0 +1,534 @@
+<title>Ops Dashboard Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#eef1f4;
+  --paper:#ffffff;
+  --panel:#f7f9fb;
+  --ink:#141a21;
+  --ink-2:#3d4854;
+  --ink-3:#6b7887;
+  --rule:#d5dce3;
+  --rule-soft:#e4eaf0;
+  --accent:#1f5573;
+  --accent-ink:#1f5573;
+  --accent-wash:#e2edf4;
+  --green:#1a7050;
+  --green-wash:#dff0e7;
+  --amber:#96650a;
+  --amber-wash:#fbeed3;
+  --red:#a8342a;
+  --red-wash:#f8e1de;
+  --code-bg:#f2f5f8;
+  --shadow:0 1px 2px rgba(20,26,33,.06), 0 8px 24px -16px rgba(20,26,33,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0f1419;
+    --paper:#161d24;
+    --panel:#1b232b;
+    --ink:#e7edf3;
+    --ink-2:#b3c0cc;
+    --ink-3:#8496a6;
+    --rule:#2b3742;
+    --rule-soft:#232e38;
+    --accent:#6fb4d8;
+    --accent-ink:#8cc6e6;
+    --accent-wash:#16303f;
+    --green:#5cc79a;
+    --green-wash:#12332a;
+    --amber:#e0ad4e;
+    --amber-wash:#372a12;
+    --red:#ea8479;
+    --red-wash:#3b1d1a;
+    --code-bg:#101820;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0f1419;
+  --paper:#161d24;
+  --panel:#1b232b;
+  --ink:#e7edf3;
+  --ink-2:#b3c0cc;
+  --ink-3:#8496a6;
+  --rule:#2b3742;
+  --rule-soft:#232e38;
+  --accent:#6fb4d8;
+  --accent-ink:#8cc6e6;
+  --accent-wash:#16303f;
+  --green:#5cc79a;
+  --green-wash:#12332a;
+  --amber:#e0ad4e;
+  --amber-wash:#372a12;
+  --red:#ea8479;
+  --red-wash:#3b1d1a;
+  --code-bg:#101820;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  font-size:16px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1020px;margin:0 auto;padding-inline:20px;padding-block:0 72px}
+
+/* ---------- masthead ---------- */
+.masthead{
+  border-bottom:2px solid var(--ink);
+  padding-block:44px 20px;
+  margin-bottom:34px;
+}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent-ink);
+}
+h1{
+  font-size:clamp(2rem,5.2vw,3rem); line-height:1.08; font-weight:700;
+  letter-spacing:-.022em; margin:.32em 0 .3em; text-wrap:balance;
+}
+.standfirst{font-size:1.09rem;color:var(--ink-2);max-width:62ch;margin:0}
+.meta{
+  display:flex;flex-wrap:wrap;gap:0 26px;
+  margin-top:24px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;
+  color:var(--ink-3);
+}
+.meta b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* ---------- generic section ---------- */
+section{margin-block:52px}
+h2{
+  font-size:1.44rem;font-weight:600;letter-spacing:-.014em;margin:0 0 6px;
+  text-wrap:balance;
+}
+.sec-note{color:var(--ink-3);margin:0 0 24px;max-width:66ch;font-size:.95rem}
+h3{font-size:1.06rem;font-weight:600;margin:0}
+p{max-width:70ch}
+
+/* ---------- traceability board ---------- */
+.board{display:grid;gap:10px}
+.trace{
+  display:grid;grid-template-columns:auto 1fr auto;gap:8px 18px;align-items:start;
+  background:var(--paper);border:1px solid var(--rule-soft);border-left:3px solid var(--accent);
+  padding:15px 18px;
+}
+.trace .n{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;font-weight:600;
+  color:var(--ink-3);padding-top:3px;font-variant-numeric:tabular-nums;
+}
+.trace .ask{font-weight:600;margin:0 0 2px;max-width:none}
+.trace .got{color:var(--ink-2);font-size:.93rem;margin:0;max-width:none}
+.trace .got code{white-space:nowrap}
+.chip{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  padding:3px 9px;border-radius:2px;white-space:nowrap;
+}
+.chip.done{background:var(--green-wash);color:var(--green)}
+.chip.part{background:var(--amber-wash);color:var(--amber)}
+.chip.open{background:var(--red-wash);color:var(--red)}
+
+/* ---------- rag callout ---------- */
+.rag{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-block:22px;
+}
+.rag > div{background:var(--paper);padding:16px 18px}
+.rag .lbl{font-weight:600;font-size:1rem;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.rag .cond{font-size:.88rem;color:var(--ink-2);margin:0;max-width:none}
+.dot{width:11px;height:11px;border-radius:50%;flex:none}
+.dot.g{background:var(--green)} .dot.a{background:var(--amber)} .dot.r{background:var(--red)}
+
+/* ---------- panel entries ---------- */
+.entry{
+  display:grid;grid-template-columns:62px 1fr;gap:0 20px;
+  padding-block:22px;border-top:1px solid var(--rule-soft);
+}
+.entry:first-of-type{border-top:1px solid var(--rule)}
+.addr{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:1.02rem;font-weight:600;
+  color:var(--accent-ink);padding-top:1px;font-variant-numeric:tabular-nums;
+}
+.entry-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-bottom:3px}
+.tag{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.04em;
+  color:var(--ink-3);border:1px solid var(--rule);padding:1px 7px;border-radius:2px;
+}
+.answers{color:var(--ink-2);font-style:italic;margin:0 0 10px;max-width:68ch}
+.entry p{margin:0 0 10px}
+.entry p:last-child{margin-bottom:0}
+.entry ul{margin:0 0 10px;padding-left:1.15em;max-width:68ch}
+.entry li{margin-bottom:3px}
+
+/* ---------- data bits ---------- */
+code{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.86em;
+  background:var(--code-bg);padding:1px 5px;border-radius:2px;color:var(--ink);
+}
+pre{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px;line-height:1.55;
+  background:var(--code-bg);border:1px solid var(--rule-soft);border-left:3px solid var(--accent);
+  padding:14px 16px;overflow-x:auto;margin:0 0 12px;color:var(--ink);
+}
+pre code{background:none;padding:0;font-size:inherit}
+.tbl-wrap{overflow-x:auto;margin:0 0 12px}
+table{border-collapse:collapse;width:100%;min-width:420px;font-size:.9rem}
+th,td{text-align:left;padding:7px 14px 7px 0;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+th{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1px solid var(--rule);
+}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- note block ---------- */
+.note{
+  background:var(--panel);border:1px solid var(--rule-soft);padding:18px 20px;
+  margin-block:18px;
+}
+.note.warn{border-left:3px solid var(--amber)}
+.note.info{border-left:3px solid var(--accent)}
+.note h3{margin-bottom:6px}
+.note p:last-child,.note ul:last-child{margin-bottom:0}
+.note ul{padding-left:1.15em;margin:0 0 10px}
+
+.kicker{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);
+  margin:34px 0 14px;padding-bottom:6px;border-bottom:1px solid var(--rule);
+}
+footer{
+  margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);
+  font-size:.88rem;color:var(--ink-3);
+}
+footer code{font-size:.85em}
+
+@media (max-width:640px){
+  .entry{grid-template-columns:1fr;gap:6px}
+  .addr{padding-top:0}
+  .rag{grid-template-columns:1fr}
+  .trace{grid-template-columns:auto 1fr;gap:6px 14px}
+  .trace .chip{grid-column:2}
+}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <div class="eyebrow">Operations Dashboard &middot; Consolidated Alert, Infra &amp; Platform Health</div>
+  <h1>Ops Dashboard Field Guide</h1>
+  <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
+  <div class="meta">
+    <span>Panels <b>34</b></span>
+    <span>Time range <b>now-24h</b></span>
+    <span>Refresh <b>60s</b></span>
+    <span>Saved objects <b>2</b></span>
+    <span>Dashboard id <b>ops-dashboard-consolidated-v1</b></span>
+  </div>
+</header>
+
+<section>
+  <h2>Team feedback &rarr; what shipped</h2>
+  <p class="sec-note">All six items from <em>Add Overall Infrastructure Health Status</em> are on the dashboard. Two are built from CMDB enrichment rather than from the incident records &mdash; the reason is in <a href="#gap">the open item</a> at the end.</p>
+
+  <div class="board">
+    <div class="trace">
+      <div class="n">01</div>
+      <div>
+        <p class="ask">Overall Infra Health as Green / Amber / Red, derived from availability <em>and</em> active critical issues</p>
+        <p class="got">Panel 2.1 &mdash; one ES|QL query spanning <code>metrics-*</code> and <code>servicenow-open-incidents-snapshots-*</code>, so both inputs are evaluated together.</p>
+      </div>
+      <span class="chip done">Shipped</span>
+    </div>
+    <div class="trace">
+      <div class="n">02</div>
+      <div>
+        <p class="ask">Active P1 count and Active P2 count</p>
+        <p class="got">Panels 2.3 and 2.4 &mdash; distinct open incident numbers, so repeated snapshots don&rsquo;t inflate the figure.</p>
+      </div>
+      <span class="chip done">Shipped</span>
+    </div>
+    <div class="trace">
+      <div class="n">03</div>
+      <div>
+        <p class="ask">Impacted domain (Windows, Linux, Network, Database, Middleware, Storage&hellip;) for active incidents</p>
+        <p class="got">Panel 2.6 &mdash; domains resolved from the CMDB support group and CI class on the telemetry, not from the incident record.</p>
+      </div>
+      <span class="chip part">CMDB-derived</span>
+    </div>
+    <div class="trace">
+      <div class="n">04</div>
+      <div>
+        <p class="ask">Impacted applications: how many, plus an application health indicator</p>
+        <p class="got">Panels 2.5 and 2.7 &mdash; applications resolved from <code>ci.short_description</code>, with per-application RED / AMBER health.</p>
+      </div>
+      <span class="chip part">CMDB-derived</span>
+    </div>
+    <div class="trace">
+      <div class="n">05</div>
+      <div>
+        <p class="ask">Overall Infra Availability % KPI (e.g. 99.5%)</p>
+        <p class="got">Panel 2.2 &mdash; monitored servers still shipping telemetry, shown to two decimals.</p>
+      </div>
+      <span class="chip done">Shipped</span>
+    </div>
+    <div class="trace">
+      <div class="n">06</div>
+      <div>
+        <p class="ask">&ldquo;Predictive Insights&rdquo; placeholder tile, Coming Soon / In Progress</p>
+        <p class="got">Panel 2.8 &mdash; reserves the slot and names the four capabilities plus the next concrete step.</p>
+      </div>
+      <span class="chip done">Shipped</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>How the dashboard is now laid out</h2>
+  <p class="sec-note">One new <strong>Executive Summary</strong> block sits directly under the banner; everything the NOC already used is unchanged below a second <strong>Operational Detail</strong> banner. Leadership gets an answer in the first screen without scrolling into SRE territory.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Band</th><th>Contents</th><th>Audience</th></tr></thead>
+      <tbody>
+        <tr><td class="num">Row 1</td><td>Overall Infra Health &middot; Availability % &middot; Active P1 &middot; Active P2 &middot; Impacted Applications</td><td>Leadership</td></tr>
+        <tr><td class="num">Row 2</td><td>Impacted Domain table &middot; Impacted Applications table &middot; Predictive Insights</td><td>Leadership / duty manager</td></tr>
+        <tr><td class="num">Rows 3&ndash;10</td><td>Agent health, coverage gap, telemetry freshness, alert pipeline, disk, network, ingest</td><td>NOC / SRE</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:28px">The RAG rule, in full</h3>
+  <p style="margin-top:6px">Evaluated top&ndash;down inside the panel&rsquo;s ES|QL, so RED always wins over AMBER.</p>
+  <div class="rag">
+    <div>
+      <p class="lbl"><span class="dot r"></span>RED</p>
+      <p class="cond">Any active <strong>P1</strong>, <em>or</em> availability below <strong>98%</strong>.</p>
+    </div>
+    <div>
+      <p class="lbl"><span class="dot a"></span>AMBER</p>
+      <p class="cond">Any active <strong>P2</strong>, <em>or</em> availability below <strong>99.5%</strong>.</p>
+    </div>
+    <div>
+      <p class="lbl"><span class="dot g"></span>GREEN</p>
+      <p class="cond">No P1, no P2, availability <strong>99.5%</strong> or better.</p>
+    </div>
+  </div>
+  <p>Re-tuning is a one-line edit: open the panel, <strong>Edit ES|QL</strong>, change <code>98.0</code> or <code>99.5</code> in the <code>EVAL infra_health</code> block. No other panel depends on those numbers.</p>
+</section>
+
+<section>
+  <h2>Executive Summary panels</h2>
+  <p class="sec-note">Panel numbers below match the reading order on the dashboard, left to right and top to bottom.</p>
+
+  <div class="entry">
+    <div class="addr">2.1</div>
+    <div>
+      <div class="entry-head"><h3>Overall Infrastructure Health</h3>
+        <span class="tag">data table</span><span class="tag">metrics-* + servicenow snapshots</span></div>
+      <p class="answers">Is infrastructure healthy right now &mdash; one answer, one colour.</p>
+      <p>A single ES|QL statement reads both indices at once, using <code>METADATA _index</code> to tell the two document sources apart. That is what lets availability and incident load be scored together rather than in two panels the reader has to combine mentally.</p>
+      <pre><code>| EVAL infra_health = CASE(
+      p1 &gt; 0 OR availability_pct &lt; 98.0,  "RED",
+      p2 &gt; 0 OR availability_pct &lt; 99.5,  "AMBER",
+      "GREEN")</code></pre>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Column</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Infra Health</strong></td><td>RED / AMBER / GREEN with its status dot</td></tr>
+          <tr><td>Availability %</td><td>Servers reporting in the last 15 min &divide; all monitored servers</td></tr>
+          <tr><td>Servers down</td><td>Servers with no telemetry for 15 min</td></tr>
+          <tr><td>Active P1 / P2</td><td>Distinct open ServiceNow incident numbers</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">2.2</div>
+    <div>
+      <div class="entry-head"><h3>Infrastructure Availability %</h3>
+        <span class="tag">metric</span><span class="tag">metrics-*</span></div>
+      <p class="answers">What percentage of the estate is alive?</p>
+      <p>Denominator: distinct <code>host.name</code> seen anywhere in the dashboard time window. Numerator: distinct <code>host.name</code> with a document in the <strong>last 15 minutes</strong>. Shown to two decimals, matching the <code>99.5%</code> example in the feedback.</p>
+      <p><strong>Worth saying out loud when presenting:</strong> &ldquo;up&rdquo; means <em>still shipping metricbeat data</em>. A box that is powered on but whose agent has died counts as down &mdash; deliberately, because that is a real monitoring outage.</p>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">2.3<br>2.4</div>
+    <div>
+      <div class="entry-head"><h3>Active P1 &amp; Active P2 Incidents</h3>
+        <span class="tag">metric &times; 2</span><span class="tag">servicenow-open-incidents-snapshots-*</span></div>
+      <p class="answers">How much critical work is open right now?</p>
+      <p>Each tile counts <code>COUNT_DISTINCT(number)</code> filtered on <code>priority == 1</code> or <code>priority == 2</code>. Counting distinct <em>incident numbers</em> rather than documents matters here: the index stores repeated snapshots of the same open incident, and counting rows would multiply every long-running P1.</p>
+      <p>These two replace the old <em>Active Critical Alerts (P1)</em> tile, which has been removed so the same figure never appears twice on the page.</p>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">2.5</div>
+    <div>
+      <div class="entry-head"><h3>Impacted Applications</h3>
+        <span class="tag">metric</span><span class="tag">metrics-*</span></div>
+      <p class="answers">How many business systems have something dark behind them?</p>
+      <p>Counts distinct applications with <strong>at least one CI not reporting</strong> for over 15 minutes. The application name comes from <code>ci.short_description</code>, the ServiceNow CI short description carried on every metric document by the CMDB enrichment &mdash; values such as <em>ImageRight</em>, <em>FileNet Server</em>, <em>Exchange</em>, <em>Citrix XenApp Servers</em>, <em>CNA Canada Insurance System DB Server</em>.</p>
+      <p>Two filters keep it honest: only monitored, Operational CIs are considered, and descriptions beginning <code>Linux&nbsp;</code> are dropped &mdash; on Linux CIs that field usually holds raw <code>uname</code> output rather than an application name.</p>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">2.6</div>
+    <div>
+      <div class="entry-head"><h3>Impacted Domain &mdash; Infrastructure Health by Domain</h3>
+        <span class="tag">data table</span><span class="tag">metrics-*</span></div>
+      <p class="answers">Which technology domain is hurting?</p>
+      <p>Columns: <strong>Domain &middot; Impacted CIs &middot; Total CIs &middot; Availability % &middot; Health</strong>, sorted worst-first and using the same RAG wording as the executive tile. Each CI is bucketed once, first match wins:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Domain</th><th>Derived from</th></tr></thead>
+        <tbody>
+          <tr><td>Database</td><td><code>ci.support_group.l2.name</code> starts with <code>IT.I.Exadata</code></td></tr>
+          <tr><td>Network / Boundary</td><td>starts with <code>IT.Sec.Boundary</code></td></tr>
+          <tr><td>Security / SIEM</td><td>starts with <code>IT.Sec.SIEM</code></td></tr>
+          <tr><td>Security / IAM</td><td>starts with <code>IT.Sec</code> (remaining security groups)</td></tr>
+          <tr><td>Cloud / GCP</td><td>starts with <code>IT.I.GCP</code></td></tr>
+          <tr><td>Windows</td><td><code>ci.class_name == "Windows Server"</code></td></tr>
+          <tr><td>Linux / UNIX</td><td><code>ci.class_name == "Linux Server"</code></td></tr>
+          <tr><td>Other / Unclassified</td><td>everything else</td></tr>
+        </tbody>
+      </table></div>
+      <p>Adding <em>Middleware</em> or <em>Storage</em> later is one more line at the top of the <code>CASE</code> block &mdash; a support-group prefix and the label to show.</p>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">2.7</div>
+    <div>
+      <div class="entry-head"><h3>Impacted Applications &mdash; Business Impact</h3>
+        <span class="tag">data table</span><span class="tag">metrics-*</span></div>
+      <p class="answers">Which applications, in which environment, and how badly?</p>
+      <p>The drill-down behind tile 2.5. One row per <strong>application &times; environment</strong>, only where something is down, sorted by CIs down, top 50.</p>
+      <ul>
+        <li><strong>Env</strong> separates a <em>prod</em> outage from <em>drt / cut / dev / sandbox</em> noise at a glance.</li>
+        <li><strong>App health</strong> is RED when every CI mapped to that application is down, AMBER when only some are &mdash; redundancy is still carrying it.</li>
+      </ul>
+      <p><strong>An empty table is the good state.</strong> It means no application currently has a silent CI.</p>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">2.8</div>
+    <div>
+      <div class="entry-head"><h3>Predictive Insights</h3>
+        <span class="tag">markdown tile</span><span class="tag">placeholder</span></div>
+      <p class="answers">Reserved for proactive monitoring &mdash; Coming Soon / In Progress.</p>
+      <p>Names the four intended capabilities so the slot reads as planned work rather than a blank: alert-storm forecasting, disk-full / capacity prediction, incident-volume forecasting, and anomaly-based early warning.</p>
+      <p>It also records the next concrete step, which keeps the conversation moving when someone asks &ldquo;when?&rdquo;: Elastic ML is already running in this cluster, so what is needed is the forecast and anomaly-detection jobs, their output landed in a <code>predictive-insights-*</code> index, and this markdown tile swapped for a live Lens panel.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Operational Detail panels</h2>
+  <p class="sec-note">The pre-existing NOC content, unchanged except for removing the duplicated P1 tile and re-flowing its row into three equal tiles.</p>
+
+  <div class="kicker">KPI tiles</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tile</th><th>Index</th><th>How the number is produced</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Agent / Collector Health %</strong></td><td><code>metrics-*</code></td><td>Distinct agents seen in the last 5 min &divide; all distinct agents in the window. Agent death is the upstream cause of most coverage gaps.</td></tr>
+      <tr><td><strong>Coverage Gap Risk %</strong></td><td><code>metrics-*</code></td><td>Share of monitored, Operational CIs whose last-seen is older than 15 min &mdash; the monitoring blind-spot rate.</td></tr>
+      <tr><td><strong>Telemetry Freshness</strong></td><td><code>metrics-*</code></td><td><code>MAX(ingest_lag_in_sec) / 60</code>. How stale the worst number on this dashboard could be.</td></tr>
+      <tr><td><strong>Total Servers Monitored</strong></td><td><code>metrics-*</code></td><td>Distinct <code>host.name</code> across the time range.</td></tr>
+      <tr><td><strong>Servers Up / Down</strong></td><td><code>metrics-*</code></td><td>Up = distinct hosts with a document in the last 15 min; Down = total &minus; up.</td></tr>
+      <tr><td><strong>Servers Availability %</strong></td><td><code>metrics-*</code></td><td>Same definition as 2.2, shown alongside its component counts for on-call engineers.</td></tr>
+      <tr><td><strong>Raw Netcool Alerts (24h)</strong></td><td><code>.ds-bridge-alerts-netcool-default-*</code></td><td>Raw alert documents in the last 24 h.</td></tr>
+      <tr><td><strong>Correlated SN Events (24h)</strong></td><td><code>.ds-logs-servicenow.event-default-*</code></td><td>Events that survived correlation into ServiceNow.</td></tr>
+      <tr><td><strong>Alert Dedup Ratio (24h)</strong></td><td>both</td><td><code>(raw &minus; correlated) &divide; raw</code> &mdash; the share of alert noise suppressed before it reached an analyst. Higher is better.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="kicker">Trends</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Chart</th><th>How it works</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Alert Volume Trend &mdash; hourly</strong></td><td>Netcool alert count bucketed hourly. This is the empirical baseline an alert-storm forecast would be trained against; visible spikes are today&rsquo;s storm signal.</td></tr>
+      <tr><td><strong>Telemetry Freshness Trend</strong></td><td>Max ingest lag per hour, in minutes. A rising staircase means the pipeline is falling behind; a single spike is a transient relay or backpressure event.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="kicker">Worklists</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Table</th><th>What it lists</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Coverage Gap &mdash; CIs Not Reporting</strong></td><td>Every monitored CI silent for more than 15 min, with host, location, L2 support group and minutes stale. Top 100, worst first. Click any cell to filter the whole dashboard to that CI, site or team.</td></tr>
+      <tr><td><strong>Disk Saturation (&gt;50% used)</strong></td><td>Max used-percent per host &times; mount point, above 50%, top 25. The threshold is the <code>WHERE disk_pct &gt; 0.5</code> clause.</td></tr>
+      <tr><td><strong>Network Errors (per interface)</strong></td><td>Max in- and out-errors per host &times; interface, summed, above zero, top 25. Surfaces bad NICs, duplex mismatches and saturated links.</td></tr>
+      <tr><td><strong>Ingest Pipeline Health</strong></td><td>Max lag, average lag and document count per <code>data_stream.dataset</code> &mdash; which collector is dragging the freshness KPI down.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="kicker">Reference tiles</div>
+  <p><strong>Noise Reduction &mdash; AI KPI status</strong> documents why the Noise Reduction Opportunity Score cannot be built from today&rsquo;s mappings, so the KPI stays visibly tracked rather than silently dropped. <strong>Quick links</strong> deep-link into Discover per platform (Windows, Linux/UNIX, AIX, HPUX). <strong>Notes &amp; Data Limitations</strong> is the dashboard&rsquo;s own README &mdash; definitions, thresholds and the remaining blocked KPIs.</p>
+</section>
+
+<section>
+  <h2>Global controls</h2>
+  <p class="sec-note">Three hierarchical controls sit above every panel &mdash; picking a location narrows the values offered in the next two.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Control</th><th>Field</th><th>Values in the current data</th></tr></thead>
+    <tbody>
+      <tr><td>Location</td><td><code>ci.geo.name</code></td><td>Aurora IL70, Slough, Germantown, Blythewood, Chicago IL00, Greenford, GCP</td></tr>
+      <tr><td>Support Group (L2)</td><td><code>ci.support_group.l2.name</code></td><td>Wintel, Unix Engineering, Exadata Admin, IT.Sec.*, GCP Services</td></tr>
+      <tr><td>Host</td><td><code>host.name</code></td><td>Any monitored server</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="gap">
+  <h2>The one open item</h2>
+
+  <div class="note warn">
+    <h3>Impacted domain and impacted applications are CMDB-derived, not incident-derived</h3>
+    <p>The only fields confirmed to exist on <code>servicenow-open-incidents-snapshots-*</code> today are <code>number</code> and <code>priority</code>. <code>ci.name</code> is <strong>not</strong> populated on those incident documents &mdash; the <code>ci_name_exists.csv</code> export came back empty &mdash; so incidents cannot be joined to CMDB configuration items on CI name, and no category, assignment-group or business-service field has been confirmed either.</p>
+    <p>So panels 2.6 and 2.7 answer <em>&ldquo;which domains and applications have infrastructure that has gone silent&rdquo;</em>. That is a true impact signal and it is live today &mdash; but it is not a breakdown of the P1/P2 incidents themselves. Worth stating plainly in the presentation rather than letting someone discover it in the room.</p>
+  </div>
+
+  <p>To close it, run this in <strong>Discover &rarr; ES|QL</strong> and share the column list:</p>
+  <pre><code>FROM servicenow-open-incidents-snapshots-*
+| WHERE priority &lt;= 2
+| LIMIT 5</code></pre>
+  <p>Once a domain/category field and a business-service field are confirmed, both panels swap to incident-based ES|QL and nothing else on the dashboard changes &mdash; the RAG tile already reads P1 and P2 straight from that index.</p>
+  <pre><code>FROM servicenow-open-incidents-snapshots-*
+| WHERE priority &lt;= 2
+| STATS p1 = COUNT_DISTINCT(CASE(priority == 1, number, null)),
+        p2 = COUNT_DISTINCT(CASE(priority == 2, number, null))
+  BY domain = &lt;category_or_assignment_group_field&gt;
+| SORT p1 DESC, p2 DESC</code></pre>
+</section>
+
+<section>
+  <h2>Limitations to state up front</h2>
+  <div class="note info">
+    <ul>
+      <li><strong>MTTA is still blocked.</strong> <code>acknowledged_at</code>, <code>assigned_at</code> and <code>assigned_by</code> are absent from <code>servicenow-incidents-*</code>. It needs a ServiceNow Business Rule to write the Acknowledge state-change timestamp, plus a mapping update on the Elastic integration.</li>
+      <li><strong>Noise Reduction Opportunity Score is still blocked</strong> &mdash; no stable rule identifier, no dedup outcome, no analyst-feedback flag, no alert-to-incident join key.</li>
+      <li><strong>Environment scope.</strong> Availability and impact currently span every environment: prod, drt, cut, ete, dre, dev, test, sandbox, eit. If leadership wants the executive row to be prod-only, add a <code>ci.environment</code> control beside the existing three, or add <code>AND ci.environment == "prod"</code> to those panels.</li>
+      <li><strong>&ldquo;Up&rdquo; means shipping telemetry</strong>, not responding to a probe. Intentional, but say it before someone else does.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <p>Deploy by importing <code>operation-dashboard.ndjson</code> under <strong>Stack Management &rarr; Saved Objects &rarr; Import</strong>, choosing &ldquo;Check for existing objects&rdquo; and overwriting, so the dashboard keeps its URL and bookmarks. The file carries the <code>metrics-*</code> data view and the dashboard; every panel is stored by value, so there is nothing else to create.</p>
+</footer>
+
+</div>
