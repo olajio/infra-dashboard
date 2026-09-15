@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>34</b></span>
+    <span>Panels <b>35</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -276,7 +276,7 @@ footer code{font-size:.85em}
       <div class="n">05</div>
       <div>
         <p class="ask">Overall Infra Availability % KPI (e.g. 99.5%)</p>
-        <p class="got">Panel 2.2 &mdash; monitored servers still shipping telemetry, shown to two decimals.</p>
+        <p class="got">Panel 2.2, renamed <em>Server Availability %</em> so the title states its scope, plus panel 2.9 <em>Monitored Estate</em> covering every other tier.</p>
       </div>
       <span class="chip done">Shipped</span>
     </div>
@@ -306,20 +306,46 @@ footer code{font-size:.85em}
     </table>
   </div>
 
+  <div class="note warn">
+    <h3>Scope &mdash; what the availability number covers</h3>
+    <p><code>metrics-*</code> is not a server-only index pattern: it spans <strong>578 data streams and ~830M documents</strong> across eleven tiers. But <code>host.name</code> is only a valid availability unit for <strong>agent-based</strong> collection (<code>system.*</code>, <code>windows.*</code>), where it names the monitored machine. For remotely-collected tiers the agent writes its own hostname, so <code>host.name</code> is the <strong>collector</strong> &mdash; <code>vsphere.virtualmachine</code> carries 150,838 documents under a single <code>host.name</code>, every <code>kubernetes.*</code> stream shows 1, and <code>gcp.gke</code> shows 1 for 197M documents.</p>
+    <p>An unscoped <code>COUNT_DISTINCT(host.name)</code> therefore mixes real servers with APM service hosts, containers and collector hostnames. Every availability panel is now scoped with <code>| WHERE STARTS_WITH(data_stream.dataset, "system.")</code>, so the denominator is the real server estate of ~2,893 hosts.</p>
+    <p><strong>How to say it in the room:</strong> availability is measured on the OS-monitored server estate; P1/P2 covers every infrastructure domain; collection health for the other tiers is panel 2.9.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Infrastructure tier</th><th>Data streams</th><th>Max distinct host.name</th><th>Documents</th></tr></thead>
+      <tbody>
+        <tr><td>Applications &mdash; APM</td><td class="num">513</td><td class="num">5,285</td><td class="num">306.8 M</td></tr>
+        <tr><td><strong>Servers &mdash; OS telemetry</strong></td><td class="num">13</td><td class="num">2,893</td><td class="num">214.1 M</td></tr>
+        <tr><td>Cloud &mdash; GCP</td><td class="num">4</td><td class="num">1</td><td class="num">199.5 M</td></tr>
+        <tr><td>Prometheus targets</td><td class="num">1</td><td class="num">9</td><td class="num">61.0 M</td></tr>
+        <tr><td>Servers &mdash; Windows services</td><td class="num">2</td><td class="num">1,602</td><td class="num">43.6 M</td></tr>
+        <tr><td>Containers &mdash; Kubernetes</td><td class="num">23</td><td class="num">1</td><td class="num">4.5 M</td></tr>
+        <tr><td>Monitoring stack</td><td class="num">8</td><td class="num">13</td><td class="num">265.6 K</td></tr>
+        <tr><td>Virtualisation &mdash; vSphere</td><td class="num">7</td><td class="num">1</td><td class="num">234.8 K</td></tr>
+        <tr><td>Database &mdash; Oracle</td><td class="num">5</td><td class="num">2</td><td class="num">14.3 K</td></tr>
+        <tr><td>Middleware &mdash; IBM MQ</td><td class="num">1</td><td class="num">1</td><td class="num">2.9 K</td></tr>
+        <tr><td>Database &mdash; SQL</td><td class="num">1</td><td class="num">2</td><td class="num">568</td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <h3 style="margin-top:28px">The RAG rule, in full</h3>
   <p style="margin-top:6px">Evaluated top&ndash;down inside the panel&rsquo;s ES|QL, so RED always wins over AMBER.</p>
   <div class="rag">
     <div>
       <p class="lbl"><span class="dot r"></span>RED</p>
-      <p class="cond">Any active <strong>P1</strong>, <em>or</em> availability below <strong>98%</strong>.</p>
+      <p class="cond">Any active <strong>P1</strong> in any domain, <em>or</em> server availability below <strong>98%</strong>.</p>
     </div>
     <div>
       <p class="lbl"><span class="dot a"></span>AMBER</p>
-      <p class="cond">Any active <strong>P2</strong>, <em>or</em> availability below <strong>99.5%</strong>.</p>
+      <p class="cond">Any active <strong>P2</strong> in any domain, <em>or</em> server availability below <strong>99.5%</strong>.</p>
     </div>
     <div>
       <p class="lbl"><span class="dot g"></span>GREEN</p>
-      <p class="cond">No P1, no P2, availability <strong>99.5%</strong> or better.</p>
+      <p class="cond">No P1, no P2, server availability <strong>99.5%</strong> or better.</p>
     </div>
   </div>
   <p>Re-tuning is a one-line edit: open the panel, <strong>Edit ES|QL</strong>, change <code>98.0</code> or <code>99.5</code> in the <code>EVAL infra_health</code> block. No other panel depends on those numbers.</p>
@@ -344,9 +370,9 @@ footer code{font-size:.85em}
         <thead><tr><th>Column</th><th>Meaning</th></tr></thead>
         <tbody>
           <tr><td><strong>Infra Health</strong></td><td>RED / AMBER / GREEN with its status dot</td></tr>
-          <tr><td>Availability %</td><td>Servers reporting in the last 15 min &divide; all monitored servers</td></tr>
-          <tr><td>Servers down</td><td>Servers with no telemetry for 15 min</td></tr>
-          <tr><td>Active P1 / P2</td><td>Distinct open ServiceNow incident numbers</td></tr>
+          <tr><td>Server availability %</td><td>Servers shipping <code>system.*</code> telemetry in the last 15 min &divide; all such servers</td></tr>
+          <tr><td>Servers down</td><td>Servers with no <code>system.*</code> telemetry for 15 min</td></tr>
+          <tr><td>Active P1 / P2</td><td>Distinct open ServiceNow incident numbers, <strong>all</strong> infrastructure domains</td></tr>
         </tbody>
       </table></div>
     </div>
@@ -355,10 +381,11 @@ footer code{font-size:.85em}
   <div class="entry">
     <div class="addr">2.2</div>
     <div>
-      <div class="entry-head"><h3>Infrastructure Availability %</h3>
-        <span class="tag">metric</span><span class="tag">metrics-*</span></div>
-      <p class="answers">What percentage of the estate is alive?</p>
-      <p>Denominator: distinct <code>host.name</code> seen anywhere in the dashboard time window. Numerator: distinct <code>host.name</code> with a document in the <strong>last 15 minutes</strong>. Shown to two decimals, matching the <code>99.5%</code> example in the feedback.</p>
+      <div class="entry-head"><h3>Server Availability %</h3>
+        <span class="tag">metric</span><span class="tag">metrics-* scoped to system.*</span></div>
+      <p class="answers">What percentage of the server estate is alive?</p>
+      <p>Denominator: distinct <code>host.name</code> shipping <code>system.*</code> telemetry anywhere in the dashboard time window &mdash; about 2,893 servers. Numerator: the same, restricted to hosts with a document in the <strong>last 15 minutes</strong>. Shown to two decimals, matching the <code>99.5%</code> example in the feedback.</p>
+      <p><strong>Renamed</strong> from <em>Infrastructure Availability %</em>. The KPI is unchanged; the title now states its scope, because the figure is a server-estate number and the old name implied the whole estate.</p>
       <p><strong>Worth saying out loud when presenting:</strong> &ldquo;up&rdquo; means <em>still shipping metricbeat data</em>. A box that is powered on but whose agent has died counts as down &mdash; deliberately, because that is a real monitoring outage.</p>
     </div>
   </div>
@@ -434,6 +461,16 @@ footer code{font-size:.85em}
       <p>It also records the next concrete step, which keeps the conversation moving when someone asks &ldquo;when?&rdquo;: Elastic ML is already running in this cluster, so what is needed is the forecast and anomaly-detection jobs, their output landed in a <code>predictive-insights-*</code> index, and this markdown tile swapped for a live Lens panel.</p>
     </div>
   </div>
+  <div class="entry">
+    <div class="addr">2.9</div>
+    <div>
+      <div class="entry-head"><h3>Monitored Estate &mdash; Coverage by Tier</h3>
+        <span class="tag">data table</span><span class="tag">metrics-*</span></div>
+      <p class="answers">What is actually being monitored, and is each tier still reporting?</p>
+      <p>One row per infrastructure tier, derived from <code>data_stream.dataset</code>: Servers (OS and Windows), Applications (APM), vSphere, Oracle, SQL, IBM MQ, GCP, Kubernetes, Prometheus targets and the monitoring stack itself. Columns show how many data streams feed the tier, its distinct <code>host.name</code> count, document volume, minutes since the last document, and a collection status of Flowing (&le;15 min), Delayed (&le;60 min) or Stalled.</p>
+      <p>Read the host column carefully: for remotely-collected tiers it is the <strong>collector</strong> count, not a device count. This is a <strong>collection-health</strong> view, not per-device availability &mdash; that needs each tier&rsquo;s own entity identifier rather than <code>host.name</code>.</p>
+    </div>
+  </div>
 </section>
 
 <section>
@@ -447,7 +484,7 @@ footer code{font-size:.85em}
       <tr><td><strong>Agent / Collector Health %</strong></td><td><code>metrics-*</code></td><td>Distinct agents seen in the last 5 min &divide; all distinct agents in the window. Agent death is the upstream cause of most coverage gaps.</td></tr>
       <tr><td><strong>Coverage Gap Risk %</strong></td><td><code>metrics-*</code></td><td>Share of monitored, Operational CIs whose last-seen is older than 15 min &mdash; the monitoring blind-spot rate.</td></tr>
       <tr><td><strong>Telemetry Freshness</strong></td><td><code>metrics-*</code></td><td><code>MAX(ingest_lag_in_sec) / 60</code>. How stale the worst number on this dashboard could be.</td></tr>
-      <tr><td><strong>Total Servers Monitored</strong></td><td><code>metrics-*</code></td><td>Distinct <code>host.name</code> across the time range.</td></tr>
+      <tr><td><strong>Total Servers Monitored</strong></td><td><code>metrics-*</code></td><td>Distinct <code>host.name</code> across the time range. Now scoped to <code>system.*</code> like panel 2.2 &mdash; these four tiles previously carried the same unscoped denominator and over-counted.</td></tr>
       <tr><td><strong>Servers Up / Down</strong></td><td><code>metrics-*</code></td><td>Up = distinct hosts with a document in the last 15 min; Down = total &minus; up.</td></tr>
       <tr><td><strong>Servers Availability %</strong></td><td><code>metrics-*</code></td><td>Same definition as 2.2, shown alongside its component counts for on-call engineers.</td></tr>
       <tr><td><strong>Raw Netcool Alerts (24h)</strong></td><td><code>.ds-bridge-alerts-netcool-default-*</code></td><td>Raw alert documents in the last 24 h.</td></tr>
@@ -523,6 +560,8 @@ footer code{font-size:.85em}
       <li><strong>Noise Reduction Opportunity Score is still blocked</strong> &mdash; no stable rule identifier, no dedup outcome, no analyst-feedback flag, no alert-to-incident join key.</li>
       <li><strong>Environment scope.</strong> Availability and impact currently span every environment: prod, drt, cut, ete, dre, dev, test, sandbox, eit. If leadership wants the executive row to be prod-only, add a <code>ci.environment</code> control beside the existing three, or add <code>AND ci.environment == "prod"</code> to those panels.</li>
       <li><strong>&ldquo;Up&rdquo; means shipping telemetry</strong>, not responding to a probe. Intentional, but say it before someone else does.</li>
+      <li><strong>No per-device availability outside the server estate.</strong> vSphere VMs, Oracle instances, MQ queue managers, GCP resources and Kubernetes objects are collected remotely, so <code>host.name</code> is the collector. Measuring their availability needs each tier&rsquo;s own entity field; panel 2.9 is the interim collection-health signal.</li>
+      <li><strong>508 <code>apm.app.*</code> data streams exist</strong> &mdash; a real, named application register (<code>cnacentral</code>, <code>claimecm</code>, <code>ilap_pricing_api</code>, <code>billigportal</code>&hellip;). That is a materially better source for the Impacted Applications panels than the CMDB <code>ci.short_description</code> free text they use today.</li>
     </ul>
   </div>
 </section>
