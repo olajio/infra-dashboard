@@ -557,6 +557,23 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
   <div class="entry">
     <div class="addr">new</div>
     <div>
+      <div class="entry-head"><h3>Server Availability Trend</h3>
+        <span class="tag">line chart</span><span class="tag">metrics-* scoped to system.*</span><span class="tag">hourly</span></div>
+      <p class="answers">Is server availability getting better or worse?</p>
+      <p>The <strong>Server Availability %</strong> tiles answer &ldquo;how many servers are up right now?&rdquo;. This answers &ldquo;has that been getting better or worse?&rdquo; &mdash; one point per hour across the dashboard window, sitting between the Servers Up / Down / Availability tiles and the Servers Down worklist.</p>
+      <p>Each <code>system.*</code> document is bucketed to its hour; a server counts as <strong>up in that hour</strong> if it produced at least one document in it. The distinct-host count is exact rather than <code>COUNT_DISTINCT</code>, so the line does not jitter from HyperLogLog estimation error on a percentage axis. The denominator is the <strong>busiest hour in the window</strong> &mdash; the most servers seen reporting in any one hour. The first and last buckets are dropped because both are partial; without that the line always ends in a false cliff.</p>
+    </div>
+  </div>
+
+  <div class="note warn">
+    <h3>Reading the trend against the tile</h3>
+    <p>The trend and the <strong>Servers Availability %</strong> tile will not agree to the decimal, and that is expected &mdash; they answer different questions. The tile applies a <strong>15-minute</strong> silence rule at this instant; the trend asks whether a server reported <strong>at any point in the hour</strong>, which is more forgiving. Use the tile for <em>now</em>, the trend for <em>direction</em>.</p>
+    <p><strong>What it cannot show.</strong> A server down for the <em>entire</em> window produces no documents at all, so it lands in neither the numerator nor the denominator &mdash; availability still reads 100% while that server is dead. The existing tiles share this blind spot, because they also take their total from the hosts seen in the window. Servers dead longer than the window are caught by <strong>Coverage Gap &mdash; Monitored CIs Not Reporting</strong>, which starts from the CMDB list rather than from telemetry.</p>
+  </div>
+
+  <div class="entry">
+    <div class="addr">new</div>
+    <div>
       <div class="entry-head"><h3>Servers Down &mdash; Impacted CIs</h3>
         <span class="tag">data table</span><span class="tag">metrics-* scoped to system.*</span><span class="tag">host drill-down</span></div>
       <p class="answers">Which servers are down, what CI is each one, and who owns it?</p>

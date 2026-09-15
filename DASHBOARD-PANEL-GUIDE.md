@@ -356,6 +356,44 @@ alert-storm forecast would be trained against — visible spikes are today's sto
 `MAX(ingest_lag_in_sec)` per hour, converted to minutes. A rising staircase = the ingest pipeline is
 falling behind; a spike = a transient relay/backpressure event.
 
+### 3.x Server Availability Trend — % of server estate reporting, per hour
+
+**Type:** Lens line chart · **Index:** `metrics-*`, scoped to `system.*` · **Location:** between the
+Servers Up / Down / Availability tiles and the Servers Down worklist
+
+The **Server Availability %** tiles answer *"how many servers are up right now?"*. This answers *"has
+that been getting better or worse?"* — one point per hour across the dashboard window.
+
+**How it is computed.**
+
+1. Every `system.*` metric document is bucketed to the hour it landed in.
+2. A server counts as **up in that hour** if it produced at least one document in it. The distinct-host
+   count is exact — a two-stage `STATS ... BY host.name, bucket` then `COUNT(*) BY bucket`, rather than
+   `COUNT_DISTINCT` — so the line does not jitter from HyperLogLog estimation error the way a single
+   approximate count would on a percentage axis.
+3. The denominator, **estate**, is the busiest hour in the window: the largest number of servers seen
+   reporting in any one hour.
+4. `availability_pct = servers_up ÷ estate × 100`, rounded to two decimals.
+
+The first and last buckets are dropped because both are partial — the window starts mid-hour and the
+current hour is still filling. Without that the line always ends in a false cliff.
+
+> **Reading it against the tile.** The trend and the **Servers Availability %** tile will not agree to
+> the decimal, and that is expected: they answer different questions. The tile applies a **15-minute**
+> silence rule at this instant; the trend asks whether a server reported **at any point in the hour**,
+> which is more forgiving. Use the tile for *now*, the trend for *direction*.
+>
+> **What it cannot show.** A server that was down for the *entire* window produces no documents at all,
+> so it lands in neither the numerator nor the denominator — availability still reads 100 % while that
+> server is dead. The existing tiles share this blind spot, because they also take their total from the
+> hosts seen in the window. Servers dead longer than the window are caught by **Coverage Gap — Monitored
+> CIs Not Reporting**, which starts from the CMDB list rather than from telemetry.
+
+*Implementation note:* ES|QL has no window functions, so the per-hour counts and the single estate figure
+cannot be produced by one aggregation. The query packs each `(hour, servers_up)` pair into one long,
+collapses to a single row to compute the estate, then re-expands with `MV_EXPAND`. It is the only panel on
+the dashboard using that pattern — if it ever errors after an upgrade, that is the line to look at.
+
 ### 3.x Servers Down — Impacted CIs (>15 min without telemetry)
 
 **Type:** Lens data table · **Index:** `metrics-*`, scoped to `system.*` · **Location:** directly under the
