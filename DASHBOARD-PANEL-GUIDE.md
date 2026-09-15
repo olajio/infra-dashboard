@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 43 on the landing page + 8 on the detail dashboard · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 45 on the landing page + 8 on the detail dashboard · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -521,3 +521,30 @@ labelled predictive.
 **Auto-remediation cannot be measured at all**: no field in this cluster records that a remediation ran.
 Executions, auto-resolved incidents, success rate and time saved would each need a new source — an
 orchestration event stream, or `close_code` / `resolved_by` on `servicenow-incidents-*`.
+
+### 7.5 Confirmed field names — two limitations closed
+
+| Was | Now |
+|---|---|
+| **Monitoring Coverage %** was *reporting* coverage | Real CMDB **onboarding** coverage from `cmdb-cis-*`: Hardware CIs with `is_monitored: true` ÷ all Operational Hardware CIs, plus a **Monitoring Coverage by CI Class** table showing onboarding progress per platform |
+| **Services at Risk** was disk-only | All three saturation signals: **disk ≥ 90%**, **CPU ≥ 95%**, **memory ≥ 95%**, plus a **Services at Risk — Host Saturation** table with per-host maxima |
+
+Confirmed fields: `system.cpu.total.norm.pct`, `system.memory.actual.used.pct`,
+`system.filesystem.used.pct`. Memory uses **`actual.used.pct`** (excludes cache) rather than
+`used.pct`, which reads ~86% on a perfectly healthy host and would have made the tile meaningless.
+
+CPU and memory use the **window maximum**, so a brief spike counts — which is why their thresholds sit
+at 95% while disk sits at 90%. Disk is the genuinely predictive one.
+
+**Coverage caveat:** `cmdb-cis-*` carries the CMDB **sync** timestamp, so if the full sync has not run
+inside the dashboard time range the panel is empty. That is a stale sync, not zero coverage.
+
+### 7.6 Host drill-down into Observability → Infrastructure
+
+Clicking a **Host** on *Services at Risk*, *Disk Saturation* or *Network Errors* opens that host's
+infrastructure view: `/app/metrics/detail/host/<host>`. Same gate as everywhere else — `host.name` is
+grouped raw so it is the single actionable column, while mount point, interface and every metric pass
+through `TO_STRING()` and stay inert, so a stray click cannot build a broken URL.
+
+Disk Saturation and Network Errors live on the **Infrastructure Detail** dashboard; Services at Risk is
+on the landing page in Operational Effectiveness.
