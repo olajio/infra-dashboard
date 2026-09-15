@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>35</b></span>
+    <span>Panels <b>38</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -471,6 +471,17 @@ footer code{font-size:.85em}
       <p>Read the host column carefully: for remotely-collected tiers it is the <strong>collector</strong> count, not a device count. This is a <strong>collection-health</strong> view, not per-device availability &mdash; that needs each tier&rsquo;s own entity identifier rather than <code>host.name</code>.</p>
     </div>
   </div>
+  <div class="entry">
+    <div class="addr">2.10</div>
+    <div>
+      <div class="entry-head"><h3>Application Estate &mdash; APM</h3>
+        <span class="tag">2 metrics + data table</span><span class="tag">metrics-apm*</span></div>
+      <p class="answers">How large is the observed application estate, and is its telemetry flowing?</p>
+      <p><strong>Applications Instrumented (APM)</strong> counts distinct <code>service.name</code> &mdash; 508 services today. <strong>Applications in Production (APM)</strong> restricts that to <code>prd*</code> / <code>prod*</code>. The <strong>Application Estate</strong> table breaks it down by environment with document volume, minutes since the last document, and a Flowing / Delayed / Stalled telemetry status.</p>
+      <p><code>service.environment</code> arrives inconsistently cased and suffixed &mdash; <code>prd</code>, <code>prd1</code>, <code>PRD</code>, <code>drt1</code>, <code>DRT2</code>, <code>ete1</code>&ndash;<code>ete4</code>, <code>cut1</code>, <code>stg1</code>, blank &mdash; so the panels normalise it with <code>TO_LOWER()</code> plus prefix matching into Production, DR, ETE/Test, CUT, Stage, Dev, Sandbox, Unspecified and Other.</p>
+      <p><strong>This is inventory and telemetry freshness, not application health.</strong> The reason is below.</p>
+    </div>
+  </div>
 </section>
 
 <section>
@@ -554,6 +565,17 @@ footer code{font-size:.85em}
 
 <section>
   <h2>Limitations to state up front</h2>
+  <div class="note warn">
+    <h3>Why there is no APM application-<em>health</em> panel yet</h3>
+    <p>The obvious approach &mdash; flag an application whose APM telemetry has stopped &mdash; does not survive contact with this estate. Of the 508 instrumented services, 97 are batch-shaped (<code>*_batch</code>, <code>inbound_*</code>, <code>outbound_*</code>), and <strong>87 of those 97 emit more than 500 documents a day</strong>. Document volume cannot separate a failed application from a batch job that is simply not running, so a &ldquo;stopped reporting&rdquo; panel would show leadership a wall of false positives.</p>
+    <p>Real application health needs the transaction-outcome fields Elastic APM aggregates onto <code>apm.service_transaction.1m</code> &mdash; success/failure counts and latency. One query confirms the field names in this deployment:</p>
+    <pre><code>FROM metrics-apm*
+| WHERE data_stream.dataset == "apm.service_transaction.1m"
+| LIMIT 3</code></pre>
+    <p>With those names the Application Estate table gains error-rate and latency columns and a genuine per-application RED / AMBER / GREEN &mdash; which is what the feedback asked for.</p>
+  </div>
+
+
   <div class="note info">
     <ul>
       <li><strong>MTTA is still blocked.</strong> <code>acknowledged_at</code>, <code>assigned_at</code> and <code>assigned_by</code> are absent from <code>servicenow-incidents-*</code>. It needs a ServiceNow Business Rule to write the Acknowledge state-change timestamp, plus a mapping update on the Elastic integration.</li>
@@ -561,7 +583,7 @@ footer code{font-size:.85em}
       <li><strong>Environment scope.</strong> Availability and impact currently span every environment: prod, drt, cut, ete, dre, dev, test, sandbox, eit. If leadership wants the executive row to be prod-only, add a <code>ci.environment</code> control beside the existing three, or add <code>AND ci.environment == "prod"</code> to those panels.</li>
       <li><strong>&ldquo;Up&rdquo; means shipping telemetry</strong>, not responding to a probe. Intentional, but say it before someone else does.</li>
       <li><strong>No per-device availability outside the server estate.</strong> vSphere VMs, Oracle instances, MQ queue managers, GCP resources and Kubernetes objects are collected remotely, so <code>host.name</code> is the collector. Measuring their availability needs each tier&rsquo;s own entity field; panel 2.9 is the interim collection-health signal.</li>
-      <li><strong>508 <code>apm.app.*</code> data streams exist</strong> &mdash; a real, named application register (<code>cnacentral</code>, <code>claimecm</code>, <code>ilap_pricing_api</code>, <code>billigportal</code>&hellip;). That is a materially better source for the Impacted Applications panels than the CMDB <code>ci.short_description</code> free text they use today.</li>
+      <li><strong>The APM application register is now on the dashboard</strong> (panel 2.10). The CMDB-derived Impacted Applications panels are kept rather than replaced, because they answer a different question: which applications sit on servers that have gone silent.</li>
     </ul>
   </div>
 </section>

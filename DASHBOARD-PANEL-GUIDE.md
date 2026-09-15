@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 34 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 38 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -207,6 +207,23 @@ This is a **collection-health** view, not per-device availability. Per-device av
 Oracle, MQ, GCP and Kubernetes needs each tier's own entity identifier (VM name, instance, queue manager,
 resource id) instead of `host.name` — see the limitations section.
 
+### 2.10 Application Estate — APM
+
+**Type:** two Lens metrics + one data table · **Index:** `metrics-apm*`
+
+| Panel | What it shows |
+|---|---|
+| **Applications Instrumented (APM)** | `COUNT_DISTINCT(service.name)` — the size of the observed application estate (508 services today) |
+| **Applications in Production (APM)** | The same, restricted to `prd*` / `prod*` environments |
+| **Application Estate — by environment** | Applications, document volume, minutes since last document and a 🟢/🟠/🔴 telemetry status, per normalised environment |
+
+`service.environment` arrives inconsistently cased and suffixed — `prd`, `prd1`, `PRD`, `drt1`, `DRT2`,
+`ete1`–`ete4`, `cut1`, `stg1`, and blank — so the panels normalise it with `TO_LOWER()` plus prefix
+matching into Production · DR · ETE/Test · CUT · Stage · Dev · Sandbox · Unspecified · Other.
+
+> **This is inventory and telemetry freshness, not application health.** See the limitations section for
+> why a health panel needs one more field confirmation.
+
 ---
 
 ## 3. Operational Detail — NOC / SRE
@@ -345,6 +362,28 @@ Nothing else on the dashboard changes — the RAG tile already reads P1/P2 strai
 
 ## 6. Other known limitations (carried over)
 
+### Why there is no APM application-*health* panel yet
+
+The obvious approach — flag an application whose APM telemetry has stopped — does not survive contact
+with this estate. Of the 508 instrumented services, 97 are batch-shaped (`*_batch`, `inbound_*`,
+`outbound_*`), and **87 of those 97 emit more than 500 documents a day**. Document volume therefore
+cannot separate a failed application from a batch job that simply is not running right now, so a
+"stopped reporting" panel would show a wall of false positives to leadership.
+
+Real application health needs the transaction-outcome fields Elastic APM aggregates onto
+`apm.service_transaction.1m` — success/failure counts and latency. To confirm the field names in this
+deployment, run:
+
+```esql
+FROM metrics-apm*
+| WHERE data_stream.dataset == "apm.service_transaction.1m"
+| LIMIT 3
+```
+
+With those names, the Application Estate table gains error-rate and latency columns and a genuine
+🟢/🟠/🔴 per application — which is what the feedback asked for.
+
+
 * **MTTA** — blocked: `acknowledged_at` / `assigned_at` / `assigned_by` are not in `servicenow-incidents-*`.
   Needs a ServiceNow Business Rule to write the Acknowledge state-change timestamp plus a mapping update.
 * **Noise Reduction Opportunity Score** — blocked; see panel 3.10 for the full reasoning.
@@ -359,6 +398,6 @@ Nothing else on the dashboard changes — the RAG tile already reads P1/P2 strai
   managers, GCP resources and Kubernetes objects are all collected remotely, so `host.name` is the
   collector. Measuring their availability needs each tier's own entity field; panel 2.9 shows collection
   health as the interim signal.
-* **508 `apm.app.*` data streams exist** — a real, named application register (`cnacentral`, `claimecm`,
-  `ilap_pricing_api`, `billigportal`, …). That is a materially better source for the Impacted Applications
-  panels than the CMDB `ci.short_description` free text they use today, and worth a follow-up.
+* **The APM application register is now on the dashboard** (panel 2.10). The CMDB-derived Impacted
+  Applications panels (2.5 / 2.7) are kept because they answer a different question — *which applications
+  sit on servers that have gone silent* — rather than being replaced by it.
