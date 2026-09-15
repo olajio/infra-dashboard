@@ -7,3 +7,23 @@ FROM metrics-apm*
 | EVAL error_rate = ROUND((transactions - successes) * 100.0 / transactions, 2)
 | SORT error_rate DESC
 | LIMIT 40
+
+
+
+FROM metrics-apm*
+| WHERE data_stream.dataset == "apm.service_transaction.1m"
+| EVAL env_raw = TO_LOWER(service.environment)
+| EVAL environment = CASE(
+      env_raw IS NULL,                                              "Unspecified",
+      STARTS_WITH(env_raw, "prd") OR STARTS_WITH(env_raw, "prod"),  "Production",
+      STARTS_WITH(env_raw, "drt") OR STARTS_WITH(env_raw, "dre"),   "DR",
+      STARTS_WITH(env_raw, "ete"),                                  "ETE / Test",
+      STARTS_WITH(env_raw, "cut"),                                  "CUT",
+      STARTS_WITH(env_raw, "stg") OR STARTS_WITH(env_raw, "stage"), "Stage",
+      "Other / Unknown")
+| STATS apps = COUNT_DISTINCT(COALESCE(ci.name, service.name)),
+        transactions = COUNT(event.success_count),
+        successes = SUM(event.success_count)
+  BY environment
+| EVAL error_rate = ROUND((transactions - successes) * 100.0 / transactions, 2)
+| SORT transactions DESC
