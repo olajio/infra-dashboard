@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>39</b></span>
+    <span>Panels <b>40</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -505,6 +505,19 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
       <p><strong>This is inventory and telemetry freshness, not application health.</strong> The reason is below.</p>
     </div>
   </div>
+  <div class="entry">
+    <div class="addr">2.11</div>
+    <div>
+      <div class="entry-head"><h3>Impacted CIs &mdash; Active P1 / P2 Incidents</h3>
+        <span class="tag">data table</span><span class="tag">servicenow-open-incidents-snapshots-*</span><span class="tag">CMDB drill-down</span></div>
+      <p class="answers">Which CIs are the open P1s and P2s actually sitting on?</p>
+      <p>The incident-side worklist: every open P1/P2 with the CI it landed on &mdash; <strong>Sev, Incident, Impacted CI, CI class, Env, Assigned to, Short description, Last seen</strong>.</p>
+      <p><strong>Drill-down:</strong> click an <strong>Impacted CI</strong> to open that CI in the ServiceNow CMDB, where the Affected CIs and relationship tabs live. As with the APM table, only <code>ci.name</code> is grouped raw so it is the single drilldown-actionable column; every other column passes through <code>TO_STRING()</code> or <code>CASE()</code> and is inert on click.</p>
+      <p><strong>Correction:</strong> an earlier version of this guide said <code>ci.name</code> was not populated on the incidents index, and the Impacted Domain and Impacted Applications panels were built CMDB-derived as a result. That was wrong &mdash; the index carries <strong>340 fields</strong> including the full CI enrichment plus <code>assignment_group.name</code> and <code>category.1/2</code>. The wrong conclusion came from an empty CSV export, not from the data.</p>
+      <p><em>Caveat:</em> the source is a snapshot index, so an incident reassigned or re-described inside the window can appear on more than one row; the newest sorts first.</p>
+    </div>
+  </div>
+
 </section>
 
 <section>

@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 39 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 40 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -277,6 +277,28 @@ matching into Production · DR · ETE/Test · CUT · Stage · Dev · Sandbox · 
 
 > **This is inventory and telemetry freshness, not application health.** See the limitations section for
 > why a health panel needs one more field confirmation.
+
+### 2.11 Impacted CIs — Active P1 / P2 Incidents
+**Type:** Lens data table · **Index:** `servicenow-open-incidents-snapshots-*`
+
+The incident-side worklist: every open P1/P2 with the CI it landed on. Columns: **Sev · Incident ·
+Impacted CI · CI class · Env · Assigned to · Short description · Last seen**.
+
+**Drill-down:** click an **Impacted CI** to open that CI in the ServiceNow CMDB
+(`https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name=<ci>`), where the Affected CIs and
+relationship tabs live. As with the APM table, only `ci.name` is grouped raw so it is the single
+drilldown-actionable column — every other column is passed through `TO_STRING()`/`CASE()` and is inert
+on click, so a stray click cannot open the wrong record.
+
+**Correction:** an earlier version of this guide said `ci.name` was not populated on the incidents index,
+and the Impacted Domain / Impacted Applications panels were built CMDB-derived as a result. That was
+wrong. The index carries **340 fields**, including the full CI enrichment (`ci.name`, `ci.sys_id`,
+`ci.class_name`, `ci.environment`, `ci.fqdn`, `ci.ip_address`, `ci.geo.*`, `ci.support_group.l2.name`)
+plus `assignment_group.name` and `category.1/2`. The wrong conclusion came from an empty CSV export, not
+from the data.
+
+*Caveat:* the source is a snapshot index, so an incident reassigned or re-described inside the dashboard
+window can appear on more than one row; the newest sorts first.
 
 ---
 
