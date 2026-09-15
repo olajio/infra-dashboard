@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 38 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 39 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -126,19 +126,11 @@ numbers** (not documents) means the recurring open-incident snapshots do not inf
 > These two tiles replace the old *"Active Critical Alerts (P1)"* tile, which has been removed to avoid
 > showing the same figure twice.
 
-### 2.5 Impacted Applications  *(count tile)*
-**Type:** Lens metric · **Index:** `metrics-*`
+### 2.5 Applications Degraded (Prod)
+**Type:** Lens metric · **Index:** `metrics-apm*`
 
-Number of distinct **business systems / applications that have at least one CI not reporting** for >15 min.
-
-How the application name is resolved: the CMDB enrichment on every metric document carries
-`ci.short_description` — the ServiceNow CI short description (e.g. *ImageRight*, *FileNet Server*,
-*Exchange*, *Citrix XenApp Servers*, *CNA Canada Insurance System DB Server*). The query:
-
-1. keeps only monitored, Operational CIs,
-2. drops descriptions that begin with `Linux ` — on Linux CIs the field usually holds raw `uname` output
-   rather than an application name, so those would be noise,
-3. rolls up to **last-seen per CI**, keeps the stale ones, and counts distinct applications.
+Production business applications whose APM **error rate is 1% or worse** over the dashboard window.
+This is real transaction health, not a proxy.
 
 ### 2.6 Impacted Domain — Infrastructure Health by Domain
 **Type:** Lens data table · **Index:** `metrics-*`
@@ -163,22 +155,56 @@ Domain is derived per CI, first match wins:
 *To add a domain* (Middleware, Storage, …) add one more `STARTS_WITH(ci_group, "<prefix>"), "<Domain>"`
 pair at the top of the `EVAL domain = CASE(...)` block.
 
-### 2.7 Impacted Applications — Business Impact
-**Type:** Lens data table · **Index:** `metrics-*`
+### 2.7 Application Health — APM (error rate & latency)
+**Type:** Lens data table · **Index:** `metrics-apm*`, dataset `apm.service_transaction.1m`
 
-The drill-down behind tile 2.5 — one row per **application × environment**, only where something is down:
+One row per **business application × portfolio × environment**:
 
 | Column | Meaning |
 |---|---|
-| Application / Business system | `ci.short_description` from the CMDB enrichment |
-| Env | `ci.environment` — prod, drt, cut, ete, dre, dev, test, sandbox, eit |
-| CIs down | CIs for that application with no telemetry in 15 min |
-| CIs total | CIs mapped to that application |
-| App health | 🔴 **RED — all CIs down** (application fully dark) vs 🟠 **AMBER — partial impact** (redundancy still carrying it) |
+| Health | 🔴 RED ≥ 5% errors · 🟠 AMBER ≥ 1% · 🟢 GREEN below that |
+| Business application | `ci.name` from the ServiceNow Business Application record, e.g. *Document Management Facility* |
+| Portfolio | `ci.customer_specific.pm_portfolio`, e.g. *Policy Admin (Commercial and Specialty)* |
+| Env | Normalised `service.environment` |
+| Error rate % | Failed ÷ total transactions |
+| Avg latency (ms) | Mean transaction duration |
+| Failed txns / Transactions | The underlying counts |
 
-Sorted by *CIs down* descending, top 50. **An empty table is the good state** — it means no application
-has a silent CI. Splitting by environment lets leadership separate a *prod* outage from *drt/dev* noise
-at a glance.
+**How the maths works.** `event.success_count` and `transaction.duration.summary` are
+**`aggregate_metric_double`** fields — each document stores `{sum, value_count}` rather than a single
+number. In ES|QL, `COUNT(field)` returns the summed `value_count` and `SUM(field)` the summed `sum`, so:
+
+```
+error rate    = (COUNT(event.success_count) − SUM(event.success_count)) / COUNT(event.success_count)
+avg latency   = SUM(transaction.duration.summary) / COUNT(transaction.duration.summary)
+```
+
+This is exactly how Elastic's own APM UI derives failure rate, so the dashboard and the APM app agree.
+
+**Sanity check after import:** if *Transactions* equals the raw document count on every row, this build
+is not unwrapping `value_count` and the rates are wrong. Confirm with:
+
+```esql
+FROM metrics-apm*
+| WHERE data_stream.dataset == "apm.service_transaction.1m"
+| STATS docs = COUNT(*), txns = COUNT(event.success_count), ok = SUM(event.success_count)
+```
+
+`txns` should be well above `docs`.
+
+**Application naming.** APM documents carry the CMDB *Business Application* enrichment — `ci.name`,
+`ci.number` (`APM0003276`), `ci.customer_specific.pm_portfolio` and `ci.support_group.l2.name`. Panels
+key on `COALESCE(ci.name, service.name)`, so services without enrichment still appear under their raw
+APM service name rather than vanishing.
+
+### Applications on Silent Servers (CMDB cross-reference)
+**Type:** Lens data table · **Index:** `metrics-*` · **Location:** Operational Detail, beside *Coverage Gap*
+
+The CMDB-derived view is kept, but demoted out of the executive band now that APM gives real application
+health. It answers a different question: **which applications sit on servers that have gone silent**.
+One row per application × environment from `ci.short_description`, with CIs down, CIs total, and
+🔴 RED (all CIs down) vs 🟠 AMBER (partial impact). It sits beside *Coverage Gap — Monitored CIs Not
+Reporting* because both read the same signal: an empty table is the good state.
 
 ### 2.8 Predictive Insights — 🚧 Coming Soon / In Progress
 **Type:** Markdown tile (placeholder, as requested)
@@ -316,7 +342,7 @@ where the domain/application attribution comes from, and the KPIs still blocked 
 | 1 | Overall Infra Health as 🟢 / 🟠 / 🔴, derived from availability **and** active critical issues | Panel 2.1 *Overall Infrastructure Health* (single cross-index ES|QL over `metrics-*` + `servicenow-open-incidents-snapshots-*`) | ✅ Done |
 | 2 | Active P1 count · Active P2 count | Panels 2.3 / 2.4 | ✅ Done |
 | 3 | Impacted domain (Windows, Linux, Network, Database, Middleware, Storage…) for active incidents | Panel 2.6 *Impacted Domain* | ⚠️ Done **CMDB-derived**, not incident-derived — see §5 |
-| 4 | Impacted applications: count + application health indicator | Panels 2.5 + 2.7 | ⚠️ Done **CMDB-derived** (`ci.short_description`) — see §5 |
+| 4 | Impacted applications: count + application health indicator | Panels 2.5 + 2.7, from real APM transaction health keyed on the ServiceNow Business Application name | ✅ Done |
 | 5 | Infra Availability % KPI (e.g. 99.5 %) | Panel 2.2, renamed *Server Availability %*, plus panel 2.9 *Monitored Estate* | ✅ Done — scope now explicit |
 | 6 | Predictive Insights placeholder tile ("Coming Soon / In Progress") | Panel 2.8 | ✅ Done |
 
@@ -362,35 +388,6 @@ Nothing else on the dashboard changes — the RAG tile already reads P1/P2 strai
 
 ## 6. Other known limitations (carried over)
 
-### Why there is no APM application-*health* panel yet
-
-The obvious approach — flag an application whose APM telemetry has stopped — does not survive contact
-with this estate. Of the 508 instrumented services, 97 are batch-shaped (`*_batch`, `inbound_*`,
-`outbound_*`), and **87 of those 97 emit more than 500 documents a day**. Document volume therefore
-cannot separate a failed application from a batch job that simply is not running right now, so a
-"stopped reporting" panel would show a wall of false positives to leadership.
-
-Real application health needs the transaction-outcome fields Elastic APM aggregates onto
-`apm.service_transaction.1m` — success/failure counts and latency. To confirm the field names in this
-deployment, run:
-
-```esql
-FROM metrics-apm*
-| WHERE data_stream.dataset == "apm.service_transaction.1m"
-| LIMIT 3
-```
-
-With those names, the Application Estate table gains error-rate and latency columns and a genuine
-🟢/🟠/🔴 per application — which is what the feedback asked for.
-
-
-* **MTTA** — blocked: `acknowledged_at` / `assigned_at` / `assigned_by` are not in `servicenow-incidents-*`.
-  Needs a ServiceNow Business Rule to write the Acknowledge state-change timestamp plus a mapping update.
-* **Noise Reduction Opportunity Score** — blocked; see panel 3.10 for the full reasoning.
-* **Environment scope** — availability and impact figures currently span **all** environments (prod, drt,
-  cut, ete, dre, dev, test, sandbox, eit). If leadership wants the executive row to be prod-only, add a
-  `ci.environment` control next to the existing three, or add `AND ci.environment == "prod"` to the
-  executive panels' `WHERE` clauses.
 * **"Up" = shipping telemetry.** A server that is powered on but whose metricbeat agent has died counts as
   down. That is intentional (it *is* a monitoring outage), but it is worth stating when presenting the
   availability number.

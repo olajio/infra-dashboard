@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>38</b></span>
+    <span>Panels <b>39</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -268,9 +268,9 @@ footer code{font-size:.85em}
       <div class="n">04</div>
       <div>
         <p class="ask">Impacted applications: how many, plus an application health indicator</p>
-        <p class="got">Panels 2.5 and 2.7 &mdash; applications resolved from <code>ci.short_description</code>, with per-application RED / AMBER health.</p>
+        <p class="got">Panels 2.5 and 2.7 &mdash; real APM error rate and latency per business application, keyed on the ServiceNow Business Application name and grouped by portfolio.</p>
       </div>
-      <span class="chip part">CMDB-derived</span>
+      <span class="chip done">Shipped</span>
     </div>
     <div class="trace">
       <div class="n">05</div>
@@ -404,11 +404,10 @@ footer code{font-size:.85em}
   <div class="entry">
     <div class="addr">2.5</div>
     <div>
-      <div class="entry-head"><h3>Impacted Applications</h3>
-        <span class="tag">metric</span><span class="tag">metrics-*</span></div>
-      <p class="answers">How many business systems have something dark behind them?</p>
-      <p>Counts distinct applications with <strong>at least one CI not reporting</strong> for over 15 minutes. The application name comes from <code>ci.short_description</code>, the ServiceNow CI short description carried on every metric document by the CMDB enrichment &mdash; values such as <em>ImageRight</em>, <em>FileNet Server</em>, <em>Exchange</em>, <em>Citrix XenApp Servers</em>, <em>CNA Canada Insurance System DB Server</em>.</p>
-      <p>Two filters keep it honest: only monitored, Operational CIs are considered, and descriptions beginning <code>Linux&nbsp;</code> are dropped &mdash; on Linux CIs that field usually holds raw <code>uname</code> output rather than an application name.</p>
+      <div class="entry-head"><h3>Applications Degraded (Prod)</h3>
+        <span class="tag">metric</span><span class="tag">metrics-apm*</span></div>
+      <p class="answers">How many production applications are actually failing right now?</p>
+      <p>Counts production business applications whose APM <strong>error rate is 1% or worse</strong> over the dashboard window. Real transaction health, not a proxy.</p>
     </div>
   </div>
 
@@ -439,10 +438,29 @@ footer code{font-size:.85em}
   <div class="entry">
     <div class="addr">2.7</div>
     <div>
-      <div class="entry-head"><h3>Impacted Applications &mdash; Business Impact</h3>
+      <div class="entry-head"><h3>Application Health &mdash; APM</h3>
+        <span class="tag">data table</span><span class="tag">apm.service_transaction.1m</span></div>
+      <p class="answers">Which business applications are failing, in which portfolio and environment?</p>
+      <p>One row per business application &times; portfolio &times; environment, sorted worst-first: <strong>Health</strong> (&#128308; RED &ge; 5% errors, &#128992; AMBER &ge; 1%, &#128994; GREEN below), <strong>Business application</strong>, <strong>Portfolio</strong>, <strong>Env</strong>, <strong>Error rate %</strong>, <strong>Avg latency (ms)</strong>, <strong>Failed txns</strong> and <strong>Transactions</strong>.</p>
+      <p><strong>How the maths works.</strong> <code>event.success_count</code> and <code>transaction.duration.summary</code> are <code>aggregate_metric_double</code> fields &mdash; each document stores <code>{sum, value_count}</code> rather than a single number. In ES|QL <code>COUNT(field)</code> returns the summed <code>value_count</code> and <code>SUM(field)</code> the summed <code>sum</code>:</p>
+      <pre><code>error rate  = (COUNT(event.success_count) &minus; SUM(event.success_count)) / COUNT(event.success_count)
+avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.summary)</code></pre>
+      <p>That is exactly how Elastic&rsquo;s own APM UI derives failure rate, so this dashboard and the APM app agree.</p>
+      <p><strong>Sanity check after import:</strong> if <em>Transactions</em> equals the raw document count on every row, this build is not unwrapping <code>value_count</code> and the rates are wrong. <code>txns</code> should come back well above <code>docs</code> here:</p>
+      <pre><code>FROM metrics-apm*
+| WHERE data_stream.dataset == "apm.service_transaction.1m"
+| STATS docs = COUNT(*), txns = COUNT(event.success_count), ok = SUM(event.success_count)</code></pre>
+      <p><strong>Application naming.</strong> APM documents carry the CMDB <em>Business Application</em> enrichment &mdash; <code>ci.name</code> (<em>Document Management Facility</em>), <code>ci.number</code> (<code>APM0003276</code>), <code>ci.customer_specific.pm_portfolio</code> (<em>Policy Admin (Commercial and Specialty)</em>) and <code>ci.support_group.l2.name</code>. Panels key on <code>COALESCE(ci.name, service.name)</code> so unenriched services still appear under their raw APM service name.</p>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">ops</div>
+    <div>
+      <div class="entry-head"><h3>Applications on Silent Servers (CMDB cross-reference)</h3>
         <span class="tag">data table</span><span class="tag">metrics-*</span></div>
-      <p class="answers">Which applications, in which environment, and how badly?</p>
-      <p>The drill-down behind tile 2.5. One row per <strong>application &times; environment</strong>, only where something is down, sorted by CIs down, top 50.</p>
+      <p class="answers">Which applications sit on servers that have gone silent? Now in Operational Detail, beside <em>Coverage Gap</em>.</p>
+      <p>Kept but demoted out of the executive band now that APM gives real application health &mdash; it answers a different question. One row per <strong>application &times; environment</strong>, only where something is down, sorted by CIs down, top 50.</p>
       <ul>
         <li><strong>Env</strong> separates a <em>prod</em> outage from <em>drt / cut / dev / sandbox</em> noise at a glance.</li>
         <li><strong>App health</strong> is RED when every CI mapped to that application is down, AMBER when only some are &mdash; redundancy is still carrying it.</li>
@@ -565,16 +583,6 @@ footer code{font-size:.85em}
 
 <section>
   <h2>Limitations to state up front</h2>
-  <div class="note warn">
-    <h3>Why there is no APM application-<em>health</em> panel yet</h3>
-    <p>The obvious approach &mdash; flag an application whose APM telemetry has stopped &mdash; does not survive contact with this estate. Of the 508 instrumented services, 97 are batch-shaped (<code>*_batch</code>, <code>inbound_*</code>, <code>outbound_*</code>), and <strong>87 of those 97 emit more than 500 documents a day</strong>. Document volume cannot separate a failed application from a batch job that is simply not running, so a &ldquo;stopped reporting&rdquo; panel would show leadership a wall of false positives.</p>
-    <p>Real application health needs the transaction-outcome fields Elastic APM aggregates onto <code>apm.service_transaction.1m</code> &mdash; success/failure counts and latency. One query confirms the field names in this deployment:</p>
-    <pre><code>FROM metrics-apm*
-| WHERE data_stream.dataset == "apm.service_transaction.1m"
-| LIMIT 3</code></pre>
-    <p>With those names the Application Estate table gains error-rate and latency columns and a genuine per-application RED / AMBER / GREEN &mdash; which is what the feedback asked for.</p>
-  </div>
-
 
   <div class="note info">
     <ul>
