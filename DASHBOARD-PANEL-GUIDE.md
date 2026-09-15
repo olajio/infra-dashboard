@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 40 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 41 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -355,6 +355,77 @@ alert-storm forecast would be trained against — visible spikes are today's sto
 **Type:** Lens line chart · **Index:** `metrics-*`
 `MAX(ingest_lag_in_sec)` per hour, converted to minutes. A rising staircase = the ingest pipeline is
 falling behind; a spike = a transient relay/backpressure event.
+
+### 3.x Server Availability Trend — % of server estate reporting, per hour
+
+**Type:** Lens line chart · **Index:** `metrics-*`, scoped to `system.*` · **Location:** between the
+Servers Up / Down / Availability tiles and the Servers Down worklist
+
+The **Server Availability %** tiles answer *"how many servers are up right now?"*. This answers *"has
+that been getting better or worse?"* — one point per hour across the dashboard window.
+
+**How it is computed.**
+
+1. Every `system.*` metric document is bucketed to the hour it landed in.
+2. A server counts as **up in that hour** if it produced at least one document in it. The distinct-host
+   count is exact — a two-stage `STATS ... BY host.name, bucket` then `COUNT(*) BY bucket`, rather than
+   `COUNT_DISTINCT` — so the line does not jitter from HyperLogLog estimation error the way a single
+   approximate count would on a percentage axis.
+3. The denominator, **estate**, is the busiest hour in the window: the largest number of servers seen
+   reporting in any one hour.
+4. `availability_pct = servers_up ÷ estate × 100`, rounded to two decimals.
+
+The first and last buckets are dropped because both are partial — the window starts mid-hour and the
+current hour is still filling. Without that the line always ends in a false cliff.
+
+> **Reading it against the tile.** The trend and the **Servers Availability %** tile will not agree to
+> the decimal, and that is expected: they answer different questions. The tile applies a **15-minute**
+> silence rule at this instant; the trend asks whether a server reported **at any point in the hour**,
+> which is more forgiving. Use the tile for *now*, the trend for *direction*.
+>
+> **What it cannot show.** A server that was down for the *entire* window produces no documents at all,
+> so it lands in neither the numerator nor the denominator — availability still reads 100 % while that
+> server is dead. The existing tiles share this blind spot, because they also take their total from the
+> hosts seen in the window. Servers dead longer than the window are caught by **Coverage Gap — Monitored
+> CIs Not Reporting**, which starts from the CMDB list rather than from telemetry.
+
+*Implementation note:* ES|QL has no window functions, so the per-hour counts and the single estate figure
+cannot be produced by one aggregation. The query packs each `(hour, servers_up)` pair into one long,
+collapses to a single row to compute the estate, then re-expands with `MV_EXPAND`. It is the only panel on
+the dashboard using that pattern — if it ever errors after an upgrade, that is the line to look at.
+
+### 3.x Servers Down — Impacted CIs (>15 min without telemetry)
+
+**Type:** Lens data table · **Index:** `metrics-*`, scoped to `system.*` · **Location:** directly under the
+Servers Up / Down / Availability tiles
+
+The worklist behind the **Servers Down** tile. It uses the **same scope and window as that tile** —
+`STARTS_WITH(data_stream.dataset, "system.")`, seen in the dashboard window but not in the last 15
+minutes — so the row count and the tile agree. Deliberately no `ci.is_monitored` filter, because the tile
+has none either.
+
+| Column | Meaning |
+|---|---|
+| **Host** | `host.name` — **click to open the host in Observability → Infrastructure** |
+| Impacted CI | `ci.name`, the ServiceNow CI record for that server |
+| CI class | Windows Server / Linux Server / AIX Server … |
+| Application / purpose | `ci.short_description`. Shows `—` where the CMDB holds `uname` output instead of a real name (typical for Linux CIs) |
+| Env | `ci.environment` |
+| Location | `ci.geo.name` |
+| Support group | `ci.support_group.l2.name` — who to call |
+| Down (min) | Minutes since the last document, worst first |
+
+Only `host.name` is grouped raw, so it is the single drilldown-actionable column; every other column
+passes through `TO_STRING()` or `CASE()` and is inert on click.
+
+> **On "impacted CI":** this shows the CI *that is down* plus what the CMDB says it is for. It does **not**
+> show downstream CIs that depend on it — that needs the `cmdb-ci-relations-*` graph joined to the host
+> list, which ES|QL cannot do at query time on a 33.9M-edge index. It needs an ENRICH policy or a
+> denormalising transform on the Elasticsearch side.
+
+*Overlaps with* **Coverage Gap — Monitored CIs Not Reporting**, which covers all of `metrics-*` (not just
+servers) and filters to monitored + Operational CIs. This panel is the server-specific, tile-matching view
+with the drill-down.
 
 ### 3.6 Coverage Gap — Monitored CIs Not Reporting (>15 min)
 **Type:** Lens data table · **Index:** `metrics-*`
