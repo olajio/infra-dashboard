@@ -38,45 +38,15 @@ FROM servicenow-open-incidents-snapshots-* | LIMIT 3
 
 
 
+POST servicenow-open-incidents-snapshots-*/_search
+{"size":0,"aggs":{
+  "has_parents":{"filter":{"exists":{"field":"ci.parents.name"}}},
+  "has_top":{"filter":{"exists":{"field":"ci.top_level_parents.name"}}},
+  "has_bizsvc":{"filter":{"exists":{"field":"business_service.name"}}},
+  "has_ci":{"filter":{"exists":{"field":"ci.name"}}},
+  "ci_classes":{"terms":{"field":"ci.class_name","size":25}}
+}}
 
-
-# 1: GET _cat/indices/*cmdb*?v&s=index [200 OK]
-health status index                      uuid                   pri rep docs.count docs.deleted store.size pri.store.size dataset.size
-green  open   bridge-enrichment-cmdb-cis KWQGZHd1QWyT1Li-MAjYew   1   1          0            0       502b           251b         251b
-green  open   cmdb                       kabGc1g2QiKrLr0cA9xlSg   1   1          0            0       500b           250b         250b
-green  open   cmdb-ci-relations-000002   Sha6AgBaQHauviGbuOeL8A   1   1   33886722     35978928     13.1gb          6.5gb        6.5gb
-green  open   cmdb-cis-000003            xu0AC3J9S3G9cbkE9npOTQ   1   1    3876184       241039      1.8gb        922.8mb      922.8mb
-green  open   cmdb-relations             zQByc6T2SzG0VByrxIjS5g   1   1    3671725       511897      1.5gb        808.1mb      808.1mb
-green  open   cmdb_app_dependencies_v2   SelOBt7tQq-Jjr4qwVtuHg   1   1       8924         1537      8.1mb            4mb          4mb
-green  open   cmdb_ci_normalized         fFcZ42K1TU2wH5au-fMl3A   1   1   21382856      4034811      9.9gb          4.9gb        4.9gb
-green  open   cmdb_rel_edges             r4OdW_NsT6OCqIWLWXcl3A   1   1    9994327           74      4.1gb            2gb          2gb
-green  open   cmdb_rel_edges_deduced     xIxWOzvoQ1Co1FFmYm1NGQ   1   1        555          120    382.8kb        191.4kb      191.4kb
-green  open   cmdb_with_apm_flag         Cc8WMmyVSd6ttOKkh-RcLA   1   1       2316         6878       17mb          8.5mb        8.5mb
-
-# 2: GET _cat/indices/*servicenow*?v&s=index [200 OK]
-health status index                                                         uuid                   pri rep docs.count docs.deleted store.size pri.store.size dataset.size
-green  open   .ds-logs-servicenow.event-default-2026.09.10-000094           s6leS67bTnqlgFHU7rYfww   1   1   19682959            0     22.9gb         11.4gb       11.4gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.06.09-000170 mNoIEFqkQVWYSUWx6x9ZUw   1   0    6411288            0         0b             0b        3.4gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.06.16-000171 guJLuxfvRbWSV9OsIkzd6Q   1   0    6177711            0         0b             0b        3.4gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.06.23-000172 0__J6loySnSH0Y-PdNijdQ   1   0    6788501            0         0b             0b        3.7gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.06.30-000173 pxI1-bRfTPiPsu8uNGNdsw   1   0    6439159            0         0b             0b        3.5gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.07.07-000174 lJ0U1VIOR-uBa588idm_1w   1   0    6277379            0         0b             0b        3.4gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.07.14-000175 TnWGi5m7RZKPkrpMFafVhg   1   0    6444109            0         0b             0b        3.5gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.07.21-000176 tjQ0SaSOTTWuk-NVXl0R3g   1   0    6327288            0         0b             0b        3.5gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.07.28-000177 qWdBGEQ5QqOLWbuGISrVIg   1   0    6103512            0         0b             0b        3.4gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.08.04-000178 naX-4jTIQiSZFyDbSgDkWg   1   0    6198861            0         0b             0b        3.4gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.08.11-000179 PlCXOZaZQuKNJfn-37xNKA   1   0    6177194            0         0b             0b        3.3gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.08.18-000180 _jcjCy14R9aGeGHswS6D_A   1   0    6169262            0         0b             0b        3.3gb
-green  open   partial-servicenow-open-incidents-snapshots-2026.08.25-000181 lYSK00nrTgmZyGHP7Q8JwA   1   0    6146140            0         0b             0b        3.3gb
-green  open   servicenow-change-requests-000001                             P8fZ0zPoQ0yZ5qPFbZHIXw   1   1     147503        54730    502.9mb        251.6mb      251.6mb
-green  open   servicenow-companies-000001                                   qVkndeYqRA-kxZ58dK4eJQ   1   1          0            0       502b           251b         251b
-green  open   servicenow-incident-timelines-000001                          dXDuwSoQRiaGuCQEVqfLFw   1   1    9912185      5903079     15.6gb          7.8gb        7.8gb
-green  open   servicenow-incidents-000001                                   _DTvbWQ2SrCeAZCBaVlAmg   1   1    1227676        23888      1.5gb          811mb        811mb
-green  open   servicenow-locations-000001                                   YpYLdNk2RZKoNsdN3Yx0Vw   1   1        475           44    833.7kb        422.2kb      422.2kb
-green  open   servicenow-open-incidents-snapshots-2026.09.01-000182         JSRK6TpzQCyClYEWQgsl9A   1   1    6154725            0      6.9gb          3.4gb        3.4gb
-green  open   servicenow-open-incidents-snapshots-2026.09.08-000183         TQwYfIXsSP6a7QmBbMLE8g   1   1    5982932            0      6.7gb          3.3gb        3.3gb
-green  open   servicenow-problems-2023.05.08-000002                         YgLkI--rSdmexAg8PtK-eg   1   1      14627        14285     67.9mb         33.9mb       33.9mb
-green  open   servicenow-service-mappings-000001                            zMfFVtrKQne3LN982mtehQ   1   1     769075      2576451      1.8gb        968.6mb      968.6mb
-green  open   servicenow-ssr-tasks-2023.05.19-000001                        udPDY_bmQlakdRSnjCJQYQ   1   1     518800       281672    887.2mb        443.4mb      443.4mb
-green  open   servicenow-task-sla-000001                                    CvKjk9ysS6qLSrKs5KlCfw   1   1     198461        52399    141.8mb         70.9mb       70.9mb
-
+GET cmdb-ci-relations-000002/_search?size=2
+GET cmdb_rel_edges/_search?size=2
+GET servicenow-service-mappings-000001/_search?size=2
