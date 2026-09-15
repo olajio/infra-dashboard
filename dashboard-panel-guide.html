@@ -227,13 +227,34 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>41</b></span>
+    <span>Panels <b>44</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
     <span>Dashboard id <b>ops-dashboard-consolidated-v1</b></span>
   </div>
 </header>
+
+<section>
+  <h2>Dashboard flow &mdash; four sections</h2>
+  <p class="sec-note">The dashboard reads top to bottom as a narrative, each section answering the question the one above it raises. Section headers are markdown banners on the dashboard itself.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>#</th><th>Section</th><th>Question it answers</th><th>Panels, in order</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1</strong></td><td><strong>Executive Health</strong></td><td>Is the business healthy right now?</td><td>Overall Infrastructure Health &middot; Server Availability % &middot; Active P1 &middot; Active P2 &middot; Applications Degraded (Prod) &middot; Impacted Domain &middot; Impacted CIs &middot; Application Health &mdash; APM</td></tr>
+      <tr><td><strong>2</strong></td><td><strong>Operational Effectiveness</strong></td><td>How is the estate actually running, and what needs hands on it?</td><td>Total Servers &middot; Servers Up &middot; Servers Down &middot; Servers Availability % &middot; Server Availability Trend &middot; Servers Down &mdash; Impacted CIs &middot; Disk Saturation &middot; Network Errors</td></tr>
+      <tr><td><strong>3</strong></td><td><strong>Monitoring Maturity</strong></td><td>How much can we see, and can we trust sections 1 and 2?</td><td>Monitored Estate by Tier &middot; Business Applications Monitored &middot; APM Services Instrumented &middot; Application Estate by environment &middot; Agent / Collector Health &middot; Coverage Gap Risk &middot; Telemetry Freshness &middot; Telemetry Freshness Trend &middot; Ingest Pipeline Health &middot; Coverage Gap &mdash; CIs Not Reporting &middot; Applications on Silent Servers</td></tr>
+      <tr><td><strong>4</strong></td><td><strong>Automation &amp; Predictive Operations</strong></td><td>What is automation taking off the queue, and what is coming?</td><td>Raw Netcool Alerts &middot; Correlated SN Events &middot; Alert Dedup Ratio &middot; Alert Volume Trend &middot; Noise Reduction &mdash; AI KPI status &middot; Predictive Insights</td></tr>
+    </tbody>
+  </table></div>
+  <p>Quick links and <strong>Notes &amp; Data Limitations</strong> trail the four sections as reference material.</p>
+
+  <div class="note info">
+    <h3>Why panels sit where they do</h3>
+    <p>Section 3 is deliberately <em>after</em> the operational detail rather than buried at the bottom: a coverage gap or a stale feed means the availability figures in sections 1 and 2 are optimistic, so it reads as the confidence statement for everything above it. Alert correlation and deduplication sit in section 4 rather than with the alert-handling detail because they measure what automation removes from the analyst queue &mdash; the same question the predictive tiles ask.</p>
+    <p>The per-panel write-ups below are grouped by subject, not by on-screen order. Use the table above for the layout.</p>
+  </div>
+</section>
 
 <section>
   <h2>Team feedback &rarr; what shipped</h2>

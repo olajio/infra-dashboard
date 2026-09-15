@@ -3,11 +3,37 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 41 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 44 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
-## 0. How to import
+## 0. Dashboard flow — four sections
+
+The dashboard reads top to bottom as a narrative, each section answering the question the one above it
+raises. Section headers are markdown banners on the dashboard itself.
+
+| # | Section | Question it answers | Panels, in order |
+|---|---|---|---|
+| **1** | 🏢 **Executive Health** | *Is the business healthy right now?* | Overall Infrastructure Health · Server Availability % · Active P1 · Active P2 · Applications Degraded (Prod) · Impacted Domain · Impacted CIs · Application Health — APM |
+| **2** | 🔧 **Operational Effectiveness** | *How is the estate actually running, and what needs hands on it?* | Total Servers · Servers Up · Servers Down · Servers Availability % · Server Availability Trend · Servers Down — Impacted CIs · Disk Saturation · Network Errors |
+| **3** | 📡 **Monitoring Maturity** | *How much can we see, and can we trust sections 1 and 2?* | Monitored Estate by Tier · Business Applications Monitored · APM Services Instrumented · Application Estate by environment · Agent / Collector Health · Coverage Gap Risk · Telemetry Freshness · Telemetry Freshness Trend · Ingest Pipeline Health · Coverage Gap — CIs Not Reporting · Applications on Silent Servers |
+| **4** | 🤖 **Automation & Predictive Operations** | *What is automation taking off the queue, and what is coming?* | Raw Netcool Alerts · Correlated SN Events · Alert Dedup Ratio · Alert Volume Trend · Noise Reduction — AI KPI status · Predictive Insights |
+
+Quick links and **Notes & Data Limitations** trail the four sections as reference material.
+
+**Why panels sit where they do.** Section 3 is deliberately *after* the operational detail rather than
+buried at the bottom: a coverage gap or a stale feed means the availability figures in sections 1 and 2
+are optimistic, so it reads as the confidence statement for everything above it. Alert correlation and
+deduplication sit in section 4 rather than with the alert-handling detail because they measure what
+automation removes from the analyst queue, which is the same question the predictive tiles ask.
+
+> The per-panel write-ups below keep their original numbering (§2 for the executive panels, §3 for the
+> operational ones). That numbering is a reference index, not the on-screen order — use the table above
+> for the layout.
+
+---
+
+## 0.1 How to import
 
 Kibana → **Stack Management → Saved Objects → Import** → select `operation-dashboard.ndjson` →
 choose *"Check for existing objects"* and **overwrite** the existing dashboard to keep the same URL/bookmarks.
