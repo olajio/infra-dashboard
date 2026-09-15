@@ -439,7 +439,7 @@ footer code{font-size:.85em}
     <div class="addr">2.7</div>
     <div>
       <div class="entry-head"><h3>Application Health &mdash; APM</h3>
-        <span class="tag">data table</span><span class="tag">apm.service_transaction.1m</span></div>
+        <span class="tag">data table</span><span class="tag">apm.service_transaction.1m</span><span class="tag">APM drill-down</span></div>
       <p class="answers">Which business applications are failing, in which portfolio and environment?</p>
       <p>One row per business application &times; portfolio &times; environment, sorted worst-first: <strong>Health</strong> (&#128308; RED &ge; 5% errors, &#128992; AMBER &ge; 1%, &#128994; GREEN below), <strong>Business application</strong>, <strong>Portfolio</strong>, <strong>Env</strong>, <strong>Error rate %</strong>, <strong>Avg latency (ms)</strong>, <strong>Failed txns</strong> and <strong>Transactions</strong>.</p>
       <p><strong>How the maths works.</strong> <code>event.success_count</code> and <code>transaction.duration.summary</code> are <code>aggregate_metric_double</code> fields &mdash; each document stores <code>{sum, value_count}</code> rather than a single number. In ES|QL <code>COUNT(field)</code> returns the summed <code>value_count</code> and <code>SUM(field)</code> the summed <code>sum</code>:</p>
@@ -450,6 +450,11 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
       <pre><code>FROM metrics-apm*
 | WHERE data_stream.dataset == "apm.service_transaction.1m"
 | STATS docs = COUNT(*), txns = COUNT(event.success_count), ok = SUM(event.success_count)</code></pre>
+      <p><strong>Drill-down into APM.</strong> Click a value in the <strong>APM service</strong> column and that service&rsquo;s APM overview opens in a new tab:</p>
+      <pre><code>/app/apm/services/&lt;service.name&gt;/overview?rangeFrom=now-24h&amp;rangeTo=now&amp;environment=ENVIRONMENT_ALL</code></pre>
+      <p>Two constraints shape this, both worth knowing before anyone asks. <strong>Kibana only offers a drilldown on columns backed by a real index field</strong> &mdash; values produced by <code>EVAL</code> or <code>STATS</code> are not index-backed and cannot be clicked through. So <code>service.name</code> is grouped raw and stays actionable, while Business application, Portfolio, Env and every metric are computed and inert on click. That is deliberate: a stray click on the wrong column cannot open a broken APM page.</p>
+      <p><strong>The link must key on <code>service.name</code>, not the business application name.</strong> APM addresses services by <code>service.name</code> (<code>document management facility prod</code>); the ServiceNow name (<em>Document Management Facility</em>) resolves to a service APM does not have. The table therefore shows the business application as the label and carries <code>service.name</code> as the clickable column beside it &mdash; which also means the table is now one row per <strong>APM service</strong>, with its business application alongside.</p>
+      <p><em>On ES|QL tables:</em> the URL field formatter &mdash; the usual way to turn a cell into a hyperlink &mdash; does not render as a link in ES|QL-backed Lens tables, only data-view-backed ones. The URL drilldown is the supported route here, which is why the value opens on click rather than looking like a blue link.</p>
       <p><strong>Application naming.</strong> APM documents carry the CMDB <em>Business Application</em> enrichment &mdash; <code>ci.name</code> (<em>Document Management Facility</em>), <code>ci.number</code> (<code>APM0003276</code>), <code>ci.customer_specific.pm_portfolio</code> (<em>Policy Admin (Commercial and Specialty)</em>) and <code>ci.support_group.l2.name</code>. Panels key on <code>COALESCE(ci.name, service.name)</code> so unenriched services still appear under their raw APM service name.</p>
     </div>
   </div>

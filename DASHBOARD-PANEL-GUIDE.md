@@ -192,6 +192,34 @@ FROM metrics-apm*
 
 `txns` should be well above `docs`.
 
+**Drill-down into APM.** Click a value in the **APM service** column and that service's APM overview
+opens in a new tab:
+
+```
+/app/apm/services/<service.name>/overview?rangeFrom=now-24h&rangeTo=now&environment=ENVIRONMENT_ALL
+```
+
+Two design constraints shape how this works, both worth knowing before anyone asks:
+
+1. **Kibana only offers a drilldown on columns backed by a real index field.** Values produced by `EVAL`
+   or `STATS` are not index-backed, so they cannot be clicked through. `service.name` is therefore
+   grouped raw and stays actionable, while Business application, Portfolio, Env and every metric are
+   computed and inert on click. That is deliberate — a stray click on the wrong column cannot open a
+   broken APM page.
+2. **The link must key on `service.name`, not the business application name.** APM addresses services by
+   `service.name` (`document management facility prod`); the ServiceNow Business Application name
+   (`Document Management Facility`) would resolve to a service that does not exist in APM. The table
+   shows the business application as the label and carries `service.name` as the clickable column
+   beside it.
+
+The table is consequently **one row per APM service**, with its business application shown alongside,
+rather than one row per business application. Leadership reads the Business application and Health
+columns; SRE clicks the APM service column to investigate.
+
+> **Note on ES|QL tables:** the URL *field formatter* — the usual way to make a table cell a hyperlink —
+> does not render as a link in ES|QL-backed Lens tables, only in data-view-backed ones. The URL drilldown
+> is the supported route here, which is why the value opens on click rather than looking like a blue link.
+
 **Application naming.** APM documents carry the CMDB *Business Application* enrichment — `ci.name`,
 `ci.number` (`APM0003276`), `ci.customer_specific.pm_portfolio` and `ci.support_group.l2.name`. Panels
 key on `COALESCE(ci.name, service.name)`, so services without enrichment still appear under their raw
