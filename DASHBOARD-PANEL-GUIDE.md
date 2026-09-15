@@ -372,6 +372,30 @@ Threshold lives in the `WHERE disk_pct > 0.5` clause.
 `MAX` of `system.network.in.errors` and `system.network.out.errors` per **host × interface**, summed into
 a total, filtered to >0, top 25. Surfaces bad NICs, duplex mismatches and saturated links.
 
+### Host drill-down — Disk Saturation & Network Errors
+
+Clicking a **Host** on either panel opens that host in **Observability → Infrastructure**:
+
+```
+https://kibana-prod.gcp.cna.com/app/metrics/detail/host/<host>
+```
+
+Built the same way as the APM service drill-down: a URL drilldown on the panel, fired by a single click.
+
+**Why the queries changed slightly.** Kibana only offers a drilldown on columns backed by a real index
+field — values produced by `EVAL` or `STATS` are not. Both panels previously grouped by *two* index
+fields (`host.name` **and** the mount point / interface), which would have made the second column
+clickable too and sent a mount point like `P:\` into the host URL. Each query now wraps that column in
+`TO_STRING()` so it becomes computed and inert, leaving `host.name` as the single actionable column.
+`oneClickFilter` is off on the host column so the click opens the action menu rather than applying a
+filter.
+
+Nothing else on either panel changed — same thresholds, same limits, same columns, same position.
+
+> **One thing to check on import:** the path `/app/metrics/detail/host/<host>` is the Observability
+> Infrastructure host-detail route. If it 404s in your Kibana, the fix is a one-line edit to the
+> drilldown URL template on each panel — everything else stays as is.
+
 ### 3.9 Ingest Pipeline Health — max lag per data source
 **Type:** Lens data table · **Index:** `metrics-*`
 Max lag, average lag and document count grouped by `data_stream.dataset` (system.filesystem,
