@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 40 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 43 on the landing page + 8 on the detail dashboard · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -12,7 +12,7 @@
 Kibana → **Stack Management → Saved Objects → Import** → select `operation-dashboard.ndjson` →
 choose *"Check for existing objects"* and **overwrite** the existing dashboard to keep the same URL/bookmarks.
 
-The file contains two saved objects: the `metrics-*` data view and the dashboard itself. All other index
+The file contains **four** saved objects: the `metrics-*` data view, the **Operations Dashboard** landing page, and the **Infrastructure Detail — Saturation & Platform** dashboard. All other index
 patterns are **ad-hoc ES|QL data views** embedded inside each panel — nothing else to create.
 
 ---
@@ -456,3 +456,68 @@ Nothing else on the dashboard changes — the RAG tile already reads P1/P2 strai
 * **The APM application register is now on the dashboard** (panel 2.10). The CMDB-derived Impacted
   Applications panels (2.5 / 2.7) are kept because they answer a different question — *which applications
   sit on servers that have gone silent* — rather than being replaced by it.
+
+---
+
+## 7. Landing-page restructure — *infra db recs.docx*
+
+The dashboard now follows the flow the team asked for, and the NDJSON carries **two** dashboards.
+
+### 7.1 The four sections
+
+| # | Section | Contains |
+|---|---|---|
+| 1 | **Executive Health** | Overall Infrastructure Health · Active P1 · Active P2 · Applications Impacted · Services at Risk · Monitoring Coverage % · Since Last P1 · P1s Raised (7 days) · Server Availability % · Health Trend (7 days) · Impacted Domain |
+| 2 | **Operational Effectiveness** | Impacted CIs · Application Health (APM) · Alert Volume Trend · Applications on Silent Servers · server up/down/total/availability |
+| 3 | **Monitoring Maturity** | Agent Health · Coverage Gap Risk · Telemetry Freshness · **Uncorrelated Alerts** · Raw/Correlated/Dedup · Coverage Gap table · Monitored Estate by Tier · Ingest Pipeline Health · Freshness Trend · APM estate |
+| 4 | **Automation & Predictive Operations** | Predictive Insights (limitations) · Automation & Auto-remediation (limitations) · Noise Reduction AI KPI status |
+
+**Moved off the landing page**, per *"metrics to remove"*: disk saturation, network errors and the
+OS-specific deep links now live on a second dashboard, **Infrastructure Detail — Saturation & Platform**
+(`ops-dashboard-infra-detail-v1`), linked from the footer tile. Both dashboards import from the one NDJSON.
+
+### 7.2 New executive KPIs
+
+| Panel | How it works | Limitation |
+|---|---|---|
+| **Overall Infrastructure Health** | Rolls up every domain: RAG from active P1/P2 across all CI classes **plus** server availability. Shows domains with P1, domains with P2, and server availability. | Only servers have live availability telemetry. Database, Middleware, Network and Storage reach the tile **through incidents only** — a silent database with no incident raised will not turn it amber. |
+| **Services at Risk** | Servers with a filesystem at or above 90% full. | **Disk only.** CPU and memory field names in `system.cpu` / `system.memory` are unconfirmed; adding them would be a guess. |
+| **Monitoring Coverage %** | Monitored, Operational CIs reporting in the last 15 min ÷ all such CIs. | This is *reporting* coverage, not CMDB **onboarding** coverage. The "4,200 of 4,600" figure Senthil asked for needs `cmdb-cis-000003`, schema unconfirmed. |
+| **Since Last P1 (hrs)** | Hours since the most recent **open** P1 was raised. | Measured against currently-open P1s. "Time since the last P1 ever" needs `servicenow-incidents-000001`. |
+| **P1s Raised (7 days)** | Distinct P1 incident numbers with `opened_at` in the last 7 days. | Counts P1s still open. A P1 opened and closed inside the window is not counted. |
+| **Infrastructure Health Trend — 7 days** | Per day: servers reporting, P1 opened, P2 opened, CIs impacted, with a RAG marker. | Carries its **own 7-day panel time range**, so it stays 7 days whatever the dashboard picker says. Every other panel follows the picker. |
+| **Uncorrelated Alerts (24h)** | Raw Netcool alerts minus correlated ServiceNow events. | Volume difference, not a per-alert join — there is no shared correlation id. |
+
+### 7.3 Triage path (recs 5 & 6)
+
+Clicking an **Impacted CI** now offers two destinations, infrastructure first:
+
+1. **Open infrastructure view for this CI** → `/app/metrics/detail/host/<ci>`
+2. **Open CI in ServiceNow CMDB** → `cmdb_ci_list.do?sysparm_query=name=<ci>`
+
+That satisfies *"do not land directly into ServiceNow"* while keeping the CMDB path one click away.
+The **APM service** column on Application Health drills into the APM service overview.
+
+**The full chain the team drew — Application → Impacted CI → Infrastructure Component → Health — is not
+yet joinable.** `business_service.name` is populated on only 2.8% of incident documents, and
+`ci.parents.*` on none. Application-side and CI-side impact are two separate panels today, not one path.
+
+### 7.4 Predictive & ML limitations
+
+Everything under *Predictive Insights* is forecasting and therefore needs a trained model. **No ML job
+exists today**, so the tile states what each ask needs rather than showing an invented number:
+
+| Ask | Needs | Blocker |
+|---|---|---|
+| Alert trend forecasting | ML `forecast` on the Netcool hourly series | No job; *Alert Volume Trend* is the training baseline |
+| Capacity risk (days-to-full) | Regression per filesystem over weeks | Needs a retained daily rollup; raw retention is the constraint |
+| Infrastructure risk indicators | Multi-metric anomaly detection | No job; CPU/memory fields unconfirmed |
+| Predictive risk signal | Composite of the above | Depends on all three |
+
+Elastic ML is licensed and running (`.internal.alerts-ml.anomaly-detection.alerts-*`), so nothing is
+technically blocking. *Services at Risk* is a current-state threshold count — deliberately **not**
+labelled predictive.
+
+**Auto-remediation cannot be measured at all**: no field in this cluster records that a remediation ran.
+Executions, auto-resolved incidents, success rate and time saved would each need a new source — an
+orchestration event stream, or `close_code` / `resolved_by` on `servicenow-incidents-*`.
