@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 39 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 40 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -132,28 +132,36 @@ numbers** (not documents) means the recurring open-incident snapshots do not inf
 Production business applications whose APM **error rate is 1% or worse** over the dashboard window.
 This is real transaction health, not a proxy.
 
-### 2.6 Impacted Domain — Infrastructure Health by Domain
-**Type:** Lens data table · **Index:** `metrics-*`
+### 2.6 Impacted Domain — Active P1 / P2 Incidents
+**Type:** Lens data table · **Index:** `servicenow-open-incidents-snapshots-*`
 
-Answers *"which technology domain is hurting right now?"*. Columns: **Domain · Impacted CIs · Total CIs ·
-Availability % · Health**, sorted worst-first, with the same 🟢/🟠/🔴 wording as the executive tile
-(GREEN = 0 impacted, AMBER = ≥98 % available, RED = below that).
+Which technology domain the open P1s and P2s are actually landing in. Columns: **Status · Domain · P1 ·
+P2 · Incidents · Impacted CIs**, worst-first.
 
-Domain is derived per CI, first match wins:
+Domain is grouped from `ci.class_name` **on the incident record**, using the CMDB's real class
+vocabulary:
 
-| Domain shown | Derived from |
+| Domain | CI classes |
 |---|---|
-| Database | `ci.support_group.l2.name` starts with `IT.I.Exadata` |
-| Network / Boundary | starts with `IT.Sec.Boundary` |
-| Security / SIEM | starts with `IT.Sec.SIEM` |
-| Security / IAM | starts with `IT.Sec` (catch-all for the remaining security groups) |
-| Cloud / GCP | starts with `IT.I.GCP` |
-| Windows | `ci.class_name == "Windows Server"` |
-| Linux / UNIX | `ci.class_name == "Linux Server"` |
-| Other / Unclassified | everything else |
+| Windows | Windows Server |
+| Linux | Linux Server |
+| AIX / UNIX | AIX Server |
+| Network | IP Switch · IP Router · Wireless Access Point · IP Address |
+| Database | MSFT SQL Instance |
+| Storage | Storage Server |
+| Middleware | Application Server |
+| Virtualisation | VMware Virtual Machine Instance · ESX Server |
+| Application / Service | Mapped / Calculated / Tag-Based / plain Application Service · Infrastructure Service · Business Application |
+| Batch | Batch Job |
+| Facilities / Power | UPS |
+| Other infrastructure | Computer · Server · Hardware · Printer · Configuration Item |
 
-*To add a domain* (Middleware, Storage, …) add one more `STARTS_WITH(ci_group, "<prefix>"), "<Domain>"`
-pair at the top of the `EVAL domain = CASE(...)` block.
+Anything unmapped falls through to its **raw class name** rather than a catch-all bucket, so a class we
+haven't seen shows up by name instead of disappearing into "Other".
+
+> **This replaces the CMDB-derived version.** Feedback item #3 asked for impacted domain *for active
+> incidents*, and that is now what it is. The earlier panel grouped server telemetry by support group
+> because the incident CI fields were believed to be empty — see the correction in 2.11.
 
 ### 2.7 Application Health — APM (error rate & latency)
 **Type:** Lens data table · **Index:** `metrics-apm*`, dataset `apm.service_transaction.1m`
@@ -277,6 +285,28 @@ matching into Production · DR · ETE/Test · CUT · Stage · Dev · Sandbox · 
 
 > **This is inventory and telemetry freshness, not application health.** See the limitations section for
 > why a health panel needs one more field confirmation.
+
+### 2.11 Impacted CIs — Active P1 / P2 Incidents
+**Type:** Lens data table · **Index:** `servicenow-open-incidents-snapshots-*`
+
+The incident-side worklist: every open P1/P2 with the CI it landed on. Columns: **Sev · Incident ·
+Impacted CI · CI class · Env · Assigned to · Short description · Last seen**.
+
+**Drill-down:** click an **Impacted CI** to open that CI in the ServiceNow CMDB
+(`https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name=<ci>`), where the Affected CIs and
+relationship tabs live. As with the APM table, only `ci.name` is grouped raw so it is the single
+drilldown-actionable column — every other column is passed through `TO_STRING()`/`CASE()` and is inert
+on click, so a stray click cannot open the wrong record.
+
+**Correction:** an earlier version of this guide said `ci.name` was not populated on the incidents index,
+and the Impacted Domain / Impacted Applications panels were built CMDB-derived as a result. That was
+wrong. The index carries **340 fields**, including the full CI enrichment (`ci.name`, `ci.sys_id`,
+`ci.class_name`, `ci.environment`, `ci.fqdn`, `ci.ip_address`, `ci.geo.*`, `ci.support_group.l2.name`)
+plus `assignment_group.name` and `category.1/2`. The wrong conclusion came from an empty CSV export, not
+from the data.
+
+*Caveat:* the source is a snapshot index, so an incident reassigned or re-described inside the dashboard
+window can appear on more than one row; the newest sorts first.
 
 ---
 

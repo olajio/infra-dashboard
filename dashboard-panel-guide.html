@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>39</b></span>
+    <span>Panels <b>40</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -414,24 +414,29 @@ footer code{font-size:.85em}
   <div class="entry">
     <div class="addr">2.6</div>
     <div>
-      <div class="entry-head"><h3>Impacted Domain &mdash; Infrastructure Health by Domain</h3>
-        <span class="tag">data table</span><span class="tag">metrics-*</span></div>
-      <p class="answers">Which technology domain is hurting?</p>
-      <p>Columns: <strong>Domain &middot; Impacted CIs &middot; Total CIs &middot; Availability % &middot; Health</strong>, sorted worst-first and using the same RAG wording as the executive tile. Each CI is bucketed once, first match wins:</p>
+      <div class="entry-head"><h3>Impacted Domain &mdash; Active P1 / P2 Incidents</h3>
+        <span class="tag">data table</span><span class="tag">servicenow-open-incidents-snapshots-*</span></div>
+      <p class="answers">Which technology domain are the open P1s and P2s actually landing in?</p>
+      <p>Columns: <strong>Status &middot; Domain &middot; P1 &middot; P2 &middot; Incidents &middot; Impacted CIs</strong>, worst-first. Domain is grouped from <code>ci.class_name</code> <strong>on the incident record</strong>, using the CMDB&rsquo;s real class vocabulary.</p>
       <div class="tbl-wrap"><table>
-        <thead><tr><th>Domain</th><th>Derived from</th></tr></thead>
+        <thead><tr><th>Domain</th><th>CI classes</th></tr></thead>
         <tbody>
-          <tr><td>Database</td><td><code>ci.support_group.l2.name</code> starts with <code>IT.I.Exadata</code></td></tr>
-          <tr><td>Network / Boundary</td><td>starts with <code>IT.Sec.Boundary</code></td></tr>
-          <tr><td>Security / SIEM</td><td>starts with <code>IT.Sec.SIEM</code></td></tr>
-          <tr><td>Security / IAM</td><td>starts with <code>IT.Sec</code> (remaining security groups)</td></tr>
-          <tr><td>Cloud / GCP</td><td>starts with <code>IT.I.GCP</code></td></tr>
-          <tr><td>Windows</td><td><code>ci.class_name == "Windows Server"</code></td></tr>
-          <tr><td>Linux / UNIX</td><td><code>ci.class_name == "Linux Server"</code></td></tr>
-          <tr><td>Other / Unclassified</td><td>everything else</td></tr>
+          <tr><td>Windows</td><td>Windows Server</td></tr>
+          <tr><td>Linux</td><td>Linux Server</td></tr>
+          <tr><td>AIX / UNIX</td><td>AIX Server</td></tr>
+          <tr><td>Network</td><td>IP Switch &middot; IP Router &middot; Wireless Access Point &middot; IP Address</td></tr>
+          <tr><td>Database</td><td>MSFT SQL Instance</td></tr>
+          <tr><td>Storage</td><td>Storage Server</td></tr>
+          <tr><td>Middleware</td><td>Application Server</td></tr>
+          <tr><td>Virtualisation</td><td>VMware Virtual Machine Instance &middot; ESX Server</td></tr>
+          <tr><td>Application / Service</td><td>Mapped / Calculated / Tag-Based / plain Application Service &middot; Infrastructure Service &middot; Business Application</td></tr>
+          <tr><td>Batch</td><td>Batch Job</td></tr>
+          <tr><td>Facilities / Power</td><td>UPS</td></tr>
+          <tr><td>Other infrastructure</td><td>Computer &middot; Server &middot; Hardware &middot; Printer &middot; Configuration Item</td></tr>
         </tbody>
       </table></div>
-      <p>Adding <em>Middleware</em> or <em>Storage</em> later is one more line at the top of the <code>CASE</code> block &mdash; a support-group prefix and the label to show.</p>
+      <p>Anything unmapped falls through to its <strong>raw class name</strong> rather than a catch-all, so an unseen class shows up by name instead of disappearing into &ldquo;Other&rdquo;.</p>
+      <p><strong>This replaces the CMDB-derived version.</strong> Feedback item #3 asked for impacted domain <em>for active incidents</em>, and that is now what it is &mdash; see the correction in 2.11.</p>
     </div>
   </div>
 
@@ -505,6 +510,19 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
       <p><strong>This is inventory and telemetry freshness, not application health.</strong> The reason is below.</p>
     </div>
   </div>
+  <div class="entry">
+    <div class="addr">2.11</div>
+    <div>
+      <div class="entry-head"><h3>Impacted CIs &mdash; Active P1 / P2 Incidents</h3>
+        <span class="tag">data table</span><span class="tag">servicenow-open-incidents-snapshots-*</span><span class="tag">CMDB drill-down</span></div>
+      <p class="answers">Which CIs are the open P1s and P2s actually sitting on?</p>
+      <p>The incident-side worklist: every open P1/P2 with the CI it landed on &mdash; <strong>Sev, Incident, Impacted CI, CI class, Env, Assigned to, Short description, Last seen</strong>.</p>
+      <p><strong>Drill-down:</strong> click an <strong>Impacted CI</strong> to open that CI in the ServiceNow CMDB, where the Affected CIs and relationship tabs live. As with the APM table, only <code>ci.name</code> is grouped raw so it is the single drilldown-actionable column; every other column passes through <code>TO_STRING()</code> or <code>CASE()</code> and is inert on click.</p>
+      <p><strong>Correction:</strong> an earlier version of this guide said <code>ci.name</code> was not populated on the incidents index, and the Impacted Domain and Impacted Applications panels were built CMDB-derived as a result. That was wrong &mdash; the index carries <strong>340 fields</strong> including the full CI enrichment plus <code>assignment_group.name</code> and <code>category.1/2</code>. The wrong conclusion came from an empty CSV export, not from the data.</p>
+      <p><em>Caveat:</em> the source is a snapshot index, so an incident reassigned or re-described inside the window can appear on more than one row; the newest sorts first.</p>
+    </div>
+  </div>
+
 </section>
 
 <section>
