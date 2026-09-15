@@ -132,28 +132,36 @@ numbers** (not documents) means the recurring open-incident snapshots do not inf
 Production business applications whose APM **error rate is 1% or worse** over the dashboard window.
 This is real transaction health, not a proxy.
 
-### 2.6 Impacted Domain — Infrastructure Health by Domain
-**Type:** Lens data table · **Index:** `metrics-*`
+### 2.6 Impacted Domain — Active P1 / P2 Incidents
+**Type:** Lens data table · **Index:** `servicenow-open-incidents-snapshots-*`
 
-Answers *"which technology domain is hurting right now?"*. Columns: **Domain · Impacted CIs · Total CIs ·
-Availability % · Health**, sorted worst-first, with the same 🟢/🟠/🔴 wording as the executive tile
-(GREEN = 0 impacted, AMBER = ≥98 % available, RED = below that).
+Which technology domain the open P1s and P2s are actually landing in. Columns: **Status · Domain · P1 ·
+P2 · Incidents · Impacted CIs**, worst-first.
 
-Domain is derived per CI, first match wins:
+Domain is grouped from `ci.class_name` **on the incident record**, using the CMDB's real class
+vocabulary:
 
-| Domain shown | Derived from |
+| Domain | CI classes |
 |---|---|
-| Database | `ci.support_group.l2.name` starts with `IT.I.Exadata` |
-| Network / Boundary | starts with `IT.Sec.Boundary` |
-| Security / SIEM | starts with `IT.Sec.SIEM` |
-| Security / IAM | starts with `IT.Sec` (catch-all for the remaining security groups) |
-| Cloud / GCP | starts with `IT.I.GCP` |
-| Windows | `ci.class_name == "Windows Server"` |
-| Linux / UNIX | `ci.class_name == "Linux Server"` |
-| Other / Unclassified | everything else |
+| Windows | Windows Server |
+| Linux | Linux Server |
+| AIX / UNIX | AIX Server |
+| Network | IP Switch · IP Router · Wireless Access Point · IP Address |
+| Database | MSFT SQL Instance |
+| Storage | Storage Server |
+| Middleware | Application Server |
+| Virtualisation | VMware Virtual Machine Instance · ESX Server |
+| Application / Service | Mapped / Calculated / Tag-Based / plain Application Service · Infrastructure Service · Business Application |
+| Batch | Batch Job |
+| Facilities / Power | UPS |
+| Other infrastructure | Computer · Server · Hardware · Printer · Configuration Item |
 
-*To add a domain* (Middleware, Storage, …) add one more `STARTS_WITH(ci_group, "<prefix>"), "<Domain>"`
-pair at the top of the `EVAL domain = CASE(...)` block.
+Anything unmapped falls through to its **raw class name** rather than a catch-all bucket, so a class we
+haven't seen shows up by name instead of disappearing into "Other".
+
+> **This replaces the CMDB-derived version.** Feedback item #3 asked for impacted domain *for active
+> incidents*, and that is now what it is. The earlier panel grouped server telemetry by support group
+> because the incident CI fields were believed to be empty — see the correction in 2.11.
 
 ### 2.7 Application Health — APM (error rate & latency)
 **Type:** Lens data table · **Index:** `metrics-apm*`, dataset `apm.service_transaction.1m`
