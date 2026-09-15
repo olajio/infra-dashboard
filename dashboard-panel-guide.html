@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>40</b></span>
+    <span>Panels <b>41</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -553,6 +553,23 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
       <tr><td><strong>Telemetry Freshness Trend</strong></td><td>Max ingest lag per hour, in minutes. A rising staircase means the pipeline is falling behind; a single spike is a transient relay or backpressure event.</td></tr>
     </tbody>
   </table></div>
+
+  <div class="entry">
+    <div class="addr">new</div>
+    <div>
+      <div class="entry-head"><h3>Servers Down &mdash; Impacted CIs</h3>
+        <span class="tag">data table</span><span class="tag">metrics-* scoped to system.*</span><span class="tag">host drill-down</span></div>
+      <p class="answers">Which servers are down, what CI is each one, and who owns it?</p>
+      <p>The worklist behind the <strong>Servers Down</strong> tile, sitting directly under it. It uses the <strong>same scope and window as that tile</strong> &mdash; <code>system.*</code> datasets, seen in the window but not in the last 15 minutes &mdash; so the row count and the tile agree. Deliberately no <code>ci.is_monitored</code> filter, because the tile has none either.</p>
+      <p>Columns: <strong>Host</strong> (click to open in Observability &rarr; Infrastructure) &middot; <strong>Impacted CI</strong> &middot; <strong>CI class</strong> &middot; <strong>Application / purpose</strong> &middot; <strong>Env</strong> &middot; <strong>Location</strong> &middot; <strong>Support group</strong> &middot; <strong>Down (min)</strong>, worst first. Application shows <code>&mdash;</code> where the CMDB holds <code>uname</code> output rather than a real name, which is typical for Linux CIs.</p>
+      <p>Only <code>host.name</code> is grouped raw, so it is the single drilldown-actionable column; everything else passes through <code>TO_STRING()</code> or <code>CASE()</code> and is inert on click.</p>
+    </div>
+  </div>
+
+  <div class="note warn">
+    <h3>On &ldquo;impacted CI&rdquo;</h3>
+    <p>This shows the CI <em>that is down</em> plus what the CMDB says it is for. It does <strong>not</strong> show downstream CIs that depend on it &mdash; that needs the <code>cmdb-ci-relations-*</code> graph joined to the host list, which ES|QL cannot do at query time against a 33.9M-edge index. It needs an ENRICH policy or a denormalising transform on the Elasticsearch side.</p>
+  </div>
 
   <div class="kicker">Worklists</div>
   <div class="tbl-wrap"><table>

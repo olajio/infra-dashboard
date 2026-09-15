@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 40 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 41 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -355,6 +355,39 @@ alert-storm forecast would be trained against — visible spikes are today's sto
 **Type:** Lens line chart · **Index:** `metrics-*`
 `MAX(ingest_lag_in_sec)` per hour, converted to minutes. A rising staircase = the ingest pipeline is
 falling behind; a spike = a transient relay/backpressure event.
+
+### 3.x Servers Down — Impacted CIs (>15 min without telemetry)
+
+**Type:** Lens data table · **Index:** `metrics-*`, scoped to `system.*` · **Location:** directly under the
+Servers Up / Down / Availability tiles
+
+The worklist behind the **Servers Down** tile. It uses the **same scope and window as that tile** —
+`STARTS_WITH(data_stream.dataset, "system.")`, seen in the dashboard window but not in the last 15
+minutes — so the row count and the tile agree. Deliberately no `ci.is_monitored` filter, because the tile
+has none either.
+
+| Column | Meaning |
+|---|---|
+| **Host** | `host.name` — **click to open the host in Observability → Infrastructure** |
+| Impacted CI | `ci.name`, the ServiceNow CI record for that server |
+| CI class | Windows Server / Linux Server / AIX Server … |
+| Application / purpose | `ci.short_description`. Shows `—` where the CMDB holds `uname` output instead of a real name (typical for Linux CIs) |
+| Env | `ci.environment` |
+| Location | `ci.geo.name` |
+| Support group | `ci.support_group.l2.name` — who to call |
+| Down (min) | Minutes since the last document, worst first |
+
+Only `host.name` is grouped raw, so it is the single drilldown-actionable column; every other column
+passes through `TO_STRING()` or `CASE()` and is inert on click.
+
+> **On "impacted CI":** this shows the CI *that is down* plus what the CMDB says it is for. It does **not**
+> show downstream CIs that depend on it — that needs the `cmdb-ci-relations-*` graph joined to the host
+> list, which ES|QL cannot do at query time on a 33.9M-edge index. It needs an ENRICH policy or a
+> denormalising transform on the Elasticsearch side.
+
+*Overlaps with* **Coverage Gap — Monitored CIs Not Reporting**, which covers all of `metrics-*` (not just
+servers) and filters to monitored + Operational CIs. This panel is the server-specific, tile-matching view
+with the drill-down.
 
 ### 3.6 Coverage Gap — Monitored CIs Not Reporting (>15 min)
 **Type:** Lens data table · **Index:** `metrics-*`
