@@ -565,6 +565,13 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
     </tbody>
   </table></div>
 
+  <div class="note info">
+    <h3>Host drill-down &mdash; Disk Saturation &amp; Network Errors</h3>
+    <p>Clicking a <strong>Host</strong> on either panel opens that host in <strong>Observability &rarr; Infrastructure</strong> at <code>/app/metrics/detail/host/&lt;host&gt;</code> &mdash; built the same way as the APM service drill-down.</p>
+    <p><strong>Why the queries changed slightly.</strong> Kibana only offers a drilldown on columns backed by a real index field; values from <code>EVAL</code> or <code>STATS</code> are not. Both panels previously grouped by <em>two</em> index fields (<code>host.name</code> and the mount point / interface), which would have made the second column clickable too and sent a mount point like <code>P:\</code> into the host URL. Each query now wraps that column in <code>TO_STRING()</code> so it is computed and inert, leaving <code>host.name</code> as the single actionable column. Nothing else changed &mdash; same thresholds, limits, columns and position.</p>
+    <p><em>Check on import:</em> if <code>/app/metrics/detail/host/&lt;host&gt;</code> 404s in your Kibana, the fix is a one-line edit to the drilldown URL template on each panel.</p>
+  </div>
+
   <div class="kicker">Reference tiles</div>
   <p><strong>Noise Reduction &mdash; AI KPI status</strong> documents why the Noise Reduction Opportunity Score cannot be built from today&rsquo;s mappings, so the KPI stays visibly tracked rather than silently dropped. <strong>Quick links</strong> deep-link into Discover per platform (Windows, Linux/UNIX, AIX, HPUX). <strong>Notes &amp; Data Limitations</strong> is the dashboard&rsquo;s own README &mdash; definitions, thresholds and the remaining blocked KPIs.</p>
 </section>
