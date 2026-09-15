@@ -27,3 +27,11 @@ FROM metrics-apm*
   BY environment
 | EVAL error_rate = ROUND((transactions - successes) * 100.0 / transactions, 2)
 | SORT transactions DESC
+
+
+
+
+GET _cat/indices/*cmdb*?v&s=index
+GET _cat/indices/*servicenow*?v&s=index
+
+FROM servicenow-open-incidents-snapshots-* | LIMIT 3
