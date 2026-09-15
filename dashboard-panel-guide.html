@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>40</b></span>
+    <span>Panels <b>45 + 8</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -617,6 +617,83 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
       <li><strong>The APM application register is now on the dashboard</strong> (panel 2.10). The CMDB-derived Impacted Applications panels are kept rather than replaced, because they answer a different question: which applications sit on servers that have gone silent.</li>
     </ul>
   </div>
+</section>
+
+
+<section>
+  <h2>Landing-page restructure</h2>
+  <p class="sec-note">The dashboard now follows the flow the team asked for, and the NDJSON carries <strong>two</strong> dashboards.</p>
+
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>#</th><th>Section</th><th>Contains</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td><strong>Executive Health</strong></td><td>Overall Infrastructure Health &middot; Active P1 &middot; Active P2 &middot; Applications Impacted &middot; Services at Risk &middot; Monitoring Coverage % &middot; Since Last P1 &middot; P1s Raised (7 days) &middot; Server Availability % &middot; Health Trend (7 days) &middot; Impacted Domain</td></tr>
+      <tr><td class="num">2</td><td><strong>Operational Effectiveness</strong></td><td>Impacted CIs &middot; Application Health (APM) &middot; Alert Volume Trend &middot; Applications on Silent Servers &middot; server up / down / total / availability</td></tr>
+      <tr><td class="num">3</td><td><strong>Monitoring Maturity</strong></td><td>Agent Health &middot; Coverage Gap Risk &middot; Telemetry Freshness &middot; <strong>Uncorrelated Alerts</strong> &middot; Raw / Correlated / Dedup &middot; Coverage Gap table &middot; Monitored Estate by Tier &middot; Ingest Pipeline Health &middot; Freshness Trend &middot; APM estate</td></tr>
+      <tr><td class="num">4</td><td><strong>Automation &amp; Predictive Operations</strong></td><td>Predictive Insights (limitations) &middot; Automation &amp; Auto-remediation (limitations) &middot; Noise Reduction AI KPI status</td></tr>
+    </tbody>
+  </table></div>
+
+  <p><strong>Moved off the landing page</strong>, per &ldquo;metrics to remove&rdquo;: disk saturation, network errors and the OS-specific deep links now live on a second dashboard, <strong>Infrastructure Detail &mdash; Saturation &amp; Platform</strong>, linked from the footer tile. Both import from the one NDJSON.</p>
+
+  <div class="kicker">New executive KPIs &mdash; and what each one cannot tell you</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Panel</th><th>How it works</th><th>Limitation</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Overall Infrastructure Health</strong></td><td>Rolls up every domain: RAG from active P1/P2 across all CI classes <em>plus</em> server availability.</td><td>Only servers have live availability telemetry. Database, Middleware, Network and Storage reach the tile <strong>through incidents only</strong> &mdash; a silent database with no incident raised will not turn it amber.</td></tr>
+      <tr><td><strong>Services at Risk</strong></td><td>Servers with a filesystem at or above 90% full.</td><td><strong>Disk only.</strong> CPU and memory field names in <code>system.cpu</code> / <code>system.memory</code> are unconfirmed; adding them would be a guess.</td></tr>
+      <tr><td><strong>Monitoring Coverage %</strong></td><td>Monitored, Operational CIs reporting in the last 15 min &divide; all such CIs.</td><td><em>Reporting</em> coverage, not CMDB <strong>onboarding</strong> coverage. The &ldquo;4,200 of 4,600&rdquo; figure needs <code>cmdb-cis-000003</code>, schema unconfirmed.</td></tr>
+      <tr><td><strong>Since Last P1 (hrs)</strong></td><td>Hours since the most recent <strong>open</strong> P1 was raised.</td><td>Open P1s only. &ldquo;Time since the last P1 ever&rdquo; needs <code>servicenow-incidents-000001</code>.</td></tr>
+      <tr><td><strong>P1s Raised (7 days)</strong></td><td>Distinct P1 numbers with <code>opened_at</code> in the last 7 days.</td><td>Counts P1s still open; one opened and closed inside the window is not counted.</td></tr>
+      <tr><td><strong>Health Trend &mdash; 7 days</strong></td><td>Per day: servers reporting, P1 opened, P2 opened, CIs impacted, with a RAG marker.</td><td>Carries its <strong>own 7-day panel time range</strong>, so it stays 7 days whatever the dashboard picker says. Every other panel follows the picker.</td></tr>
+      <tr><td><strong>Uncorrelated Alerts (24h)</strong></td><td>Raw Netcool alerts minus correlated ServiceNow events.</td><td>A volume difference, not a per-alert join &mdash; there is no shared correlation id.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="kicker">Triage path</div>
+  <p>Clicking an <strong>Impacted CI</strong> now offers two destinations, infrastructure first: <strong>1</strong> the infrastructure view for that CI (<code>/app/metrics/detail/host/&lt;ci&gt;</code>), <strong>2</strong> the CI in ServiceNow CMDB. That satisfies &ldquo;do not land directly into ServiceNow&rdquo; while keeping CMDB one click away. The <strong>APM service</strong> column drills into the APM service overview.</p>
+  <div class="note warn">
+    <h3>The full chain is not yet joinable</h3>
+    <p>Application &rarr; Impacted CI &rarr; Infrastructure Component &rarr; Health needs a link between the application and the CI. <code>business_service.name</code> is populated on only <strong>2.8%</strong> of incident documents, and <code>ci.parents.*</code> on <strong>none</strong>. Application-side and CI-side impact are two separate panels today, not one path.</p>
+  </div>
+
+  <div class="kicker">Predictive &amp; ML limitations</div>
+  <p>Everything under <em>Predictive Insights</em> is forecasting and therefore needs a trained model. <strong>No ML job exists today</strong>, so the tile states what each ask needs rather than showing an invented number.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Ask</th><th>Needs</th><th>Blocker</th></tr></thead>
+    <tbody>
+      <tr><td>Alert trend forecasting</td><td>ML <code>forecast</code> on the Netcool hourly series</td><td>No job; <em>Alert Volume Trend</em> is the training baseline</td></tr>
+      <tr><td>Capacity risk (days-to-full)</td><td>Regression per filesystem over weeks</td><td>Needs a retained daily rollup; raw retention is the constraint</td></tr>
+      <tr><td>Infrastructure risk indicators</td><td>Multi-metric anomaly detection</td><td>No job; CPU/memory fields unconfirmed</td></tr>
+      <tr><td>Predictive risk signal</td><td>Composite of the above</td><td>Depends on all three</td></tr>
+    </tbody>
+  </table></div>
+  <p>Elastic ML is licensed and running, so nothing is technically blocking. <em>Services at Risk</em> is a current-state threshold count &mdash; deliberately <strong>not</strong> labelled predictive.</p>
+  <div class="note warn">
+    <h3>Auto-remediation cannot be measured at all</h3>
+    <p>No field in this cluster records that a remediation ran. Executions, auto-resolved incidents, success rate and time saved would each need a new source &mdash; an orchestration event stream (TrueSight, Ansible Tower, ServiceNow Flow Designer), or <code>close_code</code> / <code>resolved_by</code> on <code>servicenow-incidents-*</code>.</p>
+  </div>
+</section>
+
+
+<section>
+  <h2>Confirmed fields &amp; host drill-down</h2>
+  <p class="sec-note">Two limitations closed once the CMDB and metricbeat field names were verified.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Was</th><th>Now</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Monitoring Coverage %</strong> was <em>reporting</em> coverage</td><td>Real CMDB <strong>onboarding</strong> coverage from <code>cmdb-cis-*</code>: Hardware CIs with <code>is_monitored: true</code> &divide; all Operational Hardware CIs, plus a <strong>Monitoring Coverage by CI Class</strong> table showing onboarding progress per platform.</td></tr>
+      <tr><td><strong>Services at Risk</strong> was disk-only</td><td>All three saturation signals &mdash; <strong>disk &ge; 90%</strong>, <strong>CPU &ge; 95%</strong>, <strong>memory &ge; 95%</strong> &mdash; plus a <strong>Services at Risk &mdash; Host Saturation</strong> table with per-host maxima.</td></tr>
+    </tbody>
+  </table></div>
+  <p>Confirmed fields: <code>system.cpu.total.norm.pct</code>, <code>system.memory.actual.used.pct</code>, <code>system.filesystem.used.pct</code>. Memory uses <strong><code>actual.used.pct</code></strong> (excludes cache) rather than <code>used.pct</code>, which reads ~86% on a perfectly healthy host and would have made the tile meaningless.</p>
+  <p>CPU and memory use the <strong>window maximum</strong>, so a brief spike counts &mdash; which is why their thresholds sit at 95% while disk sits at 90%. Disk is the genuinely predictive one.</p>
+  <div class="note warn">
+    <h3>Coverage caveat</h3>
+    <p><code>cmdb-cis-*</code> carries the CMDB <strong>sync</strong> timestamp, so if the full sync has not run inside the dashboard time range the panel is empty. That is a stale sync, not zero coverage.</p>
+  </div>
+  <div class="kicker">Host drill-down into Observability &rarr; Infrastructure</div>
+  <p>Clicking a <strong>Host</strong> on <em>Services at Risk</em>, <em>Disk Saturation</em> or <em>Network Errors</em> opens that host&rsquo;s infrastructure view at <code>/app/metrics/detail/host/&lt;host&gt;</code>. Same gate as everywhere else: <code>host.name</code> is grouped raw so it is the single actionable column, while mount point, interface and every metric pass through <code>TO_STRING()</code> and stay inert, so a stray click cannot build a broken URL.</p>
 </section>
 
 <footer>
