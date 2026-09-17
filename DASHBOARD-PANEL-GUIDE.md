@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 44 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 43 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -14,8 +14,8 @@ raises. Section headers are markdown banners on the dashboard itself.
 
 | # | Section | Question it answers | Panels, in order |
 |---|---|---|---|
-| **1** | 🏢 **Executive Health** | *Is the business healthy right now?* | Overall Infrastructure Health · Server Availability % · Active P1 · Active P2 · Applications Degraded (Prod) · Impacted Domain · Impacted CIs · Application Health — APM |
-| **2** | 🔧 **Operational Effectiveness** | *How is the estate actually running, and what needs hands on it?* | Total Servers · Servers Up · Servers Down · Servers Availability % · Server Availability Trend · Servers Down — Impacted CIs · Disk Saturation · Network Errors |
+| **1** | 🏢 **Executive Health** | *Is the business healthy right now?* | Overall Infrastructure Health · Server Availability % · Active P1 · Active P2 · Impacted Domain · Affected CIs · Application Health — APM |
+| **2** | 🔧 **Operational Effectiveness** | *How is the estate actually running, and what needs hands on it?* | Total Servers · Servers Up · Servers Down · Servers Availability % · Server Availability Trend · Servers Down — Affected CIs · Disk Saturation · Network Errors |
 | **3** | 📡 **Monitoring Maturity** | *How much can we see, and can we trust sections 1 and 2?* | Monitored Estate by Tier · Business Applications Monitored · APM Services Instrumented · Application Estate by environment · Agent / Collector Health · Coverage Gap Risk · Telemetry Freshness · Telemetry Freshness Trend · Ingest Pipeline Health · Coverage Gap — CIs Not Reporting · Applications on Silent Servers |
 | **4** | 🤖 **Automation & Predictive Operations** | *What is automation taking off the queue, and what is coming?* | Raw Netcool Alerts · Correlated SN Events · Alert Dedup Ratio · Alert Volume Trend · Noise Reduction — AI KPI status · Predictive Insights |
 
@@ -33,7 +33,76 @@ automation removes from the analyst queue, which is the same question the predic
 
 ---
 
-## 0.1 How to import
+## 0.1 Terminology — Affected CI vs Impacted CI
+
+Aligned to the client's definitions, September 2026. An earlier version of this dashboard had the two
+terms the other way round; every panel title, column label and note has been realigned.
+
+| Term | Definition | On the dashboard |
+|---|---|---|
+| **Affected CI** | The configuration item that *is* affected by the incident — the server, switch, database or service the incident was raised against. | `ci.name` on the ServiceNow incident record. This is what every CI panel shows today. |
+| **Impacted CI** | A configuration item that could be affected *as a consequence* of the affected CI failing — the downstream, dependent side of a CMDB relationship. | **Not available yet.** See below. |
+
+**Why Impacted CIs are not on the dashboard.** Deriving them needs the CMDB relationship graph in
+`cmdb-ci-relations-000002` (33.9M edges: `parent`, `child`, `type.name`, and an `impacted_ci` field
+naming which side is downstream). ES|QL cannot traverse a graph that size at query time, and
+`ci.parents.*` / `ci.top_level_parents.*` exist in the incident mapping but are populated on **0**
+documents, so the incident record carries no downstream rollup of its own. Closing this needs an ENRICH
+policy or a denormalising transform on the Elasticsearch side — an infrastructure change, not a
+dashboard one. `business_service.name` is populated on 2.8% of incidents and is the nearest available
+proxy; it is shown on the Affected CIs worklist.
+
+**Panels renamed:** *Impacted CIs — Active P1 / P2 Incidents* → **Affected CIs — Active P1 / P2
+Incidents**; *Servers Down — Impacted CIs* → **Servers Down — Affected CIs**. The *Impacted Domain*
+panel keeps its name (a domain is not a CI) but its CI column is now **Affected CIs**.
+
+---
+
+## 0.2 Reconciling the incident counts
+
+The client found three different P2 figures on one screen: the **Active P2** tile said 44, *Impacted
+Domain* summed to 40, and *Affected CIs* listed 41 rows. Three panels, three numbers, two separate
+causes.
+
+| Panel | Showed | Why |
+|---|---|---|
+| **Active P2 Incidents** (tile) | 44 | `WHERE priority == 2` — counts **every** open P2. |
+| **Impacted Domain** | 40 | Also had `AND ci.name IS NOT NULL`. Incidents with no CI on the record were silently dropped — 44 − 40 = **4 open P2s with no CI**. |
+| **Affected CIs** | 41 rows | Same 40 incidents, but grouped by eight attributes. One incident had an attribute change between snapshots (`business_service.name` filling in, a reassignment, a re-description) and so appeared on **two rows**. |
+
+**Fixes.** *Impacted Domain* no longer filters on `ci.name`; incidents without one now land in a
+**⚠️ No CI mapped** row, so its P1 and P2 columns add up to the tiles exactly — and the count of
+unmapped incidents becomes a visible data-quality signal rather than a silent omission. *Affected CIs*
+now groups on `number`, `ci.name` and `priority` only, so it is one row per incident × CI.
+
+*Affected CIs* still lists only incidents that carry a CI, so its row count equals the tile total minus
+the *No CI mapped* row. That is by design — it is a CI worklist — and the Domain panel now makes the
+difference visible.
+
+**To verify against the cluster:**
+
+```esql
+FROM servicenow-open-incidents-snapshots-*
+| WHERE priority == 2
+| STATS all_p2 = COUNT_DISTINCT(number),
+        with_ci = COUNT_DISTINCT(CASE(ci.name IS NOT NULL, number, null))
+| EVAL no_ci = all_p2 - with_ci
+```
+
+```esql
+FROM servicenow-open-incidents-snapshots-*
+| WHERE priority == 2 AND ci.name IS NOT NULL
+| STATS rows = COUNT(*) BY number, ci.name, ci.class_name, ci.environment,
+                           assignment_group.name, business_service.name, short_description
+| STATS variants = COUNT(*) BY number
+| WHERE variants > 1
+```
+
+The first should return `no_ci = 4`; the second should return the one incident that was splitting.
+
+---
+
+## 0.3 How to import
 
 Kibana → **Stack Management → Saved Objects → Import** → select `operation-dashboard.ndjson` →
 choose *"Check for existing objects"* and **overwrite** the existing dashboard to keep the same URL/bookmarks.
@@ -152,17 +221,22 @@ numbers** (not documents) means the recurring open-incident snapshots do not inf
 > These two tiles replace the old *"Active Critical Alerts (P1)"* tile, which has been removed to avoid
 > showing the same figure twice.
 
-### 2.5 Applications Degraded (Prod)
-**Type:** Lens metric · **Index:** `metrics-apm*`
+### 2.5 Applications Degraded (Prod) — *removed*
 
-Production business applications whose APM **error rate is 1% or worse** over the dashboard window.
-This is real transaction health, not a proxy.
+Removed at the client's request, September 2026: the team judged the way degradation was calculated to
+be wrong. Application health is still on the dashboard as the full *Application Health — APM* table
+(§2.7), which shows the underlying error rate and latency per service rather than rolling them into a
+single count.
 
 ### 2.6 Impacted Domain — Active P1 / P2 Incidents
 **Type:** Lens data table · **Index:** `servicenow-open-incidents-snapshots-*`
 
 Which technology domain the open P1s and P2s are actually landing in. Columns: **Status · Domain · P1 ·
-P2 · Incidents · Impacted CIs**, worst-first.
+P2 · Incidents · Affected CIs**, worst-first.
+
+Incidents with no CI on the record appear under **⚠️ No CI mapped**, and ones whose CI carries no
+class under **⚠️ CI class missing**, so the P1 and P2 columns add up to the Active P1 / Active P2
+tiles exactly.
 
 Domain is grouped from `ci.class_name` **on the incident record**, using the CMDB's real class
 vocabulary:
@@ -235,11 +309,16 @@ opens in a new tab:
 
 Two design constraints shape how this works, both worth knowing before anyone asks:
 
-1. **Kibana only offers a drilldown on columns backed by a real index field.** Values produced by `EVAL`
-   or `STATS` are not index-backed, so they cannot be clicked through. `service.name` is therefore
-   grouped raw and stays actionable, while Business application, Portfolio, Env and every metric are
-   computed and inert on click. That is deliberate — a stray click on the wrong column cannot open a
-   broken APM page.
+1. **The drilldown must be pinned to one column.** A Lens ES|QL table fires the click action on *every*
+   column it treats as a dimension, so the drilldown was originally offered on cells whose value was
+   never meant to reach the URL. Every column except `service.name` is now marked as a metric
+   (`inMetricDimension`), which is what decides whether a cell is clickable, so the action appears on
+   the **APM service** column alone.
+
+   > *Correction.* An earlier version of this guide said Kibana only offers a drilldown on columns backed
+   > by a real index field, and that `EVAL`/`STATS`-computed columns were inert. That is not true of ES|QL
+   > tables — the client found the ServiceNow link offered on every column of the CI worklist. Wrapping a
+   > column in `TO_STRING()` does not make it unclickable; marking it as a metric does.
 2. **The link must key on `service.name`, not the business application name.** APM addresses services by
    `service.name` (`document management facility prod`); the ServiceNow Business Application name
    (`Document Management Facility`) would resolve to a service that does not exist in APM. The table
@@ -312,17 +391,24 @@ matching into Production · DR · ETE/Test · CUT · Stage · Dev · Sandbox · 
 > **This is inventory and telemetry freshness, not application health.** See the limitations section for
 > why a health panel needs one more field confirmation.
 
-### 2.11 Impacted CIs — Active P1 / P2 Incidents
+### 2.11 Affected CIs — Active P1 / P2 Incidents
 **Type:** Lens data table · **Index:** `servicenow-open-incidents-snapshots-*`
 
-The incident-side worklist: every open P1/P2 with the CI it landed on. Columns: **Sev · Incident ·
-Impacted CI · CI class · Env · Assigned to · Short description · Last seen**.
+*Renamed from "Impacted CIs" — see [Terminology](#01-terminology--affected-ci-vs-impacted-ci).*
 
-**Drill-down:** click an **Impacted CI** to open that CI in the ServiceNow CMDB
-(`https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name=<ci>`), where the Affected CIs and
-relationship tabs live. As with the APM table, only `ci.name` is grouped raw so it is the single
-drilldown-actionable column — every other column is passed through `TO_STRING()`/`CASE()` and is inert
-on click, so a stray click cannot open the wrong record.
+The incident-side worklist: every open P1/P2 with the CI it landed on. Columns: **Sev · Incident ·
+Affected CI · CI class · Business service · Env · Assigned to · Short description · Last seen**.
+
+**Drill-down:** click an **Affected CI** to open that CI in the ServiceNow CMDB
+(`https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name=<ci>`), where the relationship tabs
+live. Every column except `ci.name` is marked as a metric so the action is offered on that one column
+only; a stray click can no longer open the wrong record.
+
+**One row per incident × CI.** The source is a snapshot index. Grouping on the descriptive fields meant
+an incident that was reassigned or re-described inside the dashboard window appeared twice — which is
+why this table used to show 41 rows for 40 P2 incidents. It now groups on `number`, `ci.name` and
+`priority` only, and collapses the descriptive columns with `VALUES(...)` + `MV_MAX(...)`. An incident
+genuinely raised against two CIs still, correctly, shows twice.
 
 **Correction:** an earlier version of this guide said `ci.name` was not populated on the incidents index,
 and the Impacted Domain / Impacted Applications panels were built CMDB-derived as a result. That was
@@ -420,7 +506,7 @@ cannot be produced by one aggregation. The query packs each `(hour, servers_up)`
 collapses to a single row to compute the estate, then re-expands with `MV_EXPAND`. It is the only panel on
 the dashboard using that pattern — if it ever errors after an upgrade, that is the line to look at.
 
-### 3.x Servers Down — Impacted CIs (>15 min without telemetry)
+### 3.x Servers Down — Affected CIs (>15 min without telemetry)
 
 **Type:** Lens data table · **Index:** `metrics-*`, scoped to `system.*` · **Location:** directly under the
 Servers Up / Down / Availability tiles
@@ -433,7 +519,7 @@ has none either.
 | Column | Meaning |
 |---|---|
 | **Host** | `host.name` — **click to open the host in Observability → Infrastructure** |
-| Impacted CI | `ci.name`, the ServiceNow CI record for that server |
+| Affected CI | `ci.name`, the ServiceNow CI record for that server |
 | CI class | Windows Server / Linux Server / AIX Server … |
 | Application / purpose | `ci.short_description`. Shows `—` where the CMDB holds `uname` output instead of a real name (typical for Linux CIs) |
 | Env | `ci.environment` |
@@ -441,10 +527,10 @@ has none either.
 | Support group | `ci.support_group.l2.name` — who to call |
 | Down (min) | Minutes since the last document, worst first |
 
-Only `host.name` is grouped raw, so it is the single drilldown-actionable column; every other column
-passes through `TO_STRING()` or `CASE()` and is inert on click.
+Every column except `host.name` is marked as a metric, so the Infrastructure drilldown is offered on the
+**Host** column alone.
 
-> **On "impacted CI":** this shows the CI *that is down* plus what the CMDB says it is for. It does **not**
+> **On "affected CI":** this shows the CI *that is down* plus what the CMDB says it is for. It does **not**
 > show downstream CIs that depend on it — that needs the `cmdb-ci-relations-*` graph joined to the host
 > list, which ES|QL cannot do at query time on a 33.9M-edge index. It needs an ENRICH policy or a
 > denormalising transform on the Elasticsearch side.
@@ -479,11 +565,11 @@ https://kibana-prod.gcp.cna.com/app/metrics/detail/host/<host>
 
 Built the same way as the APM service drill-down: a URL drilldown on the panel, fired by a single click.
 
-**Why the queries changed slightly.** Kibana only offers a drilldown on columns backed by a real index
-field — values produced by `EVAL` or `STATS` are not. Both panels previously grouped by *two* index
-fields (`host.name` **and** the mount point / interface), which would have made the second column
+**Why the queries changed slightly.** Both panels previously grouped by *two* index
+fields (`host.name` **and** the mount point / interface), which made the second column
 clickable too and sent a mount point like `P:\` into the host URL. Each query now wraps that column in
-`TO_STRING()` so it becomes computed and inert, leaving `host.name` as the single actionable column.
+`TO_STRING()`, and every column except `host.name` is marked as a metric, which is what actually stops a
+cell being clickable — leaving `host.name` as the single actionable column.
 `oneClickFilter` is off on the host column so the click opens the action menu rather than applying a
 filter.
 

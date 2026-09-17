@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>44</b></span>
+    <span>Panels <b>43</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -241,8 +241,8 @@ footer code{font-size:.85em}
   <div class="tbl-wrap"><table>
     <thead><tr><th>#</th><th>Section</th><th>Question it answers</th><th>Panels, in order</th></tr></thead>
     <tbody>
-      <tr><td><strong>1</strong></td><td><strong>Executive Health</strong></td><td>Is the business healthy right now?</td><td>Overall Infrastructure Health &middot; Server Availability % &middot; Active P1 &middot; Active P2 &middot; Applications Degraded (Prod) &middot; Impacted Domain &middot; Impacted CIs &middot; Application Health &mdash; APM</td></tr>
-      <tr><td><strong>2</strong></td><td><strong>Operational Effectiveness</strong></td><td>How is the estate actually running, and what needs hands on it?</td><td>Total Servers &middot; Servers Up &middot; Servers Down &middot; Servers Availability % &middot; Server Availability Trend &middot; Servers Down &mdash; Impacted CIs &middot; Disk Saturation &middot; Network Errors</td></tr>
+      <tr><td><strong>1</strong></td><td><strong>Executive Health</strong></td><td>Is the business healthy right now?</td><td>Overall Infrastructure Health &middot; Server Availability % &middot; Active P1 &middot; Active P2 &middot; Impacted Domain &middot; Affected CIs &middot; Application Health &mdash; APM</td></tr>
+      <tr><td><strong>2</strong></td><td><strong>Operational Effectiveness</strong></td><td>How is the estate actually running, and what needs hands on it?</td><td>Total Servers &middot; Servers Up &middot; Servers Down &middot; Servers Availability % &middot; Server Availability Trend &middot; Servers Down &mdash; Affected CIs &middot; Disk Saturation &middot; Network Errors</td></tr>
       <tr><td><strong>3</strong></td><td><strong>Monitoring Maturity</strong></td><td>How much can we see, and can we trust sections 1 and 2?</td><td>Monitored Estate by Tier &middot; Business Applications Monitored &middot; APM Services Instrumented &middot; Application Estate by environment &middot; Agent / Collector Health &middot; Coverage Gap Risk &middot; Telemetry Freshness &middot; Telemetry Freshness Trend &middot; Ingest Pipeline Health &middot; Coverage Gap &mdash; CIs Not Reporting &middot; Applications on Silent Servers</td></tr>
       <tr><td><strong>4</strong></td><td><strong>Automation &amp; Predictive Operations</strong></td><td>What is automation taking off the queue, and what is coming?</td><td>Raw Netcool Alerts &middot; Correlated SN Events &middot; Alert Dedup Ratio &middot; Alert Volume Trend &middot; Noise Reduction &mdash; AI KPI status &middot; Predictive Insights</td></tr>
     </tbody>
@@ -254,6 +254,52 @@ footer code{font-size:.85em}
     <p>Section 3 is deliberately <em>after</em> the operational detail rather than buried at the bottom: a coverage gap or a stale feed means the availability figures in sections 1 and 2 are optimistic, so it reads as the confidence statement for everything above it. Alert correlation and deduplication sit in section 4 rather than with the alert-handling detail because they measure what automation removes from the analyst queue &mdash; the same question the predictive tiles ask.</p>
     <p>The per-panel write-ups below are grouped by subject, not by on-screen order. Use the table above for the layout.</p>
   </div>
+</section>
+
+<section>
+  <h2>Terminology &mdash; Affected CI vs Impacted CI</h2>
+  <p class="sec-note">Aligned to the client&rsquo;s definitions, September 2026. An earlier version of this dashboard had the two terms the other way round; every panel title, column label and note has been realigned.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Term</th><th>Definition</th><th>On the dashboard</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Affected CI</strong></td><td>The configuration item that <em>is</em> affected by the incident &mdash; the server, switch, database or service the incident was raised against.</td><td><code>ci.name</code> on the ServiceNow incident record. This is what every CI panel shows today.</td></tr>
+      <tr><td><strong>Impacted CI</strong></td><td>A configuration item that could be affected <em>as a consequence</em> of the affected CI failing &mdash; the downstream, dependent side of a CMDB relationship.</td><td><strong>Not available yet.</strong></td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Panels renamed:</strong> <em>Impacted CIs &mdash; Active P1 / P2 Incidents</em> &rarr; <strong>Affected CIs &mdash; Active P1 / P2 Incidents</strong>; <em>Servers Down &mdash; Impacted CIs</em> &rarr; <strong>Servers Down &mdash; Affected CIs</strong>. <em>Impacted Domain</em> keeps its name (a domain is not a CI) but its CI column is now <strong>Affected CIs</strong>.</p>
+
+  <div class="note warn">
+    <h3>Why Impacted CIs are not on the dashboard</h3>
+    <p>Deriving them needs the CMDB relationship graph in <code>cmdb-ci-relations-000002</code> (33.9M edges: <code>parent</code>, <code>child</code>, <code>type.name</code>, and an <code>impacted_ci</code> field naming which side is downstream). ES|QL cannot traverse a graph that size at query time, and <code>ci.parents.*</code> / <code>ci.top_level_parents.*</code> exist in the incident mapping but are populated on <strong>0</strong> documents, so the incident record carries no downstream rollup of its own. Closing this needs an ENRICH policy or a denormalising transform on the Elasticsearch side &mdash; an infrastructure change, not a dashboard one. <code>business_service.name</code> is populated on 2.8% of incidents and is the nearest available proxy; it is shown on the Affected CIs worklist.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Reconciling the incident counts</h2>
+  <p class="sec-note">The client found three different P2 figures on one screen. Three panels, three numbers, two separate causes &mdash; both now fixed.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Panel</th><th>Showed</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Active P2 Incidents</strong> (tile)</td><td>44</td><td><code>WHERE priority == 2</code> &mdash; counts <strong>every</strong> open P2.</td></tr>
+      <tr><td><strong>Impacted Domain</strong></td><td>40</td><td>Also had <code>AND ci.name IS NOT NULL</code>. Incidents with no CI on the record were silently dropped &mdash; 44 &minus; 40 = <strong>4 open P2s with no CI</strong>.</td></tr>
+      <tr><td><strong>Affected CIs</strong></td><td>41 rows</td><td>Same 40 incidents, but grouped by eight attributes. One incident had an attribute change between snapshots and so appeared on <strong>two rows</strong>.</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Fixes.</strong> <em>Impacted Domain</em> no longer filters on <code>ci.name</code>; incidents without one now land in a <strong>&#9888;&#65039; No CI mapped</strong> row, so its P1 and P2 columns add up to the tiles exactly &mdash; and the count of unmapped incidents becomes a visible data-quality signal rather than a silent omission. <em>Affected CIs</em> now groups on <code>number</code>, <code>ci.name</code> and <code>priority</code> only, so it is one row per incident &times; CI.</p>
+  <p><em>Affected CIs</em> still lists only incidents that carry a CI, so its row count equals the tile total minus the <em>No CI mapped</em> row. That is by design &mdash; it is a CI worklist &mdash; and the Domain panel now makes the difference visible.</p>
+  <p><strong>To verify against the cluster:</strong></p>
+  <pre><code>FROM servicenow-open-incidents-snapshots-*
+| WHERE priority == 2
+| STATS all_p2 = COUNT_DISTINCT(number),
+        with_ci = COUNT_DISTINCT(CASE(ci.name IS NOT NULL, number, null))
+| EVAL no_ci = all_p2 - with_ci</code></pre>
+  <pre><code>FROM servicenow-open-incidents-snapshots-*
+| WHERE priority == 2 AND ci.name IS NOT NULL
+| STATS rows = COUNT(*) BY number, ci.name, ci.class_name, ci.environment,
+                           assignment_group.name, business_service.name, short_description
+| STATS variants = COUNT(*) BY number
+| WHERE variants &gt; 1</code></pre>
+  <p>The first should return <code>no_ci = 4</code>; the second should return the one incident that was splitting.</p>
 </section>
 
 <section>
@@ -425,10 +471,10 @@ footer code{font-size:.85em}
   <div class="entry">
     <div class="addr">2.5</div>
     <div>
-      <div class="entry-head"><h3>Applications Degraded (Prod)</h3>
-        <span class="tag">metric</span><span class="tag">metrics-apm*</span></div>
-      <p class="answers">How many production applications are actually failing right now?</p>
-      <p>Counts production business applications whose APM <strong>error rate is 1% or worse</strong> over the dashboard window. Real transaction health, not a proxy.</p>
+      <div class="entry-head"><h3>Applications Degraded (Prod) &mdash; removed</h3>
+        <span class="tag">removed Sept 2026</span></div>
+      <p class="answers">&mdash;</p>
+      <p>Removed at the client&rsquo;s request: the team judged the way degradation was calculated to be wrong. Application health remains on the dashboard as the full <em>Application Health &mdash; APM</em> table, which shows the underlying error rate and latency per service rather than rolling them into a single count.</p>
     </div>
   </div>
 
@@ -438,7 +484,8 @@ footer code{font-size:.85em}
       <div class="entry-head"><h3>Impacted Domain &mdash; Active P1 / P2 Incidents</h3>
         <span class="tag">data table</span><span class="tag">servicenow-open-incidents-snapshots-*</span></div>
       <p class="answers">Which technology domain are the open P1s and P2s actually landing in?</p>
-      <p>Columns: <strong>Status &middot; Domain &middot; P1 &middot; P2 &middot; Incidents &middot; Impacted CIs</strong>, worst-first. Domain is grouped from <code>ci.class_name</code> <strong>on the incident record</strong>, using the CMDB&rsquo;s real class vocabulary.</p>
+      <p>Columns: <strong>Status &middot; Domain &middot; P1 &middot; P2 &middot; Incidents &middot; Affected CIs</strong>, worst-first. Domain is grouped from <code>ci.class_name</code> <strong>on the incident record</strong>, using the CMDB&rsquo;s real class vocabulary.</p>
+      <p>Incidents with no CI on the record appear under <strong>&#9888;&#65039; No CI mapped</strong>, and ones whose CI carries no class under <strong>&#9888;&#65039; CI class missing</strong>, so the P1 and P2 columns add up to the Active P1 / Active P2 tiles exactly.</p>
       <div class="tbl-wrap"><table>
         <thead><tr><th>Domain</th><th>CI classes</th></tr></thead>
         <tbody>
@@ -478,7 +525,11 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
 | STATS docs = COUNT(*), txns = COUNT(event.success_count), ok = SUM(event.success_count)</code></pre>
       <p><strong>Drill-down into APM.</strong> Click a value in the <strong>APM service</strong> column and that service&rsquo;s APM overview opens in a new tab:</p>
       <pre><code>/app/apm/services/&lt;service.name&gt;/overview?rangeFrom=now-24h&amp;rangeTo=now&amp;environment=ENVIRONMENT_ALL</code></pre>
-      <p>Two constraints shape this, both worth knowing before anyone asks. <strong>Kibana only offers a drilldown on columns backed by a real index field</strong> &mdash; values produced by <code>EVAL</code> or <code>STATS</code> are not index-backed and cannot be clicked through. So <code>service.name</code> is grouped raw and stays actionable, while Business application, Portfolio, Env and every metric are computed and inert on click. That is deliberate: a stray click on the wrong column cannot open a broken APM page.</p>
+      <p>Two constraints shape this, both worth knowing before anyone asks. <strong>The drilldown has to be pinned to one column.</strong> A Lens ES|QL table fires the click action on <em>every</em> column it treats as a dimension, so the drilldown was originally offered on cells whose value was never meant to reach the URL. Every column except <code>service.name</code> is now marked as a metric (<code>inMetricDimension</code>), which is what decides whether a cell is clickable, so the action appears on the <strong>APM service</strong> column alone.</p>
+      <div class="note warn">
+        <h3>Correction</h3>
+        <p>An earlier version of this guide said Kibana only offers a drilldown on columns backed by a real index field, and that <code>EVAL</code>/<code>STATS</code>-computed columns were inert on click. That is not true of ES|QL tables &mdash; the client found the ServiceNow link offered on <em>every</em> column of the CI worklist. Wrapping a column in <code>TO_STRING()</code> does not make it unclickable; marking it as a metric does.</p>
+      </div>
       <p><strong>The link must key on <code>service.name</code>, not the business application name.</strong> APM addresses services by <code>service.name</code> (<code>document management facility prod</code>); the ServiceNow name (<em>Document Management Facility</em>) resolves to a service APM does not have. The table therefore shows the business application as the label and carries <code>service.name</code> as the clickable column beside it &mdash; which also means the table is now one row per <strong>APM service</strong>, with its business application alongside.</p>
       <p><em>On ES|QL tables:</em> the URL field formatter &mdash; the usual way to turn a cell into a hyperlink &mdash; does not render as a link in ES|QL-backed Lens tables, only data-view-backed ones. The URL drilldown is the supported route here, which is why the value opens on click rather than looking like a blue link.</p>
       <p><strong>Application naming.</strong> APM documents carry the CMDB <em>Business Application</em> enrichment &mdash; <code>ci.name</code> (<em>Document Management Facility</em>), <code>ci.number</code> (<code>APM0003276</code>), <code>ci.customer_specific.pm_portfolio</code> (<em>Policy Admin (Commercial and Specialty)</em>) and <code>ci.support_group.l2.name</code>. Panels key on <code>COALESCE(ci.name, service.name)</code> so unenriched services still appear under their raw APM service name.</p>
@@ -534,13 +585,13 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
   <div class="entry">
     <div class="addr">2.11</div>
     <div>
-      <div class="entry-head"><h3>Impacted CIs &mdash; Active P1 / P2 Incidents</h3>
-        <span class="tag">data table</span><span class="tag">servicenow-open-incidents-snapshots-*</span><span class="tag">CMDB drill-down</span></div>
+      <div class="entry-head"><h3>Affected CIs &mdash; Active P1 / P2 Incidents</h3>
+        <span class="tag">data table</span><span class="tag">servicenow-open-incidents-snapshots-*</span><span class="tag">CMDB drill-down</span><span class="tag">renamed</span></div>
       <p class="answers">Which CIs are the open P1s and P2s actually sitting on?</p>
-      <p>The incident-side worklist: every open P1/P2 with the CI it landed on &mdash; <strong>Sev, Incident, Impacted CI, CI class, Env, Assigned to, Short description, Last seen</strong>.</p>
-      <p><strong>Drill-down:</strong> click an <strong>Impacted CI</strong> to open that CI in the ServiceNow CMDB, where the Affected CIs and relationship tabs live. As with the APM table, only <code>ci.name</code> is grouped raw so it is the single drilldown-actionable column; every other column passes through <code>TO_STRING()</code> or <code>CASE()</code> and is inert on click.</p>
+      <p>The incident-side worklist: every open P1/P2 with the CI it landed on &mdash; <strong>Sev, Incident, Affected CI, CI class, Business service, Env, Assigned to, Short description, Last seen</strong>.</p>
+      <p><strong>Drill-down:</strong> click an <strong>Affected CI</strong> to open that CI in the ServiceNow CMDB, where the relationship tabs live. Every column except <code>ci.name</code> is marked as a metric, so the action is offered on that one column only &mdash; a stray click can no longer open the wrong record.</p>
+      <p><strong>One row per incident &times; CI.</strong> The source is a snapshot index. Grouping on the descriptive fields meant an incident reassigned or re-described inside the window appeared twice, which is why this table used to show 41 rows for 40 P2 incidents. It now groups on <code>number</code>, <code>ci.name</code> and <code>priority</code> only, collapsing the descriptive columns with <code>VALUES(...)</code> + <code>MV_MAX(...)</code>. An incident genuinely raised against two CIs still, correctly, shows twice.</p>
       <p><strong>Correction:</strong> an earlier version of this guide said <code>ci.name</code> was not populated on the incidents index, and the Impacted Domain and Impacted Applications panels were built CMDB-derived as a result. That was wrong &mdash; the index carries <strong>340 fields</strong> including the full CI enrichment plus <code>assignment_group.name</code> and <code>category.1/2</code>. The wrong conclusion came from an empty CSV export, not from the data.</p>
-      <p><em>Caveat:</em> the source is a snapshot index, so an incident reassigned or re-described inside the window can appear on more than one row; the newest sorts first.</p>
     </div>
   </div>
 
@@ -595,17 +646,17 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
   <div class="entry">
     <div class="addr">new</div>
     <div>
-      <div class="entry-head"><h3>Servers Down &mdash; Impacted CIs</h3>
+      <div class="entry-head"><h3>Servers Down &mdash; Affected CIs</h3>
         <span class="tag">data table</span><span class="tag">metrics-* scoped to system.*</span><span class="tag">host drill-down</span></div>
       <p class="answers">Which servers are down, what CI is each one, and who owns it?</p>
       <p>The worklist behind the <strong>Servers Down</strong> tile, sitting directly under it. It uses the <strong>same scope and window as that tile</strong> &mdash; <code>system.*</code> datasets, seen in the window but not in the last 15 minutes &mdash; so the row count and the tile agree. Deliberately no <code>ci.is_monitored</code> filter, because the tile has none either.</p>
-      <p>Columns: <strong>Host</strong> (click to open in Observability &rarr; Infrastructure) &middot; <strong>Impacted CI</strong> &middot; <strong>CI class</strong> &middot; <strong>Application / purpose</strong> &middot; <strong>Env</strong> &middot; <strong>Location</strong> &middot; <strong>Support group</strong> &middot; <strong>Down (min)</strong>, worst first. Application shows <code>&mdash;</code> where the CMDB holds <code>uname</code> output rather than a real name, which is typical for Linux CIs.</p>
-      <p>Only <code>host.name</code> is grouped raw, so it is the single drilldown-actionable column; everything else passes through <code>TO_STRING()</code> or <code>CASE()</code> and is inert on click.</p>
+      <p>Columns: <strong>Host</strong> (click to open in Observability &rarr; Infrastructure) &middot; <strong>Affected CI</strong> &middot; <strong>CI class</strong> &middot; <strong>Application / purpose</strong> &middot; <strong>Env</strong> &middot; <strong>Location</strong> &middot; <strong>Support group</strong> &middot; <strong>Down (min)</strong>, worst first. Application shows <code>&mdash;</code> where the CMDB holds <code>uname</code> output rather than a real name, which is typical for Linux CIs.</p>
+      <p>Every column except <code>host.name</code> is marked as a metric, so the Infrastructure drilldown is offered on the <strong>Host</strong> column alone.</p>
     </div>
   </div>
 
   <div class="note warn">
-    <h3>On &ldquo;impacted CI&rdquo;</h3>
+    <h3>On &ldquo;affected CI&rdquo;</h3>
     <p>This shows the CI <em>that is down</em> plus what the CMDB says it is for. It does <strong>not</strong> show downstream CIs that depend on it &mdash; that needs the <code>cmdb-ci-relations-*</code> graph joined to the host list, which ES|QL cannot do at query time against a 33.9M-edge index. It needs an ENRICH policy or a denormalising transform on the Elasticsearch side.</p>
   </div>
 
@@ -623,7 +674,7 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
   <div class="note info">
     <h3>Host drill-down &mdash; Disk Saturation &amp; Network Errors</h3>
     <p>Clicking a <strong>Host</strong> on either panel opens that host in <strong>Observability &rarr; Infrastructure</strong> at <code>/app/metrics/detail/host/&lt;host&gt;</code> &mdash; built the same way as the APM service drill-down.</p>
-    <p><strong>Why the queries changed slightly.</strong> Kibana only offers a drilldown on columns backed by a real index field; values from <code>EVAL</code> or <code>STATS</code> are not. Both panels previously grouped by <em>two</em> index fields (<code>host.name</code> and the mount point / interface), which would have made the second column clickable too and sent a mount point like <code>P:\</code> into the host URL. Each query now wraps that column in <code>TO_STRING()</code> so it is computed and inert, leaving <code>host.name</code> as the single actionable column. Nothing else changed &mdash; same thresholds, limits, columns and position.</p>
+    <p><strong>Why the queries changed slightly.</strong> Both panels previously grouped by <em>two</em> index fields (<code>host.name</code> and the mount point / interface), which made the second column clickable too and sent a mount point like <code>P:\</code> into the host URL. Each query now wraps that column in <code>TO_STRING()</code>, and every column except <code>host.name</code> is marked as a metric &mdash; which is what actually stops a cell being clickable &mdash; leaving <code>host.name</code> as the single actionable column. Nothing else changed &mdash; same thresholds, limits, columns and position.</p>
     <p><em>Check on import:</em> if <code>/app/metrics/detail/host/&lt;host&gt;</code> 404s in your Kibana, the fix is a one-line edit to the drilldown URL template on each panel.</p>
   </div>
 
