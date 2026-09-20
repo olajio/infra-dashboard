@@ -516,6 +516,10 @@ The worklist behind the **Servers Down** tile. It uses the **same scope and wind
 minutes — so the row count and the tile agree. Deliberately no `ci.is_monitored` filter, because the tile
 has none either.
 
+**One row per host, by construction.** `last_seen` is `MAX(@timestamp)` grouped on **`host.name` alone**;
+the CI columns are collapsed onto that one row with `VALUES(...)` + `MV_MAX(...)`. This matters — see the
+fix note below.
+
 | Column | Meaning |
 |---|---|
 | **Host** | `host.name` — **click to open the host in Observability → Infrastructure** |
@@ -539,10 +543,52 @@ Every column except `host.name` is marked as a metric, so the Infrastructure dri
 servers) and filters to monitored + Operational CIs. This panel is the server-specific, tile-matching view
 with the drill-down.
 
+#### Fixed September 2026 — phantom "down" servers
+
+The client reported the **Servers Down** tile showing **0** while this table listed a screen of dead
+servers, one of which (`kw3lniicsd002`) was demonstrably reporting CPU metrics a minute earlier.
+
+The table used to group on **seven** keys: `host.name` *plus six CMDB enrichment attributes*
+(`ci.name`, `ci.class_name`, `ci.environment`, `ci.geo.name`, `ci.support_group.l2.name`,
+`ci.short_description`). Those attributes are **mutable**. When a CI's enrichment changes, every document
+written before the change keeps the old values and every document after carries the new ones — so one
+host becomes **two groups**. The group holding the superseded values has a `last_seen` frozen at the
+moment of the change, sails through `WHERE last_seen < NOW() - 15 minutes`, and is rendered as a dead
+server. The host is alive; only that combination of attribute values is.
+
+The tell was in the data: every phantom row read **1,425–1,426 minutes down** — 23 h 45 m, landing a few
+minutes inside a 24-hour window. That is not a fleet of servers failing independently, it is one bulk
+CMDB update at a single moment, just inside the window's reach. All of them were Linux servers in the
+same data centre under the same support group.
+
+The **Servers Down** tile was never wrong: it counts `COUNT_DISTINCT(host.name)` with no attribute
+grouping, so a host is one entity no matter how many times its metadata changed.
+
+**The fix.** Group on `host.name` alone, then collapse the CI columns onto that row with `VALUES(...)` +
+`MV_MAX(...)`. The table's definition of *down* is now identical to the tile's — no document in the last
+15 minutes — so the two agree by construction rather than by coincidence.
+
+> **The same defect exists in *Coverage Gap — Monitored CIs Not Reporting*** (§3.6), which groups on
+> `ci.name`, `host.name`, `ci.geo.name` and `ci.support_group.l2.name`. A support-group rename or a data
+> centre correction splits a CI the same way. It is not fixed here because the fix trades away a feature:
+> the two descriptive columns would stop being index-backed and lose click-to-filter. *Applications on
+> Silent Servers* had the same defect and **is** fixed, because its displayed columns do not change.
+
 ### 3.6 Coverage Gap — Monitored CIs Not Reporting (>15 min)
 **Type:** Lens data table · **Index:** `metrics-*`
 The actionable worklist behind the Coverage Gap Risk tile. Last-seen per CI, keeps anything older than
 15 min, and shows **CI name · host · location · L2 support group · minutes stale**, worst first, top 100.
+
+> ⚠️ **Known defect — same root cause as the Servers Down table.** This panel groups `last_seen` on
+> `ci.name`, `host.name`, `ci.geo.name` and `ci.support_group.l2.name`. The last two are mutable CMDB
+> attributes, so a support-group rename or a location correction splits one CI into two groups and the
+> stale one is reported as not reporting. Treat long-stale rows with suspicion until this is fixed: check
+> the host in Infrastructure before raising anything. The fix is the same shape as the one applied to
+> Servers Down, but it costs click-to-filter on **Data Center** and **Support Team**, so it is being held
+> for a decision.
+
+*The Coverage Gap Risk tile above it is **not** affected* — it groups on `ci.name` alone, which is an
+identity, not a description.
 Click any cell to filter the whole dashboard to that CI/site/team.
 
 ### 3.7 Disk Saturation (>50 % used)
