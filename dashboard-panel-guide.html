@@ -270,7 +270,7 @@ footer code{font-size:.85em}
 
   <div class="note warn">
     <h3>Why Impacted CIs are not on the dashboard</h3>
-    <p>Deriving them needs the CMDB relationship graph in <code>cmdb-ci-relations-000002</code> (33.9M edges: <code>parent</code>, <code>child</code>, <code>type.name</code>, and an <code>impacted_ci</code> field naming which side is downstream). ES|QL cannot traverse a graph that size at query time, and <code>ci.parents.*</code> / <code>ci.top_level_parents.*</code> exist in the incident mapping but are populated on <strong>0</strong> documents, so the incident record carries no downstream rollup of its own. Closing this needs an ENRICH policy or a denormalising transform on the Elasticsearch side &mdash; an infrastructure change, not a dashboard one. <code>business_service.name</code> is populated on 2.8% of incidents and is the nearest available proxy; it is shown on the Affected CIs worklist.</p>
+    <p>Deriving them needs the CMDB relationship graph in <code>cmdb-ci-relations-000002</code> (33.9M edges: <code>parent</code>, <code>child</code>, <code>type.name</code>, and an <code>impacted_ci</code> field naming which side is downstream). ES|QL cannot traverse a graph that size at query time, and <code>ci.parents.*</code> / <code>ci.top_level_parents.*</code> exist in the incident mapping but are populated on <strong>0</strong> documents, so the incident record carries no downstream rollup of its own. Closing this needs an ENRICH policy or a denormalising transform on the Elasticsearch side &mdash; an infrastructure change, not a dashboard one. <code>business_service.name</code> is populated on 2.8% of incidents and is the nearest available proxy, though it was removed from the Affected CIs worklist in September 2026 &mdash; at that coverage the column was blank on almost every row.</p>
   </div>
 </section>
 
@@ -594,16 +594,21 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
       <div class="entry-head"><h3>Affected CIs &mdash; Active P1 / P2 Incidents</h3>
         <span class="tag">data table</span><span class="tag">servicenow-open-incidents-snapshots-*</span><span class="tag">CMDB drill-down</span><span class="tag">renamed</span></div>
       <p class="answers">Which CIs are the open P1s and P2s actually sitting on?</p>
-      <p>The incident-side worklist: every open P1/P2 with the CI it landed on &mdash; <strong>Sev, Incident, Affected CI, CI class, Business service, Env, Assigned to, Short description, Last seen</strong>.</p>
-      <p><strong>Drill-down &mdash; direct CMDB record link.</strong> Clicking the <strong>CMDB record</strong> column opens that CI in ServiceNow at <code>nav_to.do?uri=cmdb_ci.do%3Fsys_id%3D&lt;ci.sys_id&gt;</code>. <code>sys_id</code> is the CI&rsquo;s primary key, so ServiceNow resolves the record and renders it on <strong>its own class form</strong> &mdash; a Windows server opens as a Windows server. That is what the team asked for when they said the old link went to &ldquo;the base link for the CI&rdquo;, and it needs no class parameter at all.</p>
-      <p><strong>Why there is a separate column for it.</strong> A Kibana URL drilldown receives exactly <strong>one</strong> value: the cell that was clicked. It cannot read the rest of the row, so whatever the URL needs must <em>be</em> the clicked cell &mdash; which means a column has to carry it. <em>Affected CI</em> stays clean and readable and is no longer clickable; <code>cmdb_record</code> is the only clickable column and is width-capped at the end of the row.</p>
+      <p>The incident-side worklist: every open P1/P2 with the CI it landed on &mdash; <strong>Sev, Incident, Affected CI, CI class (ServiceNow table), Env, Assigned to, Short description</strong>.</p>
+      <p><strong>Drill-down &mdash; class-scoped CMDB link, third attempt.</strong> The team&rsquo;s target URL needs <strong>two</strong> values: the CI name and its ServiceNow table name. A Kibana URL drilldown exposes <code>event.points</code>, an array of the points in the click context &mdash; so if Lens sends every <em>dimension</em> column of the clicked row, making both <code>ci.name</code> and <code>ci_class</code> dimensions lets the template read them positionally as <code>{{event.points.0.value}}</code> and <code>{{event.points.1.value}}</code>.</p>
+      <p><code>ci.name</code> sits immediately before <code>ci_class</code> in the column order, so <code>points.0</code> is the CI name and <code>points.1</code> its class under both plausible orderings (column order, or clicked-cell-first). <strong>Click the Affected CI cell</strong> &mdash; the one the label names, and the one that is correct either way.</p>
+      <p><em>CI class</em> now shows the ServiceNow table name (<code>cmdb_ci_win_server</code>) rather than the display label (<em>Windows Server</em>), because the URL needs the table name and a second class column would have cost exactly the extra column this change was meant to remove.</p>
+      <p><strong>Columns removed</strong> at the team&rsquo;s request: <em>Business service</em> (populated on only 2.8% of incidents, so mostly blank) and <em>Last seen</em>. <code>last_seen</code> is still computed as the sort key that puts the newest incident first; it is simply no longer displayed.</p>
     </div>
   </div>
 
-  <div class="note info">
-    <h3>The link column &mdash; what was traded away</h3>
-    <p>The class-scoped list URL the team originally sent (<code>cmdb_ci_list.do?sysparm_query=name%3D&hellip;%5Esys_class_name%3D&hellip;</code>) needs <strong>two</strong> values, so the clicked cell had to carry <code>vskau1p1328^sys_class_name=cmdb_ci_win_server</code> &mdash; accurate, but ugly in an executive table. <code>sys_id</code> reaches the same record with one opaque reference id, which reads like the record pointer it is.</p>
-    <p><strong>Check on import:</strong> if the <strong>CMDB record</strong> column is blank, <code>ci.sys_id</code> is not populated on <code>servicenow-open-incidents-snapshots-*</code> and the link has nothing to key on. The fallback is the class-scoped list URL, which goes back in on request.</p>
+  <div class="note warn">
+    <h3>This is an experiment with a known readout</h3>
+    <p>Three approaches have been tried for this one link. <strong>1.</strong> Pack both values into one clickable column &mdash; worked, but put query syntax in an executive table. <strong>2.</strong> Key on <code>ci.sys_id</code> &mdash; <strong>did not work</strong> in the client&rsquo;s environment. <strong>3.</strong> <code>event.points</code> &mdash; current.</p>
+    <p>Attempt 3 rests on Lens sending more than one point per cell click, which could not be verified without the cluster. The readout is unambiguous:</p>
+    <p><strong>Opens the right CI, class-scoped</strong> &rarr; <code>event.points</code> carries the row. Done.</p>
+    <p><strong>Opens an empty ServiceNow list</strong> &rarr; <code>points</code> carries only the clicked cell, <code>points.1</code> rendered empty, and the query filtered <code>sys_class_name</code> to nothing. Fall back to the name-only URL (<code>sysparm_query=name%3D{{event.value}}</code>), the version that was working before this round.</p>
+    <p>Either way nothing else on the panel is affected.</p>
   </div>
 
   <div class="note warn">
