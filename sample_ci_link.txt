@@ -1,0 +1,1 @@
+https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name%3Dvskau1p1328%5Esys_class_name%3Dcmdb_ci_win_server&sysparm_first_row=1&sysparm_view=
