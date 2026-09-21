@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>43</b></span>
+    <span>Panels <b>44</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -243,7 +243,7 @@ footer code{font-size:.85em}
     <tbody>
       <tr><td><strong>1</strong></td><td><strong>Executive Health</strong></td><td>Is the business healthy right now?</td><td>Overall Infrastructure Health &middot; Server Availability % &middot; Active P1 &middot; Active P2 &middot; Impacted Domain &middot; Affected CIs &middot; Application Health &mdash; APM</td></tr>
       <tr><td><strong>2</strong></td><td><strong>Operational Effectiveness</strong></td><td>How is the estate actually running, and what needs hands on it?</td><td>Total Servers &middot; Servers Up &middot; Servers Down &middot; Servers Availability % &middot; Server Availability Trend &middot; Servers Down &mdash; Affected CIs &middot; Disk Saturation &middot; Network Errors</td></tr>
-      <tr><td><strong>3</strong></td><td><strong>Monitoring Maturity</strong></td><td>How much can we see, and can we trust sections 1 and 2?</td><td>Monitored Estate by Tier &middot; Business Applications Monitored &middot; APM Services Instrumented &middot; Application Estate by environment &middot; Agent / Collector Health &middot; Coverage Gap Risk &middot; Telemetry Freshness &middot; Telemetry Freshness Trend &middot; Ingest Pipeline Health &middot; Coverage Gap &mdash; CIs Not Reporting &middot; Applications on Silent Servers</td></tr>
+      <tr><td><strong>3</strong></td><td><strong>Monitoring Maturity</strong></td><td>How much can we see, and can we trust sections 1 and 2?</td><td>Monitored Estate by Tier &middot; Business Applications Monitored &middot; APM Services Instrumented &middot; Application Estate by environment &middot; Agent / Collector Health &middot; Total CIs Monitored &middot; CIs Not Reporting &middot; Telemetry Freshness &middot; Telemetry Freshness Trend &middot; Ingest Pipeline Health &middot; Coverage Gap &mdash; CIs Not Reporting &middot; Applications on Silent Servers</td></tr>
       <tr><td><strong>4</strong></td><td><strong>Automation &amp; Predictive Operations</strong></td><td>What is automation taking off the queue, and what is coming?</td><td>Raw Netcool Alerts &middot; Correlated SN Events &middot; Alert Dedup Ratio &middot; Alert Volume Trend &middot; Noise Reduction &mdash; AI KPI status &middot; Predictive Insights</td></tr>
     </tbody>
   </table></div>
@@ -404,18 +404,18 @@ footer code{font-size:.85em}
   <div class="rag">
     <div>
       <p class="lbl"><span class="dot r"></span>RED</p>
-      <p class="cond">Any active <strong>P1</strong> in any domain, <em>or</em> server availability below <strong>98%</strong>.</p>
+      <p class="cond">Any active <strong>P1</strong> in any domain, <em>or</em> CI availability below <strong>99%</strong>.</p>
     </div>
     <div>
       <p class="lbl"><span class="dot a"></span>AMBER</p>
-      <p class="cond">Any active <strong>P2</strong> in any domain, <em>or</em> server availability below <strong>99.5%</strong>.</p>
+      <p class="cond">Any active <strong>P2</strong> in any domain, <em>or</em> CI availability below <strong>99.9%</strong>.</p>
     </div>
     <div>
       <p class="lbl"><span class="dot g"></span>GREEN</p>
-      <p class="cond">No P1, no P2, server availability <strong>99.5%</strong> or better.</p>
+      <p class="cond">No P1, no P2, CI availability <strong>99.9%</strong> or better.</p>
     </div>
   </div>
-  <p>Re-tuning is a one-line edit: open the panel, <strong>Edit ES|QL</strong>, change <code>98.0</code> or <code>99.5</code> in the <code>EVAL infra_health</code> block. No other panel depends on those numbers.</p>
+  <p>Re-tuning is a one-line edit: open the panel, <strong>Edit ES|QL</strong>, change <code>99.0</code> or <code>99.9</code> in the <code>EVAL infra_health</code> block. The boundaries are the two-nines / three-nines availability tiers, deliberately the same as the RAG colouring on the availability tiles so the two never disagree about what green means.</p>
 </section>
 
 <section>
@@ -429,16 +429,17 @@ footer code{font-size:.85em}
         <span class="tag">data table</span><span class="tag">metrics-* + servicenow snapshots</span></div>
       <p class="answers">Is infrastructure healthy right now &mdash; one answer, one colour.</p>
       <p>A single ES|QL statement reads both indices at once, using <code>METADATA _index</code> to tell the two document sources apart. That is what lets availability and incident load be scored together rather than in two panels the reader has to combine mentally.</p>
+      <p><strong>Changed September 2026 &mdash; CI availability, not server availability.</strong> The denominator is now every CI with <code>ci.is_monitored == true</code> and <code>ci.operational_status == "Operational"</code>, counted on <code>ci.name</code>, rather than distinct <code>host.name</code> on <code>system.*</code> datasets. That is a <em>wider</em> population &mdash; it includes CIs monitored through tiers where <code>host.name</code> is the collector rather than the device (vSphere, Oracle, MQ, GCP), which the server-based figure could never see. Expect this number to differ from the <em>Server Availability %</em> tile beside it: they measure different estates and both are correct.</p>
       <pre><code>| EVAL infra_health = CASE(
-      p1 &gt; 0 OR availability_pct &lt; 98.0,  "RED",
-      p2 &gt; 0 OR availability_pct &lt; 99.5,  "AMBER",
+      p1 &gt; 0 OR availability_pct &lt; 99.0,  "RED",
+      p2 &gt; 0 OR availability_pct &lt; 99.9,  "AMBER",
       "GREEN")</code></pre>
       <div class="tbl-wrap"><table>
         <thead><tr><th>Column</th><th>Meaning</th></tr></thead>
         <tbody>
           <tr><td><strong>Infra Health</strong></td><td>RED / AMBER / GREEN with its status dot</td></tr>
-          <tr><td>Server availability %</td><td>Servers shipping <code>system.*</code> telemetry in the last 15 min &divide; all such servers</td></tr>
-          <tr><td>Servers down</td><td>Servers with no <code>system.*</code> telemetry for 15 min</td></tr>
+          <tr><td>CI availability %</td><td>Monitored, Operational <strong>CIs</strong> reporting in the last 15 min &divide; all such CIs</td></tr>
+          <tr><td>CIs not reporting</td><td>Monitored CIs with no telemetry for 15 min</td></tr>
           <tr><td>Active P1 / P2</td><td>Distinct open ServiceNow incident numbers, <strong>all</strong> infrastructure domains</td></tr>
         </tbody>
       </table></div>
@@ -454,6 +455,11 @@ footer code{font-size:.85em}
       <p>Denominator: distinct <code>host.name</code> shipping <code>system.*</code> telemetry anywhere in the dashboard time window &mdash; about 2,893 servers. Numerator: the same, restricted to hosts with a document in the <strong>last 15 minutes</strong>. Shown to two decimals, matching the <code>99.5%</code> example in the feedback.</p>
       <p><strong>Renamed</strong> from <em>Infrastructure Availability %</em>. The KPI is unchanged; the title now states its scope, because the figure is a server-estate number and the old name implied the whole estate.</p>
       <p><strong>Worth saying out loud when presenting:</strong> &ldquo;up&rdquo; means <em>still shipping metricbeat data</em>. A box that is powered on but whose agent has died counts as down &mdash; deliberately, because that is a real monitoring outage.</p>
+      <p><strong>RAG colouring (September 2026).</strong> Both availability tiles &mdash; this one and <em>Servers Availability %</em> in the operational row &mdash; now colour the number against the standard availability tiers: <strong>&#128994; green at 99.9%</strong> or better (three nines), <strong>&#128992; amber from 99.0% to 99.9%</strong> (two nines), <strong>&#128308; red below 99.0%</strong>.</p>
+      <div class="note warn">
+        <h3>Read this before adopting those thresholds</h3>
+        <p>At roughly 3,139 monitored servers, three nines is <strong>3 hosts</strong>. A routine patch window that reboots a dozen machines will show amber, and a larger maintenance wave will show red &mdash; correctly by this definition, but noisily if the team reads the tile as an alarm rather than a status. If that is too tight for how this estate is actually run, the usual alternative is green at 99.5% and amber at 99%. It is a two-number edit to the <code>colorStops</code> in each tile&rsquo;s palette.</p>
+      </div>
     </div>
   </div>
 
@@ -589,7 +595,8 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
         <span class="tag">data table</span><span class="tag">servicenow-open-incidents-snapshots-*</span><span class="tag">CMDB drill-down</span><span class="tag">renamed</span></div>
       <p class="answers">Which CIs are the open P1s and P2s actually sitting on?</p>
       <p>The incident-side worklist: every open P1/P2 with the CI it landed on &mdash; <strong>Sev, Incident, Affected CI, CI class, Business service, Env, Assigned to, Short description, Last seen</strong>.</p>
-      <p><strong>Drill-down:</strong> click an <strong>Affected CI</strong> to open that CI in the ServiceNow CMDB, where the relationship tabs live. Every column except <code>ci.name</code> is marked as a metric, so the action is offered on that one column only &mdash; a stray click can no longer open the wrong record.</p>
+      <p><strong>Drill-down &mdash; class-scoped CMDB link.</strong> The team asked for the link to open the CI <strong>scoped to its class</strong>, which needs two values: the CI name and <code>ci.class</code>, the ServiceNow table name (<code>cmdb_ci_win_server</code>) &mdash; not <code>ci.class_name</code>, the display label (<em>Windows Server</em>).</p>
+      <p>A Kibana URL drilldown receives exactly <strong>one</strong> value: the cell that was clicked. It cannot read the rest of the row, so a click on a clean <em>Affected CI</em> cell can only ever supply the name. The query therefore builds one extra column, <code>cmdb_link</code> = <code>CONCAT(ci.name, "^sys_class_name=", COALESCE(MV_MAX(table_v), "cmdb_ci"))</code>, and that column is the only clickable one. With <code>encode_url</code> on, Kibana percent-encodes it (<code>^</code> &rarr; <code>%5E</code>, <code>=</code> &rarr; <code>%3D</code>) and the template reproduces the client&rsquo;s sample URL exactly. Where <code>ci.class</code> is missing the link falls back to <code>cmdb_ci</code>, the base table, so the row still resolves rather than returning nothing.</p>
       <p><strong>One row per incident &times; CI.</strong> The source is a snapshot index. Grouping on the descriptive fields meant an incident reassigned or re-described inside the window appeared twice, which is why this table used to show 41 rows for 40 P2 incidents. It now groups on <code>number</code>, <code>ci.name</code> and <code>priority</code> only, collapsing the descriptive columns with <code>VALUES(...)</code> + <code>MV_MAX(...)</code>. An incident genuinely raised against two CIs still, correctly, shows twice.</p>
       <p><strong>Correction:</strong> an earlier version of this guide said <code>ci.name</code> was not populated on the incidents index, and the Impacted Domain and Impacted Applications panels were built CMDB-derived as a result. That was wrong &mdash; the index carries <strong>340 fields</strong> including the full CI enrichment plus <code>assignment_group.name</code> and <code>category.1/2</code>. The wrong conclusion came from an empty CSV export, not from the data.</p>
     </div>
@@ -606,7 +613,8 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
     <thead><tr><th>Tile</th><th>Index</th><th>How the number is produced</th></tr></thead>
     <tbody>
       <tr><td><strong>Agent / Collector Health %</strong></td><td><code>metrics-*</code></td><td>Distinct agents seen in the last 5 min &divide; all distinct agents in the window. Agent death is the upstream cause of most coverage gaps.</td></tr>
-      <tr><td><strong>Coverage Gap Risk %</strong></td><td><code>metrics-*</code></td><td>Share of monitored, Operational CIs whose last-seen is older than 15 min &mdash; the monitoring blind-spot rate.</td></tr>
+      <tr><td><strong>Total CIs Monitored</strong></td><td><code>metrics-*</code></td><td><code>COUNT_DISTINCT(ci.name)</code> over CIs flagged <code>ci.is_monitored</code> and <em>Operational</em> &mdash; the denominator behind the coverage figures.</td></tr>
+      <tr><td><strong>CIs Not Reporting (&gt;15 min)</strong></td><td><code>metrics-*</code></td><td><strong>Count</strong> of monitored, Operational CIs whose last-seen is older than 15 min. <em>Was Coverage Gap Risk (%) until September 2026 &mdash; the team asked for the absolute number rather than a share, so it reads &ldquo;7 CIs&rdquo; instead of &ldquo;0.2%&rdquo;. Pair it with the Total CIs tile to its left to recover the ratio.</em></td></tr>
       <tr><td><strong>Telemetry Freshness</strong></td><td><code>metrics-*</code></td><td><code>MAX(ingest_lag_in_sec) / 60</code>. How stale the worst number on this dashboard could be.</td></tr>
       <tr><td><strong>Total Servers Monitored</strong></td><td><code>metrics-*</code></td><td>Distinct <code>host.name</code> across the time range. Now scoped to <code>system.*</code> like panel 2.2 &mdash; these four tiles previously carried the same unscoped denominator and over-counted.</td></tr>
       <tr><td><strong>Servers Up / Down</strong></td><td><code>metrics-*</code></td><td>Up = distinct hosts with a document in the last 15 min; Down = total &minus; up.</td></tr>
@@ -654,6 +662,13 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
       <p>Every column except <code>host.name</code> is marked as a metric, so the Infrastructure drilldown is offered on the <strong>Host</strong> column alone.</p>
       <p><strong>One row per host, by construction.</strong> <code>last_seen</code> is <code>MAX(@timestamp)</code> grouped on <code>host.name</code> alone; the CI columns are collapsed onto that row with <code>VALUES(...)</code> + <code>MV_MAX(...)</code>.</p>
     </div>
+  </div>
+
+  <div class="note info">
+    <h3>The link column &mdash; a trade-off worth knowing</h3>
+    <p>Because the clicked cell has to carry both values, the link column displays its raw value &mdash; <code>vskau1p1328^sys_class_name=cmdb_ci_win_server</code> &mdash; which is not pretty. It sits last and is width-capped so it does not break the reading flow, and <em>Affected CI</em> stays clean. Two alternatives, either a small change:</p>
+    <p><strong>1. <code>{{event.points}}</code>.</strong> If Kibana&rsquo;s click context turns out to carry every <em>dimension</em> column of the row, <em>Affected CI</em> and a class column could both be dimensions and the URL could read <code>{{event.points.0.value}}</code> / <code>{{event.points.1.value}}</code> &mdash; one clean clickable column, no link column. Lens appears to send a single point per cell click, so this was not shipped untested.</p>
+    <p><strong>2. <code>ci.sys_id</code>.</strong> <code>nav_to.do?uri=cmdb_ci.do?sys_id=&lt;id&gt;</code> needs only one value, opens the record directly in its own class form, and keeps every column clean. It does not match the URL format the team sent, which is why it is not the default.</p>
   </div>
 
   <div class="note warn">

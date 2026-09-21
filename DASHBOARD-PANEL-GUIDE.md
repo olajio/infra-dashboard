@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 43 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 44 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -16,7 +16,7 @@ raises. Section headers are markdown banners on the dashboard itself.
 |---|---|---|---|
 | **1** | 🏢 **Executive Health** | *Is the business healthy right now?* | Overall Infrastructure Health · Server Availability % · Active P1 · Active P2 · Impacted Domain · Affected CIs · Application Health — APM |
 | **2** | 🔧 **Operational Effectiveness** | *How is the estate actually running, and what needs hands on it?* | Total Servers · Servers Up · Servers Down · Servers Availability % · Server Availability Trend · Servers Down — Affected CIs · Disk Saturation · Network Errors |
-| **3** | 📡 **Monitoring Maturity** | *How much can we see, and can we trust sections 1 and 2?* | Monitored Estate by Tier · Business Applications Monitored · APM Services Instrumented · Application Estate by environment · Agent / Collector Health · Coverage Gap Risk · Telemetry Freshness · Telemetry Freshness Trend · Ingest Pipeline Health · Coverage Gap — CIs Not Reporting · Applications on Silent Servers |
+| **3** | 📡 **Monitoring Maturity** | *How much can we see, and can we trust sections 1 and 2?* | Monitored Estate by Tier · Business Applications Monitored · APM Services Instrumented · Application Estate by environment · Agent / Collector Health · Total CIs Monitored · CIs Not Reporting · Telemetry Freshness · Telemetry Freshness Trend · Ingest Pipeline Health · Coverage Gap — CIs Not Reporting · Applications on Silent Servers |
 | **4** | 🤖 **Automation & Predictive Operations** | *What is automation taking off the queue, and what is coming?* | Raw Netcool Alerts · Correlated SN Events · Alert Dedup Ratio · Alert Volume Trend · Noise Reduction — AI KPI status · Predictive Insights |
 
 Quick links and **Notes & Data Limitations** trail the four sections as reference material.
@@ -181,23 +181,32 @@ feedback asked for ("health should be derived from availability **and** active c
 | Column | Meaning |
 |---|---|
 | **Infra Health** | 🔴 RED / 🟠 AMBER / 🟢 GREEN |
-| **Server availability %** | Servers shipping `system.*` telemetry in the last 15 min ÷ all such servers |
-| **Servers down** | Count of servers with no telemetry in the last 15 min |
+| **CI availability %** | Monitored, Operational **CIs** reporting in the last 15 min ÷ all such CIs |
+| **CIs not reporting** | Count of monitored CIs with no telemetry in the last 15 min |
 | **Active P1** | Distinct open ServiceNow P1 incident numbers — **all** infrastructure domains |
 | **Active P2** | Distinct open ServiceNow P2 incident numbers — **all** infrastructure domains |
+
+> **Changed September 2026 — CI availability, not server availability.** The team asked for this panel
+> to be driven by **CI** availability. The denominator is now every CI with `ci.is_monitored == true`
+> and `ci.operational_status == "Operational"`, counted on `ci.name`, rather than distinct `host.name`
+> on `system.*` datasets. That is a **wider** population: it includes CIs monitored through tiers where
+> `host.name` is the collector rather than the device (vSphere, Oracle, MQ, GCP…), which the server-based
+> figure could never see. Expect this number to differ from the *Server Availability %* tile beside it —
+> they measure different estates, and both are correct.
 
 **RAG rules (hard-coded in the panel's ES|QL, easy to re-tune):**
 
 | Status | Condition |
 |---|---|
-| 🔴 **RED** | any active **P1** (any domain) **OR** server availability **< 98 %** |
-| 🟠 **AMBER** | any active **P2** (any domain) **OR** server availability **< 99.5 %** |
-| 🟢 **GREEN** | no P1, no P2, server availability **≥ 99.5 %** |
+| 🔴 **RED** | any active **P1** (any domain) **OR** CI availability **< 99 %** |
+| 🟠 **AMBER** | any active **P2** (any domain) **OR** CI availability **< 99.9 %** |
+| 🟢 **GREEN** | no P1, no P2, CI availability **≥ 99.9 %** |
 
-Evaluation order is top-down, so RED always wins over AMBER.
+Evaluation order is top-down, so RED always wins over AMBER. The 99 % / 99.9 % boundaries are the
+two-nines / three-nines availability tiers, matching the RAG colouring on the availability tiles (§2.2).
 
-*To change the thresholds:* open the panel → **Edit ES|QL** → change `98.0` / `99.5` in the
-`EVAL infra_health = CASE(...)` block. No other panel needs touching.
+*To change the thresholds:* open the panel → **Edit ES|QL** → change `99.0` / `99.9` in the
+`EVAL infra_health = CASE(...)` block.
 
 ### 2.2 Server Availability %
 **Type:** Lens metric · **Index:** `metrics-*`, scoped to `system.*`
@@ -211,6 +220,28 @@ Displayed as a percentage with 2 decimals (e.g. `99.52%`), matching the example 
 
 "Up" therefore means *the server is still shipping metricbeat data*. It is an agent-liveness proxy for
 availability — it does not require an extra uptime probe.
+
+#### RAG colouring (added September 2026)
+
+Both availability tiles — *Server Availability %* in the executive row and *Servers Availability %* in
+the operational row — now colour the number against the standard availability tiers:
+
+| Colour | Availability | Tier |
+|---|---|---|
+| 🟢 Green | **≥ 99.9 %** | three nines |
+| 🟠 Amber | **99.0 – 99.9 %** | two nines |
+| 🔴 Red | **< 99.0 %** | below two nines |
+
+These are the conventional infrastructure availability bands, which is what "industry standard" means
+here. **Read the operational consequence before adopting them:** at ~3,139 monitored servers, three nines
+is **3 hosts**. A routine patch window that reboots a dozen machines will show amber, and a larger
+maintenance wave will show red — correctly, by this definition, but noisily if the team treats the tile as
+an alarm rather than a status.
+
+If that is too tight for how this estate is actually run, the usual alternative is to set green at 99.5 %
+and amber at 99 %. It is a two-number edit: the `colorStops` in each tile's palette. The thresholds are
+deliberately the same as the Overall Infrastructure Health RAG rules (§2.1) so the header tile and the
+availability tiles never disagree about what "green" means.
 
 ### 2.3 Active P1 Incidents · 2.4 Active P2 Incidents
 **Type:** Lens metric ×2 · **Index:** `servicenow-open-incidents-snapshots-*`
@@ -397,12 +428,54 @@ matching into Production · DR · ETE/Test · CUT · Stage · Dev · Sandbox · 
 *Renamed from "Impacted CIs" — see [Terminology](#01-terminology--affected-ci-vs-impacted-ci).*
 
 The incident-side worklist: every open P1/P2 with the CI it landed on. Columns: **Sev · Incident ·
-Affected CI · CI class · Business service · Env · Assigned to · Short description · Last seen**.
+Affected CI · CI class · Business service · Env · Assigned to · Short description · Last seen · Open in
+ServiceNow CMDB**.
 
-**Drill-down:** click an **Affected CI** to open that CI in the ServiceNow CMDB
-(`https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name=<ci>`), where the relationship tabs
-live. Every column except `ci.name` is marked as a metric so the action is offered on that one column
-only; a stray click can no longer open the wrong record.
+#### Drill-down — class-scoped CMDB link (September 2026)
+
+The team asked for the link to open the CI **scoped to its class**, matching this format:
+
+```
+https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name%3Dvskau1p1328%5Esys_class_name%3Dcmdb_ci_win_server&sysparm_first_row=1&sysparm_view=
+```
+
+That is two values — the CI name **and** `ci.class`, the ServiceNow table name (`cmdb_ci_win_server`),
+which is *not* the same field as `ci.class_name` (the display label, *Windows Server*).
+
+**Why there is now a separate link column.** A Kibana URL drilldown receives exactly **one** value: the
+cell that was clicked. It cannot read the rest of the row. So a click on a clean `Affected CI` cell can
+only ever supply the CI name — never the class. The only way to get both into the URL is to have the
+clicked cell carry both.
+
+So the query builds one extra column:
+
+```esql
+| EVAL cmdb_link = CONCAT(ci.name, "^sys_class_name=", COALESCE(MV_MAX(table_v), "cmdb_ci"))
+```
+
+`cmdb_link` is the **only** clickable column; `Affected CI` stays clean and readable and is no longer
+clickable. With `encode_url: true`, Kibana percent-encodes the value — `^` → `%5E`, `=` → `%3D` — so the
+template
+
+```
+https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name%3D{{event.value}}&sysparm_first_row=1&sysparm_view=
+```
+
+reproduces the client's sample URL exactly. Where `ci.class` is missing the link falls back to
+`cmdb_ci`, the base CI table, so the row still resolves instead of returning nothing.
+
+**The trade-off.** The link column displays its raw value —
+`vskau1p1328^sys_class_name=cmdb_ci_win_server` — which is not pretty. It is placed last and width-capped
+so it does not break the reading flow. Two alternatives, either a small change:
+
+1. **`{{event.points}}`** — if Kibana's click context turns out to carry every *dimension* column of the
+   row, `Affected CI` and a class column could both be dimensions and the URL could read
+   `{{event.points.0.value}}` / `{{event.points.1.value}}`, giving one clean clickable column. Lens
+   appears to send a single point per cell click, so this was not shipped untested — if it works in your
+   Kibana the link column disappears.
+2. **`ci.sys_id`** — `nav_to.do?uri=cmdb_ci.do?sys_id=<id>` needs only one value, opens the record
+   directly in its own class form, and keeps every column clean. It does not match the format the team
+   sent, which is why it was not the default.
 
 **One row per incident × CI.** The source is a snapshot index. Grouping on the descriptive fields meant
 an incident that was reassigned or re-described inside the dashboard window appeared twice — which is
@@ -432,7 +505,8 @@ window can appear on more than one row; the newest sorts first.
 | Tile | Index | How it works |
 |---|---|---|
 | **Agent / Collector Health (%)** | `metrics-*` | Distinct `agent.name` seen in the **last 5 min** ÷ all distinct agents in the window. Detects metricbeat/agent death, which is the upstream cause of most coverage gaps. |
-| **Coverage Gap Risk (%)** | `metrics-*` | Of all monitored + Operational CIs, the share whose **last seen** is older than 15 min. The blind-spot rate for the monitoring estate. |
+| **Total CIs Monitored** | `metrics-*` | `COUNT_DISTINCT(ci.name)` over CIs flagged `ci.is_monitored` and `Operational` — the denominator behind the coverage figures. |
+| **CIs Not Reporting (>15 min)** | `metrics-*` | **Count** of monitored + Operational CIs whose **last seen** is older than 15 min. *Was Coverage Gap Risk (%) until September 2026; the team asked for the absolute number rather than a share, so it now reads "7 CIs" instead of "0.2 %". Pair it with the Total CIs tile to its left to recover the ratio.* |
 | **Telemetry Freshness (max lag, min)** | `metrics-*` | `MAX(ingest_lag_in_sec) / 60`. Worst end-to-end pipeline delay in the window — how stale the *worst* number on this dashboard could be. |
 
 ### 3.2 KPI tiles — row 2 (server availability detail)
