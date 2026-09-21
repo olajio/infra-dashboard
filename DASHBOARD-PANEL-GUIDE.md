@@ -429,53 +429,55 @@ matching into Production · DR · ETE/Test · CUT · Stage · Dev · Sandbox · 
 *Renamed from "Impacted CIs" — see [Terminology](#01-terminology--affected-ci-vs-impacted-ci).*
 
 The incident-side worklist: every open P1/P2 with the CI it landed on. Columns: **Sev · Incident ·
-Affected CI · CI class (ServiceNow table) · Env · Assigned to · Short description**.
+Affected CI · CI class · Env · Assigned to · Short description**.
 
 *Removed September 2026 at the team's request: **Business service** (populated on only 2.8 % of incidents,
-so the column was mostly blank) and **Last seen**. `last_seen` is still computed — it is the sort key that
-puts the newest incident first — it is simply no longer displayed.*
+so the column was blank on almost every row) and **Last seen**. `last_seen` is still computed — it is the
+sort key that puts the newest incident first — it is simply no longer displayed.*
 
-#### Drill-down — class-scoped CMDB link, third attempt
-
-The team's target URL needs **two** values, the CI name and its ServiceNow table name:
+**Drill-down:** click an **Affected CI** to open that CI in the ServiceNow CMDB.
 
 ```
-https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name%3Dvskau1p1328%5Esys_class_name%3Dcmdb_ci_win_server&sysparm_first_row=1&sysparm_view=
+https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name={{event.value}}
 ```
 
-Two earlier approaches did not survive contact with the cluster:
+Every column except `ci.name` is marked as a metric, so the action is offered on that one column only
+and a stray click cannot open the wrong record.
 
-| Attempt | Approach | Outcome |
+#### Why the link cannot be scoped to the CI class
+
+The team asked for the class-scoped form of this URL:
+
+```
+…?sysparm_query=name%3Dvskau1p1328%5Esys_class_name%3Dcmdb_ci_win_server&sysparm_first_row=1&sysparm_view=
+```
+
+**That needs two values from one click, and Kibana only supplies one.** A URL drilldown on a Lens table
+receives the value of the *cell that was clicked* and nothing else. Cell values are not carried across to
+the other columns of the row — the click context is the single cell, not the record behind it. There is
+no template variable that reaches sideways into the row.
+
+Three ways round it were tried, in order:
+
+| # | Approach | Result |
 |---|---|---|
-| 1 | Pack both values into one clickable column (`name^sys_class_name=class`) | Worked, but put query syntax in an executive table |
-| 2 | Key on `ci.sys_id` → `nav_to.do?uri=cmdb_ci.do?sys_id=…` | **Did not work** in the client's environment |
-| 3 | `{{event.points}}` — read two columns from one click | **Current** |
+| 1 | Pack both values into the clicked cell: `name^sys_class_name=class` | **Worked**, but put raw query syntax in an executive table |
+| 2 | Key on `ci.sys_id` → `nav_to.do?uri=cmdb_ci.do?sys_id=…` | **Did not work** in this environment |
+| 3 | Make `ci.name` and the class both dimensions, read `{{event.points.0}}` / `{{event.points.1}}` | **Did not work** — `event.points` carries only the clicked cell, confirming the limit above |
 
-**How attempt 3 works.** A Kibana URL drilldown exposes `event.points`, an array of the points in the
-click context. If Lens sends every *dimension* column of the clicked row, then making both `ci.name` and
-`ci_class` dimensions lets the template read them positionally:
+Attempt 3 settles the question: Lens sends **one point per cell click**. Any URL needing a second field
+from the same row is therefore impossible through a drilldown alone, and the panel is back on the
+name-only link.
 
-```
-...sysparm_query=name%3D{{event.points.0.value}}%5Esys_class_name%3D{{event.points.1.value}}&...
-```
+**This costs nothing in practice.** CI names are unique in the CMDB, so
+`cmdb_ci_list.do?sysparm_query=name=<ci>` returns exactly the one record the class filter would have
+returned. The class parameter narrows a result set that already has one row in it. What differs is
+cosmetic: the link lands on the CI list filtered to that record rather than on the record's class form.
 
-`ci.name` is placed immediately before `ci_class` in the column order, so `points.0` is the CI name and
-`points.1` its class under both plausible orderings (column order, or clicked-cell-first). **Click the
-Affected CI cell** — that is the one the label names, and the one that is correct either way.
-
-`CI class` now shows the ServiceNow table name (`cmdb_ci_win_server`) rather than the display label
-(*Windows Server*), because the URL needs the table name and a second class column would have cost
-exactly the extra column this change was meant to remove.
-
-> **This is an experiment with a known readout.** It rests on Lens sending more than one point per cell
-> click, which could not be verified without the cluster.
->
-> - **Opens the right CI, class-scoped** → `event.points` carries the row. Done.
-> - **Opens an empty ServiceNow list** → `points` carries only the clicked cell, `points.1` rendered
->   empty, and the query filtered `sys_class_name` to nothing. Fall back to the name-only URL
->   (`sysparm_query=name%3D{{event.value}}`), which is the version that was working before this round.
->
-> Either way nothing else on the panel is affected.
+*If the class-scoped URL is genuinely required*, attempt 1 is the only approach that works, and the cost
+is a visible column containing `vskau1p1328^sys_class_name=cmdb_ci_win_server`. The alternative is to
+solve it on the ServiceNow side — a redirect that takes a CI name and forwards to the right class form —
+which would keep the dashboard clean and the link exact.
 
 **One row per incident × CI.** The source is a snapshot index. Grouping on the descriptive fields meant
 an incident that was reassigned or re-described inside the dashboard window appeared twice — which is
