@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 44 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 43 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -428,54 +428,34 @@ matching into Production · DR · ETE/Test · CUT · Stage · Dev · Sandbox · 
 *Renamed from "Impacted CIs" — see [Terminology](#01-terminology--affected-ci-vs-impacted-ci).*
 
 The incident-side worklist: every open P1/P2 with the CI it landed on. Columns: **Sev · Incident ·
-Affected CI · CI class · Business service · Env · Assigned to · Short description · Last seen · Open in
-ServiceNow CMDB**.
+Affected CI · CI class · Business service · Env · Assigned to · Short description · Last seen · CMDB
+record**.
 
-#### Drill-down — class-scoped CMDB link (September 2026)
+#### Drill-down — direct CMDB record link (September 2026)
 
-The team asked for the link to open the CI **scoped to its class**, matching this format:
-
-```
-https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name%3Dvskau1p1328%5Esys_class_name%3Dcmdb_ci_win_server&sysparm_first_row=1&sysparm_view=
-```
-
-That is two values — the CI name **and** `ci.class`, the ServiceNow table name (`cmdb_ci_win_server`),
-which is *not* the same field as `ci.class_name` (the display label, *Windows Server*).
-
-**Why there is now a separate link column.** A Kibana URL drilldown receives exactly **one** value: the
-cell that was clicked. It cannot read the rest of the row. So a click on a clean `Affected CI` cell can
-only ever supply the CI name — never the class. The only way to get both into the URL is to have the
-clicked cell carry both.
-
-So the query builds one extra column:
-
-```esql
-| EVAL cmdb_link = CONCAT(ci.name, "^sys_class_name=", COALESCE(MV_MAX(table_v), "cmdb_ci"))
-```
-
-`cmdb_link` is the **only** clickable column; `Affected CI` stays clean and readable and is no longer
-clickable. With `encode_url: true`, Kibana percent-encodes the value — `^` → `%5E`, `=` → `%3D` — so the
-template
+Clicking the **CMDB record** column opens that CI's record in ServiceNow:
 
 ```
-https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name%3D{{event.value}}&sysparm_first_row=1&sysparm_view=
+https://cnaprod.service-now.com/nav_to.do?uri=cmdb_ci.do%3Fsys_id%3D<ci.sys_id>
 ```
 
-reproduces the client's sample URL exactly. Where `ci.class` is missing the link falls back to
-`cmdb_ci`, the base CI table, so the row still resolves instead of returning nothing.
+`sys_id` is the CI's primary key, so ServiceNow resolves the record and renders it on **its own class
+form** — a Windows server opens as a Windows server. That is what the team asked for when they said the
+old link went to "the base link for the CI", and it needs no class parameter at all.
 
-**The trade-off.** The link column displays its raw value —
-`vskau1p1328^sys_class_name=cmdb_ci_win_server` — which is not pretty. It is placed last and width-capped
-so it does not break the reading flow. Two alternatives, either a small change:
+**Why there is a separate column for it.** A Kibana URL drilldown receives exactly **one** value: the
+cell that was clicked. It cannot read the rest of the row. So whatever value the URL needs must *be* the
+clicked cell — which means a column has to carry it. `Affected CI` stays clean and readable and is no
+longer clickable; `cmdb_record` is the only clickable column and is width-capped at the end of the row.
 
-1. **`{{event.points}}`** — if Kibana's click context turns out to carry every *dimension* column of the
-   row, `Affected CI` and a class column could both be dimensions and the URL could read
-   `{{event.points.0.value}}` / `{{event.points.1.value}}`, giving one clean clickable column. Lens
-   appears to send a single point per cell click, so this was not shipped untested — if it works in your
-   Kibana the link column disappears.
-2. **`ci.sys_id`** — `nav_to.do?uri=cmdb_ci.do?sys_id=<id>` needs only one value, opens the record
-   directly in its own class form, and keeps every column clean. It does not match the format the team
-   sent, which is why it was not the default.
+*The alternative considered and rejected:* the class-scoped list URL the team sent
+(`cmdb_ci_list.do?sysparm_query=name%3D…%5Esys_class_name%3D…`) needs **two** values, so the clicked cell
+had to carry `vskau1p1328^sys_class_name=cmdb_ci_win_server` — accurate, but ugly in an executive table.
+`sys_id` reaches the same record with one opaque reference id, which reads like the record pointer it is.
+
+> **Check on import:** if the **CMDB record** column is blank, `ci.sys_id` is not populated on
+> `servicenow-open-incidents-snapshots-*` and the link has nothing to key on. The fallback is the
+> class-scoped list URL described above — say so and it goes back in.
 
 **One row per incident × CI.** The source is a snapshot index. Grouping on the descriptive fields meant
 an incident that was reassigned or re-described inside the dashboard window appeared twice — which is
@@ -490,8 +470,6 @@ wrong. The index carries **340 fields**, including the full CI enrichment (`ci.n
 plus `assignment_group.name` and `category.1/2`. The wrong conclusion came from an empty CSV export, not
 from the data.
 
-*Caveat:* the source is a snapshot index, so an incident reassigned or re-described inside the dashboard
-window can appear on more than one row; the newest sorts first.
 
 ---
 

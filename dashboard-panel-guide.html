@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>44</b></span>
+    <span>Panels <b>43</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -595,80 +595,15 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
         <span class="tag">data table</span><span class="tag">servicenow-open-incidents-snapshots-*</span><span class="tag">CMDB drill-down</span><span class="tag">renamed</span></div>
       <p class="answers">Which CIs are the open P1s and P2s actually sitting on?</p>
       <p>The incident-side worklist: every open P1/P2 with the CI it landed on &mdash; <strong>Sev, Incident, Affected CI, CI class, Business service, Env, Assigned to, Short description, Last seen</strong>.</p>
-      <p><strong>Drill-down &mdash; class-scoped CMDB link.</strong> The team asked for the link to open the CI <strong>scoped to its class</strong>, which needs two values: the CI name and <code>ci.class</code>, the ServiceNow table name (<code>cmdb_ci_win_server</code>) &mdash; not <code>ci.class_name</code>, the display label (<em>Windows Server</em>).</p>
-      <p>A Kibana URL drilldown receives exactly <strong>one</strong> value: the cell that was clicked. It cannot read the rest of the row, so a click on a clean <em>Affected CI</em> cell can only ever supply the name. The query therefore builds one extra column, <code>cmdb_link</code> = <code>CONCAT(ci.name, "^sys_class_name=", COALESCE(MV_MAX(table_v), "cmdb_ci"))</code>, and that column is the only clickable one. With <code>encode_url</code> on, Kibana percent-encodes it (<code>^</code> &rarr; <code>%5E</code>, <code>=</code> &rarr; <code>%3D</code>) and the template reproduces the client&rsquo;s sample URL exactly. Where <code>ci.class</code> is missing the link falls back to <code>cmdb_ci</code>, the base table, so the row still resolves rather than returning nothing.</p>
-      <p><strong>One row per incident &times; CI.</strong> The source is a snapshot index. Grouping on the descriptive fields meant an incident reassigned or re-described inside the window appeared twice, which is why this table used to show 41 rows for 40 P2 incidents. It now groups on <code>number</code>, <code>ci.name</code> and <code>priority</code> only, collapsing the descriptive columns with <code>VALUES(...)</code> + <code>MV_MAX(...)</code>. An incident genuinely raised against two CIs still, correctly, shows twice.</p>
-      <p><strong>Correction:</strong> an earlier version of this guide said <code>ci.name</code> was not populated on the incidents index, and the Impacted Domain and Impacted Applications panels were built CMDB-derived as a result. That was wrong &mdash; the index carries <strong>340 fields</strong> including the full CI enrichment plus <code>assignment_group.name</code> and <code>category.1/2</code>. The wrong conclusion came from an empty CSV export, not from the data.</p>
-    </div>
-  </div>
-
-</section>
-
-<section>
-  <h2>Operational Detail panels</h2>
-  <p class="sec-note">The pre-existing NOC content, unchanged except for removing the duplicated P1 tile and re-flowing its row into three equal tiles.</p>
-
-  <div class="kicker">KPI tiles</div>
-  <div class="tbl-wrap"><table>
-    <thead><tr><th>Tile</th><th>Index</th><th>How the number is produced</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Agent / Collector Health %</strong></td><td><code>metrics-*</code></td><td>Distinct agents seen in the last 5 min &divide; all distinct agents in the window. Agent death is the upstream cause of most coverage gaps.</td></tr>
-      <tr><td><strong>Total CIs Monitored</strong></td><td><code>metrics-*</code></td><td><code>COUNT_DISTINCT(ci.name)</code> over CIs flagged <code>ci.is_monitored</code> and <em>Operational</em> &mdash; the denominator behind the coverage figures.</td></tr>
-      <tr><td><strong>CIs Not Reporting (&gt;15 min)</strong></td><td><code>metrics-*</code></td><td><strong>Count</strong> of monitored, Operational CIs whose last-seen is older than 15 min. <em>Was Coverage Gap Risk (%) until September 2026 &mdash; the team asked for the absolute number rather than a share, so it reads &ldquo;7 CIs&rdquo; instead of &ldquo;0.2%&rdquo;. Pair it with the Total CIs tile to its left to recover the ratio.</em></td></tr>
-      <tr><td><strong>Telemetry Freshness</strong></td><td><code>metrics-*</code></td><td><code>MAX(ingest_lag_in_sec) / 60</code>. How stale the worst number on this dashboard could be.</td></tr>
-      <tr><td><strong>Total Servers Monitored</strong></td><td><code>metrics-*</code></td><td>Distinct <code>host.name</code> across the time range. Now scoped to <code>system.*</code> like panel 2.2 &mdash; these four tiles previously carried the same unscoped denominator and over-counted.</td></tr>
-      <tr><td><strong>Servers Up / Down</strong></td><td><code>metrics-*</code></td><td>Up = distinct hosts with a document in the last 15 min; Down = total &minus; up.</td></tr>
-      <tr><td><strong>Servers Availability %</strong></td><td><code>metrics-*</code></td><td>Same definition as 2.2, shown alongside its component counts for on-call engineers.</td></tr>
-      <tr><td><strong>Raw Netcool Alerts (24h)</strong></td><td><code>.ds-bridge-alerts-netcool-default-*</code></td><td>Raw alert documents in the last 24 h.</td></tr>
-      <tr><td><strong>Correlated SN Events (24h)</strong></td><td><code>.ds-logs-servicenow.event-default-*</code></td><td>Events that survived correlation into ServiceNow.</td></tr>
-      <tr><td><strong>Alert Dedup Ratio (24h)</strong></td><td>both</td><td><code>(raw &minus; correlated) &divide; raw</code> &mdash; the share of alert noise suppressed before it reached an analyst. Higher is better.</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="kicker">Trends</div>
-  <div class="tbl-wrap"><table>
-    <thead><tr><th>Chart</th><th>How it works</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Alert Volume Trend &mdash; hourly</strong></td><td>Netcool alert count bucketed hourly. This is the empirical baseline an alert-storm forecast would be trained against; visible spikes are today&rsquo;s storm signal.</td></tr>
-      <tr><td><strong>Telemetry Freshness Trend</strong></td><td>Max ingest lag per hour, in minutes. A rising staircase means the pipeline is falling behind; a single spike is a transient relay or backpressure event.</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="entry">
-    <div class="addr">new</div>
-    <div>
-      <div class="entry-head"><h3>Server Availability Trend</h3>
-        <span class="tag">line chart</span><span class="tag">metrics-* scoped to system.*</span><span class="tag">hourly</span></div>
-      <p class="answers">Is server availability getting better or worse?</p>
-      <p>The <strong>Server Availability %</strong> tiles answer &ldquo;how many servers are up right now?&rdquo;. This answers &ldquo;has that been getting better or worse?&rdquo; &mdash; one point per hour across the dashboard window, sitting between the Servers Up / Down / Availability tiles and the Servers Down worklist.</p>
-      <p>Each <code>system.*</code> document is bucketed to its hour; a server counts as <strong>up in that hour</strong> if it produced at least one document in it. The distinct-host count is exact rather than <code>COUNT_DISTINCT</code>, so the line does not jitter from HyperLogLog estimation error on a percentage axis. The denominator is the <strong>busiest hour in the window</strong> &mdash; the most servers seen reporting in any one hour. The first and last buckets are dropped because both are partial; without that the line always ends in a false cliff.</p>
-    </div>
-  </div>
-
-  <div class="note warn">
-    <h3>Reading the trend against the tile</h3>
-    <p>The trend and the <strong>Servers Availability %</strong> tile will not agree to the decimal, and that is expected &mdash; they answer different questions. The tile applies a <strong>15-minute</strong> silence rule at this instant; the trend asks whether a server reported <strong>at any point in the hour</strong>, which is more forgiving. Use the tile for <em>now</em>, the trend for <em>direction</em>.</p>
-    <p><strong>What it cannot show.</strong> A server down for the <em>entire</em> window produces no documents at all, so it lands in neither the numerator nor the denominator &mdash; availability still reads 100% while that server is dead. The existing tiles share this blind spot, because they also take their total from the hosts seen in the window. Servers dead longer than the window are caught by <strong>Coverage Gap &mdash; Monitored CIs Not Reporting</strong>, which starts from the CMDB list rather than from telemetry.</p>
-  </div>
-
-  <div class="entry">
-    <div class="addr">new</div>
-    <div>
-      <div class="entry-head"><h3>Servers Down &mdash; Affected CIs</h3>
-        <span class="tag">data table</span><span class="tag">metrics-* scoped to system.*</span><span class="tag">host drill-down</span></div>
-      <p class="answers">Which servers are down, what CI is each one, and who owns it?</p>
-      <p>The worklist behind the <strong>Servers Down</strong> tile, sitting directly under it. It uses the <strong>same scope and window as that tile</strong> &mdash; <code>system.*</code> datasets, seen in the window but not in the last 15 minutes &mdash; so the row count and the tile agree. Deliberately no <code>ci.is_monitored</code> filter, because the tile has none either.</p>
-      <p>Columns: <strong>Host</strong> (click to open in Observability &rarr; Infrastructure) &middot; <strong>Affected CI</strong> &middot; <strong>CI class</strong> &middot; <strong>Application / purpose</strong> &middot; <strong>Env</strong> &middot; <strong>Location</strong> &middot; <strong>Support group</strong> &middot; <strong>Down (min)</strong>, worst first. Application shows <code>&mdash;</code> where the CMDB holds <code>uname</code> output rather than a real name, which is typical for Linux CIs.</p>
-      <p>Every column except <code>host.name</code> is marked as a metric, so the Infrastructure drilldown is offered on the <strong>Host</strong> column alone.</p>
-      <p><strong>One row per host, by construction.</strong> <code>last_seen</code> is <code>MAX(@timestamp)</code> grouped on <code>host.name</code> alone; the CI columns are collapsed onto that row with <code>VALUES(...)</code> + <code>MV_MAX(...)</code>.</p>
+      <p><strong>Drill-down &mdash; direct CMDB record link.</strong> Clicking the <strong>CMDB record</strong> column opens that CI in ServiceNow at <code>nav_to.do?uri=cmdb_ci.do%3Fsys_id%3D&lt;ci.sys_id&gt;</code>. <code>sys_id</code> is the CI&rsquo;s primary key, so ServiceNow resolves the record and renders it on <strong>its own class form</strong> &mdash; a Windows server opens as a Windows server. That is what the team asked for when they said the old link went to &ldquo;the base link for the CI&rdquo;, and it needs no class parameter at all.</p>
+      <p><strong>Why there is a separate column for it.</strong> A Kibana URL drilldown receives exactly <strong>one</strong> value: the cell that was clicked. It cannot read the rest of the row, so whatever the URL needs must <em>be</em> the clicked cell &mdash; which means a column has to carry it. <em>Affected CI</em> stays clean and readable and is no longer clickable; <code>cmdb_record</code> is the only clickable column and is width-capped at the end of the row.</p>
     </div>
   </div>
 
   <div class="note info">
-    <h3>The link column &mdash; a trade-off worth knowing</h3>
-    <p>Because the clicked cell has to carry both values, the link column displays its raw value &mdash; <code>vskau1p1328^sys_class_name=cmdb_ci_win_server</code> &mdash; which is not pretty. It sits last and is width-capped so it does not break the reading flow, and <em>Affected CI</em> stays clean. Two alternatives, either a small change:</p>
-    <p><strong>1. <code>{{event.points}}</code>.</strong> If Kibana&rsquo;s click context turns out to carry every <em>dimension</em> column of the row, <em>Affected CI</em> and a class column could both be dimensions and the URL could read <code>{{event.points.0.value}}</code> / <code>{{event.points.1.value}}</code> &mdash; one clean clickable column, no link column. Lens appears to send a single point per cell click, so this was not shipped untested.</p>
-    <p><strong>2. <code>ci.sys_id</code>.</strong> <code>nav_to.do?uri=cmdb_ci.do?sys_id=&lt;id&gt;</code> needs only one value, opens the record directly in its own class form, and keeps every column clean. It does not match the URL format the team sent, which is why it is not the default.</p>
+    <h3>The link column &mdash; what was traded away</h3>
+    <p>The class-scoped list URL the team originally sent (<code>cmdb_ci_list.do?sysparm_query=name%3D&hellip;%5Esys_class_name%3D&hellip;</code>) needs <strong>two</strong> values, so the clicked cell had to carry <code>vskau1p1328^sys_class_name=cmdb_ci_win_server</code> &mdash; accurate, but ugly in an executive table. <code>sys_id</code> reaches the same record with one opaque reference id, which reads like the record pointer it is.</p>
+    <p><strong>Check on import:</strong> if the <strong>CMDB record</strong> column is blank, <code>ci.sys_id</code> is not populated on <code>servicenow-open-incidents-snapshots-*</code> and the link has nothing to key on. The fallback is the class-scoped list URL, which goes back in on request.</p>
   </div>
 
   <div class="note warn">
