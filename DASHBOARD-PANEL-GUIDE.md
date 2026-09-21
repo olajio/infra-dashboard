@@ -435,14 +435,31 @@ Affected CI · CI class · Env · Assigned to · Short description**.
 so the column was blank on almost every row) and **Last seen**. `last_seen` is still computed — it is the
 sort key that puts the newest incident first — it is simply no longer displayed.*
 
-**Drill-down:** click an **Affected CI** to open that CI in the ServiceNow CMDB.
+#### Drill-downs — two columns, two destinations
 
-```
-https://cnaprod.service-now.com/cmdb_ci_list.do?sysparm_query=name={{event.value}}
-```
+| Click | Action | Opens |
+|---|---|---|
+| **Incident** | *Open incident in ServiceNow* | `…/now/nav/ui/classic/params/target/incident_list.do%3Fsysparm_query%3Dnumber%253D<INC>` |
+| **Affected CI** | *Open CI in ServiceNow CMDB* | `cmdb_ci_list.do?sysparm_query=name=<ci>` |
 
-Every column except `ci.name` is marked as a metric, so the action is offered on that one column only
-and a stray click cannot open the wrong record.
+Both columns also offer **Filter for value**, so a click on an incident number can filter the whole
+dashboard to that incident. Every other column is marked as a metric and is inert on click.
+
+**The Incident column is now the raw `number` field**, not an `EVAL`-derived string. That matters: Kibana
+can only build a dashboard filter from a column backed by a real index field, so the previous
+`TO_STRING(number)` version could be drilled from but not filtered on.
+
+> **Both drilldowns are offered on both columns.** Kibana attaches drilldowns to the *panel*, not to a
+> column, and every one of them fires on the same value-click trigger. So clicking the Incident cell
+> shows *Open incident* **and** *Open CI in CMDB*, and clicking the Affected CI cell shows both too. Pick
+> the one that matches the column you clicked; the mismatched pair (a CI name sent to the incident list,
+> or an incident number sent to the CI list) just returns an empty ServiceNow list. The column labels name
+> the right action.
+
+> **Filtering on an incident empties the `metrics-*` panels.** `number` exists only on
+> `servicenow-open-incidents-snapshots-*`, so once that filter is applied every panel reading `metrics-*`
+> matches nothing and renders blank until the filter is cleared. That is inherent to a cross-index
+> dashboard filter, not a fault in the panel — the incident-side panels are the ones that stay meaningful.
 
 #### Why the link cannot be scoped to the CI class
 
