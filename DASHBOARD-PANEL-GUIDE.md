@@ -478,23 +478,22 @@ Three ways round it were tried, in order:
 
 | # | Approach | Result |
 |---|---|---|
-| 1 | Pack both values into the clicked cell: `name^sys_class_name=class` | **Worked**, but put raw query syntax in an executive table |
+| 1 | Pack both values into the clicked cell: `name^sys_class_name=class` | **Did not work** |
 | 2 | Key on `ci.sys_id` → `nav_to.do?uri=cmdb_ci.do?sys_id=…` | **Did not work** in this environment |
 | 3 | Make `ci.name` and the class both dimensions, read `{{event.points.0}}` / `{{event.points.1}}` | **Did not work** — `event.points` carries only the clicked cell, confirming the limit above |
 
-Attempt 3 settles the question: Lens sends **one point per cell click**. Any URL needing a second field
-from the same row is therefore impossible through a drilldown alone, and the panel is back on the
-name-only link.
+**All three failed, and the panel is back on the name-only link.** Attempt 3 is the one that explains the
+others: Lens sends one point per cell click, so any URL needing a second field from the same row is
+impossible through a drilldown alone.
 
 **This costs nothing in practice.** CI names are unique in the CMDB, so
 `cmdb_ci_list.do?sysparm_query=name=<ci>` returns exactly the one record the class filter would have
 returned. The class parameter narrows a result set that already has one row in it. What differs is
 cosmetic: the link lands on the CI list filtered to that record rather than on the record's class form.
 
-*If the class-scoped URL is genuinely required*, attempt 1 is the only approach that works, and the cost
-is a visible column containing `vskau1p1328^sys_class_name=cmdb_ci_win_server`. The alternative is to
-solve it on the ServiceNow side — a redirect that takes a CI name and forwards to the right class form —
-which would keep the dashboard clean and the link exact.
+*If the class-scoped landing page is genuinely required*, it has to be solved on the **ServiceNow side** —
+a redirect or a saved view that takes a CI name and forwards to the right class form. Kibana cannot supply
+the second value, so no amount of dashboard work will produce that URL.
 
 **One row per incident × CI.** The source is a snapshot index. Grouping on the descriptive fields meant
 an incident that was reassigned or re-described inside the dashboard window appeared twice — which is
