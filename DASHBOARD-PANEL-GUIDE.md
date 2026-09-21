@@ -461,39 +461,40 @@ can only build a dashboard filter from a column backed by a real index field, so
 > matches nothing and renders blank until the filter is cleared. That is inherent to a cross-index
 > dashboard filter, not a fault in the panel — the incident-side panels are the ones that stay meaningful.
 
-#### Why the link cannot be scoped to the CI class
+#### `encode_url` — the bug behind every failed link
 
-The team asked for the class-scoped form of this URL:
+**Kibana's `encode_url` option percent-encodes the URL *after* the template is compiled, and `%` is one
+of the characters it encodes.** A template that already contains percent-encoding is therefore mangled:
+`%3F` becomes `%253F`, `%253D` becomes `%25253D`, and ServiceNow receives nonsense.
 
-```
-…?sysparm_query=name%3Dvskau1p1328%5Esys_class_name%3Dcmdb_ci_win_server&sysparm_first_row=1&sysparm_view=
-```
+That single setting explains every link on this panel that failed:
 
-**That needs two values from one click, and Kibana only supplies one.** A URL drilldown on a Lens table
-receives the value of the *cell that was clicked* and nothing else. Cell values are not carried across to
-the other columns of the row — the click context is the single cell, not the record behind it. There is
-no template variable that reaches sideways into the row.
+| Link | Template contains `%XX`? | `encode_url` | Outcome |
+|---|---|---|---|
+| CI, name only — `…?sysparm_query=name={{event.value}}` | no | true | **Works.** Nothing for the encoder to damage |
+| Attempt 1 — packed `name%3D…%5Esys_class_name%3D…` | yes | true | Broken |
+| Attempt 2 — `nav_to.do?uri=cmdb_ci.do%3Fsys_id%3D…` | yes | true | Broken |
+| Attempt 3 — `{{event.points}}` with `%3D` / `%5E` | yes | true | Broken |
+| Incident — `…incident_list.do%3Fsysparm_query%3D…` | yes | **false** | **Works** |
 
-Three ways round it were tried, in order:
+**The rule:** if a URL template contains percent-encoding of its own, `encode_url` must be **off**. If it
+contains none and the value might hold a space or an `&`, leave it **on** so the value is escaped. The two
+drilldowns on this panel are deliberately set differently for exactly that reason.
 
-| # | Approach | Result |
-|---|---|---|
-| 1 | Pack both values into the clicked cell: `name^sys_class_name=class` | **Did not work** |
-| 2 | Key on `ci.sys_id` → `nav_to.do?uri=cmdb_ci.do?sys_id=…` | **Did not work** in this environment |
-| 3 | Make `ci.name` and the class both dimensions, read `{{event.points.0}}` / `{{event.points.1}}` | **Did not work** — `event.points` carries only the clicked cell, confirming the limit above |
+> **A conclusion recorded here earlier was wrong.** This guide previously stated that Lens sends one point
+> per cell click, and that a class-scoped CMDB link was therefore impossible. That was inferred from
+> attempt 3 failing — but attempt 3's template carried `%3D` and `%5E` with `encode_url` on, so it was
+> never a valid test of `event.points`. Whether Lens carries the whole row in the click context is still
+> **unknown**. What *is* established: attempts 1 and 2 were mechanically sound and failed only because of
+> the encoding setting, so the class-scoped CI link is very likely achievable with `encode_url` off.
 
-**All three failed, and the panel is back on the name-only link.** Attempt 3 is the one that explains the
-others: Lens sends one point per cell click, so any URL needing a second field from the same row is
-impossible through a drilldown alone.
+#### Both drilldowns appear on both columns — this one is a real limit
 
-**This costs nothing in practice.** CI names are unique in the CMDB, so
-`cmdb_ci_list.do?sysparm_query=name=<ci>` returns exactly the one record the class filter would have
-returned. The class parameter narrows a result set that already has one row in it. What differs is
-cosmetic: the link lands on the CI list filtered to that record rather than on the record's class form.
-
-*If the class-scoped landing page is genuinely required*, it has to be solved on the **ServiceNow side** —
-a redirect or a saved view that takes a CI name and forwards to the right class form. Kibana cannot supply
-the second value, so no amount of dashboard work will produce that URL.
+Kibana attaches drilldowns to the **panel**, not to a column, and every drilldown fires on the same
+value-click trigger. There is no per-column binding, so clicking **Incident** offers both actions and so
+does clicking **Affected CI**. Each label names the column it belongs to; the mismatched pairing (a CI
+name sent to the incident list, or an incident number sent to the CI list) opens an empty ServiceNow list
+rather than the wrong record.
 
 **One row per incident × CI.** The source is a snapshot index. Grouping on the descriptive fields meant
 an incident that was reassigned or re-described inside the dashboard window appeared twice — which is

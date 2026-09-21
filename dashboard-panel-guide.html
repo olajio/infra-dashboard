@@ -608,12 +608,25 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
   </div>
 
   <div class="note warn">
-    <h3>Why the link cannot be scoped to the CI class</h3>
-    <p>The team asked for the class-scoped form of this URL, <code>…?sysparm_query=name%3Dvskau1p1328%5Esys_class_name%3Dcmdb_ci_win_server&amp;…</code>. <strong>That needs two values from one click, and Kibana only supplies one.</strong> A URL drilldown on a Lens table receives the value of the <em>cell that was clicked</em> and nothing else. Cell values are not carried across to the other columns of the row &mdash; the click context is the single cell, not the record behind it, and no template variable reaches sideways into the row.</p>
-    <p>Three ways round it were tried. <strong>1.</strong> Pack both values into the clicked cell (<code>name^sys_class_name=class</code>) &mdash; <em>did not work</em>. <strong>2.</strong> Key on <code>ci.sys_id</code> &mdash; <em>did not work</em> in this environment. <strong>3.</strong> Make both columns dimensions and read <code>{{event.points.0}}</code> / <code>{{event.points.1}}</code> &mdash; <em>did not work</em>, confirming that <code>event.points</code> carries only the clicked cell.</p>
-    <p><strong>All three failed, and the panel is back on the name-only link.</strong> Attempt 3 is the one that explains the others: Lens sends one point per cell click, so any URL needing a second field from the same row is impossible through a drilldown alone.</p>
-    <p><strong>This costs nothing in practice.</strong> CI names are unique in the CMDB, so <code>name=&lt;ci&gt;</code> returns exactly the one record the class filter would have returned &mdash; the class parameter narrows a result set that already has one row in it. What differs is cosmetic: the link lands on the CI list filtered to that record rather than on the record&rsquo;s class form.</p>
-    <p><em>If the class-scoped landing page is genuinely required</em>, it has to be solved on the <strong>ServiceNow side</strong> &mdash; a redirect or saved view that takes a CI name and forwards to the right class form. Kibana cannot supply the second value, so no amount of dashboard work will produce that URL.</p>
+    <h3><code>encode_url</code> &mdash; the bug behind every failed link</h3>
+    <p><strong>Kibana&rsquo;s <code>encode_url</code> option percent-encodes the URL <em>after</em> the template is compiled, and <code>%</code> is one of the characters it encodes.</strong> A template that already contains percent-encoding is therefore mangled: <code>%3F</code> becomes <code>%253F</code>, <code>%253D</code> becomes <code>%25253D</code>, and ServiceNow receives nonsense. That single setting explains every link on this panel that failed.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Link</th><th>Template has <code>%XX</code>?</th><th><code>encode_url</code></th><th>Outcome</th></tr></thead>
+      <tbody>
+        <tr><td>CI, name only</td><td>no</td><td>true</td><td><strong>Works</strong> &mdash; nothing for the encoder to damage</td></tr>
+        <tr><td>Attempt 1 &mdash; packed name + class</td><td>yes</td><td>true</td><td>Broken</td></tr>
+        <tr><td>Attempt 2 &mdash; <code>sys_id</code></td><td>yes</td><td>true</td><td>Broken</td></tr>
+        <tr><td>Attempt 3 &mdash; <code>event.points</code></td><td>yes</td><td>true</td><td>Broken</td></tr>
+        <tr><td>Incident</td><td>yes</td><td><strong>false</strong></td><td><strong>Works</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>The rule:</strong> if a URL template contains percent-encoding of its own, <code>encode_url</code> must be <strong>off</strong>. If it contains none and the value might hold a space or an <code>&amp;</code>, leave it <strong>on</strong> so the value is escaped. The two drilldowns on this panel are set differently for exactly that reason.</p>
+    <p><strong>A conclusion recorded here earlier was wrong.</strong> This guide previously stated that Lens sends one point per cell click and that a class-scoped CMDB link was therefore impossible. That was inferred from attempt 3 failing &mdash; but attempt 3&rsquo;s template carried <code>%3D</code> and <code>%5E</code> with <code>encode_url</code> on, so it was never a valid test of <code>event.points</code>. Whether Lens carries the whole row is still <strong>unknown</strong>. What is established: attempts 1 and 2 were mechanically sound and failed only on the encoding setting, so the class-scoped CI link is very likely achievable with <code>encode_url</code> off.</p>
+  </div>
+
+  <div class="note warn">
+    <h3>Both drilldowns appear on both columns &mdash; this one is a real limit</h3>
+    <p>Kibana attaches drilldowns to the <strong>panel</strong>, not to a column, and every drilldown fires on the same value-click trigger. There is no per-column binding, so clicking <strong>Incident</strong> offers both actions and so does clicking <strong>Affected CI</strong>. Each label names the column it belongs to; the mismatched pairing &mdash; a CI name sent to the incident list, or an incident number sent to the CI list &mdash; opens an empty ServiceNow list rather than the wrong record.</p>
   </div>
 
   <div class="note warn">
