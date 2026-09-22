@@ -225,15 +225,37 @@ footer code{font-size:.85em}
 <header class="masthead">
   <div class="eyebrow">Operations Dashboard &middot; Consolidated Alert, Infra &amp; Platform Health</div>
   <h1>Ops Dashboard Field Guide</h1>
-  <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
+  <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, how the team&rsquo;s feedback was implemented &mdash; and what sits on the four detail dashboards behind it.</p>
   <div class="meta">
     <span>Panels <b>45</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
+    <span>Detail dashboards <b>4</b></span>
     <span>Dashboard id <b>ops-dashboard-consolidated-v1</b></span>
   </div>
 </header>
+
+<section id="family">
+  <h2>The dashboard family</h2>
+  <p class="sec-note">Five saved objects, five separate imports. The landing page answers <em>is anything wrong</em>; the four detail dashboards answer <em>what exactly</em>, each against a different index.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Dashboard</th><th>File</th><th>Saved-object id</th><th>Panels</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Operations Dashboard &mdash; Consolidated</strong></td><td><code>operation-dashboard.ndjson</code></td><td><code>ops-dashboard-consolidated-v1</code></td><td class="num">45</td><td><code>metrics-*</code>, <code>metrics-apm*</code>, <code>servicenow-open-incidents-snapshots-*</code>, Netcool + SN event streams</td></tr>
+      <tr><td><strong>Database Detail &mdash; CloudSQL PostgreSQL</strong></td><td><code>database-postgresql-dashboard.ndjson</code></td><td><code>06a07662-c4fa-4074-981c-ff075c3c5da1</code></td><td class="num">22</td><td><code>metrics-*</code> (<code>gcp.cloudsql_postgresql</code>)</td></tr>
+      <tr><td><strong>Database Detail &mdash; Microsoft SQL Server</strong></td><td><code>database-mssql-dashboard.ndjson</code></td><td><code>db-detail-mssql-v1</code></td><td class="num">10</td><td><code>metricbeat-*</code></td></tr>
+      <tr><td><strong>Service Management &mdash; Incident Effectiveness</strong></td><td><code>service-management-dashboard.ndjson</code></td><td><code>sm-incident-effectiveness-v1</code></td><td class="num">10</td><td><code>servicenow-incidents-*</code></td></tr>
+      <tr><td><strong>Availability &mdash; Synthetic Monitoring</strong></td><td><code>synthetic-availability-dashboard.ndjson</code></td><td><code>availability-synthetics-v1</code></td><td class="num">11</td><td><code>synthetics-*</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note info">
+    <h3>Why they are separate saved objects</h3>
+    <p>Each detail dashboard imports and updates on its own, so a change to one cannot break the landing page. They import in any order and none depends on another. The CloudSQL dashboard keeps the saved-object id of the managed GCP-integration dashboard it was adapted from, which means re-importing it overwrites that copy in place rather than leaving a duplicate beside it.</p>
+    <p><strong>There is no Oracle or MySQL dashboard</strong>, and that is a finding rather than an omission &mdash; see <a href="#detail">Detail dashboards &rarr; 7.5</a>.</p>
+  </div>
+</section>
 
 <section>
   <h2>Dashboard flow &mdash; four sections</h2>
@@ -304,7 +326,7 @@ footer code{font-size:.85em}
 
 <section>
   <h2>Team feedback &rarr; what shipped</h2>
-  <p class="sec-note">All six items from <em>Add Overall Infrastructure Health Status</em> are on the dashboard. Two are built from CMDB enrichment rather than from the incident records &mdash; the reason is in <a href="#gap">the open item</a> at the end.</p>
+  <p class="sec-note">All six items from <em>Add Overall Infrastructure Health Status</em> are on the dashboard. The Impacted Applications panels are still built from CMDB enrichment rather than from the incident records, on purpose &mdash; the reason is in <a href="#gap">the open item</a> at the end.</p>
 
   <div class="board">
     <div class="trace">
@@ -327,9 +349,9 @@ footer code{font-size:.85em}
       <div class="n">03</div>
       <div>
         <p class="ask">Impacted domain (Windows, Linux, Network, Database, Middleware, Storage&hellip;) for active incidents</p>
-        <p class="got">Panel 2.6 &mdash; domains resolved from the CMDB support group and CI class on the telemetry, not from the incident record.</p>
+        <p class="got">Panel 2.6 &mdash; domains resolved from <code>ci.class_name</code> on the incident record itself, with a <code>&#9888;&#65039; No CI mapped</code> bucket for incidents carrying no CI.</p>
       </div>
-      <span class="chip part">CMDB-derived</span>
+      <span class="chip done">Shipped</span>
     </div>
     <div class="trace">
       <div class="n">04</div>
@@ -687,26 +709,174 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
   </table></div>
 </section>
 
+<section id="detail">
+  <h2>Detail dashboards</h2>
+  <p class="sec-note">Four saved objects behind the landing page. Each is its own import and its own index; none of them touches <code>operation-dashboard.ndjson</code>.</p>
+
+  <div class="entry">
+    <div class="addr">7.1</div>
+    <div>
+      <div class="entry-head">
+        <h3>Database Detail &mdash; CloudSQL PostgreSQL</h3>
+        <span class="tag">22 panels</span>
+        <span class="tag">gcp.cloudsql_postgresql</span>
+      </div>
+      <p class="answers">Which of the 22 CloudSQL instances is in trouble, and why.</p>
+      <p><strong>22 instances across 4 GCP projects</strong> &mdash; <code>spg</code> (prd + dr, main + control), <code>anomalo</code> (prd + dr), and 8 pre-production instances each in <code>ilap</code> and <code>rst</code>. All PostgreSQL 14, region <code>us-central</code>.</p>
+      <p>Keyed on <code>gcp.labels.resource.database_id</code>, never <code>host.name</code> &mdash; <code>host.name</code> here is the GKE collector pod running the GCP integration, so keying on it would collapse all 22 instances into one.</p>
+      <p>This is the Elastic GCP integration&rsquo;s own dashboard, adapted, with three panels ported in at the top:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Ported panel</th><th>Why it was added</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Instances Silent</strong></td><td>The integration charts metrics but never counts what stopped reporting</td></tr>
+          <tr><td><strong>Max Transaction-ID Utilisation</strong></td><td>XID wraparound forces a Postgres instance read-only. It is the one metric here that means a hard outage rather than degradation</td></tr>
+          <tr><td><strong>CloudSQL Instance Health</strong></td><td>Per-instance table with staleness and RAG &mdash; ranks <em>which</em> instance to look at before the charts below explain why</td></tr>
+        </tbody>
+      </table></div>
+      <p>The other 19 panels are the integration&rsquo;s work, unchanged: database up, uptime, CPU, memory quota and usage, disk bytes used / quota / read ops / write ops, network sent and received, transaction count, connections, replication lag, and the Query Insights breakdown (execution time, IO time, latencies, lock time).</p>
+      <div class="note warn">
+        <h3>Three panels render empty, and that is expected rather than a fault</h3>
+        <p><em>Database Network Connections</em> &mdash; <code>network.connections.count</code> is not populated; <code>num_backends</code> is the connection count that works. <em>Replication Replica Lag</em> and <em>Replication Network Lag</em> &mdash; <code>replication.replica_lag.sec</code> is not populated, because none of the 22 instances has a read replica.</p>
+      </div>
+      <p>This dashboard <strong>does not pin a time range</strong>, unlike the others &mdash; it inherits whatever the picker holds.</p>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">7.2</div>
+    <div>
+      <div class="entry-head">
+        <h3>Database Detail &mdash; Microsoft SQL Server</h3>
+        <span class="tag">10 panels</span>
+        <span class="tag">metricbeat-*</span>
+      </div>
+      <p class="answers">Which SQL Server instances are unhealthy &mdash; and which ones are not being collected at all.</p>
+      <p><strong>390 instances across 333 servers</strong>, keyed on <code>ci.name</code> (<code>INSTANCE@server</code>). 45 servers host more than one instance. Nine environments, 45&nbsp;% of instances in prod.</p>
+      <div class="note warn">
+        <h3>These documents are not in <code>metrics-*</code></h3>
+        <p>They live in the legacy pre-data-stream <code>metricbeat-*</code> indices, which is why an earlier survey of this cluster concluded MSSQL was not collected at all. That conclusion was wrong, and the mistake is worth remembering: <code>metrics-*</code> is not the whole cluster.</p>
+      </div>
+      <p>Three metricsets feed it &mdash; <code>sql</code>/<code>query</code> (390 instances), <code>mssql</code>/<code>performance</code> (135) and <code>mssql</code>/<code>transaction_log</code> (66). That spread is itself the headline finding, below.</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Panel</th><th>What it shows</th></tr></thead>
+        <tbody>
+          <tr><td>The four tiles</td><td>MSSQL Instances &middot; Reporting Performance Metrics &middot; Instances Failing Collection &middot; Databases Never Log-Backed-Up</td></tr>
+          <tr><td><strong>Collection Failures</strong></td><td>Instances the collector cannot read, with endpoint, environment, DBA group and the error text</td></tr>
+          <tr><td>Instance Health</td><td>Peak connections, worst page life expectancy, buffer pool GB, temp tables, staleness, RAG on PLE</td></tr>
+          <tr><td>Throughput</td><td>Batch requests, logins, page splits and lock waits <strong>per second</strong></td></tr>
+          <tr><td><strong>Transaction Log</strong></td><td>Per database: log fullness, allocated vs used, unbacked bytes, and backup age with its own RAG</td></tr>
+          <tr><td>Collection Coverage</td><td>Instances reporting per hour, by metricset</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Three deliberate departures from the raw fields</strong>, each of which would otherwise put a visibly wrong number in front of a DBA:</p>
+      <ul>
+        <li><strong>The <code>*_per_sec</code> fields are not rates.</strong> <code>batch_requests_per_sec</code> sampled at <strong>9,694,126</strong> and <code>logins_per_sec</code> at <strong>281,543</strong>, with logouts almost identical &mdash; the giveaway that these are cumulative counters from <code>sys.dm_os_performance_counters</code> carrying a misleading name. Every one is read only as <code>MIN</code> and <code>MAX</code> and shown as <em>(max &minus; min) &divide; elapsed seconds</em>. <strong>A counter reset from an instance restart inside the window will distort that row.</strong></li>
+        <li><strong><code>buffer.cache_hit.pct</code> is omitted entirely.</strong> It sampled at <strong>2.2</strong>, where a real buffer cache hit ratio is 95&ndash;99&nbsp;%. The field is the raw counter without its <code>_base</code> divisor and cannot be corrected from the dashboard.</li>
+        <li><strong><code>transaction_log.space_usage.used.pct</code> is already 0&ndash;100</strong>, unlike the percentage fields everywhere else in this cluster. Verified against the byte fields: 52.9&nbsp;MB of 39,240&nbsp;MB reads <code>0.135</code>. No percent formatter is used anywhere on this dashboard &mdash; it would have rendered 39.74&nbsp;% as 3,974&nbsp;%.</li>
+      </ul>
+      <div class="note warn">
+        <h3>The finding to act on</h3>
+        <p>390 instances configured, 135 returning performance data. The sampled error is a SQL Server login failure for the monitoring service account, so roughly <strong>255 instances have collection configured with credentials that do not work</strong> &mdash; invisible until now because documents kept arriving. The Collection Failures panel routes to <code>IT.I.Database_Engineering_-_Microsoft_SQL_Server.DBA</code>.</p>
+        <p>Separately, two of three sampled databases have <strong>never had a transaction log backup</strong> &mdash; the <code>backup_time</code> field carries SQL Server&rsquo;s 1900 sentinel. In FULL recovery model the log then grows until it fills the disk.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">7.3</div>
+    <div>
+      <div class="entry-head">
+        <h3>Service Management &mdash; Incident Effectiveness</h3>
+        <span class="tag">10 panels</span>
+        <span class="tag">servicenow-incidents-*</span>
+        <span class="tag">now-7d</span>
+      </div>
+      <p class="answers">How well the organisation handles incidents, as opposed to how the estate is running.</p>
+      <p>The ITSM KPI set: <strong>MTTR mean and P90, first-call resolution, reopen rate</strong>, MTTR by priority, intake channel, slowest assignment groups with service provider and reassignment rate, an MTTR trend, and opened-versus-resolved per hour.</p>
+      <p><strong><code>resolution_time</code> is pre-computed wall-clock seconds</strong> and equals <code>resolved_at &minus; opened_at</code> exactly &mdash; verified to the second on three sampled incidents (72, 6,250 and 248 seconds). MTTR needs no date arithmetic and carries no business-hours assumption: it is elapsed time including nights and weekends.</p>
+      <p><strong>This is a different index from the landing page.</strong> <code>servicenow-incidents-*</code> is one document per incident (1.23M docs); the landing page reads <code>servicenow-open-incidents-snapshots-*</code>, which is 87.8M documents of repeated snapshots. None of the de-duplication the landing-page panels need applies here.</p>
+      <p><strong>The window is 7 days, not 24 hours</strong>, and deliberately so: it selects incidents <em>opened</em> in the window, and a day is too small a sample for a stable MTTR. A long-running incident opened before the window and resolved inside it does not appear.</p>
+      <div class="note warn">
+        <h3>SLA breach is not on this dashboard</h3>
+        <p><code>has_breached_sla</code> and the whole <code>sla.*</code> tree are null even on resolved incidents &mdash; that data lives in the separate <code>servicenow-task-sla</code> index (199k docs), not yet wired up. There is also <strong>no per-person resolver leaderboard</strong>; the data supports one, and putting it on a dashboard is a different conversation from the one this answers.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">7.4</div>
+    <div>
+      <div class="entry-head">
+        <h3>Availability &mdash; Synthetic Monitoring</h3>
+        <span class="tag">11 panels</span>
+        <span class="tag">synthetics-*</span>
+      </div>
+      <p class="answers">Whether targets actually answer, rather than whether their agents are still shipping.</p>
+      <p><strong>This is the only real availability measurement in the family.</strong> Every availability figure on the landing page is <em>agent liveness</em> &mdash; is metricbeat still shipping. These are active checks against the target from the Aurora observer locations.</p>
+      <p>Monitors configured &middot; check success rate &middot; monitors with failures &middot; monitors broken by config &rarr; availability by protocol and by observer location &rarr; <strong>failing monitors, separating sustained outage from flapping</strong> &rarr; <strong>TLS certificates by days to expiry</strong> &rarr; slowest monitors by P50/P90 &rarr; hourly availability trend split by protocol.</p>
+      <p><strong>Read the protocols separately. Never blend them.</strong></p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Protocol</th><th>Monitors</th><th>Checks</th><th>Check availability</th></tr></thead>
+        <tbody>
+          <tr><td>ICMP</td><td class="num">3,103 up / 32 down</td><td class="num">758,038</td><td class="num"><strong>99.13&nbsp;%</strong></td></tr>
+          <tr><td>HTTP</td><td class="num">228 up / 150 down</td><td class="num">14,935</td><td class="num"><strong>67.49&nbsp;%</strong></td></tr>
+          <tr><td>TCP</td><td class="num">36 up / 20 down</td><td class="num">1,738</td><td class="num"><strong>57.08&nbsp;%</strong></td></tr>
+          <tr><td>Browser</td><td class="num">0 up</td><td class="num">1,080</td><td class="num"><strong>0.00&nbsp;%</strong></td></tr>
+        </tbody>
+      </table></div>
+      <p>ICMP is 98&nbsp;% of all checks, so a single combined figure would read &asymp;98.7&nbsp;% and hide the other three entirely. <strong>ICMP covers essentially the whole server estate</strong> &mdash; 3,103 monitors against 3,139 hosts on the Total Servers tile.</p>
+      <p><strong>Two filters are applied to every rate on this dashboard:</strong></p>
+      <ul>
+        <li><code>monitor.status IS NOT NULL</code> &mdash; synthetics indices hold per-step journey documents as well as per-check summaries, and only summaries carry a status. <strong>744 step documents</strong> would otherwise have been counted as checks.</li>
+        <li><code>error.code != "AGENT_NOT_BROWSER_CAPABLE"</code> &mdash; six browser monitors have failed continuously since <strong>27 July 2026</strong> because the agent cannot run browser journeys. That is a configuration fault, not an outage. They are excluded from the rates and counted on their own tile so the problem stays visible. <em>The TLS expiry panel deliberately omits this guard</em>, since it is not a rate.</li>
+      </ul>
+      <div class="note info">
+        <h3>An overstatement corrected</h3>
+        <p>Those broken monitors were initially described as something that would poison the availability metric. At <strong>1,008 checks of 776,535 &mdash; 0.13&nbsp;%</strong> they would not have. They are still excluded, because a runner that cannot start is not an outage.</p>
+      </div>
+      <div class="note warn">
+        <h3>The decision this dashboard puts to you</h3>
+        <p>The landing page says <em>Server Availability 99.84&nbsp;%</em> and means agents are reporting. ICMP says <strong>99.13&nbsp;%</strong> and means hosts answer. Both are defensible, they measure different things, and they will never agree. The suggestion on the table is to relabel the landing-page tile <em>Telemetry Coverage</em> and promote ICMP as the real availability number.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="addr">7.5</div>
+    <div>
+      <div class="entry-head">
+        <h3>Why there is no Oracle or MySQL dashboard</h3>
+        <span class="tag">finding, not omission</span>
+      </div>
+      <p><strong>Oracle collects nothing.</strong> All five <code>oracle.*</code> datasets and the <code>sql</code> dataset carry the same error on every document:</p>
+      <pre><code>DPI-1047: Cannot locate a 64-bit Oracle Client library:
+"libclntsh.so: cannot open shared object file"</code></pre>
+      <p><strong>All 323 <code>oracle.*</code> metric fields are empty.</strong> The ~2,850 documents per dataset per day are two collectors &mdash; <code>lrch1e01</code> and <code>vslrau1p298</code> &mdash; logging a connection failure every 60 seconds. Installing the Oracle Instant Client on those two hosts is the whole fix. Only one Oracle target is configured at all (<code>drtora19c1-scan.cna.com:1522/oem135r.cna.com</code>), so even once fixed it would be one database.</p>
+      <p>This is what the estate panel&rsquo;s error-aware status now catches &mdash; a tier whose documents are all errors reads <strong>&#128308; All errors</strong> rather than green.</p>
+      <p><strong>MySQL and self-managed PostgreSQL emit nothing at all.</strong> No <code>mysql.*</code> or <code>postgresql.*</code> dataset exists under any naming. The only PostgreSQL is GCP CloudSQL, which has its own dashboard (7.1).</p>
+      <div class="note info">
+        <p><strong>The <code>sql</code> dataset is not MSSQL.</strong> It is a second Metricbeat SQL input pointed at the same Oracle database, failing the same way on a 300-second interval. Real MSSQL lives in <code>metricbeat-*</code> (7.2).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="gap">
   <h2>The one open item</h2>
 
-  <div class="note warn">
-    <h3>Impacted domain and impacted applications are CMDB-derived, not incident-derived</h3>
-    <p>The only fields confirmed to exist on <code>servicenow-open-incidents-snapshots-*</code> today are <code>number</code> and <code>priority</code>. <code>ci.name</code> is <strong>not</strong> populated on those incident documents &mdash; the <code>ci_name_exists.csv</code> export came back empty &mdash; so incidents cannot be joined to CMDB configuration items on CI name, and no category, assignment-group or business-service field has been confirmed either.</p>
-    <p>So panels 2.6 and 2.7 answer <em>&ldquo;which domains and applications have infrastructure that has gone silent&rdquo;</em>. That is a true impact signal and it is live today &mdash; but it is not a breakdown of the P1/P2 incidents themselves. Worth stating plainly in the presentation rather than letting someone discover it in the room.</p>
+  <div class="note info">
+    <h3>An earlier reading of the incident index was wrong, and the correction matters</h3>
+    <p>This section used to record that <code>ci.name</code> was not populated on <code>servicenow-open-incidents-snapshots-*</code>, on the strength of a <code>ci_name_exists.csv</code> export that came back empty, and that domain and application attribution therefore had to be CMDB-derived. <code>ci.name</code> <strong>is</strong> populated, along with <code>ci.class_name</code>, <code>ci.environment</code>, <code>assignment_group.name</code> and <code>short_description</code>.</p>
+    <p>Panel 2.6 <em>Impacted Domain</em> and the <em>Affected CIs</em> worklist are both <strong>incident-derived</strong> today: they read the incident record&rsquo;s own CI and map <code>ci.class_name</code> onto a domain, with a <code>&#9888;&#65039; No CI mapped</code> bucket for the incidents that genuinely carry no CI.</p>
   </div>
 
-  <p>To close it, run this in <strong>Discover &rarr; ES|QL</strong> and share the column list:</p>
-  <pre><code>FROM servicenow-open-incidents-snapshots-*
-| WHERE priority &lt;= 2
-| LIMIT 5</code></pre>
-  <p>Once a domain/category field and a business-service field are confirmed, both panels swap to incident-based ES|QL and nothing else on the dashboard changes &mdash; the RAG tile already reads P1 and P2 straight from that index.</p>
-  <pre><code>FROM servicenow-open-incidents-snapshots-*
-| WHERE priority &lt;= 2
-| STATS p1 = COUNT_DISTINCT(CASE(priority == 1, number, null)),
-        p2 = COUNT_DISTINCT(CASE(priority == 2, number, null))
-  BY domain = &lt;category_or_assignment_group_field&gt;
-| SORT p1 DESC, p2 DESC</code></pre>
+  <div class="note warn">
+    <h3>What is still open: the Impacted side of the relationship</h3>
+    <p>Affected CIs are on the dashboard. <strong>Impacted CIs &mdash; the downstream dependents of an affected CI &mdash; are not.</strong> Deriving them needs the CMDB relationship graph in <code>cmdb-ci-relations-000002</code> (33.9M edges), which ES|QL cannot traverse at query time, and the incident record carries no rollup of its own: <code>ci.parents.*</code> and <code>ci.top_level_parents.*</code> are mapped but populated on <strong>0</strong> documents.</p>
+    <p>Closing it is an Elasticsearch-side change &mdash; an ENRICH policy or a denormalising transform &mdash; not a dashboard one. <code>business_service.name</code> is populated on 2.8&nbsp;% of incidents and is the nearest proxy; it was removed from the Affected CIs worklist in September 2026 because at that coverage the column was blank on almost every row.</p>
+  </div>
+
+  <p>The <em>Impacted Applications</em> panels (2.5 / 2.7) stay CMDB-derived on purpose: they answer <em>which applications sit on servers that have gone silent</em>, which is a different question from <em>which applications are named on an open incident</em>.</p>
 </section>
 
 <section>
@@ -726,6 +896,7 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
 
 <footer>
   <p>Deploy by importing <code>operation-dashboard.ndjson</code> under <strong>Stack Management &rarr; Saved Objects &rarr; Import</strong>, choosing &ldquo;Check for existing objects&rdquo; and overwriting, so the dashboard keeps its URL and bookmarks. The file carries the <code>metrics-*</code> data view and the dashboard; every panel is stored by value, so there is nothing else to create.</p>
+  <p>The four detail dashboards import the same way, one file each, in any order &mdash; none depends on the landing page or on another. Overwrite on import there too, so <code>database-postgresql-dashboard.ndjson</code> replaces the managed GCP-integration dashboard it was adapted from rather than sitting beside it.</p>
 </footer>
 
 </div>
