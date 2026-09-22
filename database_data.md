@@ -68,4 +68,14 @@ The honest finding is worth more than a thin dashboard: **the database tier is e
 
 That last query gives you the number for that conversation: *N database CIs in the CMDB, 4 reporting.* That's a monitoring-coverage gap to fix with the DBA team, and it fits the Monitoring Maturity section rather than a Database detail dashboard.
 
+
+
+
+GET metrics-*/_field_caps?fields=gcp.cloudsql_postgresql.*
+
+FROM metrics-*
+| WHERE data_stream.dataset == "gcp.cloudsql_postgresql"
+| STATS docs = COUNT(*) BY gcp.labels.resource.database_id, gcp.labels.metrics.database
+| SORT docs DESC
+
 If you want, I can build a **Database Coverage Gap** panel from data that exists today — CMDB database CIs vs. what's reporting — while the instrumentation question gets worked. Say the word and I'll add it.
