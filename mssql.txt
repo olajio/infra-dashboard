@@ -1,0 +1,10 @@
+FROM metricbeat-*, metrics-*
+| WHERE ci.class == "cmdb_ci_db_mssql_instance"
+| STATS docs = COUNT(*), instances = COUNT_DISTINCT(ci.name)
+  BY event.module, metricset.name
+| SORT docs DESC
+
+
+FROM metricbeat-*
+| WHERE ci.class == "cmdb_ci_db_mssql_instance"
+| LIMIT 3
