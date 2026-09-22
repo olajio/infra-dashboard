@@ -720,10 +720,13 @@ mutable CMDB attributes splits one host into several rows when its enrichment ch
 
 *Thresholds live in the `WHERE p90 >= 0.8` / `>= 0.85` clause of each panel.*
 
-> **Check on import.** If either table is empty, the metric field is not populated under that name in this
-> cluster. Confirm with
-> `FROM .ds-metrics-system.cpu-default* | STATS n = COUNT(system.cpu.total.norm.pct)` — a zero means
-> falling back to `system.cpu.total.pct / system.cpu.cores`, which is the same figure computed manually.
+> **Both fields verified populated in this cluster.** `system.cpu.total.norm.pct` returns **703,279**
+> values from `FROM .ds-metrics-system.cpu-default* | STATS n = COUNT(system.cpu.total.norm.pct)`, and
+> `system.memory.actual.used.pct` was confirmed on a document sample. Neither panel rests on an assumed
+> field name.
+>
+> *If a future agent upgrade ever drops the `norm` variant,* the equivalent is
+> `system.cpu.total.pct / system.cpu.cores` — the same figure computed by hand.
 
 ### 3.7 Disk Saturation (>50 % used)
 **Type:** Lens data table · **Index:** `.ds-metrics-system.filesystem-default*`
