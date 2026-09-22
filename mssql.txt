@@ -8,3 +8,8 @@ FROM metricbeat-*, metrics-*
 FROM metricbeat-*
 | WHERE ci.class == "cmdb_ci_db_mssql_instance"
 | LIMIT 3
+
+
+FROM metricbeat-*, metrics-*
+| WHERE metricset.name == "transaction_log"
+| LIMIT 3
