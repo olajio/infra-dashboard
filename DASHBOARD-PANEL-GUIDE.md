@@ -693,17 +693,25 @@ grouping, so a host is one entity no matter how many times its metadata changed.
 The actionable worklist behind the Coverage Gap Risk tile. Last-seen per CI, keeps anything older than
 15 min, and shows **CI name · host · location · L2 support group · minutes stale**, worst first, top 100.
 
-> ⚠️ **Known defect — same root cause as the Servers Down table.** This panel groups `last_seen` on
-> `ci.name`, `host.name`, `ci.geo.name` and `ci.support_group.l2.name`. The last two are mutable CMDB
-> attributes, so a support-group rename or a location correction splits one CI into two groups and the
-> stale one is reported as not reporting. Treat long-stale rows with suspicion until this is fixed: check
-> the host in Infrastructure before raising anything. The fix is the same shape as the one applied to
-> Servers Down, but it costs click-to-filter on **Data Center** and **Support Team**, so it is being held
-> for a decision.
+#### Fixed September 2026 — the last of the mutable-attribute bugs
 
-*The Coverage Gap Risk tile above it is **not** affected* — it groups on `ci.name` alone, which is an
+This panel used to group `last_seen` on `ci.name`, `host.name`, `ci.geo.name` **and**
+`ci.support_group.l2.name`. The last two are mutable CMDB attributes, so a support-group rename or a
+location correction split one CI into two groups, and the group holding the superseded values kept a
+`last_seen` frozen at the moment of the change — reported as a CI that had stopped reporting. Exactly the
+defect that produced the phantom down-servers.
+
+It now groups on **`ci.name` and `host.name` only** — both identities, not descriptions — and collapses
+the two descriptive columns with `VALUES(...)` + `MV_MAX(...)`.
+
+**The cost, as flagged before the change:** *Data Center* and *Support Team* are now computed columns
+rather than index fields, so Kibana cannot build a working dashboard filter from them and they are no
+longer clickable. **CI Name and Host still filter normally**, and the dashboard's own `ci.geo.name`,
+`ci.support_group.l2.name` and `host.name` controls at the top of the page are unaffected — that is still
+the better way to filter a whole dashboard to a site or a team. Nothing else on the panel changed.
+
+*The Coverage Gap Risk tile above it was never affected* — it groups on `ci.name` alone, which is an
 identity, not a description.
-Click any cell to filter the whole dashboard to that CI/site/team.
 
 ### 3.6b CPU Saturation (P90 ≥ 80 %) · Memory Saturation (P90 ≥ 85 %)
 **Type:** Lens data tables ×2 · **Indices:** `.ds-metrics-system.cpu-default*`, `.ds-metrics-system.memory-default*`
