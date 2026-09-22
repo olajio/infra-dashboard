@@ -143,3 +143,65 @@ I'm not going to build three empty dashboards. Two things I can do now — tell 
 2. **Build the CloudSQL Postgres panels** once you run the two queries above.
 
 And the real headline for the team: **the database tier is unmonitored.** Two collectors have been failing to connect since they were configured, and nobody noticed because documents kept arriving. That's worth more to them than a dashboard would have been.
+
+---
+---
+23 instances, not 2 — my earlier read came from a 3-document sample. Let me get the exact inventory and the field list.
+
+22 instances across 4 GCP projects, and 87 fields in the mapping. Building on the ones I can verify.
+
+That last "unverified" is the dataset name string in the `WHERE` clause, not a field. Confirming and committing.
+
+Built what the data supports. Pushed to `main` (`c0ae012`) as a **separate** saved object — it doesn't touch `operation-dashboard.ndjson`, so your working dashboard carries no risk from this.
+
+## First, a correction
+
+I told you CloudSQL was **2 instances**. It's **22**, across four GCP projects — I'd read that from a 3-document sample, which was too small to see the estate.
+
+| Project | Instances | |
+|---|---|---|
+| `cna-g-prod-proj-spg` | 4 | prd main + control, dr main + control |
+| `cna-g-prod-proj-anomalo` | 2 | prd + dr |
+| `cna-g-pre-proj-ilap` | 8 | ete1–4, cut1–4 |
+| `cna-g-pre-proj-rst` | 8 | ete1–4, cut1–4 |
+
+All Postgres 14 in `us-central`, each with `postgres`, `template1`, `cloudsqladmin` and an application database (`ilap_db`, `rst_db`, `anomalo`, and the SPG instance databases).
+
+## The dashboard — 8 panels
+
+Instance count · reporting · silent → inventory table (project, region, PG version, staleness, RAG) → connections per database and transactions per instance → hourly transaction trend.
+
+Everything is keyed on **`gcp.labels.resource.database_id`**, never `host.name`. `host.name` here is the GKE collector pod `elastic-agent-gcp-integration-agent-…` — the same collector-vs-device trap as vSphere. Keying on host.name would have shown all 22 instances as one "host".
+
+The header panel documents why Oracle and MSSQL aren't there, so that finding travels with the dashboard instead of living in this thread.
+
+## Where I stopped short, deliberately
+
+`field_caps` returned **87** `gcp.cloudsql_postgresql.*` fields — CPU utilisation, memory, disk usage and quota, replication lag, transaction-id utilisation, vacuum age, query insights. That would make this a genuinely strong Postgres dashboard.
+
+**But `field_caps` reports the mapping, not what's populated.** Those 87 fields are defined by the GCP integration package whether or not GCP is actually sending them. I've only *observed* three carrying values. I built on those three and nothing else — every field referenced is verified, and the validation asserts it.
+
+One query unlocks the rest:
+
+```esql
+FROM metrics-*
+| WHERE data_stream.dataset == "gcp.cloudsql_postgresql"
+| STATS cpu    = COUNT(gcp.cloudsql_postgresql.database.cpu.utilization.pct),
+        mem    = COUNT(gcp.cloudsql_postgresql.database.memory.utilization.pct),
+        disk   = COUNT(gcp.cloudsql_postgresql.database.disk.utilization.pct),
+        used   = COUNT(gcp.cloudsql_postgresql.database.disk.bytes_used.bytes),
+        conns  = COUNT(gcp.cloudsql_postgresql.database.network.connections.count),
+        xid    = COUNT(gcp.cloudsql_postgresql.database.transaction_id_utilization.pct),
+        vacuum = COUNT(gcp.cloudsql_postgresql.database.vacuum.oldest_transaction_age),
+        repl   = COUNT(gcp.cloudsql_postgresql.database.replication.replica_lag.sec),
+        up     = COUNT(gcp.cloudsql_postgresql.database.up),
+        uptime = COUNT(gcp.cloudsql_postgresql.database.uptime.sec)
+```
+
+Any column above zero is real and I'll add it. `transaction_id_utilization` and `vacuum.oldest_transaction_age` are the ones I'd most want — they're the early warning for XID wraparound, which takes a Postgres instance down hard.
+
+## Two things worth raising with the team
+
+**The Database quick links on the main dashboard return nothing.** They point Discover at `ci.class_name.normalized:*oracle*`, but there's no `ci.*` CMDB enrichment on any database dataset — that's also why your fourth query came back empty. Those links have never worked. I can repoint the Postgres one at this new dashboard; Oracle and MSSQL have nowhere to point until collection is fixed.
+
+**The estate panel still says "Database — Oracle · 🟢 Flowing."** Documents arrive on schedule, so it looks healthy — they're just all errors. I'd like to make a tier that emits only errors show as 🔴. Small change to one panel on the main dashboard; say the word and I'll do it.
