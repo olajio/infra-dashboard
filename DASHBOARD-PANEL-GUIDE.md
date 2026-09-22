@@ -3,7 +3,7 @@
 **Saved object:** `operation-dashboard.ndjson` → dashboard `ops-dashboard-consolidated-v1`
 **Title:** *Operations Dashboard — Consolidated (Alert, Infra, Platform Health)*
 **Default time range:** `now-24h` → `now` (saved with the dashboard) · **Auto-refresh:** every 60 s
-**Panels:** 43 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
+**Panels:** 45 · every panel is *by value* (embedded in the dashboard), so importing this one NDJSON is the whole deployment.
 
 ---
 
@@ -15,7 +15,7 @@ raises. Section headers are markdown banners on the dashboard itself.
 | # | Section | Question it answers | Panels, in order |
 |---|---|---|---|
 | **1** | 🏢 **Executive Health** | *Is the business healthy right now?* | Overall Infrastructure Health · Server Availability % · Active P1 · Active P2 · Impacted Domain · Affected CIs · Application Health — APM |
-| **2** | 🔧 **Operational Effectiveness** | *How is the estate actually running, and what needs hands on it?* | Total Servers · Servers Up · Servers Down · Servers Availability % · Server Availability Trend · Servers Down — Affected CIs · Disk Saturation · Network Errors |
+| **2** | 🔧 **Operational Effectiveness** | *How is the estate actually running, and what needs hands on it?* | Total Servers · Servers Up · Servers Down · Servers Availability % · Server Availability Trend · Servers Down — Affected CIs · CPU Saturation · Memory Saturation · Disk Saturation · Network Errors |
 | **3** | 📡 **Monitoring Maturity** | *How much can we see, and can we trust sections 1 and 2?* | Monitored Estate by Tier · Business Applications Monitored · APM Services Instrumented · Application Estate by environment · Agent / Collector Health · Total CIs Monitored · CIs Not Reporting · Telemetry Freshness · Telemetry Freshness Trend · Ingest Pipeline Health · Coverage Gap — CIs Not Reporting · Applications on Silent Servers |
 | **4** | 🤖 **Automation & Predictive Operations** | *What is automation taking off the queue, and what is coming?* | Raw Netcool Alerts · Correlated SN Events · Alert Dedup Ratio · Alert Volume Trend · Noise Reduction — AI KPI status · Predictive Insights |
 
@@ -681,6 +681,49 @@ The actionable worklist behind the Coverage Gap Risk tile. Last-seen per CI, kee
 *The Coverage Gap Risk tile above it is **not** affected* — it groups on `ci.name` alone, which is an
 identity, not a description.
 Click any cell to filter the whole dashboard to that CI/site/team.
+
+### 3.6b CPU Saturation (P90 ≥ 80 %) · Memory Saturation (P90 ≥ 85 %)
+**Type:** Lens data tables ×2 · **Indices:** `.ds-metrics-system.cpu-default*`, `.ds-metrics-system.memory-default*`
+**Location:** directly above Disk Saturation / Network Errors
+
+Added September 2026. Both datasets cover **2,893 hosts** — the same hosts behind the availability
+number — and neither was read by any panel until now. CPU and memory saturation are the two most
+standard panels on an infrastructure dashboard; the data had been collected all along.
+
+| Column | Meaning |
+|---|---|
+| **Host** | `host.name` — **click to open the host in Observability → Infrastructure** |
+| Env | `ci.environment` |
+| Support group | `ci.support_group.l2.name` — who to call |
+| P90 % | The figure the threshold is applied to |
+| Peak % | Worst single sample in the window |
+| Avg % | Mean across the window |
+
+**Why P90 and not peak.** Disk fills monotonically, so `MAX()` is the right summary for it. CPU and memory
+are bursty — almost every host touches 100 % CPU for one sample at some point, so a peak-based threshold
+would list the entire estate. P90 means *"at or above this level for at least 10 % of the window"*, which
+is sustained pressure rather than a spike. Peak and average are shown alongside so a genuine spike is
+still visible.
+
+**Field choices, both deliberate:**
+
+- **CPU uses `system.cpu.total.norm.pct`, not `system.cpu.total.pct`.** The un-normalised field is summed
+  across cores, so a 16-core host at half load reads `8.0` — 800 %. The `norm` variant is 0–1 regardless
+  of core count.
+- **Memory uses `system.memory.actual.used.pct`, not `system.memory.used.pct`.** On a sample from this
+  cluster a healthy host read **0.86** on `used.pct` and **0.52** on `actual.used.pct`. The difference is
+  page cache, which Linux reclaims on demand. The naive field would have painted most of the estate red.
+
+**Grouping is on `host.name` alone**, with `ci.environment` and the support group collapsed onto the row
+via `VALUES(...)` + `MV_MAX(...)`. This is the same fix applied to the Servers Down worklist — grouping on
+mutable CMDB attributes splits one host into several rows when its enrichment changes.
+
+*Thresholds live in the `WHERE p90 >= 0.8` / `>= 0.85` clause of each panel.*
+
+> **Check on import.** If either table is empty, the metric field is not populated under that name in this
+> cluster. Confirm with
+> `FROM .ds-metrics-system.cpu-default* | STATS n = COUNT(system.cpu.total.norm.pct)` — a zero means
+> falling back to `system.cpu.total.pct / system.cpu.cores`, which is the same figure computed manually.
 
 ### 3.7 Disk Saturation (>50 % used)
 **Type:** Lens data table · **Index:** `.ds-metrics-system.filesystem-default*`

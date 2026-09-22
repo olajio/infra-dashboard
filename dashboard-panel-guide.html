@@ -227,7 +227,7 @@ footer code{font-size:.85em}
   <h1>Ops Dashboard Field Guide</h1>
   <p class="standfirst">What every panel on the Kibana operations dashboard measures, where the number comes from, and how the team&rsquo;s six feedback items were implemented.</p>
   <div class="meta">
-    <span>Panels <b>43</b></span>
+    <span>Panels <b>45</b></span>
     <span>Time range <b>now-24h</b></span>
     <span>Refresh <b>60s</b></span>
     <span>Saved objects <b>2</b></span>
@@ -242,7 +242,7 @@ footer code{font-size:.85em}
     <thead><tr><th>#</th><th>Section</th><th>Question it answers</th><th>Panels, in order</th></tr></thead>
     <tbody>
       <tr><td><strong>1</strong></td><td><strong>Executive Health</strong></td><td>Is the business healthy right now?</td><td>Overall Infrastructure Health &middot; Server Availability % &middot; Active P1 &middot; Active P2 &middot; Impacted Domain &middot; Affected CIs &middot; Application Health &mdash; APM</td></tr>
-      <tr><td><strong>2</strong></td><td><strong>Operational Effectiveness</strong></td><td>How is the estate actually running, and what needs hands on it?</td><td>Total Servers &middot; Servers Up &middot; Servers Down &middot; Servers Availability % &middot; Server Availability Trend &middot; Servers Down &mdash; Affected CIs &middot; Disk Saturation &middot; Network Errors</td></tr>
+      <tr><td><strong>2</strong></td><td><strong>Operational Effectiveness</strong></td><td>How is the estate actually running, and what needs hands on it?</td><td>Total Servers &middot; Servers Up &middot; Servers Down &middot; Servers Availability % &middot; Server Availability Trend &middot; Servers Down &mdash; Affected CIs &middot; CPU Saturation &middot; Memory Saturation &middot; Disk Saturation &middot; Network Errors</td></tr>
       <tr><td><strong>3</strong></td><td><strong>Monitoring Maturity</strong></td><td>How much can we see, and can we trust sections 1 and 2?</td><td>Monitored Estate by Tier &middot; Business Applications Monitored &middot; APM Services Instrumented &middot; Application Estate by environment &middot; Agent / Collector Health &middot; Total CIs Monitored &middot; CIs Not Reporting &middot; Telemetry Freshness &middot; Telemetry Freshness Trend &middot; Ingest Pipeline Health &middot; Coverage Gap &mdash; CIs Not Reporting &middot; Applications on Silent Servers</td></tr>
       <tr><td><strong>4</strong></td><td><strong>Automation &amp; Predictive Operations</strong></td><td>What is automation taking off the queue, and what is coming?</td><td>Raw Netcool Alerts &middot; Correlated SN Events &middot; Alert Dedup Ratio &middot; Alert Volume Trend &middot; Noise Reduction &mdash; AI KPI status &middot; Predictive Insights</td></tr>
     </tbody>
@@ -649,6 +649,8 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
     <thead><tr><th>Table</th><th>What it lists</th></tr></thead>
     <tbody>
       <tr><td><strong>Coverage Gap &mdash; CIs Not Reporting</strong></td><td>Every monitored CI silent for more than 15 min, with host, location, L2 support group and minutes stale. Top 100, worst first. Click any cell to filter the whole dashboard to that CI, site or team. <strong>&#9888;&#65039; Known defect:</strong> groups <code>last_seen</code> on two mutable CMDB attributes, so a support-group rename or location correction can split a CI and report the stale half as silent &mdash; check the host in Infrastructure before acting on a long-stale row. The Coverage Gap Risk tile above is not affected; it groups on <code>ci.name</code> alone.</td></tr>
+      <tr><td><strong>CPU Saturation (P90 &ge; 80%)</strong></td><td>Hosts whose CPU sits at or above 80% for at least a tenth of the window, with env, support group, P90, peak and average. Host click-through to Infrastructure. Uses <code>system.cpu.total.norm.pct</code> &mdash; the un-normalised field sums across cores, so a 16-core host at half load would read 800%.</td></tr>
+      <tr><td><strong>Memory Saturation (P90 &ge; 85%)</strong></td><td>Same shape for memory, using <code>system.memory.actual.used.pct</code>. On a sample from this cluster a healthy host read 0.86 on <code>used.pct</code> against 0.52 on <code>actual.used.pct</code> &mdash; the difference is reclaimable page cache, and the naive field would have painted most of the estate red.</td></tr>
       <tr><td><strong>Disk Saturation (&gt;50% used)</strong></td><td>Max used-percent per host &times; mount point, above 50%, top 25. The threshold is the <code>WHERE disk_pct &gt; 0.5</code> clause.</td></tr>
       <tr><td><strong>Network Errors (per interface)</strong></td><td>Max in- and out-errors per host &times; interface, summed, above zero, top 25. Surfaces bad NICs, duplex mismatches and saturated links.</td></tr>
       <tr><td><strong>Ingest Pipeline Health</strong></td><td>Max lag, average lag and document count per <code>data_stream.dataset</code> &mdash; which collector is dragging the freshness KPI down.</td></tr>
