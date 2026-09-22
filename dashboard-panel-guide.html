@@ -243,7 +243,7 @@ footer code{font-size:.85em}
     <thead><tr><th>Dashboard</th><th>File</th><th>Saved-object id</th><th>Panels</th><th>Source</th></tr></thead>
     <tbody>
       <tr><td><strong>Operations Dashboard &mdash; Consolidated</strong></td><td><code>operation-dashboard.ndjson</code></td><td><code>ops-dashboard-consolidated-v1</code></td><td class="num">45</td><td><code>metrics-*</code>, <code>metrics-apm*</code>, <code>servicenow-open-incidents-snapshots-*</code>, Netcool + SN event streams</td></tr>
-      <tr><td><strong>Database Detail &mdash; CloudSQL PostgreSQL</strong></td><td><code>database-postgresql-dashboard.ndjson</code></td><td><code>06a07662-c4fa-4074-981c-ff075c3c5da1</code></td><td class="num">22</td><td><code>metrics-*</code> (<code>gcp.cloudsql_postgresql</code>)</td></tr>
+      <tr><td><strong>Database Detail &mdash; CloudSQL PostgreSQL</strong></td><td><code>database-postgresql-dashboard.ndjson</code></td><td><code>06a07662-c4fa-4074-981c-ff075c3c5da1</code></td><td class="num">23</td><td><code>metrics-*</code> (<code>gcp.cloudsql_postgresql</code>)</td></tr>
       <tr><td><strong>Database Detail &mdash; Microsoft SQL Server</strong></td><td><code>database-mssql-dashboard.ndjson</code></td><td><code>db-detail-mssql-v1</code></td><td class="num">10</td><td><code>metricbeat-*</code></td></tr>
       <tr><td><strong>Service Management &mdash; Incident Effectiveness</strong></td><td><code>service-management-dashboard.ndjson</code></td><td><code>sm-incident-effectiveness-v1</code></td><td class="num">10</td><td><code>servicenow-incidents-*</code></td></tr>
       <tr><td><strong>Availability &mdash; Synthetic Monitoring</strong></td><td><code>synthetic-availability-dashboard.ndjson</code></td><td><code>availability-synthetics-v1</code></td><td class="num">11</td><td><code>synthetics-*</code></td></tr>
@@ -718,26 +718,56 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
     <div>
       <div class="entry-head">
         <h3>Database Detail &mdash; CloudSQL PostgreSQL</h3>
-        <span class="tag">22 panels</span>
+        <span class="tag">23 panels</span>
         <span class="tag">gcp.cloudsql_postgresql</span>
       </div>
       <p class="answers">Which of the 22 CloudSQL instances is in trouble, and why.</p>
       <p><strong>22 instances across 4 GCP projects</strong> &mdash; <code>spg</code> (prd + dr, main + control), <code>anomalo</code> (prd + dr), and 8 pre-production instances each in <code>ilap</code> and <code>rst</code>. All PostgreSQL 14, region <code>us-central</code>.</p>
       <p>Keyed on <code>gcp.labels.resource.database_id</code>, never <code>host.name</code> &mdash; <code>host.name</code> here is the GKE collector pod running the GCP integration, so keying on it would collapse all 22 instances into one.</p>
-      <p>This is the Elastic GCP integration&rsquo;s own dashboard, adapted, with three panels ported in at the top:</p>
+      <p>This is the Elastic GCP integration&rsquo;s own dashboard, adapted. The top row is an availability band, then a per-instance worklist, then the integration&rsquo;s charts.</p>
+
+      <p><strong>Row 1 &mdash; availability, four tiles.</strong> They do not all answer the same question, and that is deliberate:</p>
       <div class="tbl-wrap"><table>
-        <thead><tr><th>Ported panel</th><th>Why it was added</th></tr></thead>
+        <thead><tr><th>Tile</th><th>What it counts</th><th>Window</th></tr></thead>
         <tbody>
-          <tr><td><strong>Instances Silent</strong></td><td>The integration charts metrics but never counts what stopped reporting</td></tr>
-          <tr><td><strong>Max Transaction-ID Utilisation</strong></td><td>XID wraparound forces a Postgres instance read-only. It is the one metric here that means a hard outage rather than degradation</td></tr>
-          <tr><td><strong>CloudSQL Instance Health</strong></td><td>Per-instance table with staleness and RAG &mdash; ranks <em>which</em> instance to look at before the charts below explain why</td></tr>
+          <tr><td><strong>Database Availability %</strong></td><td><code>AVG(database.up)</code> &mdash; the share of <em>checks</em> that reported up, formatted as a percentage</td><td>the time picker</td></tr>
+          <tr><td><strong>Instances Up</strong></td><td>Instances whose every sample in the last 15 min reported up</td><td>last 15 min</td></tr>
+          <tr><td><strong>Instances Down</strong></td><td>Instances that reported <strong>down</strong> at least once in the last 15 min</td><td>last 15 min</td></tr>
+          <tr><td><strong>Instances Silent</strong></td><td>Instances that sent <strong>nothing</strong> for 15 min &mdash; the collector lost them</td><td>last 15 min</td></tr>
         </tbody>
       </table></div>
-      <p>The other 19 panels are the integration&rsquo;s work, unchanged: database up, uptime, CPU, memory quota and usage, disk bytes used / quota / read ops / write ops, network sent and received, transaction count, connections, replication lag, and the Query Insights breakdown (execution time, IO time, latencies, lock time).</p>
+      <p>Up + Down + Silent = 22. A silent instance cannot also be counted up or down, because &ldquo;down&rdquo; here means <em>CloudSQL said it was down</em>, not <em>we stopped hearing from it</em> &mdash; different failures, different people to call. <strong>Availability % will not equal Up &divide; 22.</strong> It is time-weighted across the whole picker window, so an instance that was down for an hour of a 24-hour window and is up now lowers the percentage while still counting under Instances Up.</p>
+
+      <p><strong>Row 2 &mdash; CloudSQL Instance Health</strong>, the per-instance table with staleness and RAG. It ranks <em>which</em> instance to look at before the charts below explain why. Its <code>health</code> column is the same logic as the tiles, evaluated per instance and in this order:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Status</th><th>Condition</th></tr></thead>
+        <tbody>
+          <tr><td>&#128308; Silent</td><td>no document for &gt; 15 min (<code>DATE_DIFF</code> on <code>MAX(@timestamp)</code>)</td></tr>
+          <tr><td>&#128308; Reported down</td><td><code>MIN(database.up) == 0</code> anywhere in the window</td></tr>
+          <tr><td>&#128308; At risk</td><td>transaction-ID utilisation &ge; 90&nbsp;% <strong>or</strong> disk &ge; 90&nbsp;%</td></tr>
+          <tr><td>&#128992; Pressure</td><td>XID or disk &ge; 80&nbsp;%, or CPU or memory &ge; 90&nbsp;%</td></tr>
+          <tr><td>&#128994; Healthy</td><td>none of the above</td></tr>
+        </tbody>
+      </table></div>
+      <p>Silent is checked first, so an instance that stopped reporting is never shown as healthy on the strength of its last good sample. <strong>Reported down uses <code>MIN</code> over the whole window</strong>, so it is sticky: one down sample at any point in the picker window flags the row for the rest of that window. That is intentional for a worklist &mdash; a database that bounced overnight is worth seeing &mdash; but it is why the table can read &ldquo;Reported down&rdquo; while the Instances Down tile reads 0.</p>
+
+      <p><strong>The other 19 panels are the integration&rsquo;s work</strong>, unchanged apart from Database Up being reformatted as a percentage: uptime, CPU, memory quota and usage, disk bytes used / quota / read ops / write ops, network sent and received, transaction count, connections, replication lag, and the Query Insights breakdown (execution time, IO time, latencies, lock time).</p>
+
       <div class="note warn">
         <h3>Three panels render empty, and that is expected rather than a fault</h3>
         <p><em>Database Network Connections</em> &mdash; <code>network.connections.count</code> is not populated; <code>num_backends</code> is the connection count that works. <em>Replication Replica Lag</em> and <em>Replication Network Lag</em> &mdash; <code>replication.replica_lag.sec</code> is not populated, because none of the 22 instances has a read replica.</p>
       </div>
+
+      <div class="note info">
+        <h3>Removed: the Max Transaction-ID Utilisation tile</h3>
+        <p>It showed <code>MAX(transaction_id_utilization.pct)</code> across the fleet as a bare fraction &mdash; the share of PostgreSQL&rsquo;s ~2-billion transaction-ID space consumed before autovacuum must freeze old rows. The metric matters (at 100&nbsp;% PostgreSQL stops accepting writes to protect itself), but a single unlabelled fleet-wide fraction is not something anyone would act on, and the <strong>CloudSQL Instance Health table already carries the same number per instance with RAG at 80 / 90&nbsp;%</strong>. The signal is kept where it is usable; the tile is gone.</p>
+      </div>
+
+      <div class="note warn">
+        <h3>Database Uptime is the weakest panel here</h3>
+        <p>It averages <code>database.uptime.sec</code> across all 22 instances and prints raw seconds. Per instance, uptime is a genuinely useful restart detector &mdash; a sudden drop to near zero is an unplanned restart nobody filed a change for. Averaged across a fleet it is close to meaningless: one instance rebooting moves a multi-million-second average by a rounding error. The Instance Health table already shows <code>uptime_days</code> per instance. <strong>Candidate for removal, or for conversion to &ldquo;instances restarted in the window&rdquo;.</strong></p>
+      </div>
+
       <p>This dashboard <strong>does not pin a time range</strong>, unlike the others &mdash; it inherits whatever the picker holds.</p>
     </div>
   </div>

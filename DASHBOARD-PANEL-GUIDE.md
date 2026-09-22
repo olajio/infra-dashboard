@@ -19,7 +19,7 @@ dashboards answer *what exactly*, each against a different index.
 | Dashboard | File | Saved-object id | Panels | Source |
 |---|---|---|---|---|
 | **Operations Dashboard — Consolidated** | `operation-dashboard.ndjson` | `ops-dashboard-consolidated-v1` | 45 | `metrics-*`, `metrics-apm*`, `servicenow-open-incidents-snapshots-*`, Netcool + SN event streams |
-| **Database Detail — CloudSQL PostgreSQL** | `database-postgresql-dashboard.ndjson` | `06a07662-c4fa-4074-981c-ff075c3c5da1` | 22 | `metrics-*` (`gcp.cloudsql_postgresql`) |
+| **Database Detail — CloudSQL PostgreSQL** | `database-postgresql-dashboard.ndjson` | `06a07662-c4fa-4074-981c-ff075c3c5da1` | 23 | `metrics-*` (`gcp.cloudsql_postgresql`) |
 | **Database Detail — Microsoft SQL Server** | `database-mssql-dashboard.ndjson` | `db-detail-mssql-v1` | 10 | `metricbeat-*` |
 | **Service Management — Incident Effectiveness** | `service-management-dashboard.ndjson` | `sm-incident-effectiveness-v1` | 10 | `servicenow-incidents-*` |
 | **Availability — Synthetic Monitoring** | `synthetic-availability-dashboard.ndjson` | `availability-synthetics-v1` | 11 | `synthetics-*` |
@@ -901,7 +901,7 @@ touches `operation-dashboard.ndjson`.
 ### 7.1 Database Detail — CloudSQL PostgreSQL
 
 **File:** `database-postgresql-dashboard.ndjson` · **Id:** `06a07662-c4fa-4074-981c-ff075c3c5da1`
-**Panels:** 22 · **Source:** `metrics-*`, dataset `gcp.cloudsql_postgresql`
+**Panels:** 23 · **Source:** `metrics-*`, dataset `gcp.cloudsql_postgresql`
 
 **22 instances across 4 GCP projects** — `spg` (prd + dr, main + control), `anomalo` (prd + dr), and
 8 pre-production instances each in `ilap` and `rst`. All PostgreSQL 14, region `us-central`.
@@ -909,23 +909,65 @@ touches `operation-dashboard.ndjson`.
 Keyed on **`gcp.labels.resource.database_id`**, never `host.name` — `host.name` here is the GKE
 collector pod running the GCP integration, so keying on it would collapse all 22 instances into one.
 
-This dashboard is the Elastic GCP integration's own, adapted, with three panels ported in at the top:
+This dashboard is the Elastic GCP integration's own, adapted. The top row is an availability band, then
+a per-instance worklist, then the integration's charts.
 
-| Panel | Why it was added |
+**Row 1 — availability, four tiles.** They do not all answer the same question, and that is deliberate:
+
+| Tile | What it counts | Window |
+|---|---|---|
+| **Database Availability %** | `AVG(database.up)` — the share of *checks* that reported up, formatted as a percentage | the time picker |
+| **Instances Up** | Instances whose every sample in the last 15 min reported up | last 15 min |
+| **Instances Down** | Instances that reported **down** at least once in the last 15 min | last 15 min |
+| **Instances Silent** | Instances that sent **nothing** for 15 min — the collector lost them | last 15 min |
+
+Up + Down + Silent = 22. An instance that is silent cannot also be counted up or down, because "down"
+here means *CloudSQL said it was down*, not *we stopped hearing from it* — those are different failures
+and they route to different people. **Availability % will not equal Up ÷ 22.** It is time-weighted over
+the whole picker window, so an instance that was down for an hour of a 24-hour window and is up now
+lowers the percentage while still counting under Instances Up.
+
+**Row 2 — CloudSQL Instance Health**, the per-instance table with staleness and RAG. It ranks *which*
+instance to look at before the charts below explain why. Its `health` column is the same logic as the
+tiles, evaluated per instance and in this order:
+
+| Status | Condition |
 |---|---|
-| **Instances Silent** | The integration charts metrics but never counts what stopped reporting |
-| **Max Transaction-ID Utilisation** | XID wraparound forces a Postgres instance read-only. It is the one metric here that means a hard outage rather than degradation |
-| **CloudSQL Instance Health** | Per-instance table with staleness and RAG — ranks *which* instance to look at before the charts below explain why |
+| 🔴 Silent | no document for > 15 min (`DATE_DIFF` on `MAX(@timestamp)`) |
+| 🔴 Reported down | `MIN(database.up) == 0` anywhere in the window |
+| 🔴 At risk | transaction-ID utilisation ≥ 90 % **or** disk ≥ 90 % |
+| 🟠 Pressure | XID or disk ≥ 80 %, or CPU or memory ≥ 90 % |
+| 🟢 Healthy | none of the above |
 
-The other 19 panels are the integration's work, unchanged: database up, uptime, CPU, memory quota and
-usage, disk bytes used / quota / read ops / write ops, network sent and received, transaction count,
-connections, replication lag, and the Query Insights breakdown (execution time, IO time, latencies,
-lock time).
+Silent is checked first, so an instance that stopped reporting is never shown as healthy on the strength
+of its last good sample. **Reported down uses `MIN` over the whole window**, so it is sticky: one down
+sample at any point in the picker window flags the row for the rest of that window. That is intentional
+for a worklist — a database that bounced overnight is worth seeing — but it is why the table can show
+"Reported down" while the Instances Down tile reads 0.
+
+**The other 19 panels are the integration's work**, unchanged apart from Database Up being reformatted
+as a percentage: uptime, CPU, memory quota and usage, disk bytes used / quota / read ops / write ops,
+network sent and received, transaction count, connections, replication lag, and the Query Insights
+breakdown (execution time, IO time, latencies, lock time).
 
 > **Three panels render empty here, and that is expected, not a fault.**
 > *Database Network Connections* — `network.connections.count` is not populated; `num_backends` is the
 > connection count that works. *Replication Replica Lag* and *Replication Network Lag* —
 > `replication.replica_lag.sec` is not populated, because none of the 22 instances has a read replica.
+
+> **Removed: the Max Transaction-ID Utilisation tile.** It showed `MAX(transaction_id_utilization.pct)`
+> across the fleet as a bare fraction — the share of PostgreSQL's ~2-billion transaction-ID space
+> consumed before autovacuum must freeze old rows. The metric itself matters (at 100 % PostgreSQL stops
+> accepting writes to protect itself), but a single unlabelled fleet-wide fraction is not how anyone
+> would act on it, and the **CloudSQL Instance Health table already carries the same number per instance
+> with RAG at 80 / 90 %**. The signal is kept where it is usable; the tile is gone.
+
+> **Database Uptime is the weakest panel on this dashboard.** It averages `database.uptime.sec` across
+> all 22 instances and prints raw seconds. Per instance, uptime is a genuinely useful restart detector —
+> a sudden drop to near zero is an unplanned restart nobody filed a change for. Averaged across a fleet
+> it is almost meaningless: one instance rebooting moves a multi-million-second average by a rounding
+> error. The Instance Health table already shows `uptime_days` per instance. **Candidate for removal or
+> for conversion to "instances restarted in the window".**
 
 *The dashboard does not pin a time range*, unlike the others — it inherits whatever the picker holds.
 
