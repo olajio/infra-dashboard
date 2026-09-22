@@ -399,8 +399,31 @@ infrastructure tier, derived from `data_stream.dataset`:
 | Data streams | How many datasets feed that tier |
 | Distinct `host.name` | Reporting hosts — **the collector count for remotely-collected tiers**, not a device count |
 | Documents in range | Volume in the dashboard time window |
+| **Errors %** | Share of that tier's documents carrying an `error.message` |
 | Mins since last doc | Freshness of that tier's collection |
-| Collection | 🟢 Flowing (≤15 min) · 🟠 Delayed (≤60 min) · 🔴 Stalled |
+| Collection | 🔴 All errors · 🔴 Mostly errors (≥50 %) · 🔴 Stalled (>60 min) · 🟠 Errors present (≥5 %) · 🟠 Delayed (>15 min) · 🟢 Flowing |
+
+#### Fixed September 2026 — a tier emitting only errors read as healthy
+
+**Database — Oracle** showed **🟢 Flowing**. Documents were arriving every 60 seconds, on schedule, from
+two collectors — and every single one was a connection failure:
+
+```
+DPI-1047: Cannot locate a 64-bit Oracle Client library: "libclntsh.so: cannot open shared object file"
+```
+
+All 323 `oracle.*` metric fields are empty. The `sql` tier is the same input pointed at the same Oracle
+database, failing the same way. The panel only measured **whether documents arrived**, never **whether
+they contained anything** — so a completely broken integration was indistinguishable from a healthy one,
+and had been for as long as it has been misconfigured.
+
+The status now counts `error.message` per tier and **tests the error conditions before the staleness
+ones**, so a tier that is punctually delivering nothing but failures reads 🔴 **All errors** at 100 %,
+not 🟢 Flowing. The tier mapping itself is unchanged — nothing was reclassified.
+
+*Why the threshold ladder:* a handful of transient errors in a healthy tier is normal, so ≥5 % turns it
+amber rather than red, ≥50 % is red, and 100 % gets its own label because it means the integration has
+never worked rather than that it is degrading.
 
 This is a **collection-health** view, not per-device availability. Per-device availability for vSphere,
 Oracle, MQ, GCP and Kubernetes needs each tier's own entity identifier (VM name, instance, queue manager,

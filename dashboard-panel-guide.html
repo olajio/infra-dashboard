@@ -573,8 +573,14 @@ avg latency = SUM(transaction.duration.summary) / COUNT(transaction.duration.sum
       <div class="entry-head"><h3>Monitored Estate &mdash; Coverage by Tier</h3>
         <span class="tag">data table</span><span class="tag">metrics-*</span></div>
       <p class="answers">What is actually being monitored, and is each tier still reporting?</p>
-      <p>One row per infrastructure tier, derived from <code>data_stream.dataset</code>: Servers (OS and Windows), Applications (APM), vSphere, Oracle, SQL, IBM MQ, GCP, Kubernetes, Prometheus targets and the monitoring stack itself. Columns show how many data streams feed the tier, its distinct <code>host.name</code> count, document volume, minutes since the last document, and a collection status of Flowing (&le;15 min), Delayed (&le;60 min) or Stalled.</p>
+      <p>One row per infrastructure tier, derived from <code>data_stream.dataset</code>: Servers (OS and Windows), Applications (APM), vSphere, Oracle, SQL, IBM MQ, GCP, Kubernetes, Prometheus targets and the monitoring stack itself. Columns show how many data streams feed the tier, its distinct <code>host.name</code> count, document volume, minutes since the last document, and an error-aware collection status.</p>
       <p>Read the host column carefully: for remotely-collected tiers it is the <strong>collector</strong> count, not a device count. This is a <strong>collection-health</strong> view, not per-device availability &mdash; that needs each tier&rsquo;s own entity identifier rather than <code>host.name</code>.</p>
+      <div class="note warn">
+        <h3>Fixed September 2026 &mdash; a tier emitting only errors read as healthy</h3>
+        <p><strong>Database &mdash; Oracle</strong> showed <strong>&#128994; Flowing</strong>. Documents were arriving every 60 seconds, on schedule, from two collectors &mdash; and every one was a connection failure: <em>DPI-1047: Cannot locate a 64-bit Oracle Client library</em>. All 323 <code>oracle.*</code> metric fields are empty, and the <code>sql</code> tier is the same input pointed at the same Oracle database, failing identically.</p>
+        <p>The panel measured only <strong>whether documents arrived</strong>, never <strong>whether they contained anything</strong>, so a completely broken integration was indistinguishable from a healthy one.</p>
+        <p>The status now counts <code>error.message</code> per tier and tests the error conditions <em>before</em> the staleness ones: <strong>&#128308; All errors</strong> at 100%, <strong>&#128308; Mostly errors</strong> at &ge;50%, <strong>&#128992; Errors present</strong> at &ge;5%, then the original Stalled and Delayed rules, then <strong>&#128994; Flowing</strong>. A new <strong>Errors %</strong> column makes the figure visible rather than only the colour. The tier mapping is unchanged &mdash; nothing was reclassified.</p>
+      </div>
     </div>
   </div>
   <div class="entry">
