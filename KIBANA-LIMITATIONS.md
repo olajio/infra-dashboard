@@ -29,6 +29,10 @@ for them.
 | 8 | ES\|QL has no window functions or "latest value per group" | Trends and "current state" need workarounds | Packing trick on the availability trend; grouping on identity only |
 | 9 | ES\|QL can't walk a relationship graph | Impacted (downstream) CIs can't be computed on the dashboard | Needs an ENRICH policy or transform in Elasticsearch |
 | 10 | Links between dashboards break if the target isn't imported | Detail-dashboard links 404 in a space that lacks them | Import all five dashboards into the same space |
+| 11 | Colour rules match whole values only | A rule for "🔴" doesn't colour "🔴 RED"; everything falls back to grey | One rule per exact status text |
+| 12 | A tile's colour can only follow its own number | A RAG built from incidents *and* availability can't colour the tile directly | Hidden "max" column steers the colour (§2) |
+| 13 | Area and bar charts always start the y-axis at 0 | A 99–100 % availability trend flattens into a solid block | Availability trends are line charts with a tight axis |
+| 14 | `metrics-*` mixes field types across indices | ES\|QL refuses a query that reads a field typed differently in two indices | Query the specific data stream instead |
 
 ---
 
@@ -72,6 +76,19 @@ previous window. It's possible but was left out; it's a query change on every ti
 **Donut charts.** *(Observed)*
 There's no centre label. Totals and percentages appear in the legend and on the slices instead.
 
+**A tile's colour can only follow its own number.** *(Confirmed in source)*
+Colour-by-value reads the tile's primary number, and only if it is a number. Overall Infrastructure
+Health is RED / AMBER / GREEN from open P1s and P2s *as well as* CI availability, while the tile
+displays CI availability. The workaround: when a tile has a "max" column, Kibana colours it by
+value ÷ max, so a hidden max column is set to land that ratio at 20 % (red), 50 % (amber) or 90 %
+(green) according to the RAG the query already computes. The number shown is untouched. If anyone
+edits this tile, keep the max column and the percent-based palette together.
+
+**Area and bar charts always include zero on the y-axis.** *(Observed)*
+Kibana only allows a data-bounded y-axis on line charts. An availability trend between 99 % and
+100 % drawn as an area therefore looks like a flat block. Availability trends stay line charts with
+the axis fitted to the data; area is kept for volumes that naturally start at zero.
+
 **Trend granularity follows the query, not the time picker.** *(Observed)*
 Our three original trends bucket by hour. At the saved 4-hour window, that is 3–4 points per line.
 The new Resource Utilisation trend uses `BUCKET(@timestamp, 48, ?_tstart, ?_tend)`, which adapts
@@ -89,9 +106,11 @@ coloured. Nothing graphical.
 
 - **Numbers** are coloured by threshold. We colour CPU, memory, disk, error-rate and minutes-stale
   columns using each panel's own thresholds.
-- **Text** is coloured by matching its value. Our status columns are matched on their 🔴 / 🟠 / 🟢
-  emoji, so any status text containing that emoji takes the colour. A new status wording keeps its
-  colour as long as it keeps the emoji.
+- **Text** is coloured by matching its value, and **only whole values match**. In Kibana 9.3 a rule
+  for `🔴` does not colour `🔴 RED`; partial-match rules are silently ignored and every value falls
+  back to grey. This is what turned the Application Health Mix donut grey. Every status column and
+  donut now carries one rule per exact status text. **If a query's status wording changes, its
+  colour rule must change with it.**
 
 **Row limits.** *(Observed)* ES|QL returns 1,000 rows by default and 10,000 at most. Our worklists
 use explicit `LIMIT 100` and paginate.
@@ -141,6 +160,12 @@ times. Group on `host.name` or `ci.name` and collapse attributes with `VALUES()`
 Impacted CIs, the downstream dependents of an affected CI, live in `cmdb-ci-relations-000002`
 (33.9M edges). ES|QL can't walk that graph at query time. Closing it is an Elasticsearch change,
 an ENRICH policy or a denormalising transform, not a dashboard change.
+
+**The same field can have different types in different indices.** *(Observed)*
+`metrics-*` also matches legacy Metricbeat indices where `system.cpu.total.norm.pct` is a
+`scaled_float`, while the current data streams map it as `double`. ES|QL refuses to read a field with
+conflicting types, so the whole panel errors. Query the specific data stream, as the saturation
+tables and the Resource Utilisation trend now do (`.ds-metrics-system.cpu-default*`).
 
 **Mapped doesn't mean populated.** *(Observed)*
 Field lists and `field_caps` show what's mapped, not what holds data. Many ServiceNow and Oracle
