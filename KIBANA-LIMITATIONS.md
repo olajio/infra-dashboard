@@ -196,6 +196,16 @@ The `/app/r/s/…` links in the top bar resolve only on the Kibana instance that
 They are part of the 9.x dashboard format (`sections` plus `gridData.sectionId`). Older Kibana
 versions will not show them.
 
+**A panel can override the dashboard's time range and filters.** *(Observed)*
+A panel can carry its own time range (MIM V1's *Open Incidents* always shows the last month), and an
+ES|QL layer can ignore dashboard filters. Two panels that look like they measure the same thing can
+disagree for this reason alone. New panels that sit beside such a panel must copy its settings; the
+MIM V1 incident tiles and donut copy *Open Incidents* exactly.
+
+**Durations display in any unit without touching the query.** *(Confirmed in source)*
+A duration format with `fromUnit: microseconds`, `toUnit: asMilliseconds` and the short-unit option
+renders `transaction.duration.us` as "1,351 ms". MIM V1's latency panels use this.
+
 **Import with "overwrite".** *(Observed)*
 Import with *Check for existing objects* and overwrite, so the dashboard keeps its id, URL and
 bookmarks.
