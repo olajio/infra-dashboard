@@ -91,8 +91,10 @@ the axis fitted to the data; area is kept for volumes that naturally start at ze
 
 **Trend granularity follows the query, not the time picker.** *(Observed)*
 Our three original trends bucket by hour. At the saved 4-hour window, that is 3–4 points per line.
-The new Resource Utilisation trend uses `BUCKET(@timestamp, 48, ?_tstart, ?_tend)`, which adapts
-to the picker. The P1/P2 trend stays hourly on purpose, because ServiceNow snapshot frequency is
+The Resource Utilisation trend uses `BUCKET(@timestamp, 48, ?_tstart, ?_tend)`, which adapts
+to the picker. On our version `BUCKET()` is only accepted inside `STATS … BY` (for example
+`BY bucket = BUCKET(…)`); in an `EVAL` the query fails with *"cannot use grouping function outside
+of a STATS"*. The P1/P2 trend stays hourly on purpose, because ServiceNow snapshot frequency is
 unconfirmed and finer buckets could show false dips.
 
 ---
@@ -166,6 +168,13 @@ an ENRICH policy or a denormalising transform, not a dashboard change.
 `scaled_float`, while the current data streams map it as `double`. ES|QL refuses to read a field with
 conflicting types, so the whole panel errors. Query the specific data stream, as the saturation
 tables and the Resource Utilisation trend now do (`.ds-metrics-system.cpu-default*`).
+
+**Snapshot indices repeat every record.** *(Observed; a pitfall rather than a missing feature)*
+`servicenow-open-incidents-snapshots-*` stores a fresh copy of each incident at every snapshot. A
+plain `WHERE state_name != "Resolved"` still counts an incident resolved an hour ago, because its
+earlier "In Progress" snapshots are in the window. Active-incident panels must judge each incident
+on its **latest** snapshot: `MAX(TO_LONG(@timestamp) * 10 + value) % 10` returns the latest small
+integer (state flag, priority) per incident without a join.
 
 **Mapped doesn't mean populated.** *(Observed)*
 Field lists and `field_caps` show what's mapped, not what holds data. Many ServiceNow and Oracle
