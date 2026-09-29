@@ -1,0 +1,74 @@
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "verification_exception",
+        "reason": "verification_exception: verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices",
+        "suppressed": [
+          {
+            "type": "verification_exception",
+            "reason": "verification_exception: verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices",
+            "suppressed": [
+              {
+                "type": "verification_exception",
+                "reason": "verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "type": "verification_exception",
+    "reason": "verification_exception: verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices",
+    "suppressed": [
+      {
+        "type": "verification_exception",
+        "reason": "verification_exception: verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices",
+        "suppressed": [
+          {
+            "type": "verification_exception",
+            "reason": "verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices"
+          }
+        ]
+      }
+    ]
+  },
+  "rawResponse": {
+    "error": {
+      "root_cause": [
+        {
+          "type": "verification_exception",
+          "reason": "verification_exception: verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices",
+          "suppressed": [
+            {
+              "type": "verification_exception",
+              "reason": "verification_exception: verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices",
+              "suppressed": [
+                {
+                  "type": "verification_exception",
+                  "reason": "verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "type": "verification_exception",
+      "reason": "verification_exception: verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices",
+      "suppressed": [
+        {
+          "type": "verification_exception",
+          "reason": "verification_exception: verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices",
+          "suppressed": [
+            {
+              "type": "verification_exception",
+              "reason": "verification_exception: Found 1 problem\nline 4:33: Cannot use field [system.cpu.total.norm.pct] due to ambiguities being mapped as [2] incompatible types: [double] in [.ds-metrics-apm.internal-default-2026.09.20-001024, .ds-metrics-apm.internal-default-2026.09.23-001027, .ds-metrics-apm.internal-default-2026.09.26-001030] and [18] other indices, [scaled_float] in [.ds-metricbeat-7.17.9-2026.09.21-000520, .ds-metricbeat-7.17.9-2026.09.25-000523, .ds-metricbeat-8.6.2-2026.09.17-000436] and [32] other indices"
+            }
+          ]
+        }
+      ]
+    },
+    "status": 400
+  },
+  "isRestored": true
+}
