@@ -212,13 +212,25 @@ bookmarks.
 
 ---
 
+**Sparklines work only on data-view tiles.** *(Confirmed in source; working examples in our own exports)*
+A metric tile can carry a trend line, including one per breakdown value, but only when the tile is
+built on a data view. ES|QL tiles cannot. MIM V1's *Availability & Trend by Service* uses this. The
+host-level equivalent is not possible while the host_name control stays an ES|QL variable, because a
+data-view panel can't read that variable.
+
+**ES|QL never returns empty time buckets.** *(Observed)*
+A heatmap built from ES|QL shows a silent interval as a blank cell, not a red one. MIM V1's *Server
+Availability* heatmap lists every host against every half-hour and marks the missing ones, using
+`VALUES` + `MV_EXPAND` + `MV_CONTAINS`. Data-view heatmaps don't have this problem ("include empty
+rows").
+
+---
+
 ## 7. Not verified — test before promising
 
 We didn't use these, so we have no evidence either way. Test them in our Kibana before committing to
 them in front of the client.
 
-- **Sparklines inside metric tiles for ES|QL panels.** Kibana supports tile trendlines, but we didn't
-  confirm they work on ES|QL-based tiles, which is most of ours.
 - **Gauges (arc, semicircle, bullet) driven by ES|QL.**
 - **Target / reference lines on ES|QL line charts** (for example a dashed 99.9 % line).
 
