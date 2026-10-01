@@ -218,6 +218,13 @@ built on a data view. ES|QL tiles cannot. MIM V1's *Availability & Trend by Serv
 host-level equivalent is not possible while the host_name control stays an ES|QL variable, because a
 data-view panel can't read that variable.
 
+**A gauge can't carry a trend line; Vega can do both.** *(Confirmed in source)*
+Lens gauges have no trendline option, and Lens metric tiles (which do) can't be drawn as a gauge.
+MIM V2's *Service Availability* is a Vega panel drawing the speedometer and its trend together. Vega
+panels can only use Elasticsearch DSL queries (no ES|QL), but they still follow the time picker and
+dashboard filters through Kibana's `%timefilter%` and `%dashboard_context-…%` placeholders. They are
+edited as code.
+
 **ES|QL never returns empty time buckets.** *(Observed)*
 A heatmap built from ES|QL shows a silent interval as a blank cell, not a red one. MIM V1's *Server
 Availability* heatmap lists every host against every half-hour and marks the missing ones, using
