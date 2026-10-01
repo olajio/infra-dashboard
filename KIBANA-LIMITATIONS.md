@@ -33,6 +33,9 @@ for them.
 | 12 | A tile's colour can only follow its own number | A RAG built from incidents *and* availability can't colour the tile directly | Hidden "max" column steers the colour (§2) |
 | 13 | Area and bar charts always start the y-axis at 0 | A 99–100 % availability trend flattens into a solid block | Availability trends are line charts with a tight axis |
 | 14 | `metrics-*` mixes field types across indices | ES\|QL refuses a query that reads a field typed differently in two indices | Query the specific data stream instead |
+| 15 | ES\|QL variable controls can't be emptied | No Clear button, the last value can't be unchecked, "Select all" can't be undone | MIM V2 uses standard options-list controls instead (§4) |
+| 16 | Control filters reach every panel | A control on a field a panel's data lacks blanks that panel; there is no per-panel or per-section scope | Clear the control when moving between topics; see the MIM V2 scope table (§4) |
+| 17 | A drilldown can't tell which ES\|QL column was clicked | One link per column is impossible on ES\|QL tables | Two links, each labelled with the column it belongs to |
 
 ---
 
@@ -137,6 +140,34 @@ Kibana percent-encodes the finished URL, so a template that already contains `%3
 
 - **Template contains `%XX`:** turn Encode URL off.
 - **Template has no `%XX` and the value may contain spaces:** leave it on.
+
+**ES|QL variable controls can't be cleared.** *(Source-confirmed, Kibana 9.3 and main)*
+Controls that feed a `?variable` into ES|QL refuse an empty selection: unchecking the last value does
+nothing, "Deselect all" is a no-op and the Clear button is hidden. Kibana's code cites
+[elasticsearch#136735](https://github.com/elastic/elasticsearch/issues/136735): ES|QL has no "any value"
+yet. Standard options-list controls (field + data view) do support Clear, unchecking and Select all, so
+MIM V2 uses those. Select all is disabled when a list has more than 100 values; type to narrow it first.
+
+**Every control filters every panel.** *(Source-confirmed)*
+Options-list selections become dashboard filters, and a panel either takes all of them or none
+(`Ignore global filters`). There is no per-panel or per-section scope, even for controls placed inside
+a section. ES|QL panels never skip a filter on a field their index doesn't have, so the panel shows no
+results. Data-view panels skip such filters only when the space setting
+`courier:ignoreFilterIfFieldNotInIndex` is on (off by default). What this means on MIM V2, going by
+the fields each index is known to carry:
+
+| Control | Narrows | Blanks while set |
+|---|---|---|
+| CI Name, CI Number | Incidents, APM panels, servers | GKE panels (no CI fields) |
+| Service | APM panels, error messages | Incident and server/GKE panels |
+| Incident | Incident panels | Everything else |
+| Host | Server heatmap, APM panels | Incident and GKE panels |
+| GCP Namespace | GKE panels | Everything else |
+
+**A drilldown can't tell which ES|QL column was clicked.** *(Source-confirmed)*
+`{{event.key}}` is the column's `meta.field`, which ES|QL table columns don't set. One drilldown can't
+branch on the column, so a table with two linked columns carries two drilldowns. Each is labelled with
+the column it belongs to, and the click menu offers both.
 
 **Clicking computed columns doesn't filter usefully.** *(Observed)*
 A click adds a dashboard filter on that column's field. If the column was created in the query with
@@ -250,7 +281,7 @@ Worth separating in any conversation, because none of these is fixed by a better
 | Gap | Cause | Fix belongs to |
 |---|---|---|
 | MTTA (time to acknowledge) | No acknowledge / assign timestamps on ServiceNow incidents | ServiceNow business rule + integration mapping |
-| SLA breach | SLA data sits in `servicenow-task-sla`, not on the incident | Wire that index in |
+| SLA breach | SLA data sits in `servicenow-task-sla`, not on the incident; MIM V2 shows an age-based SLA (P1 4 h, P2 8 h) meanwhile | Wire that index in |
 | Oracle metrics | Collectors fail with `DPI-1047`: Oracle Instant Client missing on 2 hosts | Install the client on `lrch1e01` and `vslrau1p298` |
 | ~255 of 390 SQL Server instances | Monitoring login is failing | Fix the service account credentials |
 | Netcool alert severity breakdown | No severity field confirmed on the Netcool index | Confirm the field, then add the panel |
