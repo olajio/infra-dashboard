@@ -1,0 +1,32 @@
+Want to see applications impacted
+Want to see Actie incidents (P1/P2) instead of Open incidents
+ 
+P1 should be showing Red if we have more than 0 P1s, it should show green if the number of Active P1s is zero. Active incidents only
+ 
+For P2 incidents, show the panel as Amber for any number of P2s, it should be green for 0 Active P2s
+ 
+Show Impacted/Affected CIs - Also link directly to the CI in SNOW (like in the infra dashboard) this is referring to the actual CI that is down or directly suffering as a result of the incident. Research if the user-base of the each CI is being ingested into Elastic. If it is, show this data (if it make sense to do so). Term this estimated user-base for. This is a sum for all the active incidents
+ 
+For Service Availability, show a trendline right under the number in the same panel, if possible, if not possible show the trendline in another panel close to this
+ 
+On the top row, show incident requiring MIM attention - if possible (I'm concerned about the availability of field showing acknowledgment) - Opportunity to ask for further enrichment
+ 
+Rearrange columns in Open Incidents panel:
+Incidents, Priority, CI name....
+If P1, show priority in red, else show in Amber
+Link to SNOW using the CI
+If possible, if we have the data in Elastic, show the number impacted applications. Otherwise, users would have to use CI in SNOW to review impacted applications. Also, this is an opportunity to further enhance/enrich data being ingested for CI into elastic
+Consider age of incidents to be shown at a lower time granularity: like minutes or combination of hours:minutes
+Show estimated user base impacted per incident
+Consider creating additional panel for active incidents that are breached. If possible, ensure to investigate all conditions that implies a breached/breaching incident
+ 
+For Service Availability Trend, show the service availability per service
+ 
+For "Service Availability % by Service" show it in a different way per service., also using RAG styling for service availability thresholds. See if based on the service availability, we can show impacted application per service
+ 
+For "Server Availability" the hostnames are not showing fully on the current panel. Consider a different styling that would show full server names . Maybe traffic light pattern
+ 
+Consider additional panel to track recent changes on a CI - change number, CI, when the change was implemented..., this would insight into what changes if any, that resulted in the incident. Also track the status of the change (is it failed, success ....)  All these depends on available data
+
+ 
+Consider removing the panel: "Top 10 Critical Service Error Messages" doesn't appear to make sure sense except if requested based on client feedback
