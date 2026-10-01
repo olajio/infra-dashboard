@@ -286,4 +286,6 @@ Worth separating in any conversation, because none of these is fixed by a better
 | ~255 of 390 SQL Server instances | Monitoring login is failing | Fix the service account credentials |
 | Netcool alert severity breakdown | No severity field confirmed on the Netcool index | Confirm the field, then add the panel |
 | Impacted (downstream) CIs | Needs the CMDB relationship graph | ENRICH policy or transform (§5) |
+| Estimated user base per incident | No user-count field on incidents or on the `ci.*` CMDB enrichment | Add the ServiceNow user-base field to the CI enrichment |
+| Applications / services impacted *by an incident* | Incident → application needs the relationship graph; `business_service.name` is on 2.8 % of incidents. MIM V2 shows APM applications / services below 99 % availability instead | ENRICH policy or transform (§5) |
 | Noise-reduction opportunity score | No rule id, dedup outcome or analyst-feedback fields | Netcool / ServiceNow data changes |
