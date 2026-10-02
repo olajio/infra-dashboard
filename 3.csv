@@ -1,0 +1,186 @@
+"'@timestamp",approval,"approval.normalized","assigned_to.datasource","assigned_to.division","assigned_to.email","assigned_to.employee_id","assigned_to.is_active","assigned_to.language.code","assigned_to.language.name","assigned_to.language.name.normalized","assigned_to.mobile","assigned_to.name","assigned_to.name.normalized","assigned_to.number","assigned_to.sys_id","assigned_to.type","assigned_to.type.normalized","assigned_to.updated_at","assigned_to.user_id","assignment_group.datasource","assignment_group.description","assignment_group.description.keyword","assignment_group.email","assignment_group.gdc","assignment_group.is_active","assignment_group.manager.email","assignment_group.manager.name","assignment_group.manager.name.normalized","assignment_group.name","assignment_group.name.normalized","assignment_group.practice","assignment_group.rbu","assignment_group.service_provider","assignment_group.service_provider.normalized","assignment_group.sub_practice","assignment_group.sys_id","assignment_group.updated_at","category.1","category.1.normalized","category.2","category.2.normalized","category.3","category.3.normalized","change_size","change_size.normalized","ci.asset_tag","ci.assignment_group","ci.assignment_group.keyword","ci.category.1","ci.category.1.normalized","ci.category.2","ci.category.2.normalized","ci.class","ci.class_name","ci.class_name.normalized","ci.company.datasource","ci.company.industry","ci.company.industry.normalized","ci.company.iris_code","ci.company.is_active","ci.company.is_parent","ci.company.name","ci.company.name.normalized","ci.company.parent.name","ci.company.parent.name.normalized","ci.company.parent.sys_id","ci.company.rbu","ci.company.rbu.normalized","ci.company.sub_industry","ci.company.sub_industry.normalized","ci.company.sys_id","ci.company.updated_at","ci.created_at","ci.criticality","ci.criticality_name","ci.criticality_name.normalized","ci.customer_id","ci.customer_specific.batch_job_id","ci.customer_specific.batch_job_id.keyword","ci.customer_specific.pm_portfolio","ci.customer_specific.pm_portfolio.keyword","ci.customer_specific_data.1","ci.customer_specific_data.2","ci.customer_specific_data.3","ci.datasource","ci.duplicate_of","ci.duplicate_of.keyword","ci.environment","ci.extracted_at","ci.fqdn","ci.fqdn.keyword","ci.geo.city.name","ci.geo.city.name.normalized","ci.geo.city.sys_id","ci.geo.continent","ci.geo.country.iso_code","ci.geo.country.name","ci.geo.country.name.normalized","ci.geo.country.sys_id","ci.geo.datasource","ci.geo.formatted_address","ci.geo.formatted_address.keyword","ci.geo.is_active","ci.geo.location","ci.geo.location_code","ci.geo.location_code.normalized","ci.geo.name","ci.geo.place_id","ci.geo.place_id.keyword","ci.geo.state.name","ci.geo.state.name.normalized","ci.geo.state.sys_id","ci.geo.sys_id","ci.geo.type","ci.geo.updated_at","ci.id","ci.ingest_error.bridge_enrichment","ci.ingest_error.bridge_enrichment.keyword","ci.ingest_error.enrich_locations","ci.ingest_error.enrich_locations.keyword","ci.ingest_error.message","ci.ingest_error.message.keywords","ci.ingest_error.message.text","ci.ingested_at","ci.install_status","ci.install_status.keyword","ci.ip_address","ci.is_monitored","ci.is_stale","ci.is_top_level_ci","ci.last_discovered","ci.mac_address","ci.manufacturer.name","ci.manufacturer.name.normalized","ci.manufacturer.sys_id","ci.model.name","ci.model.name.normalized","ci.model.number","ci.model.sys_id","ci.name","ci.name.normalized","ci.name_normalized","ci.name_normalized.keyword","ci.number","ci.number.keyword","ci.operational_status","ci.os.family","ci.os.family.normalized","ci.os.kernel","ci.os.kernel.normalized","ci.os.name","ci.os.name.normalized","ci.os.version","ci.os.version.normalized","ci.paladin_map.sys_id","ci.parents.class","ci.parents.id","ci.parents.name","ci.parents.name.normalized","ci.priority","ci.priority.keyword","ci.raw_data.name","ci.raw_data.name.normalized","ci.service_classification","ci.service_classification.normalized","ci.short_description","ci.short_description.keywords","ci.short_description.text","ci.support_group.l1.name","ci.support_group.l1.name.normalized","ci.support_group.l1.sys_id","ci.support_group.l2.name","ci.support_group.l2.name.normalized","ci.support_group.l2.sys_id","ci.support_group.l3.name","ci.support_group.l3.name.normalized","ci.support_group.l3.sys_id","ci.sync_metadata.id","ci.sync_metadata.id.keyword","ci.sync_metadata.name","ci.sync_metadata.name.keyword","ci.sync_metadata.timestamp","ci.sys_id","ci.top_level_ci_depth","ci.top_level_parents.class","ci.top_level_parents.id","ci.top_level_parents.name","ci.top_level_parents.name.normalized","ci.unit","ci.updated_at","close_code","close_code.normalized","closed_at","closed_by.datasource","closed_by.division","closed_by.email","closed_by.employee_id","closed_by.is_active","closed_by.language.code","closed_by.language.name","closed_by.language.name.normalized","closed_by.mobile","closed_by.name","closed_by.name.normalized","closed_by.number","closed_by.sys_id","closed_by.type","closed_by.type.normalized","closed_by.updated_at","closed_by.user_id","company.datasource","company.industry","company.industry.normalized","company.iris_code","company.is_active","company.is_parent","company.name","company.name.normalized","company.parent.name","company.parent.name.normalized","company.parent.sys_id","company.rbu","company.rbu.normalized","company.sub_industry","company.sub_industry.normalized","company.sys_id","company.updated_at","completion_state","completion_state.normalized","contact_type","created_at","created_by.datasource","created_by.division","created_by.email","created_by.employee_id","created_by.is_active","created_by.language.code","created_by.language.name","created_by.language.name.normalized","created_by.mobile","created_by.name","created_by.name.normalized","created_by.number","created_by.sys_id","created_by.type","created_by.type.normalized","created_by.updated_at","created_by.user_id",datasource,"due_at","emergency_reason","emergency_reason.keywords","emergency_reason.text","end_at","event_number","extracted_at","geo.city.name","geo.city.name.normalized","geo.city.sys_id","geo.continent","geo.country.iso_code","geo.country.name","geo.country.name.normalized","geo.country.sys_id","geo.datasource","geo.formatted_address","geo.formatted_address.keywords","geo.formatted_address.text","geo.is_active","geo.location","geo.location_code","geo.location_code.normalized","geo.name","geo.place_id","geo.state.name","geo.state.name.normalized","geo.state.sys_id","geo.sys_id","geo.type","geo.updated_at",impact,"impact_name","impacted_regions.name","impacted_regions.name.normalized","impacted_regions.sys_id","implementation_impact","implementation_impact.keywords","implementation_impact.text","implementation_plan","implementation_plan.keywords","implementation_plan.text","incident_number","ingest_error.message","ingest_error.message.keyword","is_cross_tower_change","is_outage_required","mirrored_at",number,"opened_at","opened_by.datasource","opened_by.division","opened_by.email","opened_by.employee_id","opened_by.is_active","opened_by.language.code","opened_by.language.name","opened_by.language.name.normalized","opened_by.mobile","opened_by.name","opened_by.name.normalized","opened_by.number","opened_by.sys_id","opened_by.type","opened_by.type.normalized","opened_by.updated_at","opened_by.user_id","parent.number","parent.sys_id",phase,"phase.normalized","phase_state","phase_state.normalized","planned_outage_end_at","planned_outage_start_at","preapproved_by.datasource","preapproved_by.division","preapproved_by.email","preapproved_by.employee_id","preapproved_by.is_active","preapproved_by.language.code","preapproved_by.language.name","preapproved_by.language.name.normalized","preapproved_by.mobile","preapproved_by.name","preapproved_by.name.normalized","preapproved_by.number","preapproved_by.sys_id","preapproved_by.type","preapproved_by.type.normalized","preapproved_by.updated_at","preapproved_by.user_id",priority,"priority_name","priority_name.normalized","project_code","project_code.normalized","reassignment_count","requested_at","requested_by.datasource","requested_by.division","requested_by.email","requested_by.employee_id","requested_by.is_active","requested_by.language.code","requested_by.language.name","requested_by.language.name.normalized","requested_by.mobile","requested_by.name","requested_by.name.normalized","requested_by.number","requested_by.sys_id","requested_by.type","requested_by.type.normalized","requested_by.updated_at","requested_by.user_id",risk,"risk_name","risk_name.normalized","short_description","short_description.keywords","short_description.text","start_at","start_date",state,"state_name","state_name.normalized","supplier_ticket_number","sys_id",type,"type.normalized","type_name","updated_at",urgency,"urgency_name","urgency_name.normalized"
+"2026-10-01T22:14:22.914-05:00","not requested","not requested",,,"prakash.das@cna.com",00248132,true,,,,,"Prakash DAS","prakash das",,db0bb9001b237c1011d9a7d4bd4bcbcf,,,"2026-10-01T04:56:24.000-05:00",,,"To Manage Windows related incidents/Changes","To Manage Windows related incidents/Changes","dl-cna-wintel-support@atos.net",,,"Prince.Puthiyakkal@cna.com","Prince Puthiyakkal","prince puthiyakkal","IT.I.Intel_Server_Engineering.Server_Services_-_Wintel","it.i.intel_server_engineering.server_services_-_wintel",,,Atos,atos,,12807dccdba24340643cb96c4e9619f0,,Other,other,,,,,,,16785359,,,Hardware,hardware,Computer,computer,"cmdb_ci_win_server","Windows Server","windows server",,,,,,,,,,,,,,,,,,"2022-04-06T07:23:59.000-05:00",,,,,,,,,,,,"cnaprod.service-now",,,prod,"2026-09-24T04:43:15.543-05:00","kau1s054.cna.com","kau1s054.cna.com",Aurora,aurora,,,US,"United States","united states",,"cnaprod.service-now.geocode-enriched-by-paladin","4267 Meridian Pkwy, Aurora, IL 60504, USA","4267 Meridian Pkwy, Aurora, IL 60504, USA",,"POINT (-88.2170549 41.7722028)",,,"Aurora - IL70",ChIJ57GUBrr5DogRda6waiyqj4c,ChIJ57GUBrr5DogRda6waiyqj4c,Illinois,illinois,,79c8b40adb664300643cb96c4e9619a6,,"2025-11-11T04:01:21.000-06:00",3b4d37bf1b2a059011d9a7d4bd4bcb20,,,,,,,,"2026-10-01T20:43:07.815-05:00",Installed,Installed,"10.12.11.82",true,true,,"2026-08-29T01:31:18.000-05:00",,,,,,,,,kau1s054,kau1s054,kau1s054,kau1s054,,,Operational,,,,,,,,,,,,,,2,2,,,,,"Asset#13400909_x000d_
+Aurora Citrix SQL database server. Contact DBA on-call.                                                ""Citrix Server Function:Citrix License Server
+Citrix Version:Citrix 4.5 Farm
+Application:Citrix Infra
+Application Primary Owner:
+Application Secondary Owner: 
+Citrix Primary Owner:Craig DeCarlo
+Citrix Secondary Owner:John Chelliah""","Asset#13400909_x000d_
+Aurora Citrix SQL database server. Contact DBA on-call.                                                ""Citrix Server Function:Citrix License Server
+Citrix Version:Citrix 4.5 Farm
+Application:Citrix Infra
+Application Primary Owner:
+Application Secondary Owner: 
+Citrix Primary Owner:Craig DeCarlo
+Citrix Secondary Owner:John Chelliah""","Asset#13400909_x000d_
+Aurora Citrix SQL database server. Contact DBA on-call.                                                ""Citrix Server Function:Citrix License Server
+Citrix Version:Citrix 4.5 Farm
+Application:Citrix Infra
+Application Primary Owner:
+Application Secondary Owner: 
+Citrix Primary Owner:Craig DeCarlo
+Citrix Secondary Owner:John Chelliah""",,,,"IT.I.Intel_Server_Engineering.Server_Services_-_Wintel","it.i.intel_server_engineering.server_services_-_wintel",12807dccdba24340643cb96c4e9619f0,,,,"2ebf9b12-758a-4e67-a660-59cf99101bee","2ebf9b12-758a-4e67-a660-59cf99101bee","full_sync","full_sync","2026-09-24T04:32:28.691-05:00",3b4d37bf1b2a059011d9a7d4bd4bcb20,,,,,,,"2026-08-29T01:31:18.000-05:00",,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2026-10-01T22:01:51.000-05:00",,,,,,,,,,,,,,,,,,"cnaprod.service-now",,,,,,,"2026-10-01T22:14:22.914-05:00",,,,,,,,,,,,,,,,,,,,,,,,,3,"3 - Low",,,,,,,,,,,,,,,,CHG0648810,"2026-10-01T22:01:15.000-05:00",,,"bhavita.shah@cna.com",00262463,true,,,,,"Bhavita Shah","bhavita shah",,c8b3d9fd3b2fb25033af0134c3e45a43,,,"2026-10-01T05:02:01.000-05:00",,,,requested,requested,open,open,,,,,,,,,,,,,,,,,,,,4,"4 - Low","4 - low",,,0,,,,"prakash.das@cna.com",00248132,true,,,,,"Prakash DAS","prakash das",,db0bb9001b237c1011d9a7d4bd4bcbcf,,,"2026-10-01T04:56:24.000-05:00",,,,,"Zeroday September vulnerability","Zeroday September vulnerability","Zeroday September vulnerability",,,"'-5",New,new,,7adb67efcfab4310b852f1306d851c91,normal,normal,,"2026-10-01T22:02:07.000-05:00",3,"3 - Low","3 - low"
+"2026-10-01T22:04:23.025-05:00",approved,approved,,,"siva.sri@cna.com",00245239,true,,,,,"Siva Sri","siva sri",,455544ad1ba56c901207ececbc4bcb40,,,"2026-10-01T05:02:32.000-05:00",,,"Used for  Famus-R application related Incidents","Used for  Famus-R application related Incidents",,,,"Shrilalitha.Yegnaraman@cna.com","Shrilalitha Yegnaraman","shrilalitha yegnaraman","IT.A.GSL_DEV","it.a.gsl_dev",,,"Accenture - Application","accenture - application",,2680bdccdba24340643cb96c4e961938,,Other,other,,,,,,,,,,,,Application,application,"cmdb_ci_service_discovered","Mapped Application Service","mapped application service",,,,,,,,,,,,,,,,,,"2023-04-21T11:27:37.000-05:00",,,,,,,,,,,,"cnaprod.service-now",,,prod,"2024-06-17T07:32:15.751-05:00",,,,,,,,,,,,,,,,,,,,,,,,,,,d32a7004db112510875fa07c13961968,,,,,,,,"2025-09-15T06:59:17.032-05:00",Installed,Installed,,false,,,,,,,,,,,,"FAMUS-R PROD","famus-r prod","famus-r prod","famus-r prod",,,Operational,,,,,,,,,,,,,,,,,,,,,,,,,,"IT.A.GSL_DEV","it.a.gsl_dev",2680bdccdba24340643cb96c4e961938,,,,,,,,,d32a7004db112510875fa07c13961968,,,,,,,"2024-06-17T05:21:00.000-05:00",successful,successful,"2026-10-01T21:42:16.000-05:00",,,"deyyala.devi@cna.com",00245195,true,,,,,"Deyyala Devi","deyyala devi",,19db17b91b5520501207ececbc4bcb3b,,,"2026-10-01T04:56:32.000-05:00",,,,,,,,,,,,,,,,,,,,,,"2026-09-23T03:28:45.000-05:00",,,,,,,,,,,,,,,,,,"cnaprod.service-now",,,,,"2026-10-01T21:42:16.000-05:00",,"2026-10-01T22:04:23.025-05:00",,,,,,,,,,,,,,,,,,,,,,,,,3,"3 - Low",,,,,,,"FamusR Development Team will share the store procedures  to SQL DBA team.
+
+1. SQL DBA need to Take the data base backup from PROD server.
+2. SQL DBA team need to execute the script shared by FamusR Dev team.
+3. SQL DBA team need to take the post database backup after scripts execution is completed.
+4. It is non-disruptive.","FamusR Development Team will share the store procedures  to SQL DBA team.
+
+1. SQL DBA need to Take the data base backup from PROD server.
+2. SQL DBA team need to execute the script shared by FamusR Dev team.
+3. SQL DBA team need to take the post database backup after scripts execution is completed.
+4. It is non-disruptive.","FamusR Development Team will share the store procedures  to SQL DBA team.
+
+1. SQL DBA need to Take the data base backup from PROD server.
+2. SQL DBA team need to execute the script shared by FamusR Dev team.
+3. SQL DBA team need to take the post database backup after scripts execution is completed.
+4. It is non-disruptive.",,,,,,,CHG0648243,"2026-09-23T03:21:26.000-05:00",,,"siva.sri@cna.com",00245239,true,,,,,"Siva Sri","siva sri",,455544ad1ba56c901207ececbc4bcb40,,,"2026-10-01T05:02:32.000-05:00",,,,requested,requested,open,open,,,,,,,,,,,,,,,,,,,,4,"4 - Low","4 - low",,,0,,,,"siva.sri@cna.com",00245239,true,,,,,"Siva Sri","siva sri",,455544ad1ba56c901207ececbc4bcb40,,,"2026-10-01T05:02:32.000-05:00",,4,Low,low,"Specialty - FamusR, Update database tables and stored procedures to deploy the Stories-STRY0894030,STRY0899051, STRY0899052, STRY0898859","Specialty - FamusR, Update database tables and stored procedures to deploy the Stories-STRY0894030,STRY0899051, STRY0899052, STRY0898859","Specialty - FamusR, Update database tables and stored procedures to deploy the Stories-STRY0894030,STRY0899051, STRY0899052, STRY0898859",,"2026-10-01T21:00:00.000-05:00",3,Closed,closed,,cddeda78fba7c7d08b28f2277befdc55,normal,normal,,"2026-10-01T21:42:15.000-05:00",3,"3 - Low","3 - low"
+"2026-10-01T22:04:23.026-05:00","not requested","not requested",,,"prakash.das@cna.com",00248132,true,,,,,"Prakash DAS","prakash das",,db0bb9001b237c1011d9a7d4bd4bcbcf,,,"2026-10-01T04:56:24.000-05:00",,,"To Manage Windows related incidents/Changes","To Manage Windows related incidents/Changes","dl-cna-wintel-support@atos.net",,,"Prince.Puthiyakkal@cna.com","Prince Puthiyakkal","prince puthiyakkal","IT.I.Intel_Server_Engineering.Server_Services_-_Wintel","it.i.intel_server_engineering.server_services_-_wintel",,,Atos,atos,,12807dccdba24340643cb96c4e9619f0,,Other,other,,,,,,,"No Asset Tag",,,Hardware,hardware,Computer,computer,"cmdb_ci_win_server","Windows Server","windows server",,,,,,,,,,,,,,,,,,"2024-01-28T19:31:26.000-06:00",,,,,,,,,,,,"cnaprod.service-now",,,drt,"2026-09-24T04:44:24.844-05:00","vskblyd0065.cna.com","vskblyd0065.cna.com",Aurora,aurora,,,US,"United States","united states",,"cnaprod.service-now.geocode-enriched-by-paladin","4267 Meridian Pkwy, Aurora, IL 60504, USA","4267 Meridian Pkwy, Aurora, IL 60504, USA",,"POINT (-88.2170549 41.7722028)",,,"Aurora - IL70",ChIJ57GUBrr5DogRda6waiyqj4c,ChIJ57GUBrr5DogRda6waiyqj4c,Illinois,illinois,,79c8b40adb664300643cb96c4e9619a6,,"2025-11-11T04:01:21.000-06:00",d90eb3091b440a101207ececbc4bcbe8,,,,,,,,"2026-10-01T20:43:10.911-05:00",Installed,Installed,"10.1.101.80",true,true,,"2026-09-22T22:04:30.000-05:00",,,,,,,,,vskblyd0065,vskblyd0065,vskblyd0065,vskblyd0065,,,Operational,,,,,,,,,,,,,,3,3,,,,,"IGLOO DRT Server","IGLOO DRT Server","IGLOO DRT Server",,,,"IT.I.Intel_Server_Engineering.Server_Services_-_Wintel","it.i.intel_server_engineering.server_services_-_wintel",12807dccdba24340643cb96c4e9619f0,,,,"2ebf9b12-758a-4e67-a660-59cf99101bee","2ebf9b12-758a-4e67-a660-59cf99101bee","full_sync","full_sync","2026-09-24T04:32:28.691-05:00",d90eb3091b440a101207ececbc4bcbe8,,,,,,,"2026-09-23T17:36:59.000-05:00",,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2026-10-01T22:00:54.000-05:00",,,,,,,,,,,,,,,,,,"cnaprod.service-now",,,,,,,"2026-10-01T22:04:23.026-05:00",,,,,,,,,,,,,,,,,,,,,,,,,3,"3 - Low",,,,,,,,,,,,,,,,CHG0648809,"2026-10-01T21:57:58.000-05:00",,,"bhavita.shah@cna.com",00262463,true,,,,,"Bhavita Shah","bhavita shah",,c8b3d9fd3b2fb25033af0134c3e45a43,,,"2026-10-01T05:02:01.000-05:00",,,,requested,requested,open,open,,,,,,,,,,,,,,,,,,,,4,"4 - Low","4 - low",,,0,,,,"prakash.das@cna.com",00248132,true,,,,,"Prakash DAS","prakash das",,db0bb9001b237c1011d9a7d4bd4bcbcf,,,"2026-10-01T04:56:24.000-05:00",,,,,"Zeroday September vulnerability","Zeroday September vulnerability","Zeroday September vulnerability",,,"'-5",New,new,,aa1bafafcfab4310b852f1306d851cf1,normal,normal,,"2026-10-01T22:00:54.000-05:00",3,"3 - Low","3 - low"
+"2026-10-01T21:44:22.977-05:00",approved,approved,,,"sunilprakash.gawas@cna.com",00260091,true,,,,,"Sunil Prakash Gawas","sunil prakash gawas",,b5f959093b1d225033af0134c3e45a1a,,,"2026-10-01T04:57:13.000-05:00",,,"This group belongs to Network Data team which  handles BAU activities, operational issues.","This group belongs to Network Data team which  handles BAU activities, operational issues.",,,,"MahendraKumar.AM@cna.com","Mahendra Kumar AM","mahendra kumar am","IT.I.Network_Infrastructure_Services.Network","it.i.network_infrastructure_services.network",,,Atos,atos,,6280bdccdba24340643cb96c4e96193a,,Other,other,,,,,,,FDO1241X4WE,,,Resource,resource,IP,ip,"cmdb_ci_ip_switch","IP Switch","ip switch",,,,,,,,,,,,,,,,,,"2018-01-21T21:43:16.000-06:00",,,,,,,,,,,,"cnaprod.service-now",,,prod,"2026-09-24T04:43:26.097-05:00","csauwrls1.cna.com","csauwrls1.cna.com",Aurora,aurora,,,US,"United States","united states",,"cnaprod.service-now.geocode-enriched-by-paladin","4267 Meridian Pkwy, Aurora, IL 60504, USA","4267 Meridian Pkwy, Aurora, IL 60504, USA",,"POINT (-88.2170549 41.7722028)",,,"Aurora - IL70",ChIJ57GUBrr5DogRda6waiyqj4c,ChIJ57GUBrr5DogRda6waiyqj4c,Illinois,illinois,,79c8b40adb664300643cb96c4e9619a6,,"2025-11-11T04:01:21.000-06:00",82b58131db7fc3008259d5ab5e96196f,,,,,,,,"2026-10-01T20:43:10.141-05:00",Installed,Installed,"10.12.103.58",true,true,,"2026-09-19T01:20:23.000-05:00",,,,,,,,,csauwrls1,csauwrls1,csauwrls1,csauwrls1,,,Operational,,,,,,,,,,,,,,3,3,,,,,"Cisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(55)SE6, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2012 by Cisco Systems, Inc.
+Compiled Mon 23-Jul-12 13:22 by prod_rel_team
+Catalyst 37xx Switch Stack
+System OID: 1.3.6.1.4.1.9.1.516
+
+Location: Aurora NOC Comm Room
+Contact: IT Infra Data Network","Cisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(55)SE6, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2012 by Cisco Systems, Inc.
+Compiled Mon 23-Jul-12 13:22 by prod_rel_team
+Catalyst 37xx Switch Stack
+System OID: 1.3.6.1.4.1.9.1.516
+
+Location: Aurora NOC Comm Room
+Contact: IT Infra Data Network","Cisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(55)SE6, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2012 by Cisco Systems, Inc.
+Compiled Mon 23-Jul-12 13:22 by prod_rel_team
+Catalyst 37xx Switch Stack
+System OID: 1.3.6.1.4.1.9.1.516
+
+Location: Aurora NOC Comm Room
+Contact: IT Infra Data Network",,,,"IT.I.Network_Infrastructure_Services.Network","it.i.network_infrastructure_services.network",6280bdccdba24340643cb96c4e96193a,,,,"2ebf9b12-758a-4e67-a660-59cf99101bee","2ebf9b12-758a-4e67-a660-59cf99101bee","full_sync","full_sync","2026-09-24T04:32:28.691-05:00",82b58131db7fc3008259d5ab5e96196f,,,,,,,"2026-09-19T01:20:23.000-05:00",,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2026-09-23T09:58:21.000-05:00",,,,,,,,,,,,,,,,,,"cnaprod.service-now",,,,,,,"2026-10-01T21:44:22.977-05:00",,,,,,,,,,,,,,,,,,,,,,,,,2,"2 - Medium",,,,,,,"Login to ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+
+1. Login into switch  CSAUWRLS1 , CSAUWRLS2 then take the running configuration of the switches and add device in maintenance window in SEVONE
+
+2. Please run below commands to perform the pre checks on ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+         sh mac add 
+	 sh int status 
+	 sh ip arp 
+	 sh cdp nei	
+	 sh env power all 
+	 sh inventory 
+         sh run all
+	 
+3. Login into switch ADC-CH07 ,ADC-CH17  and shutdown the uplinks/mgmt towards  CSAUWRLS1 & CSAUWRLS2
+
+int Eth1/17
+shut","Login to ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+
+1. Login into switch  CSAUWRLS1 , CSAUWRLS2 then take the running configuration of the switches and add device in maintenance window in SEVONE
+
+2. Please run below commands to perform the pre checks on ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+         sh mac add 
+	 sh int status 
+	 sh ip arp 
+	 sh cdp nei	
+	 sh env power all 
+	 sh inventory 
+         sh run all
+	 
+3. Login into switch ADC-CH07 ,ADC-CH17  and shutdown the uplinks/mgmt towards  CSAUWRLS1 & CSAUWRLS2
+
+int Eth1/17
+shut","Login to ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+
+1. Login into switch  CSAUWRLS1 , CSAUWRLS2 then take the running configuration of the switches and add device in maintenance window in SEVONE
+
+2. Please run below commands to perform the pre checks on ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+         sh mac add 
+	 sh int status 
+	 sh ip arp 
+	 sh cdp nei	
+	 sh env power all 
+	 sh inventory 
+         sh run all
+	 
+3. Login into switch ADC-CH07 ,ADC-CH17  and shutdown the uplinks/mgmt towards  CSAUWRLS1 & CSAUWRLS2
+
+int Eth1/17
+shut",,,,,,,CHG0648268,"2026-09-23T09:46:49.000-05:00",,,"sunilprakash.gawas@cna.com",00260091,true,,,,,"Sunil Prakash Gawas","sunil prakash gawas",,b5f959093b1d225033af0134c3e45a1a,,,"2026-10-01T04:57:13.000-05:00",,,,requested,requested,open,open,,,,,,,,,,,,,,,,,,,,4,"4 - Low","4 - low",,,0,,,,"sunilprakash.gawas@cna.com",00260091,true,,,,,"Sunil Prakash Gawas","sunil prakash gawas",,b5f959093b1d225033af0134c3e45a1a,,,"2026-10-01T04:57:13.000-05:00",,3,Medium,medium,"RITM1041432 | ADC | Access Switch | Scream test for CSAUWRLS1 & CSAUWRLS2 | Multiple devices","RITM1041432 | ADC | Access Switch | Scream test for CSAUWRLS1 & CSAUWRLS2 | Multiple devices","RITM1041432 | ADC | Access Switch | Scream test for CSAUWRLS1 & CSAUWRLS2 | Multiple devices",,"2026-10-01T21:00:00.000-05:00","'-1",Implement,implement,,96073b383b6b03d0ee286524c3e45a7e,normal,normal,,"2026-10-01T21:29:16.000-05:00",3,"3 - Low","3 - low"
+"2026-10-01T21:44:22.977-05:00","not requested","not requested",,,"sunilprakash.gawas@cna.com",00260091,true,,,,,"Sunil Prakash Gawas","sunil prakash gawas",,b5f959093b1d225033af0134c3e45a1a,,,"2026-10-01T04:57:13.000-05:00",,,"This group belongs to Network Data team which  handles BAU activities, operational issues.","This group belongs to Network Data team which  handles BAU activities, operational issues.",,,,"MahendraKumar.AM@cna.com","Mahendra Kumar AM","mahendra kumar am","IT.I.Network_Infrastructure_Services.Network","it.i.network_infrastructure_services.network",,,Atos,atos,,6280bdccdba24340643cb96c4e96193a,,Other,other,,,,,,,FDO1241X4WE,,,Resource,resource,IP,ip,"cmdb_ci_ip_switch","IP Switch","ip switch",,,,,,,,,,,,,,,,,,"2018-01-21T21:43:16.000-06:00",,,,,,,,,,,,"cnaprod.service-now",,,prod,"2026-09-24T04:43:26.097-05:00","csauwrls1.cna.com","csauwrls1.cna.com",Aurora,aurora,,,US,"United States","united states",,"cnaprod.service-now.geocode-enriched-by-paladin","4267 Meridian Pkwy, Aurora, IL 60504, USA","4267 Meridian Pkwy, Aurora, IL 60504, USA",,"POINT (-88.2170549 41.7722028)",,,"Aurora - IL70",ChIJ57GUBrr5DogRda6waiyqj4c,ChIJ57GUBrr5DogRda6waiyqj4c,Illinois,illinois,,79c8b40adb664300643cb96c4e9619a6,,"2025-11-11T04:01:21.000-06:00",82b58131db7fc3008259d5ab5e96196f,,,,,,,,"2026-10-01T20:43:10.141-05:00",Installed,Installed,"10.12.103.58",true,true,,"2026-09-19T01:20:23.000-05:00",,,,,,,,,csauwrls1,csauwrls1,csauwrls1,csauwrls1,,,Operational,,,,,,,,,,,,,,3,3,,,,,"Cisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(55)SE6, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2012 by Cisco Systems, Inc.
+Compiled Mon 23-Jul-12 13:22 by prod_rel_team
+Catalyst 37xx Switch Stack
+System OID: 1.3.6.1.4.1.9.1.516
+
+Location: Aurora NOC Comm Room
+Contact: IT Infra Data Network","Cisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(55)SE6, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2012 by Cisco Systems, Inc.
+Compiled Mon 23-Jul-12 13:22 by prod_rel_team
+Catalyst 37xx Switch Stack
+System OID: 1.3.6.1.4.1.9.1.516
+
+Location: Aurora NOC Comm Room
+Contact: IT Infra Data Network","Cisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(55)SE6, RELEASE SOFTWARE (fc1)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2012 by Cisco Systems, Inc.
+Compiled Mon 23-Jul-12 13:22 by prod_rel_team
+Catalyst 37xx Switch Stack
+System OID: 1.3.6.1.4.1.9.1.516
+
+Location: Aurora NOC Comm Room
+Contact: IT Infra Data Network",,,,"IT.I.Network_Infrastructure_Services.Network","it.i.network_infrastructure_services.network",6280bdccdba24340643cb96c4e96193a,,,,"2ebf9b12-758a-4e67-a660-59cf99101bee","2ebf9b12-758a-4e67-a660-59cf99101bee","full_sync","full_sync","2026-09-24T04:32:28.691-05:00",82b58131db7fc3008259d5ab5e96196f,,,,,,,"2026-09-19T01:20:23.000-05:00",,,,,,,,false,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"2026-09-28T07:21:28.000-05:00",,,,,,,,,,,,,,,,,,"cnaprod.service-now",,,,,,,"2026-10-01T21:44:22.977-05:00",,,,,,,,,,,,,,,,,,,,,,,,,2,"2 - Medium",,,,,,,"Login to ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+
+1. Login into switch  CSAUWRLS1 , CSAUWRLS2 then take the running configuration of the switches and add device in maintenance window in SEVONE
+
+2. Please run below commands to perform the pre checks on ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+         sh mac add 
+	 sh int status 
+	 sh ip arp 
+	 sh cdp nei	
+	 sh env power all 
+	 sh inventory 
+         sh run all
+	 
+3. Login into switch ADC-CH07 ,ADC-CH17  and shutdown the uplinks/mgmt towards  CSAUWRLS1 & CSAUWRLS2
+
+int Eth1/17
+shut","Login to ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+
+1. Login into switch  CSAUWRLS1 , CSAUWRLS2 then take the running configuration of the switches and add device in maintenance window in SEVONE
+
+2. Please run below commands to perform the pre checks on ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+         sh mac add 
+	 sh int status 
+	 sh ip arp 
+	 sh cdp nei	
+	 sh env power all 
+	 sh inventory 
+         sh run all
+	 
+3. Login into switch ADC-CH07 ,ADC-CH17  and shutdown the uplinks/mgmt towards  CSAUWRLS1 & CSAUWRLS2
+
+int Eth1/17
+shut","Login to ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+
+1. Login into switch  CSAUWRLS1 , CSAUWRLS2 then take the running configuration of the switches and add device in maintenance window in SEVONE
+
+2. Please run below commands to perform the pre checks on ADC-CH07 ,ADC-CH17 ,CSAUWRLS1 , CSAUWRLS2
+         sh mac add 
+	 sh int status 
+	 sh ip arp 
+	 sh cdp nei	
+	 sh env power all 
+	 sh inventory 
+         sh run all
+	 
+3. Login into switch ADC-CH07 ,ADC-CH17  and shutdown the uplinks/mgmt towards  CSAUWRLS1 & CSAUWRLS2
+
+int Eth1/17
+shut",,,,,,,CHG0648541,"2026-09-28T07:06:33.000-05:00",,,"sunilprakash.gawas@cna.com",00260091,true,,,,,"Sunil Prakash Gawas","sunil prakash gawas",,b5f959093b1d225033af0134c3e45a1a,,,"2026-10-01T04:57:13.000-05:00",,,,requested,requested,open,open,,,,,,,,,,,,,,,,,,,,4,"4 - Low","4 - low",,,0,,,,"sunilprakash.gawas@cna.com",00260091,true,,,,,"Sunil Prakash Gawas","sunil prakash gawas",,b5f959093b1d225033af0134c3e45a1a,,,"2026-10-01T04:57:13.000-05:00",,3,Medium,medium,"RITM | ADC | Access Switch | Scream test for CSAUWRLS1 & CSAUWRLS2 | Multiple devices (Asking Expedited Reason)","RITM | ADC | Access Switch | Scream test for CSAUWRLS1 & CSAUWRLS2 | Multiple devices (Asking Expedited Reason)","RITM | ADC | Access Switch | Scream test for CSAUWRLS1 & CSAUWRLS2 | Multiple devices (Asking Expedited Reason)",,"2026-10-01T21:00:00.000-05:00","'-5",New,new,,d742cd66fbeb4b10dbacfaba75efdc39,normal,normal,,"2026-10-01T21:29:16.000-05:00",3,"3 - Low","3 - low"
