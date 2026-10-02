@@ -36,6 +36,8 @@ for them.
 | 15 | ES\|QL variable controls can't be emptied | No Clear button, the last value can't be unchecked, "Select all" can't be undone | MIM V2 uses standard options-list controls instead (§4) |
 | 16 | Control filters reach every panel | A control on a field a panel's data lacks blanks that panel; there is no per-panel or per-section scope | Clear the control when moving between topics; see the MIM V2 scope table (§4) |
 | 17 | A drilldown can't tell which ES\|QL column was clicked | One link per column is impossible on ES\|QL tables | Two links, each labelled with the column it belongs to |
+| 18 | Tables show clickable columns first | Column order in the query is ignored for clickable columns; a non-clickable column can't sit between two clickable ones | MIM V2 makes Priority clickable so the order is Incident, Priority, Affected CI (its click menu also lists the row's links) |
+| 19 | Dashboard controls drop records that lack the control's field | A CI Name or Incident control hides the ServiceNow SLA records (no CI or incident-number field), so SLA panels lose their data | SLA panels ignore the controls; Active Incidents falls back to the age rule, marked "(age)" |
 
 ---
 
@@ -280,8 +282,10 @@ Worth separating in any conversation, because none of these is fixed by a better
 
 | Gap | Cause | Fix belongs to |
 |---|---|---|
-| MTTA (time to acknowledge) | No acknowledge / assign timestamps on ServiceNow incidents | ServiceNow business rule + integration mapping |
-| SLA breach | SLA data sits in `servicenow-task-sla`, not on the incident; MIM V2 shows an age-based SLA (P1 4 h, P2 8 h) meanwhile | Wire that index in |
+| MTTA (time to acknowledge) | No acknowledge / assign timestamps on incidents. The response SLA in `servicenow-task-sla` says *whether* an incident was responded to in time (MIM V2 uses it), not *when*; `servicenow-incident-timelines` timestamps state changes only | ServiceNow: send assigned / acknowledged timestamps |
+| SLA breach | **Resolved in MIM V2.** The `sla.*` and `has_breached_sla` fields on incidents are empty (0 of 1,582 P1/P2 in a year); `servicenow-task-sla` has stage, breach flag, breach time and % used per SLA and is joined on incident number | — |
+| Change that caused an incident | Incidents carry no "Caused by change" field and `incident_number` on changes was empty in the sample; actual change start (`start_at`) also empty | MIM V2 matches changes on the same CI in the 7 days before the incident opened (likely, not proven). ServiceNow: send Caused-by-change and actual start |
+| Major incident / bridge flags | `is_major_incident`, `has_been_handled_by_bridge` empty on all 1,582 P1/P2 in a year | ServiceNow integration mapping |
 | Oracle metrics | Collectors fail with `DPI-1047`: Oracle Instant Client missing on 2 hosts | Install the client on `lrch1e01` and `vslrau1p298` |
 | ~255 of 390 SQL Server instances | Monitoring login is failing | Fix the service account credentials |
 | Netcool alert severity breakdown | No severity field confirmed on the Netcool index | Confirm the field, then add the panel |
