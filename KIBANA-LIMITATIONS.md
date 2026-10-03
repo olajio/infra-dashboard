@@ -38,6 +38,9 @@ for them.
 | 17 | A drilldown can't tell which ES\|QL column was clicked | One link per column is impossible on ES\|QL tables | Two links, each labelled with the column it belongs to |
 | 18 | Tables show clickable columns first | Column order in the query is ignored for clickable columns; a non-clickable column can't sit between two clickable ones | MIM V2 makes Priority clickable so the order is Incident, Priority, Affected CI (its click menu also lists the row's links) |
 | 19 | Dashboard controls drop records that lack the control's field | A CI Name or Incident control hides the ServiceNow SLA records (no CI or incident-number field), so SLA panels lose their data | SLA panels ignore the controls; Active Incidents falls back to the age rule, marked "(age)" |
+| 20 | An ES\|QL panel that reads any index with `@timestamp` always gets a time filter | Records without `@timestamp` (e.g. SLO summaries) silently disappear from that panel, even with no time field saved | MIM V3 reads SLO summaries in a panel of their own; panels with slowly-synced CMDB data use a fixed 30-day window |
+| 21 | ES\|QL cannot read a field that is an object in one index and a value in another | `type` (change type) vs `type.name` (CMDB relationship) breaks a combined query, even with `TO_STRING` | Read a sub-field that exists only on one side (`type.normalized`) |
+| 22 | `SPLIT` only accepts a one-character delimiter | `SPLIT(x, "::")` fails | Split on `":"` and take the first / last part |
 
 ---
 
