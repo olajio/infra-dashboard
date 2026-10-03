@@ -1,0 +1,7152 @@
+# 90: POST /_query?format=json [200 OK]
+{
+  "took": 73,
+  "is_partial": false,
+  "completion_time_in_millis": 1791019647432,
+  "documents_found": 7,
+  "values_loaded": 303,
+  "rows_emitted": 47,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 9455915,
+  "start_time_in_millis": 1791019647359,
+  "expiration_time_in_millis": 1791451647258,
+  "columns": [
+    {
+      "name": "errorBudgetConsumed",
+      "type": "double"
+    },
+    {
+      "name": "errorBudgetEstimated",
+      "type": "boolean"
+    },
+    {
+      "name": "errorBudgetInitial",
+      "type": "double"
+    },
+    {
+      "name": "errorBudgetRemaining",
+      "type": "double"
+    },
+    {
+      "name": "fiveMinuteBurnRate.goodEvents",
+      "type": "long"
+    },
+    {
+      "name": "fiveMinuteBurnRate.totalEvents",
+      "type": "long"
+    },
+    {
+      "name": "fiveMinuteBurnRate.value",
+      "type": "double"
+    },
+    {
+      "name": "goodEvents",
+      "type": "long"
+    },
+    {
+      "name": "isTempDoc",
+      "type": "boolean"
+    },
+    {
+      "name": "kibanaUrl",
+      "type": "text"
+    },
+    {
+      "name": "kibanaUrl.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "latestSliTimestamp",
+      "type": "date"
+    },
+    {
+      "name": "monitor.config_id",
+      "type": "keyword"
+    },
+    {
+      "name": "monitor.id",
+      "type": "keyword"
+    },
+    {
+      "name": "monitor.name",
+      "type": "keyword"
+    },
+    {
+      "name": "observer.geo.name",
+      "type": "keyword"
+    },
+    {
+      "name": "observer.name",
+      "type": "keyword"
+    },
+    {
+      "name": "oneDayBurnRate.goodEvents",
+      "type": "long"
+    },
+    {
+      "name": "oneDayBurnRate.totalEvents",
+      "type": "long"
+    },
+    {
+      "name": "oneDayBurnRate.value",
+      "type": "double"
+    },
+    {
+      "name": "oneHourBurnRate.goodEvents",
+      "type": "long"
+    },
+    {
+      "name": "oneHourBurnRate.totalEvents",
+      "type": "long"
+    },
+    {
+      "name": "oneHourBurnRate.value",
+      "type": "double"
+    },
+    {
+      "name": "service.environment",
+      "type": "keyword"
+    },
+    {
+      "name": "service.name",
+      "type": "keyword"
+    },
+    {
+      "name": "sliValue",
+      "type": "double"
+    },
+    {
+      "name": "slo.budgetingMethod",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.createdAt",
+      "type": "date"
+    },
+    {
+      "name": "slo.createdBy",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.description",
+      "type": "text"
+    },
+    {
+      "name": "slo.groupBy",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.groupings",
+      "type": "flattened"
+    },
+    {
+      "name": "slo.id",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.indicator.type",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.instanceId",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.instanceId.text",
+      "type": "text"
+    },
+    {
+      "name": "slo.name",
+      "type": "text"
+    },
+    {
+      "name": "slo.name.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.objective.target",
+      "type": "double"
+    },
+    {
+      "name": "slo.objective.timesliceTarget",
+      "type": "double"
+    },
+    {
+      "name": "slo.objective.timesliceWindow",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.revision",
+      "type": "long"
+    },
+    {
+      "name": "slo.tags",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.timeWindow.duration",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.timeWindow.type",
+      "type": "keyword"
+    },
+    {
+      "name": "slo.updatedAt",
+      "type": "date"
+    },
+    {
+      "name": "slo.updatedBy",
+      "type": "keyword"
+    },
+    {
+      "name": "spaceId",
+      "type": "keyword"
+    },
+    {
+      "name": "status",
+      "type": "keyword"
+    },
+    {
+      "name": "statusCode",
+      "type": "integer"
+    },
+    {
+      "name": "summaryUpdatedAt",
+      "type": "date"
+    },
+    {
+      "name": "totalEvents",
+      "type": "long"
+    },
+    {
+      "name": "transaction.name",
+      "type": "keyword"
+    },
+    {
+      "name": "transaction.type",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      0,
+      false,
+      0.0009999999999998899,
+      1,
+      0,
+      0,
+      0,
+      0,
+      true,
+      "https://kibana-prod.gcp.cna.com",
+      "https://kibana-prod.gcp.cna.com",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      "prd1",
+      "juno-operations-service",
+      -1,
+      "occurrences",
+      "2026-04-15T06:35:26.849Z",
+      "swarnakala.ramayanapu@cna.com",
+      "",
+      "ci.name.keyword",
+      null,
+      "432ce584-cf1a-4c45-b083-e2d9c9e85139",
+      "sli.apm.transactionDuration",
+      "*",
+      "*",
+      "juno-operations-service Latency SLO",
+      "juno-operations-service Latency SLO",
+      0.9990000000000001,
+      null,
+      null,
+      2,
+      null,
+      "7d",
+      "rolling",
+      "2026-09-25T12:27:45.018Z",
+      "CAG6012",
+      "default",
+      "NO_DATA",
+      0,
+      null,
+      0,
+      "*",
+      "*"
+    ],
+    [
+      0.34337803957266605,
+      false,
+      0.0009999999999998899,
+      0.656621960427334,
+      20924,
+      20926,
+      0.09557488292078972,
+      16687240,
+      false,
+      "https://kibana-prod.gcp.cna.com",
+      "https://kibana-prod.gcp.cna.com",
+      "2026-10-03T09:22:00.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      5663040,
+      5663644,
+      0.10664512105630417,
+      254085,
+      254118,
+      0.1298609307487518,
+      "prd1",
+      "juno-data-api",
+      0.9996566219604274,
+      "occurrences",
+      "2026-03-06T10:35:25.976Z",
+      "CAG6012",
+      "",
+      "*",
+      null,
+      "c309c34b-bc46-4874-bf9e-b932a335c7c6",
+      "sli.apm.transactionDuration",
+      "*",
+      "*",
+      "juno-data-api latency SLO",
+      "juno-data-api latency SLO",
+      0.9990000000000001,
+      null,
+      null,
+      5,
+      "JUNO",
+      "7d",
+      "rolling",
+      "2026-05-19T03:39:28.216Z",
+      "CAG6012",
+      "default",
+      "HEALTHY",
+      4,
+      "2026-10-03T09:26:47.840Z",
+      16692972,
+      null,
+      "request"
+    ],
+    [
+      0,
+      false,
+      0.050000000000000044,
+      1,
+      0,
+      0,
+      0,
+      2,
+      false,
+      "https://kibana-prod.gcp.cna.com",
+      "https://kibana-prod.gcp.cna.com",
+      "2024-10-07T06:12:00.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      "prd1",
+      "rst-batch",
+      1,
+      "occurrences",
+      "2024-11-04T14:33:46.550Z",
+      null,
+      """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "transaction.name",
+      {
+        "transaction.name": "GET /error"
+      },
+      "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "sli.apm.transactionErrorRate",
+      "GET /error",
+      "GET /error",
+      "rst-batch_prd1_apm-availability",
+      "rst-batch_prd1_apm-availability",
+      0.95,
+      null,
+      null,
+      2,
+      "EDA",
+      "30d",
+      "rolling",
+      "2024-11-04T14:40:48.267Z",
+      null,
+      "default",
+      "HEALTHY",
+      4,
+      "2024-11-04T14:42:54.266Z",
+      2,
+      null,
+      null
+    ],
+    [
+      0,
+      false,
+      0.050000000000000044,
+      1,
+      0,
+      0,
+      0,
+      1,
+      false,
+      "https://kibana-prod.gcp.cna.com",
+      "https://kibana-prod.gcp.cna.com",
+      "2024-10-07T05:47:00.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      "prd1",
+      "rst-batch",
+      1,
+      "occurrences",
+      "2024-11-04T14:33:46.550Z",
+      null,
+      """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "transaction.name",
+      {
+        "transaction.name": "GET /v1/rst/batch/renewal/touchStone"
+      },
+      "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "sli.apm.transactionErrorRate",
+      "GET /v1/rst/batch/renewal/touchStone",
+      "GET /v1/rst/batch/renewal/touchStone",
+      "rst-batch_prd1_apm-availability",
+      "rst-batch_prd1_apm-availability",
+      0.95,
+      null,
+      null,
+      2,
+      "EDA",
+      "30d",
+      "rolling",
+      "2024-11-04T14:40:48.267Z",
+      null,
+      "default",
+      "HEALTHY",
+      4,
+      "2024-11-04T14:42:54.266Z",
+      1,
+      null,
+      null
+    ],
+    [
+      0,
+      false,
+      0.050000000000000044,
+      1,
+      1,
+      1,
+      0,
+      1,
+      false,
+      "https://kibana-prod.gcp.cna.com",
+      "https://kibana-prod.gcp.cna.com",
+      "2024-12-06T23:46:00.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      "prd1",
+      "rst-batch",
+      1,
+      "occurrences",
+      "2024-11-04T14:33:46.550Z",
+      null,
+      """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "transaction.name",
+      {
+        "transaction.name": "GET /batchJob/stop/geocode"
+      },
+      "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "sli.apm.transactionErrorRate",
+      "GET /batchJob/stop/geocode",
+      "GET /batchJob/stop/geocode",
+      "rst-batch_prd1_apm-availability",
+      "rst-batch_prd1_apm-availability",
+      0.95,
+      null,
+      null,
+      2,
+      "EDA",
+      "30d",
+      "rolling",
+      "2024-11-04T14:40:48.267Z",
+      null,
+      "default",
+      "HEALTHY",
+      4,
+      "2024-12-06T23:50:34.573Z",
+      1,
+      null,
+      null
+    ]
+  ]
+}
+# 98: GET .slo-observability.summary-v3.5/_search?size=3 [200 OK]
+{
+  "took": 2,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 124,
+      "relation": "eq"
+    },
+    "max_score": 1,
+    "hits": [
+      {
+        "_index": ".slo-observability.summary-v3.5",
+        "_id": "X19fX3BqD1XsrqqSwipymNwV0qbzwAAA",
+        "_score": 1,
+        "_source": {
+          "summaryUpdatedAt": "2026-01-30T23:01:10.166863212Z",
+          "goodEvents": 899,
+          "errorBudgetEstimated": false,
+          "kibanaUrl": "https://kibana-prod.gcp.cna.com",
+          "totalEvents": 899,
+          "errorBudgetRemaining": 1,
+          "fiveMinuteBurnRate": {
+            "goodEvents": 1,
+            "totalEvents": 1,
+            "value": 0
+          },
+          "monitor": {
+            "config_id": null,
+            "name": null
+          },
+          "errorBudgetConsumed": 0,
+          "isTempDoc": false,
+          "latestSliTimestamp": "2026-01-30T22:57:00.000Z",
+          "observer": {
+            "geo": {
+              "name": null
+            },
+            "name": null
+          },
+          "spaceId": "elastic-prod",
+          "service": {
+            "environment": "prd1",
+            "name": "juno-notification-api"
+          },
+          "oneHourBurnRate": {
+            "goodEvents": 1,
+            "totalEvents": 1,
+            "value": 0
+          },
+          "slo": {
+            "indicator": {
+              "type": "sli.apm.transactionDuration",
+              "params": {
+                "transactionType": "request",
+                "filter": "",
+                "environment": "prd1",
+                "service": "juno-notification-api",
+                "index": "metrics-apm*,apm-*,metrics-*.otel-*",
+                "threshold": 300000,
+                "transactionName": "google.pubsub.v1.Publisher/Publish"
+              }
+            },
+            "timeWindow": {
+              "duration": "30d",
+              "type": "rolling"
+            },
+            "updatedBy": "CAG6012",
+            "description": "google.pubsub.v1.Publisher/publish",
+            "groupBy": [
+              "*"
+            ],
+            "revision": 1,
+            "tags": [
+              "juno-notification-api"
+            ],
+            "objective": {
+              "target": 0.99
+            },
+            "createdAt": "2026-01-22T06:05:32.322Z",
+            "instanceId": "*",
+            "createdBy": "CAG6012",
+            "name": "juno-notification-api latency SLO ",
+            "id": "23a9451a-0f7d-4b84-a525-7cf4786a5923",
+            "budgetingMethod": "occurrences",
+            "updatedAt": "2026-01-22T06:05:32.322Z"
+          },
+          "oneDayBurnRate": {
+            "goodEvents": 21,
+            "totalEvents": 21,
+            "value": 0
+          },
+          "errorBudgetInitial": 0.010000000000000009,
+          "transaction": {
+            "name": "google.pubsub.v1.Publisher/Publish",
+            "type": "request"
+          },
+          "sliValue": 1,
+          "statusCode": 4,
+          "status": "HEALTHY"
+        }
+      },
+      {
+        "_index": ".slo-observability.summary-v3.5",
+        "_id": "X19fX3BjBktFT14N_ksg_jWSo-vtmAAA",
+        "_score": 1,
+        "_source": {
+          "summaryUpdatedAt": "2026-05-18T11:51:56.195932935Z",
+          "goodEvents": 3,
+          "errorBudgetEstimated": false,
+          "kibanaUrl": "https://kibana-prod.gcp.cna.com",
+          "totalEvents": 3,
+          "errorBudgetRemaining": 1,
+          "fiveMinuteBurnRate": {
+            "goodEvents": 1,
+            "totalEvents": 1,
+            "value": 0
+          },
+          "monitor": {
+            "config_id": null,
+            "name": null
+          },
+          "errorBudgetConsumed": 0,
+          "isTempDoc": false,
+          "latestSliTimestamp": "2026-05-18T11:48:00.000Z",
+          "observer": {
+            "geo": {
+              "name": null
+            },
+            "name": null
+          },
+          "spaceId": "default",
+          "service": {
+            "environment": "prd1",
+            "name": "cnac-service"
+          },
+          "oneHourBurnRate": {
+            "goodEvents": 1,
+            "totalEvents": 1,
+            "value": 0
+          },
+          "slo": {
+            "indicator": {
+              "type": "sli.apm.transactionDuration",
+              "params": {
+                "transactionType": "request",
+                "filter": "",
+                "environment": "prd1",
+                "service": "cnac-service",
+                "index": "metrics-apm*,apm-*,metrics-*.otel-*",
+                "threshold": 2000,
+                "transactionName": "*"
+              }
+            },
+            "timeWindow": {
+              "duration": "7d",
+              "type": "rolling"
+            },
+            "updatedBy": "CAG6012",
+            "description": "",
+            "groupBy": [
+              "transaction.name"
+            ],
+            "revision": 4,
+            "tags": [
+              "CNAC"
+            ],
+            "objective": {
+              "target": 0.9990000000000001
+            },
+            "createdAt": "2026-03-30T07:34:13.462Z",
+            "instanceId": "GET /payment",
+            "groupings": {
+              "transaction": {
+                "name": "GET /payment"
+              }
+            },
+            "createdBy": "CAG6012",
+            "name": "cnac-service latency SLO",
+            "id": "964ac7ac-6d65-4c6e-a7dd-1ff8d2cc3a43",
+            "budgetingMethod": "occurrences",
+            "updatedAt": "2026-04-13T08:54:51.651Z"
+          },
+          "oneDayBurnRate": {
+            "goodEvents": 1,
+            "totalEvents": 1,
+            "value": 0
+          },
+          "errorBudgetInitial": 0.0009999999999998899,
+          "transaction": {
+            "name": null,
+            "type": "request"
+          },
+          "sliValue": 1,
+          "statusCode": 4,
+          "status": "HEALTHY"
+        }
+      },
+      {
+        "_index": ".slo-observability.summary-v3.5",
+        "_id": "X19fX3BjIlJ-GW5BQVbiCHpjqywLWAAA",
+        "_score": 1,
+        "_source": {
+          "summaryUpdatedAt": "2026-05-18T11:52:36.121544997Z",
+          "goodEvents": 3,
+          "errorBudgetEstimated": false,
+          "kibanaUrl": "https://kibana-prod.gcp.cna.com",
+          "totalEvents": 3,
+          "errorBudgetRemaining": 1,
+          "fiveMinuteBurnRate": {
+            "goodEvents": 1,
+            "totalEvents": 1,
+            "value": 0
+          },
+          "monitor": {
+            "config_id": null,
+            "name": null
+          },
+          "errorBudgetConsumed": 0,
+          "isTempDoc": false,
+          "latestSliTimestamp": "2026-05-18T11:48:00.000Z",
+          "observer": {
+            "geo": {
+              "name": null
+            },
+            "name": null
+          },
+          "spaceId": "default",
+          "service": {
+            "environment": "prd1",
+            "name": "cnac-service"
+          },
+          "oneHourBurnRate": {
+            "goodEvents": 1,
+            "totalEvents": 1,
+            "value": 0
+          },
+          "slo": {
+            "indicator": {
+              "type": "sli.apm.transactionErrorRate",
+              "params": {
+                "transactionType": "request",
+                "filter": "",
+                "environment": "prd1",
+                "service": "cnac-service",
+                "index": "metrics-apm*,apm-*,metrics-*.otel-*",
+                "transactionName": "*"
+              }
+            },
+            "timeWindow": {
+              "duration": "7d",
+              "type": "rolling"
+            },
+            "updatedBy": "CAG6012",
+            "description": "",
+            "groupBy": [
+              "transaction.name"
+            ],
+            "revision": 4,
+            "tags": [
+              "CNAC"
+            ],
+            "objective": {
+              "target": 0.9990000000000001
+            },
+            "createdAt": "2026-03-30T07:30:26.683Z",
+            "instanceId": "GET /payment",
+            "groupings": {
+              "transaction": {
+                "name": "GET /payment"
+              }
+            },
+            "createdBy": "CAG6012",
+            "name": "cnac-service availability SLO",
+            "id": "5dda32b3-a299-48e5-8831-50fab76fcbfd",
+            "budgetingMethod": "occurrences",
+            "updatedAt": "2026-04-13T08:54:20.403Z"
+          },
+          "oneDayBurnRate": {
+            "goodEvents": 1,
+            "totalEvents": 1,
+            "value": 0
+          },
+          "errorBudgetInitial": 0.0009999999999998899,
+          "transaction": {
+            "name": null,
+            "type": "request"
+          },
+          "sliValue": 1,
+          "statusCode": 4,
+          "status": "HEALTHY"
+        }
+      }
+    ]
+  }
+}
+# 101: POST /_query?format=json [200 OK]
+{
+  "took": 245,
+  "is_partial": false,
+  "completion_time_in_millis": 1791019647845,
+  "documents_found": 1994747,
+  "values_loaded": 5982448,
+  "rows_emitted": 3992726,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 532005433,
+  "start_time_in_millis": 1791019647600,
+  "expiration_time_in_millis": 1791451647659,
+  "columns": [
+    {
+      "name": "links",
+      "type": "long"
+    },
+    {
+      "name": "type.name",
+      "type": "keyword"
+    },
+    {
+      "name": "parent.class",
+      "type": "keyword"
+    },
+    {
+      "name": "child.class",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      297204,
+      "Contains::Contained by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_fc_disk"
+    ],
+    [
+      184070,
+      "Contains::Contained by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_storage_device"
+    ],
+    [
+      173432,
+      "Contains::Contained by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_lvm_pool"
+    ],
+    [
+      157446,
+      "Contains::Contained by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_file_system"
+    ],
+    [
+      100118,
+      "Contains::Contained by",
+      "cmdb_ci_win_server",
+      "cmdb_ci_file_system"
+    ],
+    [
+      96736,
+      "Virtualized by::Virtualizes",
+      "cmdb_ci_win_server",
+      "cmdb_ci_esx_server"
+    ],
+    [
+      92532,
+      "Contains::Contained by",
+      "cmdb_ci_win_server",
+      "cmdb_ci_disk_partition"
+    ],
+    [
+      92035,
+      "Contains::Contained by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_disk_partition"
+    ],
+    [
+      66531,
+      "Contains::Contained by",
+      "cmdb_ci_win_server",
+      "cmdb_ci_disk"
+    ],
+    [
+      62860,
+      "Runs on::Runs",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      55940,
+      "Contains::Contained by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_nas_file_system"
+    ],
+    [
+      51224,
+      "Virtualized by::Virtualizes",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_esx_server"
+    ],
+    [
+      46157,
+      "Contains::Contained by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_disk"
+    ],
+    [
+      36361,
+      "Owns::Owned by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_ip_address"
+    ],
+    [
+      35246,
+      "Owns::Owned by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_network_adapter"
+    ],
+    [
+      32658,
+      "Owns::Owned by",
+      "cmdb_ci_win_server",
+      "cmdb_ci_ip_address"
+    ],
+    [
+      31016,
+      "Runs on::Runs",
+      "cmdb_ci_aix_server",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      30018,
+      "Owns::Owned by",
+      "cmdb_ci_win_server",
+      "cmdb_ci_network_adapter"
+    ],
+    [
+      26084,
+      "Contains::Contained by",
+      "cmdb_ci_aix_server",
+      "cmdb_ci_file_system"
+    ],
+    [
+      23973,
+      "Contains::Contained by",
+      "cmdb_ci_win_server",
+      "cmdb_ci_config_file_tracked"
+    ],
+    [
+      17540,
+      "Uses::Used by",
+      "cmdb_ci_linux_server",
+      "dscy_router_interface"
+    ],
+    [
+      13237,
+      "Runs on::Runs",
+      "cmdb_ci_win_server",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      12546,
+      "Contains::Contained by",
+      "cmdb_ci_win_server",
+      "cmdb_ci_memory_module"
+    ],
+    [
+      11642,
+      "Owns::Owned by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_dns_name"
+    ],
+    [
+      11135,
+      "Contains::Contained by",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_memory_module"
+    ],
+    [
+      10767,
+      "Runs on::Runs",
+      "cmdb_ci_appl_sharepoint",
+      "cmdb_ci_win_server"
+    ],
+    [
+      10391,
+      "Uses::Used by",
+      "cmdb_ci_win_server",
+      "dscy_router_interface"
+    ],
+    [
+      9643,
+      "Runs on::Runs",
+      "cmdb_ci_db_mssql_integration",
+      "cmdb_ci_win_server"
+    ],
+    [
+      9194,
+      "Runs on::Runs",
+      "cmdb_ci_app_server_tomcat",
+      "cmdb_ci_linux_server"
+    ],
+    [
+      8837,
+      "Uses::Used by",
+      "cmdb_ci_win_server",
+      "dscy_route_interface"
+    ],
+    [
+      8639,
+      "Owns::Owned by",
+      "cmdb_ci_aix_server",
+      "cmdb_ci_patches"
+    ],
+    [
+      8547,
+      "Owns::Owned by",
+      "cmdb_ci_aix_server",
+      "cmdb_ci_ip_address"
+    ],
+    [
+      7845,
+      "IP Connection::IP Connection",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_ip_switch"
+    ],
+    [
+      7737,
+      "Instantiates::Instantiated by",
+      "cmdb_ci_win_server",
+      "cmdb_ci_vmware_instance"
+    ],
+    [
+      7299,
+      "IP Connection::IP Connection",
+      "cmdb_ci_win_server",
+      "cmdb_ci_ip_switch"
+    ],
+    [
+      7032,
+      "Uses::Used by",
+      "cmdb_ci_linux_server",
+      "dscy_route_interface"
+    ],
+    [
+      6968,
+      "Implement End Point To::Implement End Point From",
+      "cmdb_ci_endpoint_manual",
+      "cmdb_ci_aix_server"
+    ],
+    [
+      6621,
+      "Uses::Used by",
+      "cmdb_ci_win_server",
+      "dscy_route_next_hop"
+    ],
+    [
+      6322,
+      "Implement End Point To::Implement End Point From",
+      "cmdb_ci_endpoint_manual",
+      "cmdb_ci_win_server"
+    ],
+    [
+      5699,
+      "Connects to::Connected by",
+      "cmdb_ci_win_server",
+      "cmdb_ci_ip_switch"
+    ]
+  ]
+}
+# 109: POST /_query?format=json [200 OK]
+{
+  "took": 96,
+  "is_partial": false,
+  "completion_time_in_millis": 1791019648023,
+  "documents_found": 63,
+  "values_loaded": 9382,
+  "rows_emitted": 239,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 311988283,
+  "start_time_in_millis": 1791019647927,
+  "expiration_time_in_millis": 1791451647859,
+  "columns": [
+    {
+      "name": "@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "@version",
+      "type": "keyword"
+    },
+    {
+      "name": "agent.ephemeral_id",
+      "type": "keyword"
+    },
+    {
+      "name": "agent.hostname",
+      "type": "keyword"
+    },
+    {
+      "name": "agent.id",
+      "type": "keyword"
+    },
+    {
+      "name": "agent.name",
+      "type": "keyword"
+    },
+    {
+      "name": "agent.name.text",
+      "type": "text"
+    },
+    {
+      "name": "agent.type",
+      "type": "keyword"
+    },
+    {
+      "name": "agent.version",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "ci.asset_tag",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.category.1",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.category.1.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.category.2",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.category.2.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.class",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.class_name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.class_name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.industry",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.industry.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.iris_code",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.is_active",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.company.is_parent",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.company.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.parent.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.parent.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.parent.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.rbu",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.rbu.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.sub_industry",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.sub_industry.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.updated_at",
+      "type": "date"
+    },
+    {
+      "name": "ci.created_at",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.criticality",
+      "type": "integer"
+    },
+    {
+      "name": "ci.criticality_name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.criticality_name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_specific_data.1",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_specific_data.2",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_specific_data.3",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.environment",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.extracted_at",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.fqdn",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.city.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.city.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.city.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.continent",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.country.iso_code",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.country.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.country.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.country.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.formatted_address",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.is_active",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.geo.location",
+      "type": "geo_point"
+    },
+    {
+      "name": "ci.geo.location_code",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.location_code.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.place_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.state.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.state.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.state.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.type",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.updated_at",
+      "type": "date"
+    },
+    {
+      "name": "ci.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingest_error.bridge_enrichment",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingest_error.enrich_locations",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingest_error.message",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingest_error.message.keywords",
+      "type": "text"
+    },
+    {
+      "name": "ci.ingest_error.message.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.ingested_at",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.install_status",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ip_address",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.is_monitored",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.is_stale",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.is_top_level_ci",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.last_discovered",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.mac_address",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.manufacturer.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.manufacturer.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.manufacturer.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.model.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.model.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.model.number",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.model.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name_normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.operational_status",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.family",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.family.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.kernel",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.kernel.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.version",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.version.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.paladin_map.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.parents.class",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.parents.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.parents.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.parents.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.priority",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.raw_data.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.raw_data.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.service_classification",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.service_classification.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.short_description",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.short_description.keywords",
+      "type": "text"
+    },
+    {
+      "name": "ci.short_description.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.support_group.l1.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l1.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l1.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l3.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l3.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l3.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.name.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.sync_metadata.timestamp",
+      "type": "date"
+    },
+    {
+      "name": "ci.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.top_level_ci_depth",
+      "type": "integer"
+    },
+    {
+      "name": "ci.top_level_parents.class",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.top_level_parents.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.top_level_parents.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.top_level_parents.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.unit",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.updated_at",
+      "type": "date"
+    },
+    {
+      "name": "cloud.account.id",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.availability_zone",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.image.id",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.instance.id",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.instance.name",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.instance.name.text",
+      "type": "text"
+    },
+    {
+      "name": "cloud.machine.type",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.project.id",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.provider",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.region",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.service.name",
+      "type": "keyword"
+    },
+    {
+      "name": "cloud.service.name.text",
+      "type": "text"
+    },
+    {
+      "name": "container.id",
+      "type": "keyword"
+    },
+    {
+      "name": "container.image.name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.image.name.text",
+      "type": "text"
+    },
+    {
+      "name": "container.labels.alation_connector_port",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.alation_hermes_enabled",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.architecture",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.authors",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.build-date",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_azure_dev_image_build_buildnumber",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_azure_dev_image_build_builduri",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_azure_dev_image_build_definitionname",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_azure_dev_image_build_repository_name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_azure_dev_image_build_repository_uri",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_azure_dev_image_build_sourcebranchname",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_azure_dev_image_build_sourceversion",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_azure_dev_image_system_teamfoundationcollectionuri",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_azure_dev_image_system_teamproject",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_centurylinklabs_watchtower_enable",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_config-hash",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_container-number",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_depends_on",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_image",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_oneoff",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_project",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_project_config_files",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_project_working_dir",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_replace",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_service",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_compose_version",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_desktop_extension_api_version",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_desktop_extension_icon",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_extension_additional-urls",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_extension_detailed-description",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_extension_publisher-url",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_extension_screenshots",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_stack_namespace",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_swarm_node_id",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_swarm_service_id",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_swarm_service_name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_swarm_task",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_swarm_task_id",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_docker_swarm_task_name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_microsoft_product",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_microsoft_version",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_redhat_build-host",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_redhat_component",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.com_redhat_license_terms",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.description",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.distribution-scope",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.git_commit",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.image_base_digest",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.image_base_ref_name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.io_buildah_version",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.io_k8s_description",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.io_k8s_display-name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.io_openshift_expose-services",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.io_openshift_tags",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.io_portainer_agent",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.io_portainer_server",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.license",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.maintainer",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.name.text",
+      "type": "text"
+    },
+    {
+      "name": "container.labels.org_label-schema_arch",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_build-date",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_description",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_docker_dockerfile",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_license",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_schema-version",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_url",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_vcs-ref",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_vcs-type",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_vcs-url",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_vendor",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_label-schema_version",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_authors",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_created",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_description",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_documentation",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_licenses",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_ref_name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_revision",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_source",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_title",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_url",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_vendor",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.org_opencontainers_image_version",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.release",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.summary",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.url",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.vcs-ref",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.vcs-type",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.vendor",
+      "type": "keyword"
+    },
+    {
+      "name": "container.labels.version",
+      "type": "keyword"
+    },
+    {
+      "name": "container.name",
+      "type": "keyword"
+    },
+    {
+      "name": "container.name.text",
+      "type": "text"
+    },
+    {
+      "name": "data_stream.dataset",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.namespace",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.type",
+      "type": "keyword"
+    },
+    {
+      "name": "ecs.version",
+      "type": "keyword"
+    },
+    {
+      "name": "elastic_agent.id",
+      "type": "keyword"
+    },
+    {
+      "name": "elastic_agent.snapshot",
+      "type": "boolean"
+    },
+    {
+      "name": "elastic_agent.version",
+      "type": "keyword"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.class_match",
+      "type": "text"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.ip_match",
+      "type": "boolean"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.match_cnt",
+      "type": "integer"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.pattern_match",
+      "type": "keyword"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.proc_assignment",
+      "type": "keyword"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.proc_category",
+      "type": "keyword"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.proc_default",
+      "type": "boolean"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.proc_fingerprint",
+      "type": "keyword"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.proc_instance",
+      "type": "keyword"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.proc_join",
+      "type": "keyword"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.proc_list",
+      "type": "keyword"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.proc_match",
+      "type": "boolean"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.proc_name",
+      "type": "keyword"
+    },
+    {
+      "name": "error.message",
+      "type": "text"
+    },
+    {
+      "name": "event.agent_id_status",
+      "type": "keyword"
+    },
+    {
+      "name": "event.dataset",
+      "type": "keyword"
+    },
+    {
+      "name": "event.duration",
+      "type": "long"
+    },
+    {
+      "name": "event.ingested",
+      "type": "date"
+    },
+    {
+      "name": "event.module",
+      "type": "keyword"
+    },
+    {
+      "name": "event.processed.time.backend",
+      "type": "keyword"
+    },
+    {
+      "name": "event.processed.time.frontend",
+      "type": "keyword"
+    },
+    {
+      "name": "fields.atos_package.beats_version",
+      "type": "keyword"
+    },
+    {
+      "name": "fields.atos_package.config_version",
+      "type": "keyword"
+    },
+    {
+      "name": "fields.atos_package.os",
+      "type": "keyword"
+    },
+    {
+      "name": "fields.atos_package.type",
+      "type": "keyword"
+    },
+    {
+      "name": "host.architecture",
+      "type": "keyword"
+    },
+    {
+      "name": "host.containerized",
+      "type": "boolean"
+    },
+    {
+      "name": "host.hostname",
+      "type": "keyword"
+    },
+    {
+      "name": "host.id",
+      "type": "keyword"
+    },
+    {
+      "name": "host.ip",
+      "type": "ip"
+    },
+    {
+      "name": "host.mac",
+      "type": "keyword"
+    },
+    {
+      "name": "host.name",
+      "type": "keyword"
+    },
+    {
+      "name": "host.os.build",
+      "type": "keyword"
+    },
+    {
+      "name": "host.os.codename",
+      "type": "keyword"
+    },
+    {
+      "name": "host.os.family",
+      "type": "keyword"
+    },
+    {
+      "name": "host.os.kernel",
+      "type": "keyword"
+    },
+    {
+      "name": "host.os.name",
+      "type": "keyword"
+    },
+    {
+      "name": "host.os.name.text",
+      "type": "text"
+    },
+    {
+      "name": "host.os.platform",
+      "type": "keyword"
+    },
+    {
+      "name": "host.os.type",
+      "type": "keyword"
+    },
+    {
+      "name": "host.os.version",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest.pipeline",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.enrich_policy_by_name",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.enrich_policy_processes_by_host",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.mw_instance_extraction",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_lag_in_sec",
+      "type": "long"
+    },
+    {
+      "name": "ingest_time",
+      "type": "date"
+    },
+    {
+      "name": "metricset.name",
+      "type": "keyword"
+    },
+    {
+      "name": "metricset.name.text",
+      "type": "text"
+    },
+    {
+      "name": "metricset.period",
+      "type": "long"
+    },
+    {
+      "name": "orchestrator.cluster.name",
+      "type": "keyword"
+    },
+    {
+      "name": "orchestrator.cluster.name.text",
+      "type": "text"
+    },
+    {
+      "name": "paladin.enrichment.computed.conf_update_required",
+      "type": "boolean"
+    },
+    {
+      "name": "paladin.enrichment.computed.proc_diff",
+      "type": "keyword"
+    },
+    {
+      "name": "paladin.enrichment.computed.proc_fingerprint",
+      "type": "keyword"
+    },
+    {
+      "name": "paladin.enrichment.computed.proc_instance",
+      "type": "keyword"
+    },
+    {
+      "name": "paladin.enrichment.computed.proc_type",
+      "type": "keyword"
+    },
+    {
+      "name": "paladin.enrichment.monitor.actives",
+      "type": "keyword"
+    },
+    {
+      "name": "paladin.enrichment.monitor.condition",
+      "type": "keyword"
+    },
+    {
+      "name": "paladin.enrichment.monitor.inactives",
+      "type": "keyword"
+    },
+    {
+      "name": "process.args",
+      "type": "keyword"
+    },
+    {
+      "name": "process.command_line",
+      "type": "keyword"
+    },
+    {
+      "name": "process.command_line.text",
+      "type": "text"
+    },
+    {
+      "name": "process.cpu.pct",
+      "type": "double"
+    },
+    {
+      "name": "process.cpu.start_time",
+      "type": "date"
+    },
+    {
+      "name": "process.executable",
+      "type": "keyword"
+    },
+    {
+      "name": "process.executable.text",
+      "type": "text"
+    },
+    {
+      "name": "process.memory.pct",
+      "type": "double"
+    },
+    {
+      "name": "process.name",
+      "type": "keyword"
+    },
+    {
+      "name": "process.name.text",
+      "type": "text"
+    },
+    {
+      "name": "process.parent.pid",
+      "type": "long"
+    },
+    {
+      "name": "process.pgid",
+      "type": "long"
+    },
+    {
+      "name": "process.pid",
+      "type": "long"
+    },
+    {
+      "name": "process.state",
+      "type": "keyword"
+    },
+    {
+      "name": "process.working_directory",
+      "type": "keyword"
+    },
+    {
+      "name": "process.working_directory.text",
+      "type": "text"
+    },
+    {
+      "name": "relay.dc",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.host.backend",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.host.frontend",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.pipeline",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.plugin.filter",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.plugin.input",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.port",
+      "type": "keyword"
+    },
+    {
+      "name": "service.type",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.blkio.id",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.blkio.path",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.blkio.total.bytes",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.blkio.total.ios",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cgroups_version",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.cfs.period.us",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.cfs.quota.us",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.cfs.shares",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.id",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.cpu.path",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.cpu.pressure.full.10.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.pressure.full.300.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.pressure.full.60.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.pressure.full.total",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.pressure.some.10.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.pressure.some.300.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.pressure.some.60.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.pressure.some.total",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.rt.period.us",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.rt.runtime.us",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.periods",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.system.norm.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.system.ns",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.system.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.throttled.ns",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.throttled.periods",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.throttled.us",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.usage.norm.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.usage.ns",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.usage.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.user.norm.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.user.ns",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpu.stats.user.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.id",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.path",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.stats.system.norm.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.stats.system.ns",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.stats.system.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.stats.user.norm.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.stats.user.ns",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.stats.user.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.total.norm.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.total.ns",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.cpuacct.total.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.id",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.io.id",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.io.path",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.io.pressure.full.10.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.io.pressure.full.300.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.io.pressure.full.60.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.io.pressure.full.total",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.io.pressure.some.10.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.io.pressure.some.300.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.io.pressure.some.60.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cgroup.io.pressure.some.total",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.id",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.memory.kmem.failures",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.kmem.limit.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.kmem.usage.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.kmem.usage.max.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.kmem_tcp.failures",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.kmem_tcp.limit.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.kmem_tcp.usage.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.kmem_tcp.usage.max.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.events.fail",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.events.high",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.events.low",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.events.max",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.events.oom",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.events.oom_kill",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.failures",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.high.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.limit.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.low.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.max.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.usage.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.mem.usage.max.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.events.fail",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.events.high",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.events.low",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.events.max",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.events.oom",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.events.oom_kill",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.failures",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.high.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.limit.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.low.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.max.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.usage.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.memsw.usage.max.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.path",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.active_anon.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.active_file.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.cache.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.hierarchical_memory_limit.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.hierarchical_memsw_limit.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.inactive_anon.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.inactive_file.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.major_page_faults",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.mapped_file.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.page_faults",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.pages_in",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.pages_out",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.rss.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.rss_huge.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.swap.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.memory.stats.unevictable.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.cgroup.path",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cmdline",
+      "type": "keyword"
+    },
+    {
+      "name": "system.process.cpu.start_time",
+      "type": "date"
+    },
+    {
+      "name": "system.process.cpu.system.ticks",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cpu.total.norm.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cpu.total.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.cpu.total.ticks",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cpu.total.value",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.cpu.user.ticks",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.env",
+      "type": "flattened"
+    },
+    {
+      "name": "system.process.fd.limit.hard",
+      "type": "long"
+    },
+    {
+      "name": "system.process.fd.limit.soft",
+      "type": "long"
+    },
+    {
+      "name": "system.process.fd.open",
+      "type": "long"
+    },
+    {
+      "name": "system.process.io.cancelled_write_bytes",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.io.read_bytes",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.io.read_char",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.io.read_ops",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.io.write_bytes",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.io.write_char",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.io.write_ops",
+      "type": "counter_long"
+    },
+    {
+      "name": "system.process.memory.rss.bytes",
+      "type": "long"
+    },
+    {
+      "name": "system.process.memory.rss.pct",
+      "type": "double"
+    },
+    {
+      "name": "system.process.memory.share",
+      "type": "long"
+    },
+    {
+      "name": "system.process.memory.size",
+      "type": "long"
+    },
+    {
+      "name": "system.process.memory.swap",
+      "type": "long"
+    },
+    {
+      "name": "system.process.num_threads",
+      "type": "long"
+    },
+    {
+      "name": "system.process.state",
+      "type": "keyword"
+    },
+    {
+      "name": "tags",
+      "type": "keyword"
+    },
+    {
+      "name": "type",
+      "type": "keyword"
+    },
+    {
+      "name": "user.name",
+      "type": "keyword"
+    },
+    {
+      "name": "user.name.text",
+      "type": "text"
+    }
+  ],
+  "values": [
+    [
+      "2026-09-26T13:37:29.646Z",
+      null,
+      "d338d116-8cfe-4228-a8ae-cd649d8c36cf",
+      null,
+      "4cc242cd-d40a-4bbc-98ad-22b469727d15",
+      "vclch1d0315",
+      null,
+      "metricbeat",
+      "8.19.13",
+      "2026-09-24T09:43:58.557Z",
+      null,
+      "Hardware",
+      "hardware",
+      "Computer",
+      "computer",
+      "cmdb_ci_linux_server",
+      "Linux Server",
+      "linux server",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2025-01-23T17:22:52.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      "drt",
+      "2026-09-24T09:43:58.557Z",
+      "vclch1d0315.cna.com",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.21705495007336 41.77220276556909)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "8824111947d796d0f7539afc416d436b",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-26T11:12:59.833082671Z",
+      "Installed",
+      "10.16.101.46",
+      true,
+      true,
+      null,
+      "2026-09-22T08:13:17.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "vclch1d0315",
+      "vclch1d0315",
+      "vclch1d0315",
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Linux vclch1d0315 5.14.0-687.42.1.el9_8.x86_64 #1 SMP PREEMPT_DYNAMIC Sun Aug 23 21:35:07 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vclch1d0315 5.14.0-687.42.1.el9_8.x86_64 #1 SMP PREEMPT_DYNAMIC Sun Aug 23 21:35:07 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vclch1d0315 5.14.0-687.42.1.el9_8.x86_64 #1 SMP PREEMPT_DYNAMIC Sun Aug 23 21:35:07 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      null,
+      null,
+      null,
+      "IT.I.Unix_Engineering.Server_Services_Unix",
+      "it.i.unix_engineering.server_services_unix",
+      "d980f9ccdba24340643cb96c4e96199f",
+      null,
+      null,
+      null,
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "full_sync",
+      null,
+      "2026-09-24T09:32:28.691Z",
+      "8824111947d796d0f7539afc416d436b",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-22T08:13:17.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "system.process",
+      "default",
+      "metrics",
+      "8.0.0",
+      "4cc242cd-d40a-4bbc-98ad-22b469727d15",
+      false,
+      "8.19.13",
+      "cmdb_ci_linux_server=1",
+      true,
+      1,
+      null,
+      null,
+      null,
+      true,
+      "4e8980e7c730dfa58d9a6c3986a6eec592a3a2bf7276be1d676da133fc7e4e3c",
+      "n/a",
+      "/csapps/websphere/HTTPServer01/bin/rotatelogs /csapps/websphere/HTTPServer01/logs/access_%y.%m.%d_%H.%M.%S.log 250M",
+      [
+        "/sbin/rsyslogd -i /var/run/syslogd.pid -c 5|/usr/sbin/syslog-ng -F -p /var/run/syslogd.pid|/usr/sbin/rsyslogd -n|/usr/sbin/syslogd -r|/usr/sbin/syslogd|/usr/sbin/syslogd -D",
+        "/usr/sbin/sshd|/usr/sbin/sshd -D|/opt/ssh/sbin/sshd|/opt/quest/sbin/sshd",
+        "crond|/usr/sbin/crond|/usr/sbin/crond -n|/usr/sbin/cron",
+        "ntpd -u ntp:ntp -p /var/run/ntpd.pid -g|/usr/sbin/chronyd -u chrony|/usr/sbin/chronyd|/usr/sbin/xntpd -x|/usr/sbin/xntpd"
+      ],
+      false,
+      null,
+      null,
+      "verified",
+      "system.process",
+      111316619,
+      "2026-09-26T13:37:37.000Z",
+      "system",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "x86_64",
+      false,
+      "vclch1d0315",
+      "e805fc5fbd404be886d3e49c9a5ec585",
+      [
+        "10.16.101.46",
+        "fe80::250:56ff:fe81:d548"
+      ],
+      "00-50-56-81-D5-48",
+      "vclch1d0315",
+      null,
+      null,
+      "redhat",
+      "5.14.0-687.42.1.el9_8.x86_64",
+      "Red Hat Enterprise Linux",
+      null,
+      "rhel",
+      "linux",
+      "9.8 (Plow)",
+      [
+        "metricbeat_process_middleware",
+        "paladin-monitoring-enrichment"
+      ],
+      null,
+      null,
+      null,
+      8,
+      "2026-09-26T13:37:37.958Z",
+      "process",
+      null,
+      300000,
+      null,
+      null,
+      null,
+      "not_equal",
+      "fIVDrpYz3iJqCyBLFTWygd2HzRbtvtn5ZGZiNPhrt2o=",
+      "HTTPServer01",
+      "ihs_rotatelogs",
+      null,
+      null,
+      null,
+      [
+        "/csapps/websphere/HTTPServer01/bin/rotatelogs",
+        "/csapps/websphere/HTTPServer01/logs/access_%y.%m.%d_%H.%M.%S.log",
+        "250M"
+      ],
+      "/csapps/websphere/HTTPServer01/bin/rotatelogs /csapps/websphere/HTTPServer01/logs/access_%y.%m.%d_%H.%M.%S.log 250M",
+      null,
+      0,
+      "2026-08-31T07:43:40.000Z",
+      "/csapps/websphere/HTTPServer01/bin/rotatelogs",
+      null,
+      0.001,
+      "rotatelogs",
+      null,
+      52967,
+      52967,
+      52968,
+      "sleeping",
+      "/csapps/websphere/HTTPServer01",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "system",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "/csapps/websphere/HTTPServer01/bin/rotatelogs /csapps/websphere/HTTPServer01/logs/access_%y.%m.%d_%H.%M.%S.log 250M",
+      "2026-08-31T07:43:40.000Z",
+      null,
+      0,
+      0,
+      null,
+      1880,
+      null,
+      null,
+      524288,
+      524288,
+      4,
+      0,
+      462848,
+      426756,
+      27507,
+      37625856,
+      412740,
+      27490,
+      2056192,
+      0.001,
+      2023424,
+      4034560,
+      159744,
+      1,
+      "sleeping",
+      null,
+      null,
+      "httpadmn",
+      null
+    ],
+    [
+      "2026-10-03T09:27:24.554Z",
+      "1",
+      "be0905d8-c67f-45a2-bc40-9fa23c875b4a",
+      "vslrch1d147.cna.com",
+      "e562d4fe-d93f-4544-bf5c-90e2d4d59e95",
+      "vslrch1d147.cna.com",
+      null,
+      "metricbeat",
+      "7.17.12",
+      "2026-09-24T09:43:58.588Z",
+      "d6 b2 cb 8d 14 8c 53 b5",
+      "Hardware",
+      "hardware",
+      "Computer",
+      "computer",
+      "cmdb_ci_linux_server",
+      "Linux Server",
+      "linux server",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2017-11-28T02:18:23.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      "dre",
+      "2026-09-24T09:43:58.588Z",
+      "vslrch1d147.cna.com",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.21705495007336 41.77220276556909)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "9ed26100dbf687404a65d5ab5e961995",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-03T06:23:11.900379908Z",
+      "Installed",
+      "10.16.21.163",
+      true,
+      true,
+      null,
+      "2026-09-22T08:37:07.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "vslrch1d147",
+      "vslrch1d147",
+      "vslrch1d147",
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "3",
+      null,
+      null,
+      null,
+      null,
+      "Linux vslrch1d147.cna.com 2.6.32-754.62.1.el6.x86_64 #1 SMP Fri Jul 17 16:40:32 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vslrch1d147.cna.com 2.6.32-754.62.1.el6.x86_64 #1 SMP Fri Jul 17 16:40:32 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vslrch1d147.cna.com 2.6.32-754.62.1.el6.x86_64 #1 SMP Fri Jul 17 16:40:32 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      null,
+      null,
+      null,
+      "IT.I.Unix_Engineering.Server_Services_Unix",
+      "it.i.unix_engineering.server_services_unix",
+      "d980f9ccdba24340643cb96c4e96199f",
+      null,
+      null,
+      null,
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "full_sync",
+      null,
+      "2026-09-24T09:32:28.691Z",
+      "9ed26100dbf687404a65d5ab5e961995",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-22T08:37:07.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "system.process",
+      "default",
+      "metrics",
+      "1.12.0",
+      null,
+      null,
+      null,
+      "cmdb_ci_linux_server=1",
+      true,
+      1,
+      "mqm",
+      "IT.I.WebServices_J2EE.Middleware_Monitoring",
+      "ZZ-Event.Middleware.Service.unspecified",
+      false,
+      "03be9bbd99373d125e4c3f59c51817b6219f7df4708d237c07935b46f093914b",
+      "n/a",
+      "/opt/mqm/bin/amqzmgr0 -m DRT2Q7",
+      [
+        "/sbin/rsyslogd -i /var/run/syslogd.pid -c 5|/usr/sbin/syslog-ng -F -p /var/run/syslogd.pid|/usr/sbin/rsyslogd -n|/usr/sbin/syslogd -r|/usr/sbin/syslogd|/usr/sbin/syslogd -D",
+        "/usr/sbin/sshd|/usr/sbin/sshd -D|/opt/ssh/sbin/sshd|/opt/quest/sbin/sshd",
+        "crond|/usr/sbin/crond|/usr/sbin/crond -n|/usr/sbin/cron",
+        "mqm",
+        "ntpd -u ntp:ntp -p /var/run/ntpd.pid -g|/usr/sbin/chronyd -u chrony|/usr/sbin/chronyd|/usr/sbin/xntpd -x|/usr/sbin/xntpd"
+      ],
+      true,
+      "null",
+      null,
+      "auth_metadata_missing",
+      "system.process",
+      433835276,
+      "2026-10-03T09:27:26.000Z",
+      "system",
+      "2026-10-03T09:27:26.194925Z",
+      "2026-10-03T09:27:25.749098Z",
+      [
+        "7.17.12",
+        "8.6.2"
+      ],
+      "1",
+      "linux",
+      "metricbeat",
+      "x86_64",
+      false,
+      "vslrch1d147.cna.com",
+      "2db4661b51df93e33341966b0000001d",
+      [
+        "10.16.21.163",
+        "fe80::250:56ff:fe89:6ba"
+      ],
+      [
+        "00:50:56:89:06:ba",
+        "00:50:56:89:4c:03"
+      ],
+      "vslrch1d147.cna.com",
+      null,
+      "Santiago",
+      "redhat",
+      "2.6.32-754.62.1.el6.x86_64",
+      "Red",
+      null,
+      "redhat",
+      "linux",
+      "6.10 (Santiago)",
+      [
+        "metricbeat_process_middleware",
+        "paladin-monitoring-enrichment"
+      ],
+      null,
+      null,
+      null,
+      1,
+      "2026-10-03T09:27:26.204Z",
+      "process",
+      null,
+      300000,
+      null,
+      null,
+      null,
+      "not_equal",
+      "70hnklpC1+bzt9MFBv5u9njha3KydbXPG5wxaWLk12c=",
+      "DRT2Q7",
+      "ibm_mq_amqzmgr0_positional",
+      null,
+      null,
+      null,
+      [
+        "-m",
+        "/opt/mqm/bin/amqzmgr0",
+        "DRT2Q7"
+      ],
+      "/opt/mqm/bin/amqzmgr0 -m DRT2Q7",
+      null,
+      0,
+      "2026-09-30T00:17:45.000Z",
+      "/opt/mqm/bin/amqzmgr0",
+      null,
+      0,
+      "amqzmgr0",
+      null,
+      9206,
+      9255,
+      9255,
+      "sleeping",
+      "/var/mqm",
+      null,
+      "Aurora",
+      "vslrau1p305",
+      "vslrau1p300",
+      "beats",
+      [
+        "be-ruby-set-timestamp",
+        "fe-ruby-set-timestamp"
+      ],
+      [
+        "be-kafka",
+        "fe-beats"
+      ],
+      "5046",
+      "system",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "/opt/mqm/bin/amqzmgr0 -m DRT2Q7",
+      "2026-09-30T00:17:45.000Z",
+      null,
+      0,
+      0,
+      null,
+      910,
+      null,
+      null,
+      16384,
+      16384,
+      10,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      6721536,
+      0,
+      5058560,
+      298442752,
+      null,
+      null,
+      "sleeping",
+      [
+        "DC-Aurora",
+        "beats_input_raw_event",
+        "cna"
+      ],
+      "beats",
+      "mqm",
+      null
+    ],
+    [
+      "2026-10-03T09:27:20.567Z",
+      "1",
+      "e749ac4f-b3f0-4e62-94ac-ea80fb8fc68f",
+      "vslrau1p043.cna.com",
+      "026406ea-9db6-4449-8712-e2cd6ba9d4e3",
+      "vslrau1p043.cna.com",
+      null,
+      "metricbeat",
+      "7.17.12",
+      "2026-09-24T09:43:32.043Z",
+      "f1 80 3b b1 47 bf c2 94",
+      "Hardware",
+      "hardware",
+      "Computer",
+      "computer",
+      "cmdb_ci_linux_server",
+      "Linux Server",
+      "linux server",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2017-12-09T18:37:37.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      "prod",
+      "2026-09-24T09:43:32.043Z",
+      "vslrau1p043.cna.com",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.21705495007336 41.77220276556909)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "b97ca173db360b00643cb96c4e9619eb",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-03T06:23:07.159032165Z",
+      "Installed",
+      "10.12.14.233",
+      true,
+      true,
+      null,
+      "2026-09-19T06:54:04.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "vslrau1p043",
+      "vslrau1p043",
+      "vslrau1p043",
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2",
+      null,
+      null,
+      null,
+      null,
+      "Linux vslrau1p043.cna.com 2.6.32-754.62.1.el6.x86_64 #1 SMP Fri Jul 17 16:40:32 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vslrau1p043.cna.com 2.6.32-754.62.1.el6.x86_64 #1 SMP Fri Jul 17 16:40:32 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vslrau1p043.cna.com 2.6.32-754.62.1.el6.x86_64 #1 SMP Fri Jul 17 16:40:32 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      null,
+      null,
+      null,
+      "IT.I.Unix_Engineering.Server_Services_Unix",
+      "it.i.unix_engineering.server_services_unix",
+      "d980f9ccdba24340643cb96c4e96199f",
+      null,
+      null,
+      null,
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "full_sync",
+      null,
+      "2026-09-24T09:32:28.691Z",
+      "b97ca173db360b00643cb96c4e9619eb",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-19T06:54:04.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "system.process",
+      "default",
+      "metrics",
+      "1.12.0",
+      null,
+      null,
+      null,
+      "cmdb_ci_linux_server=1",
+      true,
+      1,
+      "httpd",
+      "IT.I.WebServices_J2EE.Middleware_Monitoring",
+      "ZZ-Event.Middleware.Service.unspecified",
+      false,
+      "6f6e0b22d604274f1674a83e3569c50a584181a1fb9c8327eba9955f426b3101",
+      "n/a",
+      "/csapps/websphere/HTTPServer01/bin/httpd -f /csapps/websphere/HTTPServer01/conf/admin.conf",
+      [
+        "/sbin/rsyslogd -i /var/run/syslogd.pid -c 5|/usr/sbin/syslog-ng -F -p /var/run/syslogd.pid|/usr/sbin/rsyslogd -n|/usr/sbin/syslogd -r|/usr/sbin/syslogd|/usr/sbin/syslogd -D",
+        "/usr/sbin/sshd|/usr/sbin/sshd -D|/opt/ssh/sbin/sshd|/opt/quest/sbin/sshd",
+        "crond|/usr/sbin/crond|/usr/sbin/crond -n|/usr/sbin/cron",
+        "httpd",
+        "ntpd -u ntp:ntp -p /var/run/ntpd.pid -g|/usr/sbin/chronyd -u chrony|/usr/sbin/chronyd|/usr/sbin/xntpd -x|/usr/sbin/xntpd"
+      ],
+      true,
+      "null",
+      null,
+      "auth_metadata_missing",
+      "system.process",
+      420239466,
+      "2026-10-03T09:27:22.000Z",
+      "system",
+      "2026-10-03T09:27:22.833068Z",
+      "2026-10-03T09:27:22.114845Z",
+      [
+        "7.17.12",
+        "8.6.2"
+      ],
+      "1",
+      "linux",
+      "metricbeat",
+      "x86_64",
+      false,
+      "vslrau1p043.cna.com",
+      "1900427da3ae978084d3386400000019",
+      [
+        "10.12.14.233",
+        "fe80::250:56ff:fea2:5b4f"
+      ],
+      "00:50:56:a2:5b:4f",
+      "vslrau1p043.cna.com",
+      null,
+      "Santiago",
+      "redhat",
+      "2.6.32-754.62.1.el6.x86_64",
+      "Red",
+      null,
+      "redhat",
+      "linux",
+      "6.10 (Santiago)",
+      [
+        "metricbeat_process_middleware",
+        "paladin-monitoring-enrichment"
+      ],
+      null,
+      null,
+      null,
+      2,
+      "2026-10-03T09:27:22.847Z",
+      "process",
+      null,
+      300000,
+      null,
+      null,
+      false,
+      "not_equal",
+      "mqQ39jO6LZ1KkZxlw9JhOvO1oGCgVYlnBwie4y8tLTM=",
+      "HTTPServer01",
+      "ibm_ihs",
+      "paladin-process-middleware-c0:6cdb4d18e0ed888d8de8d7edb83006bba7a9541b531bb410ef7fcade67415f69",
+      [
+        "in_scope=1",
+        "met_rules=1"
+      ],
+      null,
+      [
+        "-f",
+        "/csapps/websphere/HTTPServer01/bin/httpd",
+        "/csapps/websphere/HTTPServer01/conf/admin.conf"
+      ],
+      "/csapps/websphere/HTTPServer01/bin/httpd -f /csapps/websphere/HTTPServer01/conf/admin.conf",
+      null,
+      0,
+      "2026-09-13T02:30:31.000Z",
+      "/csapps/websphere/HTTPServer01/bin/httpd",
+      null,
+      0.001,
+      "httpd",
+      null,
+      1,
+      3740,
+      3740,
+      "sleeping",
+      "/",
+      null,
+      "Aurora",
+      "vslrau1p298",
+      "vslrau1p301",
+      "beats",
+      [
+        "be-ruby-set-timestamp",
+        "fe-ruby-set-timestamp"
+      ],
+      [
+        "be-kafka",
+        "fe-beats"
+      ],
+      "5046",
+      "system",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "/csapps/websphere/HTTPServer01/bin/httpd -f /csapps/websphere/HTTPServer01/conf/admin.conf",
+      "2026-09-13T02:30:31.000Z",
+      null,
+      0,
+      0,
+      null,
+      37970,
+      null,
+      null,
+      5000000,
+      5000000,
+      14,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      2347008,
+      0.001,
+      151552,
+      73220096,
+      null,
+      null,
+      "sleeping",
+      [
+        "DC-Aurora",
+        "beats_input_raw_event",
+        "cna"
+      ],
+      "beats",
+      "httpadmn",
+      null
+    ],
+    [
+      "2026-10-03T09:27:22.035Z",
+      "1",
+      "33f093ee-48f8-43f4-84ce-95729a6f5d95",
+      "vslrch1d183.cna.com",
+      "b3a2ce7d-c91e-4433-a185-8c1c4b1880ca",
+      "vslrch1d183.cna.com",
+      null,
+      "metricbeat",
+      "7.17.12",
+      "2026-09-24T09:43:58.588Z",
+      "02 0f c2 eb a9 58 06 49",
+      "Hardware",
+      "hardware",
+      "Computer",
+      "computer",
+      "cmdb_ci_linux_server",
+      "Linux Server",
+      "linux server",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2017-11-28T02:18:42.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      "dre",
+      "2026-09-24T09:43:58.588Z",
+      "vslrch1d183.cna.com",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.21705495007336 41.77220276556909)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "32e2a500dbf687404a65d5ab5e961998",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-03T06:23:11.900442411Z",
+      "Installed",
+      "10.16.21.206",
+      true,
+      true,
+      null,
+      "2026-09-22T08:37:15.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "vslrch1d183",
+      "vslrch1d183",
+      "vslrch1d183",
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "3",
+      null,
+      null,
+      null,
+      null,
+      "Linux vslrch1d183.cna.com 2.6.32-754.62.1.el6.x86_64 #1 SMP Fri Jul 17 16:40:32 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vslrch1d183.cna.com 2.6.32-754.62.1.el6.x86_64 #1 SMP Fri Jul 17 16:40:32 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vslrch1d183.cna.com 2.6.32-754.62.1.el6.x86_64 #1 SMP Fri Jul 17 16:40:32 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      null,
+      null,
+      null,
+      "IT.I.Unix_Engineering.Server_Services_Unix",
+      "it.i.unix_engineering.server_services_unix",
+      "d980f9ccdba24340643cb96c4e96199f",
+      null,
+      null,
+      null,
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "full_sync",
+      null,
+      "2026-09-24T09:32:28.691Z",
+      "32e2a500dbf687404a65d5ab5e961998",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-22T08:37:15.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "system.process",
+      "default",
+      "metrics",
+      "1.12.0",
+      null,
+      null,
+      null,
+      "cmdb_ci_linux_server=1",
+      true,
+      1,
+      "httpd",
+      "IT.I.WebServices_J2EE.Middleware_Monitoring",
+      "ZZ-Event.Middleware.Service.unspecified",
+      false,
+      "6f6e0b22d604274f1674a83e3569c50a584181a1fb9c8327eba9955f426b3101",
+      "n/a",
+      "/csapps/websphere/HTTPServer01/bin/httpd -f /csapps/websphere/HTTPServer01/conf/admin.conf",
+      [
+        "/sbin/rsyslogd -i /var/run/syslogd.pid -c 5|/usr/sbin/syslog-ng -F -p /var/run/syslogd.pid|/usr/sbin/rsyslogd -n|/usr/sbin/syslogd -r|/usr/sbin/syslogd|/usr/sbin/syslogd -D",
+        "/usr/sbin/sshd|/usr/sbin/sshd -D|/opt/ssh/sbin/sshd|/opt/quest/sbin/sshd",
+        "crond|/usr/sbin/crond|/usr/sbin/crond -n|/usr/sbin/cron",
+        "httpd",
+        "ntpd -u ntp:ntp -p /var/run/ntpd.pid -g|/usr/sbin/chronyd -u chrony|/usr/sbin/chronyd|/usr/sbin/xntpd -x|/usr/sbin/xntpd"
+      ],
+      true,
+      "null",
+      null,
+      "auth_metadata_missing",
+      "system.process",
+      370826986,
+      "2026-10-03T09:27:23.000Z",
+      "system",
+      "2026-10-03T09:27:23.560810Z",
+      "2026-10-03T09:27:23.447607Z",
+      [
+        "7.17.12",
+        "8.6.2"
+      ],
+      "1",
+      "linux",
+      "metricbeat",
+      "x86_64",
+      false,
+      "vslrch1d183.cna.com",
+      "1900427da3ae978084d3386400000019",
+      [
+        "10.16.21.206",
+        "fe80::250:56ff:fe89:800"
+      ],
+      "00:50:56:89:08:00",
+      "vslrch1d183.cna.com",
+      null,
+      "Santiago",
+      "redhat",
+      "2.6.32-754.62.1.el6.x86_64",
+      "Red",
+      null,
+      "redhat",
+      "linux",
+      "6.10 (Santiago)",
+      [
+        "metricbeat_process_middleware",
+        "paladin-monitoring-enrichment"
+      ],
+      null,
+      null,
+      null,
+      1,
+      "2026-10-03T09:27:23.571Z",
+      "process",
+      null,
+      300000,
+      null,
+      null,
+      null,
+      "not_equal",
+      "mqQ39jO6LZ1KkZxlw9JhOvO1oGCgVYlnBwie4y8tLTM=",
+      "HTTPServer01",
+      "ibm_ihs",
+      null,
+      null,
+      null,
+      [
+        "-f",
+        "/csapps/websphere/HTTPServer01/bin/httpd",
+        "/csapps/websphere/HTTPServer01/conf/admin.conf"
+      ],
+      "/csapps/websphere/HTTPServer01/bin/httpd -f /csapps/websphere/HTTPServer01/conf/admin.conf",
+      null,
+      0,
+      "2026-09-30T00:15:27.000Z",
+      "/csapps/websphere/HTTPServer01/bin/httpd",
+      null,
+      0.003,
+      "httpd",
+      null,
+      4126,
+      4126,
+      4152,
+      "sleeping",
+      "/",
+      null,
+      "Aurora",
+      "vslrau1p300",
+      "vslrau1p301",
+      "beats",
+      [
+        "be-ruby-set-timestamp",
+        "fe-ruby-set-timestamp"
+      ],
+      [
+        "be-kafka",
+        "fe-beats"
+      ],
+      "5046",
+      "system",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "/csapps/websphere/HTTPServer01/bin/httpd -f /csapps/websphere/HTTPServer01/conf/admin.conf",
+      "2026-09-30T00:15:27.000Z",
+      null,
+      0,
+      0.001,
+      null,
+      163670,
+      null,
+      null,
+      5000000,
+      5000000,
+      21,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      10985472,
+      0.003,
+      3747840,
+      883425280,
+      null,
+      null,
+      "sleeping",
+      [
+        "DC-Aurora",
+        "beats_input_raw_event",
+        "cna"
+      ],
+      "beats",
+      "httpadmn",
+      null
+    ],
+    [
+      "2026-09-28T13:55:38.975Z",
+      null,
+      "cf98240a-f06a-4f90-b371-caf13bcf246a",
+      null,
+      "3cec8b23-cd48-4947-a60f-7752933b4fba",
+      "vslrch1d504",
+      null,
+      "metricbeat",
+      "9.3.5",
+      "2026-09-24T09:43:55.929Z",
+      null,
+      "Hardware",
+      "hardware",
+      "Computer",
+      "computer",
+      "cmdb_ci_linux_server",
+      "Linux Server",
+      "linux server",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2024-10-30T17:33:27.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      "drt",
+      "2026-09-24T09:43:55.928Z",
+      "vslrch1d504.cna.com",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.21705495007336 41.77220276556909)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "e26767751b6556d0ff620d0fdc4bcbf1",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-28T12:33:06.543256155Z",
+      "Installed",
+      "10.101.8.85",
+      true,
+      true,
+      null,
+      "2026-09-22T04:09:42.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "vslrch1d504",
+      "vslrch1d504",
+      "vslrch1d504",
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "3",
+      null,
+      null,
+      null,
+      null,
+      "Linux vslrch1d504 4.18.0-553.158.1.el8_10.x86_64 #1 SMP Sun Aug 23 20:58:55 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vslrch1d504 4.18.0-553.158.1.el8_10.x86_64 #1 SMP Sun Aug 23 20:58:55 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      "Linux vslrch1d504 4.18.0-553.158.1.el8_10.x86_64 #1 SMP Sun Aug 23 20:58:55 EDT 2026 x86_64 x86_64 x86_64 GNU/Linux",
+      null,
+      null,
+      null,
+      "IT.I.Unix_Engineering.Server_Services_Unix",
+      "it.i.unix_engineering.server_services_unix",
+      "d980f9ccdba24340643cb96c4e96199f",
+      null,
+      null,
+      null,
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "full_sync",
+      null,
+      "2026-09-24T09:32:28.691Z",
+      "e26767751b6556d0ff620d0fdc4bcbf1",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-22T04:09:42.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "system.process",
+      "default",
+      "metrics",
+      "8.0.0",
+      "3cec8b23-cd48-4947-a60f-7752933b4fba",
+      false,
+      "9.3.5",
+      "cmdb_ci_linux_server=1",
+      true,
+      1,
+      null,
+      null,
+      null,
+      true,
+      "79c76313b3ac4c430d8e03dbc7afbbf331c50ec89dd9e8b69b70612a3475ba57",
+      "n/a",
+      "/csapps/jboss/eap-7.4/openjdk-11.0.25/bin/java -D[Standalone] -server -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Dspring.profiles.active=drt4 --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED --add-exports=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.management/javax.management=ALL-UNNAMED --add-opens=java.naming/javax.naming=ALL-UNNAMED -Dorg.jboss.boot.log.file=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/log/server.log -jar /csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/jboss-modules.jar -mp /csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/mo",
+      [
+        "/sbin/rsyslogd -i /var/run/syslogd.pid -c 5|/usr/sbin/syslog-ng -F -p /var/run/syslogd.pid|/usr/sbin/rsyslogd -n|/usr/sbin/syslogd -r|/usr/sbin/syslogd|/usr/sbin/syslogd -D",
+        "/usr/sbin/sshd|/usr/sbin/sshd -D|/opt/ssh/sbin/sshd|/opt/quest/sbin/sshd",
+        "crond|/usr/sbin/crond|/usr/sbin/crond -n|/usr/sbin/cron",
+        "ntpd -u ntp:ntp -p /var/run/ntpd.pid -g|/usr/sbin/chronyd -u chrony|/usr/sbin/chronyd|/usr/sbin/xntpd -x|/usr/sbin/xntpd"
+      ],
+      false,
+      null,
+      null,
+      "verified",
+      "system.process",
+      122620085,
+      "2026-09-28T13:55:44.000Z",
+      "system",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "x86_64",
+      false,
+      "vslrch1d504",
+      "89f25c24fafb4970a568190783400204",
+      "10.101.8.85",
+      "00-50-56-81-46-1E",
+      "vslrch1d504",
+      null,
+      null,
+      "redhat",
+      "4.18.0-553.158.1.el8_10.x86_64",
+      "Red Hat Enterprise Linux",
+      null,
+      "rhel",
+      "linux",
+      "8.10 (Ootpa)",
+      [
+        "metricbeat_process_middleware",
+        "paladin-monitoring-enrichment"
+      ],
+      null,
+      null,
+      null,
+      5,
+      "2026-09-28T13:55:44.655Z",
+      "process",
+      null,
+      300000,
+      null,
+      null,
+      null,
+      "not_equal",
+      "pNYZChGH+/+mzJ3VFzRuDCEbMF6QwgYt2E9AAgvjx7I=",
+      "drt4",
+      "jboss_spring",
+      null,
+      null,
+      null,
+      [
+        "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED",
+        "--add-exports=java.desktop/sun.awt=ALL-UNNAMED",
+        "--add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED",
+        "--add-exports=java.naming/com.sun.jndi.url.ldap=ALL-UNNAMED",
+        "--add-exports=java.naming/com.sun.jndi.url.ldaps=ALL-UNNAMED",
+        "--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED",
+        "--add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/com.sun.net.ssl.internal.ssl=ALL-UNNAMED",
+        "--add-opens=java.base/java.io=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.security=ALL-UNNAMED",
+        "--add-opens=java.base/java.util.concurrent=ALL-UNNAMED",
+        "--add-opens=java.base/java.util=ALL-UNNAMED",
+        "--add-opens=java.management/javax.management=ALL-UNNAMED",
+        "--add-opens=java.naming/javax.naming=ALL-UNNAMED",
+        "-D[Standalone]",
+        "-Djava.awt.headless=true",
+        "-Djava.net.preferIPv4Stack=true",
+        "-Djboss.home.dir=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice",
+        "-Djboss.modules.system.pkgs=org.jboss.byteman",
+        "-Djboss.server.base.dir=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone",
+        "-Djdk.serialFilter=maxbytes=10485760;maxdepth=128;maxarray=100000;maxrefs=300000",
+        "-Dlogging.configuration=file:/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/configuration/logging.properties",
+        "-Dorg.jboss.boot.log.file=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/log/server.log",
+        "-Dspring.profiles.active=drt4",
+        "-XX:MaxMetaspaceSize=2048m",
+        "-XX:MetaspaceSize=256m",
+        "-Xlog:gc*:file=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/log/gc.log:time,uptimemillis:filecount=5,filesize=3M",
+        "-Xms8g",
+        "-Xmx12g",
+        "-c",
+        "-jar",
+        "-mp",
+        "-server",
+        "/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/jboss-modules.jar",
+        "/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/modules",
+        "/csapps/jboss/eap-7.4/openjdk-11.0.25/bin/java",
+        "org.jboss.as.standalone",
+        "standalone-full.xml"
+      ],
+      "/csapps/jboss/eap-7.4/openjdk-11.0.25/bin/java -D[Standalone] -server -Xlog:gc*:file=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/log/gc.log:time,uptimemillis:filecount=5,filesize=3M -Djdk.serialFilter=maxbytes=10485760;maxdepth=128;maxarray=100000;maxrefs=300000 -Xms8g -Xmx12g -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=2048m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Dspring.profiles.active=drt4 --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED --add-exports=java.desktop/sun.awt=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldaps=ALL-UNNAMED --add-opens=java.base/com.sun.net.ssl.internal.ssl=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.management/javax.management=ALL-UNNAMED --add-opens=java.naming/javax.naming=ALL-UNNAMED -Dorg.jboss.boot.log.file=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/log/server.log -Dlogging.configuration=file:/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/configuration/logging.properties -jar /csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/jboss-modules.jar -mp /csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/modules org.jboss.as.standalone -Djboss.home.dir=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice -Djboss.server.base.dir=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone -c standalone-full.xml",
+      null,
+      0.001,
+      "2026-09-04T06:04:29.000Z",
+      "/csapps/jboss/eap-7.4/openjdk-11.0.25/bin/java",
+      null,
+      0.092,
+      "java",
+      null,
+      48468,
+      48457,
+      48625,
+      "sleeping",
+      "/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/bin",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "system",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "/csapps/jboss/eap-7.4/openjdk-11.0.25/bin/java -D[Standalone] -server -Xlog:gc*:file=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/log/gc.log:time,uptimemillis:filecount=5,filesize=3M -Djdk.serialFilter=maxbytes=10485760;maxdepth=128;maxarray=100000;maxrefs=300000 -Xms8g -Xmx12g -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=2048m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Dspring.profiles.active=drt4 --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED --add-exports=java.desktop/sun.awt=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldaps=ALL-UNNAMED --add-opens=java.base/com.sun.net.ssl.internal.ssl=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.management/javax.management=ALL-UNNAMED --add-opens=java.naming/javax.naming=ALL-UNNAMED -Dorg.jboss.boot.log.file=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/log/server.log -Dlogging.configuration=file:/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone/configuration/logging.properties -jar /csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/jboss-modules.jar -mp /csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/modules org.jboss.as.standalone -Djboss.home.dir=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice -Djboss.server.base.dir=/csapps/jboss/eap-7.4/drt2-node2-ere-rateservice/standalone -c standalone-full.xml",
+      "2026-09-04T06:04:29.000Z",
+      null,
+      0.001,
+      0.004,
+      null,
+      6415370,
+      null,
+      null,
+      262144,
+      262144,
+      913,
+      265043968,
+      490358272,
+      804108831,
+      4627158,
+      761524224,
+      653207408,
+      2203275,
+      6135504896,
+      0.092,
+      23367680,
+      15546142720,
+      0,
+      92,
+      "sleeping",
+      null,
+      null,
+      "eapadmin",
+      null
+    ]
+  ]
+}
+# 118: POST /_query?format=json [200 OK]
+{
+  "took": 34,
+  "is_partial": false,
+  "completion_time_in_millis": 1791019648181,
+  "documents_found": 9,
+  "values_loaded": 855,
+  "rows_emitted": 51,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 22944065,
+  "start_time_in_millis": 1791019648147,
+  "expiration_time_in_millis": 1791451648059,
+  "columns": [
+    {
+      "name": "@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "@version",
+      "type": "double"
+    },
+    {
+      "name": "acl_name",
+      "type": "text"
+    },
+    {
+      "name": "acl_name.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "action",
+      "type": "text"
+    },
+    {
+      "name": "action.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "chassis_id",
+      "type": "text"
+    },
+    {
+      "name": "chassis_id.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "chassis_info",
+      "type": "text"
+    },
+    {
+      "name": "chassis_info.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "ci.asset_tag",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.category.1",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.category.1.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.category.2",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.category.2.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.class",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.class_name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.class_name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.industry",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.industry.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.iris_code",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.is_active",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.company.is_parent",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.company.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.parent.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.parent.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.parent.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.rbu",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.rbu.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.sub_industry",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.sub_industry.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.company.updated_at",
+      "type": "date"
+    },
+    {
+      "name": "ci.created_at",
+      "type": "date"
+    },
+    {
+      "name": "ci.criticality",
+      "type": "integer"
+    },
+    {
+      "name": "ci.criticality_name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.criticality_name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_specific_data.1",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_specific_data.2",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_specific_data.3",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.duplicate_of",
+      "type": "text"
+    },
+    {
+      "name": "ci.duplicate_of.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.environment",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.extracted_at",
+      "type": "date"
+    },
+    {
+      "name": "ci.fqdn",
+      "type": "text"
+    },
+    {
+      "name": "ci.fqdn.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.city.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.city.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.city.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.continent",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.country.iso_code",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.country.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.country.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.country.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.formatted_address",
+      "type": "text"
+    },
+    {
+      "name": "ci.geo.formatted_address.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.is_active",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.geo.location",
+      "type": "geo_point"
+    },
+    {
+      "name": "ci.geo.location_code",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.location_code.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.place_id",
+      "type": "text"
+    },
+    {
+      "name": "ci.geo.place_id.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.state.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.state.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.state.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.type",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.geo.updated_at",
+      "type": "date"
+    },
+    {
+      "name": "ci.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingest_error.message",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingest_error.message.keywords",
+      "type": "text"
+    },
+    {
+      "name": "ci.ingest_error.message.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.ingested_at",
+      "type": "date"
+    },
+    {
+      "name": "ci.install_status",
+      "type": "text"
+    },
+    {
+      "name": "ci.install_status.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ip_address",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.is_monitored",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.is_stale",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.is_top_level_ci",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.last_discovered",
+      "type": "date"
+    },
+    {
+      "name": "ci.mac_address",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.manufacturer.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.manufacturer.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.manufacturer.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.model.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.model.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.model.number",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.model.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name_normalized",
+      "type": "text"
+    },
+    {
+      "name": "ci.name_normalized.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.operational_status",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.family",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.family.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.kernel",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.kernel.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.version",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.os.version.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.paladin_map.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.parents.class",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.parents.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.parents.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.parents.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.priority",
+      "type": "text"
+    },
+    {
+      "name": "ci.priority.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.raw_data.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.raw_data.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.service_classification",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.service_classification.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.short_description",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.short_description.keywords",
+      "type": "text"
+    },
+    {
+      "name": "ci.short_description.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.support_group.l1.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l1.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l1.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l3.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l3.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l3.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.id",
+      "type": "text"
+    },
+    {
+      "name": "ci.sync_metadata.id.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.name",
+      "type": "text"
+    },
+    {
+      "name": "ci.sync_metadata.name.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.timestamp",
+      "type": "date"
+    },
+    {
+      "name": "ci.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.top_level_ci_depth",
+      "type": "integer"
+    },
+    {
+      "name": "ci.top_level_parents.class",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.top_level_parents.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.top_level_parents.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.top_level_parents.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.unit",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.updated_at",
+      "type": "date"
+    },
+    {
+      "name": "data_stream.dataset",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.namespace",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.type",
+      "type": "keyword"
+    },
+    {
+      "name": "dest_ip",
+      "type": "text"
+    },
+    {
+      "name": "dest_ip.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "dest_port",
+      "type": "text"
+    },
+    {
+      "name": "dest_port.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "elm.logsource",
+      "type": "keyword"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.class_match",
+      "type": "text"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.ip_match",
+      "type": "boolean"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.match_cnt",
+      "type": "integer"
+    },
+    {
+      "name": "enrich_policy.cmdb-cis.name_match",
+      "type": "boolean"
+    },
+    {
+      "name": "error.message",
+      "type": "text"
+    },
+    {
+      "name": "error.message.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "event.agent_id_status",
+      "type": "text"
+    },
+    {
+      "name": "event.agent_id_status.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "event.ingested",
+      "type": "date"
+    },
+    {
+      "name": "event.processed.time.backend",
+      "type": "date"
+    },
+    {
+      "name": "event.processed.time.frontend",
+      "type": "date"
+    },
+    {
+      "name": "facility",
+      "type": "long"
+    },
+    {
+      "name": "facility_label",
+      "type": "keyword"
+    },
+    {
+      "name": "host.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest-syslog_facility",
+      "type": "text"
+    },
+    {
+      "name": "ingest-syslog_facility.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest-syslog_message",
+      "type": "text"
+    },
+    {
+      "name": "ingest-syslog_message.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest-syslog_pri",
+      "type": "text"
+    },
+    {
+      "name": "ingest-syslog_pri.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest-syslog_severity",
+      "type": "text"
+    },
+    {
+      "name": "ingest-syslog_severity.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest.pipeline",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.enrich_policy_by_name",
+      "type": "text"
+    },
+    {
+      "name": "ingest_error.enrich_policy_by_name.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_lag_in_sec",
+      "type": "long"
+    },
+    {
+      "name": "ingest_time",
+      "type": "date"
+    },
+    {
+      "name": "message",
+      "type": "text"
+    },
+    {
+      "name": "message_raw",
+      "type": "text"
+    },
+    {
+      "name": "message_raw.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "packet_count",
+      "type": "text"
+    },
+    {
+      "name": "packet_count.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "port",
+      "type": "long"
+    },
+    {
+      "name": "priority",
+      "type": "long"
+    },
+    {
+      "name": "protocol",
+      "type": "text"
+    },
+    {
+      "name": "protocol.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.dc",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.host.backend",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.host.frontend",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.plugin.filter",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.plugin.input",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.port",
+      "type": "keyword"
+    },
+    {
+      "name": "relay.type",
+      "type": "keyword"
+    },
+    {
+      "name": "severity",
+      "type": "long"
+    },
+    {
+      "name": "severity_label",
+      "type": "keyword"
+    },
+    {
+      "name": "src_ip",
+      "type": "text"
+    },
+    {
+      "name": "src_ip.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "src_port",
+      "type": "text"
+    },
+    {
+      "name": "src_port.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "sylsog_process",
+      "type": "text"
+    },
+    {
+      "name": "sylsog_process.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "syslog_date",
+      "type": "unsupported",
+      "original_types": [
+        "datetime",
+        "text"
+      ],
+      "suggested_cast": "keyword"
+    },
+    {
+      "name": "syslog_date.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "syslog_facility",
+      "type": "keyword"
+    },
+    {
+      "name": "syslog_facility_code",
+      "type": "long"
+    },
+    {
+      "name": "syslog_message",
+      "type": "text"
+    },
+    {
+      "name": "syslog_message.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "syslog_mnemonic",
+      "type": "text"
+    },
+    {
+      "name": "syslog_mnemonic.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "syslog_pri",
+      "type": "text"
+    },
+    {
+      "name": "syslog_pri.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "syslog_sequence_num",
+      "type": "text"
+    },
+    {
+      "name": "syslog_sequence_num.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "syslog_severity",
+      "type": "keyword"
+    },
+    {
+      "name": "syslog_severity_code",
+      "type": "long"
+    },
+    {
+      "name": "tags",
+      "type": "keyword"
+    },
+    {
+      "name": "timestamp",
+      "type": "date"
+    }
+  ],
+  "values": [
+    [
+      "2026-09-30T15:36:31.122Z",
+      1,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-24T09:43:44.281Z",
+      "4QQQFT3",
+      null,
+      null,
+      null,
+      null,
+      "cmdb_ci_esx_server",
+      "ESX Server",
+      "esx server",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2023-10-27T19:28:02.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      null,
+      null,
+      "dre",
+      "2026-09-24T09:43:44.281Z",
+      "vxbly1h215.cna.com",
+      "vxbly1h215.cna.com",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.2170549 41.7722028)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "c3fe63471b86f550c71921b6b04bcbe9",
+      null,
+      null,
+      null,
+      "2026-09-30T14:13:05.672Z",
+      "Installed",
+      "Installed",
+      "10.1.225.77",
+      true,
+      true,
+      null,
+      "2026-09-21T04:02:35.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "vxbly1h215",
+      "vxbly1h215",
+      "vxbly1h215",
+      "vxbly1h215",
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "3",
+      "3",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "IT.I.VMware_Engineering.Server_Services_-_Wintel",
+      "it.i.vmware_engineering.server_services_-_wintel",
+      "f4a130ef1b83c010f32121bebd4bcb98",
+      null,
+      null,
+      null,
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "full_sync",
+      "full_sync",
+      "2026-09-24T09:32:28.691Z",
+      "c3fe63471b86f550c71921b6b04bcbe9",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-21T04:02:36.000Z",
+      "syslog-classic",
+      "default",
+      "logs",
+      null,
+      null,
+      null,
+      null,
+      "syslog-classic",
+      "cmdb_ci_esx_server=1",
+      false,
+      1,
+      true,
+      null,
+      null,
+      "missing",
+      "missing",
+      "2026-09-30T15:36:32.000Z",
+      "2026-09-30T15:36:32.088Z",
+      "2026-09-30T15:36:31.899Z",
+      null,
+      null,
+      "vxbly1h215.cna.com",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "syslog-classic",
+      null,
+      null,
+      0,
+      "2026-09-30T15:36:32.119Z",
+      """<166>2026-09-30T15:36:31.124Z vxbly1h215.cna.com envoy-access[2112768]: [esx@4413] 2026-09-30T15:36:22.545Z POST /sdk 200 via_upstream - 1ms 0ms 127.0.0.1:54946 902b 0ms TLSv1.3 HTTP/1.1 490+552b 157+257+0b gzip 487b 0ms 127.0.0.1:443 0ms 1 127.0.0.1:54694 625b  0ms - HTTP/2 55+552b 14+257+0b 462b 0ms 127.0.0.1:8307 - "nsxDaVim-cb" "Fetch"
+""",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Aurora",
+      "vslrau1p299",
+      "vslrau1p300",
+      [
+        "be-ruby-set-timestamp",
+        "fe-dns",
+        "fe-ruby-set-timestamp",
+        "fe-syslog_pri"
+      ],
+      [
+        "be-kafka",
+        "fe-udp"
+      ],
+      "10514",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "local4",
+      20,
+      "<166>2026-09-30T15:36:31.124Z vxbly1h215.cna.com envoy-access[2112768]: [esx@4413] 2026-09-30T15:36:22.545Z POST /sdk 200 via_upstream - 1ms 0ms 127.0.0.1:54946 902b 0ms TLSv1.3 HTTP/1.1 490+552b 157+257+0b gzip 487b 0ms 127.0.0.1:443 0ms 1 127.0.0.1:54694 625b  0ms - HTTP/2 55+552b 14+257+0b 462b 0ms 127.0.0.1:8307 - \"nsxDaVim-cb\" \"Fetch\"",
+      null,
+      null,
+      null,
+      "166",
+      "166",
+      null,
+      null,
+      "informational",
+      6,
+      [
+        "elm",
+        "syslog-classic-logs"
+      ],
+      null
+    ],
+    [
+      "2026-09-30T15:36:31.122Z",
+      1,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-24T09:43:44.281Z",
+      "4QQQFT3",
+      null,
+      null,
+      null,
+      null,
+      "cmdb_ci_esx_server",
+      "ESX Server",
+      "esx server",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2023-10-27T19:28:02.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      null,
+      null,
+      "dre",
+      "2026-09-24T09:43:44.281Z",
+      "vxbly1h215.cna.com",
+      "vxbly1h215.cna.com",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.2170549 41.7722028)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "c3fe63471b86f550c71921b6b04bcbe9",
+      null,
+      null,
+      null,
+      "2026-09-30T14:13:05.672Z",
+      "Installed",
+      "Installed",
+      "10.1.225.77",
+      true,
+      true,
+      null,
+      "2026-09-21T04:02:35.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "vxbly1h215",
+      "vxbly1h215",
+      "vxbly1h215",
+      "vxbly1h215",
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "3",
+      "3",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "IT.I.VMware_Engineering.Server_Services_-_Wintel",
+      "it.i.vmware_engineering.server_services_-_wintel",
+      "f4a130ef1b83c010f32121bebd4bcb98",
+      null,
+      null,
+      null,
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "full_sync",
+      "full_sync",
+      "2026-09-24T09:32:28.691Z",
+      "c3fe63471b86f550c71921b6b04bcbe9",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-21T04:02:36.000Z",
+      "syslog-classic",
+      "default",
+      "logs",
+      null,
+      null,
+      null,
+      null,
+      "syslog-classic",
+      "cmdb_ci_esx_server=1",
+      false,
+      1,
+      true,
+      null,
+      null,
+      "missing",
+      "missing",
+      "2026-09-30T15:36:32.000Z",
+      "2026-09-30T15:36:32.088Z",
+      "2026-09-30T15:36:31.958Z",
+      null,
+      null,
+      "vxbly1h215.cna.com",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "syslog-classic",
+      null,
+      null,
+      1,
+      "2026-09-30T15:36:32.135Z",
+      """<166>2026-09-30T15:36:31.124Z vxbly1h215.cna.com envoy-access[2112768]: [esx@4413] 2026-09-30T15:36:21.032Z POST /sdk 200 via_upstream - 688ms 687ms 127.0.0.1:54946 1064b 0ms TLSv1.3 HTTP/1.1 490+714b 157+798+0b gzip 1028b 0ms 127.0.0.1:443 0ms 1 127.0.0.1:54694 787b  0ms - HTTP/2 55+714b 14+798+0b 1722b 0ms 127.0.0.1:8307 - "nsxDaVim-cb" "WaitForUpdatesEx"
+""",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Aurora",
+      "vslrau1p299",
+      "vslrau1p300",
+      [
+        "be-ruby-set-timestamp",
+        "fe-dns",
+        "fe-ruby-set-timestamp",
+        "fe-syslog_pri"
+      ],
+      [
+        "be-kafka",
+        "fe-udp"
+      ],
+      "10514",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "local4",
+      20,
+      "<166>2026-09-30T15:36:31.124Z vxbly1h215.cna.com envoy-access[2112768]: [esx@4413] 2026-09-30T15:36:21.032Z POST /sdk 200 via_upstream - 688ms 687ms 127.0.0.1:54946 1064b 0ms TLSv1.3 HTTP/1.1 490+714b 157+798+0b gzip 1028b 0ms 127.0.0.1:443 0ms 1 127.0.0.1:54694 787b  0ms - HTTP/2 55+714b 14+798+0b 1722b 0ms 127.0.0.1:8307 - \"nsxDaVim-cb\" \"WaitForUpdatesEx\"",
+      null,
+      null,
+      null,
+      "166",
+      "166",
+      null,
+      null,
+      "informational",
+      6,
+      [
+        "elm",
+        "syslog-classic-logs"
+      ],
+      null
+    ],
+    [
+      "2026-09-30T15:36:31.122Z",
+      1,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-24T09:43:44.281Z",
+      "4QQQFT3",
+      null,
+      null,
+      null,
+      null,
+      "cmdb_ci_esx_server",
+      "ESX Server",
+      "esx server",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2023-10-27T19:28:02.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      null,
+      null,
+      "dre",
+      "2026-09-24T09:43:44.281Z",
+      "vxbly1h215.cna.com",
+      "vxbly1h215.cna.com",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.2170549 41.7722028)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "c3fe63471b86f550c71921b6b04bcbe9",
+      null,
+      null,
+      null,
+      "2026-09-30T14:13:05.672Z",
+      "Installed",
+      "Installed",
+      "10.1.225.77",
+      true,
+      true,
+      null,
+      "2026-09-21T04:02:35.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "vxbly1h215",
+      "vxbly1h215",
+      "vxbly1h215",
+      "vxbly1h215",
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "3",
+      "3",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "IT.I.VMware_Engineering.Server_Services_-_Wintel",
+      "it.i.vmware_engineering.server_services_-_wintel",
+      "f4a130ef1b83c010f32121bebd4bcb98",
+      null,
+      null,
+      null,
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "2ebf9b12-758a-4e67-a660-59cf99101bee",
+      "full_sync",
+      "full_sync",
+      "2026-09-24T09:32:28.691Z",
+      "c3fe63471b86f550c71921b6b04bcbe9",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-21T04:02:36.000Z",
+      "syslog-classic",
+      "default",
+      "logs",
+      null,
+      null,
+      null,
+      null,
+      "syslog-classic",
+      "cmdb_ci_esx_server=1",
+      false,
+      1,
+      true,
+      null,
+      null,
+      "missing",
+      "missing",
+      "2026-09-30T15:36:32.000Z",
+      "2026-09-30T15:36:32.088Z",
+      "2026-09-30T15:36:31.958Z",
+      null,
+      null,
+      "vxbly1h215.cna.com",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "syslog-classic",
+      null,
+      null,
+      1,
+      "2026-09-30T15:36:32.135Z",
+      """<166>2026-09-30T15:36:31.124Z vxbly1h215.cna.com envoy-access[2112768]: [esx@4413] 2026-09-30T15:36:21.722Z POST /sdk 200 via_upstream - 1ms 0ms 127.0.0.1:54946 902b 0ms TLSv1.3 HTTP/1.1 490+552b 157+257+0b gzip 487b 0ms 127.0.0.1:443 0ms 1 127.0.0.1:54694 626b  0ms - HTTP/2 56+552b 14+257+0b 463b 0ms 127.0.0.1:8307 - "nsxDaVim-cb" "Fetch"
+""",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Aurora",
+      "vslrau1p299",
+      "vslrau1p300",
+      [
+        "be-ruby-set-timestamp",
+        "fe-dns",
+        "fe-ruby-set-timestamp",
+        "fe-syslog_pri"
+      ],
+      [
+        "be-kafka",
+        "fe-udp"
+      ],
+      "10514",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "local4",
+      20,
+      "<166>2026-09-30T15:36:31.124Z vxbly1h215.cna.com envoy-access[2112768]: [esx@4413] 2026-09-30T15:36:21.722Z POST /sdk 200 via_upstream - 1ms 0ms 127.0.0.1:54946 902b 0ms TLSv1.3 HTTP/1.1 490+552b 157+257+0b gzip 487b 0ms 127.0.0.1:443 0ms 1 127.0.0.1:54694 626b  0ms - HTTP/2 56+552b 14+257+0b 463b 0ms 127.0.0.1:8307 - \"nsxDaVim-cb\" \"Fetch\"",
+      null,
+      null,
+      null,
+      "166",
+      "166",
+      null,
+      null,
+      "informational",
+      6,
+      [
+        "elm",
+        "syslog-classic-logs"
+      ],
+      null
+    ]
+  ]
+}
