@@ -1,0 +1,1624 @@
+{
+  "page": 1,
+  "perPage": 25,
+  "total": 173,
+  "results": [
+    {
+      "name": "nbintake-data-repo-temp",
+      "description": "",
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "nbintake-data-repo",
+          "environment": "*",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*,metrics-*.otel-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.99
+      },
+      "tags": [
+        "nbintake"
+      ],
+      "groupBy": [
+        "*"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "027386e0-f40f-452c-b0ef-a0931230b72f",
+      "revision": 1,
+      "enabled": true,
+      "createdAt": "2025-06-23T10:54:37.329Z",
+      "updatedAt": "2025-06-23T10:54:37.329Z",
+      "version": 2,
+      "createdBy": "u_t2N1e-TJtXpwMMIdGtK1rrQYJDel_LQI6nA2ydZtxhA_0",
+      "updatedBy": "u_t2N1e-TJtXpwMMIdGtK1rrQYJDel_LQI6nA2ydZtxhA_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "*",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.01,
+          "consumed": 0.748359,
+          "remaining": 0.251641,
+          "isEstimated": false
+        },
+        "sliValue": 0.992516,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-03T08:46:06.766389697Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0.229885,
+        "oneDayBurnRate": 0.834988
+      },
+      "groupings": {}
+    },
+    {
+      "name": "nbintake-vendor-api",
+      "description": "",
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "nbintake-vendor-api",
+          "environment": "*",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*,metrics-*.otel-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.99
+      },
+      "tags": [
+        "nbintake"
+      ],
+      "groupBy": [
+        "*"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "0512284e-39dd-4262-81eb-f67285ded5d1",
+      "revision": 1,
+      "enabled": true,
+      "createdAt": "2025-06-23T11:01:31.557Z",
+      "updatedAt": "2025-06-23T11:01:31.557Z",
+      "version": 2,
+      "createdBy": "u_t2N1e-TJtXpwMMIdGtK1rrQYJDel_LQI6nA2ydZtxhA_0",
+      "updatedBy": "u_t2N1e-TJtXpwMMIdGtK1rrQYJDel_LQI6nA2ydZtxhA_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "*",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.01,
+          "consumed": 0.011179,
+          "remaining": 0.988821,
+          "isEstimated": false
+        },
+        "sliValue": 0.999888,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-03T08:45:55.193053999Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {}
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "AutoCloseScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-09-28T11:08:59.009253035Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "AutoCloseScheduler$$Lambda.run"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "CatAnalysisResubmissionScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-03T08:46:35.904572496Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "CatAnalysisResubmissionScheduler$$Lambda.run"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "FinalDocToEDMSScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-02T10:53:46.242520945Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "FinalDocToEDMSScheduler$$Lambda.run"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "FinalDocsGenerateScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-02T07:53:40.568809871Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "FinalDocsGenerateScheduler$$Lambda.run"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0.006141,
+          "remaining": 0.993859,
+          "isEstimated": false
+        },
+        "sliValue": 0.999693,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-03T08:46:35.904883202Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /**",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-01T08:37:42.481849962Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /**"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /batchJob/start/geocode",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2024-12-06T23:53:34.615500751Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /batchJob/start/geocode"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /batchJob/stop/geocode",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2024-12-06T23:50:34.573233641Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /batchJob/stop/geocode"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /error",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2024-11-04T14:42:54.266201705Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /error"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /health",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2025-02-28T09:49:56.187078224Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /health"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /v1/rst/batch/renewal/loadAndSaveExpiringRsts",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-09-29T06:03:41.555957513Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /v1/rst/batch/renewal/loadAndSaveExpiringRsts"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /v1/rst/batch/renewal/riskBrowser",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-04-10T06:31:21.679407608Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /v1/rst/batch/renewal/riskBrowser"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /v1/rst/batch/renewal/riskBrowser/{numberOfAccounts}",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-09-08T08:36:55.541968451Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /v1/rst/batch/renewal/riskBrowser/{numberOfAccounts}"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /v1/rst/batch/renewal/stopRen2",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-09-30T09:53:45.338166460Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /v1/rst/batch/renewal/stopRen2"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /v1/rst/batch/renewal/touchStone",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2024-11-04T14:42:54.266378801Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /v1/rst/batch/renewal/touchStone"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "GET /v1/rst/batch/renewal/touchStone/{numberOfAccounts}",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-08-28T05:34:22.649620629Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "GET /v1/rst/batch/renewal/touchStone/{numberOfAccounts}"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "ITVBatchScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-02T08:28:41.759944242Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "ITVBatchScheduler$$Lambda.run"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "KATRiskFloodRiskBatchScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-03T08:46:35.904974691Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "KATRiskFloodRiskBatchScheduler$$Lambda.run"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "POST /v1/rst/batch/renewal/catFinal",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-03-11T09:19:35.273962427Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "POST /v1/rst/batch/renewal/catFinal"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "ReferralNeedByDateScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0.027816,
+          "remaining": 0.972184,
+          "isEstimated": false
+        },
+        "sliValue": 0.998609,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-03T08:04:34.440895094Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "ReferralNeedByDateScheduler$$Lambda.run"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "RstCatRetrieveReportScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-03T08:46:35.905058543Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "RstCatRetrieveReportScheduler$$Lambda.run"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "RstGeocodeScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-03T08:46:35.905163311Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "RstGeocodeScheduler$$Lambda.run"
+      }
+    },
+    {
+      "name": "rst-batch_prd1_apm-availability",
+      "description": """Service Name: rst-batch
+Environment: prd1
+Monitored SLI: APM availability. Note availability is determined by calculating the percentage of successful transactions ( event. outcome : "success" ) out of the total number of successful and failed transactions—unknown outcomes are excluded. """,
+      "indicator": {
+        "type": "sli.apm.transactionErrorRate",
+        "params": {
+          "service": "rst-batch",
+          "environment": "prd1",
+          "transactionType": "*",
+          "transactionName": "*",
+          "filter": "",
+          "index": "metrics-apm*,apm-*"
+        }
+      },
+      "budgetingMethod": "occurrences",
+      "timeWindow": {
+        "duration": "30d",
+        "type": "rolling"
+      },
+      "objective": {
+        "target": 0.95
+      },
+      "tags": [
+        "EDA"
+      ],
+      "groupBy": [
+        "transaction.name"
+      ],
+      "settings": {
+        "preventInitialBackfill": false,
+        "syncDelay": "1m",
+        "frequency": "1m"
+      },
+      "id": "064762fc-8dbe-4283-b10b-e54b899097f9",
+      "revision": 2,
+      "enabled": true,
+      "createdAt": "2024-11-04T14:33:46.550Z",
+      "updatedAt": "2024-11-04T14:40:48.267Z",
+      "version": 2,
+      "createdBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "updatedBy": "u_TOq4PEK9Hq5tifXcfw4M61pNIgrr6cDqyzj_gTK0ibg_0",
+      "artifacts": {
+        "dashboards": []
+      },
+      "instanceId": "RstLockScheduler$$Lambda.run",
+      "summary": {
+        "errorBudget": {
+          "initial": 0.05,
+          "consumed": 0,
+          "remaining": 1,
+          "isEstimated": false
+        },
+        "sliValue": 1,
+        "status": "HEALTHY",
+        "summaryUpdatedAt": "2026-10-03T08:04:34.441191272Z",
+        "fiveMinuteBurnRate": 0,
+        "oneHourBurnRate": 0,
+        "oneDayBurnRate": 0
+      },
+      "groupings": {
+        "transaction.name": "RstLockScheduler$$Lambda.run"
+      }
+    }
+  ]
+}
