@@ -1,0 +1,951 @@
+# 52: POST /_query?format=json [200 OK]
+#! No limit defined, adding default limit of [1000]
+{
+  "took": 7663,
+  "is_partial": false,
+  "completion_time_in_millis": 1791017854331,
+  "documents_found": 1472818586,
+  "values_loaded": 2939325723,
+  "rows_emitted": 2945639545,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 972063011487,
+  "start_time_in_millis": 1791017846668,
+  "expiration_time_in_millis": 1791449854245,
+  "columns": [
+    {
+      "name": "docs",
+      "type": "long"
+    },
+    {
+      "name": "hosts",
+      "type": "long"
+    },
+    {
+      "name": "paladin.enrichment.computed.proc_diff",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      1451534102,
+      1534,
+      "equal"
+    ],
+    [
+      14973035,
+      742,
+      "not_equal"
+    ],
+    [
+      6311449,
+      423,
+      null
+    ]
+  ]
+}
+# 60: POST /_query?format=json [200 OK]
+{
+  "took": 1163,
+  "is_partial": false,
+  "completion_time_in_millis": 1791017855659,
+  "documents_found": 10571865,
+  "values_loaded": 35955356,
+  "rows_emitted": 21188558,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 23863317706,
+  "start_time_in_millis": 1791017854496,
+  "expiration_time_in_millis": 1791449855646,
+  "columns": [
+    {
+      "name": "links",
+      "type": "long"
+    },
+    {
+      "name": "with_child_name",
+      "type": "long"
+    },
+    {
+      "name": "with_apm_service",
+      "type": "long"
+    },
+    {
+      "name": "parent_class",
+      "type": "keyword"
+    },
+    {
+      "name": "child_class",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      2146205,
+      0,
+      2146205,
+      "cmdb_ci_computer",
+      null
+    ],
+    [
+      652784,
+      652784,
+      652784,
+      "cmdb_ci_disk_type",
+      "cmdb_ci_availability_zone"
+    ],
+    [
+      579741,
+      579741,
+      579741,
+      null,
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      510143,
+      510143,
+      510143,
+      "cmdb_ci_disk_type",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      434647,
+      434647,
+      434647,
+      "cmdb_ci_storage_vol_snapshot",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      366406,
+      0,
+      366406,
+      "cmdb_ci_kubernetes_pod",
+      null
+    ],
+    [
+      363276,
+      363276,
+      363276,
+      "cmdb_ci_storage_volume",
+      "cmdb_ci_storage_vol_snapshot"
+    ],
+    [
+      296778,
+      296778,
+      296778,
+      "cmdb_ci_computer",
+      "cmdb_ci_network_adapter"
+    ],
+    [
+      219789,
+      219789,
+      219789,
+      "cmdb_ci_compute_template",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      171964,
+      171964,
+      171964,
+      "cmdb_ci_google_datacenter",
+      "cmdb_ci_availability_zone"
+    ],
+    [
+      167311,
+      167311,
+      167311,
+      "cmdb_ci_storage_vol_snapshot",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      151431,
+      151431,
+      151431,
+      "cmdb_ci_endpoint_block",
+      "cmdb_ci_storage_volume"
+    ],
+    [
+      150098,
+      150098,
+      150098,
+      "cmdb_ci_vmware_instance",
+      "cmdb_ci_endpoint_block"
+    ],
+    [
+      142768,
+      142768,
+      142768,
+      "cmdb_ci_kubernetes_replicaset",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      128159,
+      128159,
+      128159,
+      "cmdb_ci_storage_vol_snapshot",
+      "cmdb_ci_storage_volume"
+    ],
+    [
+      127913,
+      127913,
+      127913,
+      "cmdb_ci_kubernetes_replicaset",
+      "cmdb_ci_kubernetes_cluster"
+    ],
+    [
+      102516,
+      102516,
+      102516,
+      "cmdb_ci_cloud_database",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      102067,
+      102067,
+      102067,
+      "cmdb_ci_kubernetes_pod",
+      "cmdb_ci_docker_container"
+    ],
+    [
+      100342,
+      100342,
+      100342,
+      "cmdb_ci_kubernetes_pod",
+      "cmdb_ci_docker_image"
+    ],
+    [
+      83362,
+      83362,
+      83362,
+      "cmdb_ci_computer",
+      "cmdb_ci_disk"
+    ],
+    [
+      79546,
+      79546,
+      79546,
+      "cmdb_ci_storage_volume",
+      "cmdb_ci_vcenter_datacenter"
+    ],
+    [
+      70146,
+      0,
+      70146,
+      "cmdb_ci_db_ora_instance",
+      null
+    ],
+    [
+      69968,
+      69968,
+      69968,
+      "cmdb_ci_ip_switch",
+      "dscy_switchport"
+    ],
+    [
+      67918,
+      67918,
+      67918,
+      "cmdb_ci_storage_controller",
+      "cmdb_ci_fc_port"
+    ],
+    [
+      65925,
+      0,
+      65925,
+      null,
+      null
+    ],
+    [
+      63311,
+      63311,
+      63311,
+      "cmdb_ci_computer",
+      "cmdb_ci_disk_partition"
+    ],
+    [
+      61135,
+      61135,
+      61135,
+      "cmdb_ci_google_datacenter",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      60932,
+      60932,
+      60932,
+      "cmdb_ci_linux_server",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      59062,
+      59062,
+      59062,
+      "cmdb_ci_kubernetes_pod",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      53185,
+      53185,
+      53185,
+      "cmdb_ci_web_service",
+      "cmdb_ci_app_server_websphere"
+    ]
+  ]
+}
+# 68: POST /_query?format=json [200 OK]
+{
+  "took": 51,
+  "is_partial": false,
+  "completion_time_in_millis": 1791017855803,
+  "documents_found": 5,
+  "values_loaded": 105,
+  "rows_emitted": 30,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 869202,
+  "start_time_in_millis": 1791017855752,
+  "expiration_time_in_millis": 1791449855646,
+  "columns": [
+    {
+      "name": "@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "child.class",
+      "type": "keyword"
+    },
+    {
+      "name": "child.environment",
+      "type": "keyword"
+    },
+    {
+      "name": "child.fqdn",
+      "type": "keyword"
+    },
+    {
+      "name": "child.install_status",
+      "type": "keyword"
+    },
+    {
+      "name": "child.name",
+      "type": "keyword"
+    },
+    {
+      "name": "child.operational_status",
+      "type": "keyword"
+    },
+    {
+      "name": "child.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "connection_strength",
+      "type": "keyword"
+    },
+    {
+      "name": "created_at",
+      "type": "date"
+    },
+    {
+      "name": "datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "extracted_at",
+      "type": "date"
+    },
+    {
+      "name": "impacted_ci",
+      "type": "keyword"
+    },
+    {
+      "name": "is_marked_for_deletion",
+      "type": "boolean"
+    },
+    {
+      "name": "meta.@timestamp",
+      "type": "keyword"
+    },
+    {
+      "name": "meta.sync_id",
+      "type": "keyword"
+    },
+    {
+      "name": "mirrored_at",
+      "type": "date"
+    },
+    {
+      "name": "outage_ratio",
+      "type": "double"
+    },
+    {
+      "name": "parent.class",
+      "type": "keyword"
+    },
+    {
+      "name": "parent.environment",
+      "type": "keyword"
+    },
+    {
+      "name": "parent.fqdn",
+      "type": "keyword"
+    },
+    {
+      "name": "parent.install_status",
+      "type": "keyword"
+    },
+    {
+      "name": "parent.name",
+      "type": "keyword"
+    },
+    {
+      "name": "parent.operational_status",
+      "type": "keyword"
+    },
+    {
+      "name": "parent.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "port",
+      "type": "integer"
+    },
+    {
+      "name": "schedule.name",
+      "type": "keyword"
+    },
+    {
+      "name": "schedule.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "schedule.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "type.name",
+      "type": "keyword"
+    },
+    {
+      "name": "type.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "type.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "updated_at",
+      "type": "date"
+    }
+  ],
+  "values": [
+    [
+      "2026-10-03T06:36:05.507Z",
+      "cmdb_ci_ip_address",
+      null,
+      null,
+      "Installed",
+      "10.8.33.59",
+      "1",
+      "3e835cb380af83908c19fa1b9f2d3208",
+      "always",
+      "2026-10-02T05:54:40.000Z",
+      "cnaprod.service-now",
+      null,
+      "none",
+      null,
+      "2026-10-03T06:32:03.527Z",
+      "8b0d63d8-12dc-4f1c-b1ab-1c5c4d692593",
+      null,
+      null,
+      "cmdb_ci_computer",
+      null,
+      null,
+      "Installed",
+      "win11-x96tmr1nx",
+      "1",
+      "75bdd6ee5c4ba618e0e95973a0349bd0",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Owns::Owned by",
+      "owns::owned by",
+      "25242fb2377a9200738d021a54990e88",
+      "2026-10-02T05:54:40.000Z"
+    ],
+    [
+      "2026-10-03T06:36:05.507Z",
+      "cmdb_ci_ip_address",
+      null,
+      null,
+      "Installed",
+      "10.8.254.109",
+      "1",
+      "7a835cb31aaf839087833ee69d28a102",
+      "always",
+      "2026-10-02T05:54:40.000Z",
+      "cnaprod.service-now",
+      null,
+      "none",
+      null,
+      "2026-10-03T06:32:03.527Z",
+      "8b0d63d8-12dc-4f1c-b1ab-1c5c4d692593",
+      null,
+      null,
+      "cmdb_ci_computer",
+      null,
+      null,
+      "Installed",
+      "win11-jxz0kmdg8",
+      "1",
+      "e17379ae2f90f654ff1a6120d7bea24d",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Owns::Owned by",
+      "owns::owned by",
+      "25242fb2377a9200738d021a54990e88",
+      "2026-10-02T05:54:40.000Z"
+    ],
+    [
+      "2026-10-03T06:36:05.507Z",
+      "cmdb_ci_ip_address",
+      null,
+      null,
+      "Installed",
+      "10.21.137.74",
+      "1",
+      "3e831cb33eaf83901fdddfe83d4f10fa",
+      "always",
+      "2026-10-02T05:54:40.000Z",
+      "cnaprod.service-now",
+      null,
+      "none",
+      null,
+      "2026-10-03T06:32:03.527Z",
+      "8b0d63d8-12dc-4f1c-b1ab-1c5c4d692593",
+      null,
+      null,
+      "cmdb_ci_computer",
+      null,
+      null,
+      "Installed",
+      "win11-rweb05q8c",
+      "1",
+      "3e372adb47286290d254f78b416d43f9",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Owns::Owned by",
+      "owns::owned by",
+      "25242fb2377a9200738d021a54990e88",
+      "2026-10-02T05:54:40.000Z"
+    ],
+    [
+      "2026-10-03T06:36:05.508Z",
+      "cmdb_ci_ip_address",
+      null,
+      null,
+      "Installed",
+      "100.117.222.99",
+      "1",
+      "b6835cb327af83904f25398bfbeaa508",
+      "always",
+      "2026-10-02T05:54:40.000Z",
+      "cnaprod.service-now",
+      null,
+      "none",
+      null,
+      "2026-10-03T06:32:03.527Z",
+      "8b0d63d8-12dc-4f1c-b1ab-1c5c4d692593",
+      null,
+      null,
+      "cmdb_ci_computer",
+      null,
+      null,
+      "Installed",
+      "win11-rzszl99pe",
+      "1",
+      "7e2c8a4a47349250837da49c646d4311",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Owns::Owned by",
+      "owns::owned by",
+      "25242fb2377a9200738d021a54990e88",
+      "2026-10-02T05:54:40.000Z"
+    ],
+    [
+      "2026-10-03T06:36:05.508Z",
+      "cmdb_ci_ip_address",
+      null,
+      null,
+      "Installed",
+      "10.21.73.104",
+      "1",
+      "76835cb3a8af8390ae11998a639c4c01",
+      "always",
+      "2026-10-02T05:54:40.000Z",
+      "cnaprod.service-now",
+      null,
+      "none",
+      null,
+      "2026-10-03T06:32:03.527Z",
+      "8b0d63d8-12dc-4f1c-b1ab-1c5c4d692593",
+      null,
+      null,
+      "cmdb_ci_computer",
+      null,
+      null,
+      "Installed",
+      "w365-giez-q8dwb",
+      "1",
+      "3ec4b2744f45ba54d31fcb99436232aa",
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Owns::Owned by",
+      "owns::owned by",
+      "25242fb2377a9200738d021a54990e88",
+      "2026-10-02T05:54:40.000Z"
+    ]
+  ]
+}
+# 76: POST /_query?format=json [400 Bad Request]
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "parsing_exception",
+        "reason": "line 2:199: mismatched input '.1' expecting {<EOF>, '|', 'and', '::', ',', '.', 'or', '+', '-', '*', '/', '%'}"
+      }
+    ],
+    "type": "parsing_exception",
+    "reason": "line 2:199: mismatched input '.1' expecting {<EOF>, '|', 'and', '::', ',', '.', 'or', '+', '-', '*', '/', '%'}",
+    "caused_by": {
+      "type": "input_mismatch_exception",
+      "reason": null
+    }
+  },
+  "status": 400
+}
+# 84: GET _cat/indices/.slo-observability*,*release*,*maint*,*blackout*,*schedule*,*deploy*?v&expand_wildcards=all&s=index [200 OK]
+health status index                                                                                 uuid                   pri rep docs.count docs.deleted store.size pri.store.size dataset.size
+green  open   .ds-.slo-observability.health-v3.6-2026.09.16-000001                                  HyGLOqUCSEGpDzafPwa9AA   1   1          0            0       498b           249b         249b
+green  open   .ds-logs-apm.app.covers_scheduler-default-2026.09.01-000001                           3lMf93gLTga3lBfeBlTVCg   1   1    4868001            0    689.2mb        344.3mb      344.3mb
+green  open   .ds-logs-apm.app.covers_scheduler-default-2026.10.01-000002                           0OvpIJMtQSiRBIK7XHtIIA   1   1     705890            0    101.7mb         51.1mb       51.1mb
+green  open   .ds-logs-apm.app.ivans_maintenance_batch-default-2026.08.27-000032                    JcKgcWPZSgmdXH9kiQHItg   1   1     238993            0     87.1mb         43.5mb       43.5mb
+green  open   .ds-logs-apm.app.ivans_maintenance_batch-default-2026.09.26-000034                    mlsw0T3QToOaytGfaMorSw   1   1     118825            0     51.1mb         25.8mb       25.8mb
+green  open   .ds-logs-apm.app.schedulef_api-default-2026.08.27-000036                              e4kNiOlsTO-ypec11XuxcA   1   1       3857            0      3.4mb          1.5mb        1.5mb
+green  open   .ds-logs-apm.app.schedulef_api-default-2026.09.26-000038                              3_nD3tHPS5azytWD8WcKYg   1   1        766            0      2.3mb          1.3mb        1.3mb
+green  open   .ds-logs-apm.app.schedulef_batch-default-2026.08.27-000036                            aA61H_9aRI6mdDNg-F4U3g   1   1     508585            0    263.9mb        131.1mb      131.1mb
+green  open   .ds-logs-apm.app.schedulef_batch-default-2026.09.26-000038                            liSUNCPCSpWPqf0pTsFqrA   1   1     161825            0     75.4mb         38.1mb       38.1mb
+green  open   .ds-logs-apm.app.schedulef_data_api-default-2026.08.27-000036                         QZ4tw0x-SIe99G24LLGmHQ   1   1     304653            0     83.3mb         41.6mb       41.6mb
+green  open   .ds-logs-apm.app.schedulef_data_api-default-2026.09.26-000038                         rsgQYtZQRjm9Q9f1jn01ug   1   1      93258            0     30.2mb           16mb         16mb
+green  open   .ds-logs-apm.app.smartcomm_release_management_ws-default-2026.08.27-000026            Mku5Mt8NQGW3z4iuDrmIeA   1   1       1752            0      2.9mb          1.4mb        1.4mb
+green  open   .ds-logs-apm.app.smartcomm_release_management_ws-default-2026.09.26-000028            M2tlAGYvStesYIBbc_x9ow   1   1        285            0      1.9mb        979.6kb      979.6kb
+green  open   .ds-logs-apm.app.surbpi_feeds_maintenance_batch-default-2026.01.24-000034             VhEXQpOMTAGHhClYTQdAaQ   1   1          0            0       500b           250b         250b
+green  open   .ds-logs-apm.app.suruwt_cde_maintenance_batch-default-2026.08.27-000016               nCbzO9bGRJmEGJCRMNeShQ   1   1     155327            0     68.5mb         34.4mb       34.4mb
+green  open   .ds-logs-apm.app.suruwt_cde_maintenance_batch-default-2026.09.26-000018               bHzgrWFbTauOw0a9-MHG3w   1   1      32428            0     12.7mb          6.7mb        6.7mb
+green  open   .ds-metrics-apm.app.covers_scheduler-default-2026.09.22-000005                        B63c6AhxSNK-xdEH2y0dXw   1   1     600740            0     77.4mb         38.8mb       38.8mb
+green  open   .ds-metrics-apm.app.covers_scheduler-default-2026.09.29-000007                        sYroYm4LSXuak6FD705_KQ   1   1     331914            0     51.1mb         24.8mb       24.8mb
+green  open   .ds-metrics-apm.app.ivans_maintenance_batch-default-2026.09.23-000305                 ipyeLWHqRuGUs6CJJJJSLQ   1   1      59464            0     11.2mb          5.3mb        5.3mb
+green  open   .ds-metrics-apm.app.ivans_maintenance_batch-default-2026.09.30-000307                 8zHEG18CQpqlzIz5Er0hGw   1   1      26128            0      5.4mb          2.7mb        2.7mb
+green  open   .ds-metrics-apm.app.schedulef_api-default-2026.09.23-000377                           2NnWi4bWQS-nIlQpAVRxEA   1   1    1600357            0    217.2mb        108.4mb      108.4mb
+green  open   .ds-metrics-apm.app.schedulef_api-default-2026.09.30-000379                           zkyJo3eiRBGas0Xic3V06g   1   1     863600            0    123.9mb         62.3mb       62.3mb
+green  open   .ds-metrics-apm.app.schedulef_batch-default-2026.09.23-000377                         BaQ2_Bt2T7-dWx3RnWiRDQ   1   1    1138768            0    156.8mb         78.3mb       78.3mb
+green  open   .ds-metrics-apm.app.schedulef_batch-default-2026.09.30-000379                         YKT4cQuqSieQHAEfwOFJAA   1   1     513775            0     72.4mb         35.9mb       35.9mb
+green  open   .ds-metrics-apm.app.schedulef_data_api-default-2026.09.23-000377                      jPaIxZwXQjKX9CWyFj5VyA   1   1    1155429            0    161.3mb         80.3mb       80.3mb
+green  open   .ds-metrics-apm.app.schedulef_data_api-default-2026.09.30-000379                      3wBlqQY6R8iVJ4hqU-Rx9g   1   1     688132            0    106.3mb         53.2mb       53.2mb
+green  open   .ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.09.23-000185         H6Yam0SBQ36R9i9yQC3bqA   1   1     540266            0     69.7mb         34.8mb       34.8mb
+green  open   .ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.09.30-000187         6FJTNJw3Snyz8dbJw4g4ZQ   1   1     267407            0     36.5mb         18.4mb       18.4mb
+green  open   .ds-metrics-apm.app.surbpi_feeds_maintenance_batch-default-2026.01.09-000445          Pr9e696ISIyOl6ltp8PhPQ   1   1          0            0       500b           250b         250b
+green  open   .ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.09.23-000107            0fzeg8-uRgyE_Yaf1xPOmA   1   1      21240            0      4.9mb          2.4mb        2.4mb
+green  open   .ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.09.30-000109            bNQbnzGjRa2RKAcp26y2Pw   1   1       9278            0      2.5mb          1.1mb        1.1mb
+green  open   .ds-metrics-kubernetes.state_deployment-default-2026.09.25-000006                     dE7mAjjjQQ2SHhYh81kI4g   1   1          0            0       498b           249b         249b
+green  open   .slo-observability.composite-summary-v1                                               lhDxsGsTR4yElRxaYrJKdA   1   1          0            0       498b           249b         249b
+green  open   .slo-observability.sli-v3                                                             lNcd7iOjSByznUKUz06cyQ   1   1          0            0       502b           251b         251b
+green  open   .slo-observability.sli-v3.2024-07-01                                                  P7Vptc4PSB6zIRB7R7ex7A   1   1          0            0       522b           261b         261b
+green  open   .slo-observability.sli-v3.2024-08-01                                                  g9xHzQY3Q1-iGrnCxOEyUA   1   1          0            0       530b           265b         265b
+green  open   .slo-observability.sli-v3.2024-09-01                                                  k43WLSesROyloF0fq3BbPw   1   1          0            0       518b           259b         259b
+green  open   .slo-observability.sli-v3.2024-10-01                                                  O6PKho_pQuOjAh6BhTlIMg   1   1          0            0       518b           259b         259b
+green  open   .slo-observability.sli-v3.2024-11-01                                                  rCYx4zvBSKGrg2VMQWn2Jg   1   1          0            0       518b           259b         259b
+green  open   .slo-observability.sli-v3.3                                                           bn4vMjjnQzecXH4UVeN7vQ   1   1          0            0       502b           251b         251b
+green  open   .slo-observability.sli-v3.3.2024-10-01                                                xOl9mgomTY2lmDRiIJV3lg   1   1     136545       136545       32mb           16mb         16mb
+green  open   .slo-observability.sli-v3.3.2024-11-01                                                DDvqhb7bQdq55W4EeoBa6Q   1   1     162533            0     37.7mb         18.8mb       18.8mb
+green  open   .slo-observability.sli-v3.3.2024-12-01                                                s4dK45tmSK6JNmnH_x2fkA   1   1     196827        12392     52.9mb         26.4mb       26.4mb
+green  open   .slo-observability.sli-v3.3.2025-01-01                                                AT1SfxHHRMOsLajlRSe1wQ   1   1     211892        46554     62.8mb         31.4mb       31.4mb
+green  open   .slo-observability.sli-v3.3.2025-02-01                                                qR_u_1SWRiujMjMgfyOoBw   1   1     224640       531662    122.9mb         61.4mb       61.4mb
+green  open   .slo-observability.sli-v3.3.2025-03-01                                                DkZ7jCNMSQy5ZKdjb0Vg1g   1   1     339662       256047    129.1mb         64.5mb       64.5mb
+green  open   .slo-observability.sli-v3.3.2025-04-01                                                JGB2u7fzSkeVhkSQ26M-ig   1   1     461667            0      145mb         72.5mb       72.5mb
+green  open   .slo-observability.sli-v3.3.2025-05-01                                                DHkZjt0IS4qzVdpRtfRxJg   1   1     662200           29    199.1mb         99.5mb       99.5mb
+green  open   .slo-observability.sli-v3.3.2025-06-01                                                ioXClJciQNiC5DkTixDS2A   1   1    1247484           30    376.2mb        188.1mb      188.1mb
+green  open   .slo-observability.sli-v3.3.2025-07-01                                                fnP3o6DyTgKxYwaJGollcg   1   1    1300209            0    420.6mb        210.3mb      210.3mb
+green  open   .slo-observability.sli-v3.3.2025-08-01                                                VhOSD7EiTWyaj_kkoLR1vw   1   1    1274642            0    391.8mb        195.9mb      195.9mb
+green  open   .slo-observability.sli-v3.3.2025-09-01                                                sQ_9qVEZQwugWDi6SP2Kxw   1   1    1208067            0    364.2mb        182.1mb      182.1mb
+green  open   .slo-observability.sli-v3.3.2025-10-01                                                Jr5qMNZaQ-it114RKsK6Og   1   1    1317457            0    414.1mb          207mb        207mb
+green  open   .slo-observability.sli-v3.3.2025-11-01                                                FfyP9zlURaS7oaCwAu6IJw   1   1    1278109            0    409.6mb        204.8mb      204.8mb
+green  open   .slo-observability.sli-v3.3.2025-12-01                                                vk4z94hiRWCVwWZ-fTbXFw   1   1    1283333            0    407.3mb        203.6mb      203.6mb
+green  open   .slo-observability.sli-v3.3.2026-01-01                                                gUgvByeRTWCU5Ow8WUHMRQ   1   1    1308112            0    420.3mb        210.1mb      210.1mb
+green  open   .slo-observability.sli-v3.3.2026-02-01                                                COxRbgGTQqGwGXl9GTFFew   1   1    1253709            0    400.4mb        200.2mb      200.2mb
+green  open   .slo-observability.sli-v3.3.2026-03-01                                                fJRTT4YZTX-X4ZnqqGRVWw   1   1    1435375            0    486.9mb        243.4mb      243.4mb
+green  open   .slo-observability.sli-v3.3.2026-04-01                                                Z59oFepQRGmO1wfNSnrpPA   1   1    1374993            0    460.5mb        230.2mb      230.2mb
+green  open   .slo-observability.sli-v3.3.2026-05-01                                                8d6Tkv7bQJeSJlK0H0jVeA   1   1    1450165            0    491.9mb        245.9mb      245.9mb
+green  open   .slo-observability.sli-v3.3.2026-06-01                                                ONKJ-c7jQOm33zFXDeOmUw   1   1    1425519            0      478mb          239mb        239mb
+green  open   .slo-observability.sli-v3.3.2026-07-01                                                PqSOoJp7RDSmisIQH5OMlA   1   1    1455829            0    487.8mb        243.9mb      243.9mb
+green  open   .slo-observability.sli-v3.3.2026-08-01                                                N-JpEq_cS66wEypz0jRiJg   1   1    1420286            0    479.2mb        239.6mb      239.6mb
+green  open   .slo-observability.sli-v3.3.2026-09-01                                                ZEHTXlU3Qe-gxmxxyeROJg   1   1    1372024            0    419.4mb        209.5mb      209.5mb
+green  open   .slo-observability.sli-v3.3.2026-10-01                                                uVJdf7lBQKKOyZU9QzQWMg   1   1     112106            0     39.1mb         19.1mb       19.1mb
+green  open   .slo-observability.sli-v3.5                                                           sDi21bySSV-zF_dv5N7WCw   1   1          0            0       500b           250b         250b
+green  open   .slo-observability.sli-v3.5.2025-12-01                                                jRe29Cd8TSGVtRilk7J68A   1   1          0            0       528b           264b         264b
+green  open   .slo-observability.sli-v3.5.2026-01-01                                                mpgwDr7WS4iXRDZjPyaLXQ   1   1        305           90    360.8kb        180.4kb      180.4kb
+green  open   .slo-observability.sli-v3.5.2026-02-01                                                SGitHLxgRNe8N6kA17HfsA   1   1      72594        54553     19.7mb          9.8mb        9.8mb
+green  open   .slo-observability.sli-v3.5.2026-03-01                                                O5_Mew-kQ5aSCbfhttroeA   1   1     145476       171416     67.7mb         33.8mb       33.8mb
+green  open   .slo-observability.sli-v3.5.2026-04-01                                                AloK2QP9S_Sp4QRSM-DE_Q   1   1     477772        42064    155.1mb         77.4mb       77.4mb
+green  open   .slo-observability.sli-v3.5.2026-05-01                                                NoHC5pVgQRCEyC9Rvoy6DQ   1   1     486886        27767      223mb        111.3mb      111.3mb
+green  open   .slo-observability.sli-v3.5.2026-06-01                                                IUI9ikcsQSiaW56y6CBOpg   1   1     484909         6231    214.7mb        107.3mb      107.3mb
+green  open   .slo-observability.sli-v3.5.2026-07-01                                                4O8fskDIR_inEC8EBRFLuw   1   1     529605         9516    237.2mb        118.6mb      118.6mb
+green  open   .slo-observability.sli-v3.5.2026-08-01                                                V4oj8YgOSU2_KDMjC5y5Ag   1   1     481910         6019    202.5mb        101.2mb      101.2mb
+green  open   .slo-observability.sli-v3.5.2026-09-01                                                Bl0wjmKYRwOqCtNBZjfLfg   1   1     503004         5319    168.8mb         84.6mb       84.6mb
+green  open   .slo-observability.sli-v3.5.2026-10-01                                                shAP3nd5SzGWhoobXoJk5g   1   1      39620            0     14.1mb          6.7mb        6.7mb
+green  open   .slo-observability.sli-v3.6                                                           cew2PQLVQVKu_9gxIdOKmA   1   1          0            0       500b           250b         250b
+green  open   .slo-observability.sli-v3.6.2026-05-19                                                WDLwKZeIR_eBKdyayJm9TQ   1   1       1095            0    301.3kb        150.6kb      150.6kb
+green  open   .slo-observability.sli-v3.6.2026-05-20                                                k8S3W440SeSXXIYxckvxYQ   1   1       1251            0    468.3kb        234.1kb      234.1kb
+green  open   .slo-observability.sli-v3.6.2026-05-21                                                mYB5oj0CTFeLwG4cczjbWA   1   1       1330            0    776.8kb        388.4kb      388.4kb
+green  open   .slo-observability.sli-v3.6.2026-05-22                                                c4Wql-BOTyW4iL31cy5QeQ   1   1       1440            0      851kb        425.5kb      425.5kb
+green  open   .slo-observability.sli-v3.6.2026-05-23                                                Dg3onsG5QLG0IgXqYlVpTg   1   1       1440            0    924.5kb        462.2kb      462.2kb
+green  open   .slo-observability.sli-v3.6.2026-05-24                                                qvto5qMDTGmSWFdkWWO5DQ   1   1       1440            0      911kb        455.5kb      455.5kb
+green  open   .slo-observability.sli-v3.6.2026-05-25                                                IcKtQFbFSymn-NuWgb7_Ug   1   1       1440            0    883.6kb        441.8kb      441.8kb
+green  open   .slo-observability.sli-v3.6.2026-05-26                                                SJYQZE56S3CdNvdg6ZASZQ   1   1       1440            0    923.3kb        461.6kb      461.6kb
+green  open   .slo-observability.sli-v3.6.2026-05-27                                                EyIpwjJKQw6-iVK4sXyAbg   1   1       1440            0      832kb          416kb        416kb
+green  open   .slo-observability.sli-v3.6.2026-05-28                                                _BHjKwNqTtG-V7gsiAxcmQ   1   1       1440            0    923.6kb        461.8kb      461.8kb
+green  open   .slo-observability.sli-v3.6.2026-05-29                                                8tNA9njFRYemvjOq2-ZRDw   1   1       1440            0    890.7kb        445.3kb      445.3kb
+green  open   .slo-observability.sli-v3.6.2026-05-30                                                N1e3g493R-C4h7PWKdCioA   1   1       1196            0    818.9kb        409.4kb      409.4kb
+green  open   .slo-observability.sli-v3.6.2026-05-31                                                rSJHVpkASpq0bGuOaqoLOg   1   1       1114            0    681.6kb        340.8kb      340.8kb
+green  open   .slo-observability.sli-v3.6.2026-06-01                                                etWy3Q8xS025L37KMMIE6A   1   1       1219            0    983.3kb        491.6kb      491.6kb
+green  open   .slo-observability.sli-v3.6.2026-06-02                                                L3DhMhk2ROaoz-5EtrGEEw   1   1       1239            0    976.6kb        488.3kb      488.3kb
+green  open   .slo-observability.sli-v3.6.2026-06-03                                                Wr4JYHB3SYSJGVEUNPLJeQ   1   1       1295            0    884.2kb        442.1kb      442.1kb
+green  open   .slo-observability.sli-v3.6.2026-06-04                                                m8HQVXYTRFuV15OlQylUwg   1   1       1247            0    640.5kb        320.2kb      320.2kb
+green  open   .slo-observability.sli-v3.6.2026-06-05                                                61TlsVQ3Ttm3s53O9scfxA   1   1       1257            0    685.3kb        342.6kb      342.6kb
+green  open   .slo-observability.sli-v3.6.2026-06-06                                                NMONkxx4SiWiXctAHonpyA   1   1       1120            0    511.8kb        255.9kb      255.9kb
+green  open   .slo-observability.sli-v3.6.2026-06-07                                                1MWEM9ErQsSldSnYxXVjqg   1   1       1111            0    882.5kb        441.2kb      441.2kb
+green  open   .slo-observability.sli-v3.6.2026-06-08                                                9Spon4neR72b8dGxZO46Ow   1   1       1272            0        1mb        513.1kb      513.1kb
+green  open   .slo-observability.sli-v3.6.2026-06-09                                                RHTgpC-BTcmZHPN5HrGaZA   1   1       1265            0    511.5kb        255.7kb      255.7kb
+green  open   .slo-observability.sli-v3.6.2026-06-10                                                UoHk07-UTzSlBaHGRHC7wA   1   1       1268            0    968.8kb        484.4kb      484.4kb
+green  open   .slo-observability.sli-v3.6.2026-06-11                                                23IMkNK_TJyRj8ES0LfgSw   1   1       1229            0    638.9kb        319.4kb      319.4kb
+green  open   .slo-observability.sli-v3.6.2026-06-12                                                i4xJ1bQhTSSwurSkK56A7g   1   1       1230            0    855.4kb        427.7kb      427.7kb
+green  open   .slo-observability.sli-v3.6.2026-06-13                                                Dl0JMMIuRHqB5hikwe8Zvg   1   1       1103            0    394.1kb          197kb        197kb
+green  open   .slo-observability.sli-v3.6.2026-06-14                                                _h9mC-NXTDG5pTPGTayusA   1   1       1135            0    459.6kb        229.8kb      229.8kb
+green  open   .slo-observability.sli-v3.6.2026-06-15                                                1fltMG0uSHWBeMdK2AIIow   1   1       1253            0    508.9kb        254.4kb      254.4kb
+green  open   .slo-observability.sli-v3.6.2026-06-16                                                wTMo6kcbTMK3vVdk3jSimg   1   1       1269            0    855.6kb        427.8kb      427.8kb
+green  open   .slo-observability.sli-v3.6.2026-06-17                                                8i2qzHTOShKym7Ap-B_atQ   1   1       1272            0        1mb        531.6kb      531.6kb
+green  open   .slo-observability.sli-v3.6.2026-06-18                                                DD3sVukeROqVFxIiWx3SqQ   1   1       1271            0    517.9kb        258.9kb      258.9kb
+green  open   .slo-observability.sli-v3.6.2026-06-19                                                N7dtixvYRhSyCCP8kn439w   1   1       1188            0      436kb          218kb        218kb
+green  open   .slo-observability.sli-v3.6.2026-06-20                                                pmtqkcInSFWkjKqxVWC4CA   1   1       1133            0    565.9kb        282.9kb      282.9kb
+green  open   .slo-observability.sli-v3.6.2026-06-21                                                R5bKqs7KRESQhLiATmEoZw   1   1       1125            0    617.6kb        308.8kb      308.8kb
+green  open   .slo-observability.sli-v3.6.2026-06-22                                                5_z2n77bTlK8aG4-KPuTkw   1   1       1259            0    848.2kb        424.1kb      424.1kb
+green  open   .slo-observability.sli-v3.6.2026-06-23                                                fFpqKcI1TbOQ85BxbfjRIg   1   1       1241            0    856.8kb        428.4kb      428.4kb
+green  open   .slo-observability.sli-v3.6.2026-06-24                                                38lhX5fST8Oh8CQWQ7gwDg   1   1       1233            0    815.6kb        407.8kb      407.8kb
+green  open   .slo-observability.sli-v3.6.2026-06-25                                                pWNA2i0LSkiGC3E84DLPaA   1   1       1249            0    629.3kb        314.6kb      314.6kb
+green  open   .slo-observability.sli-v3.6.2026-06-26                                                0ptPb3NqSFyR5ifxmlSFSA   1   1       1243            0    544.6kb        272.3kb      272.3kb
+green  open   .slo-observability.sli-v3.6.2026-06-27                                                GgRVRhJURvquE3S5EclUQw   1   1       1133            0    826.7kb        413.3kb      413.3kb
+green  open   .slo-observability.sli-v3.6.2026-06-28                                                vVkN49JsTP6Fq4whX-6-eg   1   1       1128            0    340.2kb        170.1kb      170.1kb
+green  open   .slo-observability.sli-v3.6.2026-06-29                                                pygxZptDTOSpN9lq4KvZmw   1   1       1267            0        1mb          537kb        537kb
+green  open   .slo-observability.sli-v3.6.2026-06-30                                                6Ifc3qRGSmCmifiUq1ixpg   1   1       1282            0    814.2kb        407.1kb      407.1kb
+green  open   .slo-observability.sli-v3.6.2026-07-01                                                Veor1yjKQASm493rCWyhkg   1   1       1215            0    927.6kb        463.8kb      463.8kb
+green  open   .slo-observability.sli-v3.6.2026-07-02                                                ROyu_-n0T2GiMkp_pEl6hQ   1   1       1240            0      937kb        468.5kb      468.5kb
+green  open   .slo-observability.sli-v3.6.2026-07-03                                                1DP9PX35Rnmd-LaiJHqJ3w   1   1       1195            0      851kb        425.5kb      425.5kb
+green  open   .slo-observability.sli-v3.6.2026-07-04                                                u_BtWowaRT6Lgq4whPX_Yg   1   1       1132            0    799.5kb        399.7kb      399.7kb
+green  open   .slo-observability.sli-v3.6.2026-07-05                                                7YBQrkItTHm_YFJU1CxSNA   1   1       1102            0    744.9kb        372.4kb      372.4kb
+green  open   .slo-observability.sli-v3.6.2026-07-06                                                G5roRr0KSou-ydJG-wPuvw   1   1       1271            0    533.8kb        266.9kb      266.9kb
+green  open   .slo-observability.sli-v3.6.2026-07-07                                                g358scA4TGSXOv3o-lJMgA   1   1       1256            0    670.9kb        335.4kb      335.4kb
+green  open   .slo-observability.sli-v3.6.2026-07-08                                                q3fH51Y-RlyfpQNIz3oKMA   1   1       1267            0    890.5kb        445.2kb      445.2kb
+green  open   .slo-observability.sli-v3.6.2026-07-09                                                kC_LWVb4SgqO92hRqjAE1A   1   1       1245            0      806kb          403kb        403kb
+green  open   .slo-observability.sli-v3.6.2026-07-10                                                n29psFW7RPaxBknRWY7_KQ   1   1       1253            0    506.6kb        253.3kb      253.3kb
+green  open   .slo-observability.sli-v3.6.2026-07-11                                                DXB5BXoSRHGuafzHq6uAnA   1   1       1122            0    729.1kb        364.5kb      364.5kb
+green  open   .slo-observability.sli-v3.6.2026-07-12                                                _k-riohbSEWMsaJNyFlhDQ   1   1       1124            0    382.5kb        191.2kb      191.2kb
+green  open   .slo-observability.sli-v3.6.2026-07-13                                                dtqAerkYQx-Tswq68mmjRQ   1   1       1263            0      589kb        294.5kb      294.5kb
+green  open   .slo-observability.sli-v3.6.2026-07-14                                                f_mt-RtkRVCo6I95pQn6Sw   1   1       1263            0    930.9kb        465.4kb      465.4kb
+green  open   .slo-observability.sli-v3.6.2026-07-15                                                xkFZ_0qoSAWhwTjUEbUTuw   1   1       1250            0    881.5kb        440.7kb      440.7kb
+green  open   .slo-observability.sli-v3.6.2026-07-16                                                N8RFSgQ8TouDHTxNUK8A7g   1   1       1257            0      790kb          395kb        395kb
+green  open   .slo-observability.sli-v3.6.2026-07-17                                                9LfiRqdZSom6gtEKKUT8MQ   1   1       1262            0   1023.8kb        511.9kb      511.9kb
+green  open   .slo-observability.sli-v3.6.2026-07-18                                                gmQb7gkmTqOO5KD0DlblIA   1   1       1176            0    966.1kb          483kb        483kb
+green  open   .slo-observability.sli-v3.6.2026-07-19                                                6OpfysM3TiCwzUWwMeeeRQ   1   1       1137            0    521.9kb        260.9kb      260.9kb
+green  open   .slo-observability.sli-v3.6.2026-07-20                                                sPr5uJeMRPqCD0JZ1QJLRA   1   1       1269            0    712.7kb        356.3kb      356.3kb
+green  open   .slo-observability.sli-v3.6.2026-07-21                                                cMpQW5A7TDqoTxnzGFp-OQ   1   1       1235            0    861.8kb        430.9kb      430.9kb
+green  open   .slo-observability.sli-v3.6.2026-07-22                                                HVyBAFK_SO2TcJQXbcghYA   1   1       1258            0    828.7kb        414.3kb      414.3kb
+green  open   .slo-observability.sli-v3.6.2026-07-23                                                QjBMp7XfRuKRNMTAzyiYRw   1   1       1259            0    476.2kb        238.1kb      238.1kb
+green  open   .slo-observability.sli-v3.6.2026-07-24                                                dG6ODMrcSe-cXlz0Pbhf9w   1   1       1252            0    568.5kb        284.2kb      284.2kb
+green  open   .slo-observability.sli-v3.6.2026-07-25                                                VjMGnsUHTKu1i7e0L6RxOA   1   1       1111            0    788.5kb        394.2kb      394.2kb
+green  open   .slo-observability.sli-v3.6.2026-07-26                                                -fSh59MpRD21qkLLhABZ4A   1   1       1126            0    636.8kb        318.4kb      318.4kb
+green  open   .slo-observability.sli-v3.6.2026-07-27                                                V3ElkTp_Q6OPzRo4wSsiHg   1   1       1220            0      617kb        308.5kb      308.5kb
+green  open   .slo-observability.sli-v3.6.2026-07-28                                                QconeUs2Rzu3KDO4nMA3Zw   1   1       1246            0    837.8kb        418.9kb      418.9kb
+green  open   .slo-observability.sli-v3.6.2026-07-29                                                J5JofEDFT8agHxccDJ3qGQ   1   1       1240            0    916.7kb        458.3kb      458.3kb
+green  open   .slo-observability.sli-v3.6.2026-07-30                                                YegYjQdAT8iCafPL4m8BgQ   1   1       1241            0    979.3kb        489.6kb      489.6kb
+green  open   .slo-observability.sli-v3.6.2026-07-31                                                3qTr42TET8S8phy1k9XvLA   1   1       1268            0    570.9kb        285.4kb      285.4kb
+green  open   .slo-observability.sli-v3.6.2026-08-01                                                nOHTB_0qQl2iY7kH9ZdTlQ   1   1       1116            0    316.8kb        158.4kb      158.4kb
+green  open   .slo-observability.sli-v3.6.2026-08-02                                                6Wf6sUGTR82SmvnJcCQSiA   1   1       1134            0    801.5kb        400.7kb      400.7kb
+green  open   .slo-observability.sli-v3.6.2026-08-03                                                fpqUskjqQ8Spwyv01O90Ww   1   1       1239            0    740.3kb        370.1kb      370.1kb
+green  open   .slo-observability.sli-v3.6.2026-08-04                                                n0dQKmp1Ql2J0mJqshoi0A   1   1       1267            0    536.4kb        268.2kb      268.2kb
+green  open   .slo-observability.sli-v3.6.2026-08-05                                                8onB4FjTQbOROq9k3ypdOw   1   1       1250            0    487.2kb        243.6kb      243.6kb
+green  open   .slo-observability.sli-v3.6.2026-08-06                                                _pJgIX5jR9O1DkIpUFcgvg   1   1       1286            0    837.4kb        418.7kb      418.7kb
+green  open   .slo-observability.sli-v3.6.2026-08-07                                                B2egcQeTTEy9R54ktbW5dA   1   1       1284            0    996.1kb          498kb        498kb
+green  open   .slo-observability.sli-v3.6.2026-08-08                                                0V80jbHnTEqKabGzua6cUg   1   1       1092            0      318kb          159kb        159kb
+green  open   .slo-observability.sli-v3.6.2026-08-09                                                kA58HxoyQwW-jepNVvXI9A   1   1       1100            0    641.4kb        320.7kb      320.7kb
+green  open   .slo-observability.sli-v3.6.2026-08-10                                                DrHxLFjDSxWsKO5lUCBlhA   1   1       1288            0    797.3kb        398.6kb      398.6kb
+green  open   .slo-observability.sli-v3.6.2026-08-11                                                34kiyGuAQR6O5GK78xyLYQ   1   1       1273            0    575.7kb        287.8kb      287.8kb
+green  open   .slo-observability.sli-v3.6.2026-08-12                                                xO4z2cOBS_SUYVlKIiDDCg   1   1       1271            0    498.6kb        249.3kb      249.3kb
+green  open   .slo-observability.sli-v3.6.2026-08-13                                                QeNdSU3GR_-bZ8GCG0mGoQ   1   1       1280            0    739.7kb        369.8kb      369.8kb
+green  open   .slo-observability.sli-v3.6.2026-08-14                                                8OBDmRH4RQ2VnBjegIBD3w   1   1       1289            0      867kb        433.5kb      433.5kb
+green  open   .slo-observability.sli-v3.6.2026-08-15                                                U2LrMJL0QEep0dVYwZpASA   1   1       1104            0    583.9kb        291.9kb      291.9kb
+green  open   .slo-observability.sli-v3.6.2026-08-16                                                oL0nHTJgS-iJ9g93AEbrng   1   1       1132            0    663.6kb        331.8kb      331.8kb
+green  open   .slo-observability.sli-v3.6.2026-08-17                                                4qoeC_buS6-59F7sNtxelg   1   1       1244            0    604.5kb        302.2kb      302.2kb
+green  open   .slo-observability.sli-v3.6.2026-08-18                                                Pr75JEE6QY-m-zBhIjyJoQ   1   1       1273            0    862.4kb        431.2kb      431.2kb
+green  open   .slo-observability.sli-v3.6.2026-08-19                                                A8OXab7iSA6Msz-TLejJMw   1   1       1286            0    886.5kb        443.2kb      443.2kb
+green  open   .slo-observability.sli-v3.6.2026-08-20                                                NG-IuwzvQ1SsiAlzpYewOg   1   1       1264            0    911.5kb        455.7kb      455.7kb
+green  open   .slo-observability.sli-v3.6.2026-08-21                                                FQriVw7HScGgk-_VsROFfw   1   1       1267            0    640.8kb        320.4kb      320.4kb
+green  open   .slo-observability.sli-v3.6.2026-08-22                                                qA_GZ_YqQOG0jmyB9AammA   1   1       1147            0    789.8kb        394.9kb      394.9kb
+green  open   .slo-observability.sli-v3.6.2026-08-23                                                8aYWpKfBRAiWap1KZKfgYw   1   1       1175            0    842.6kb        421.3kb      421.3kb
+green  open   .slo-observability.sli-v3.6.2026-08-24                                                FuSEBLAYQoSr11YeTQ85hg   1   1       1246            0    824.7kb        412.3kb      412.3kb
+green  open   .slo-observability.sli-v3.6.2026-08-25                                                8I-CcE4TQ32QD6E3NMHlNg   1   1       1264            0    906.8kb        453.4kb      453.4kb
+green  open   .slo-observability.sli-v3.6.2026-08-26                                                QDqd1Yj3SQeQRm4oEhkprw   1   1       1288            0    620.8kb        310.4kb      310.4kb
+green  open   .slo-observability.sli-v3.6.2026-08-27                                                XAGq3vEBS5KhR6_JLGxjgA   1   1       1247            0    747.8kb        373.9kb      373.9kb
+green  open   .slo-observability.sli-v3.6.2026-08-28                                                X6w_zTxETFy8S3yrMHSncg   1   1       1265            0    832.7kb        416.3kb      416.3kb
+green  open   .slo-observability.sli-v3.6.2026-08-29                                                cjfUcN2aTt-HZJIGtkTn5A   1   1       1134            0    790.2kb        395.1kb      395.1kb
+green  open   .slo-observability.sli-v3.6.2026-08-30                                                GAl11Kw1RfWQnCfJ3dUGlg   1   1       1125            0    461.7kb        230.8kb      230.8kb
+green  open   .slo-observability.sli-v3.6.2026-08-31                                                IglTu7mNT9KNiyYscjAfjQ   1   1       1284            0        1mb        537.4kb      537.4kb
+green  open   .slo-observability.sli-v3.6.2026-09-01                                                cny93knYQvakjn41591uMQ   1   1       1258            0        1mb        523.6kb      523.6kb
+green  open   .slo-observability.sli-v3.6.2026-09-02                                                xVEotx5sTfeNGmGSFILsHA   1   1       1250            0    704.6kb        352.3kb      352.3kb
+green  open   .slo-observability.sli-v3.6.2026-09-03                                                4pM0Wl5KTru79YmoQjBI2w   1   1       1282            0    718.3kb        359.1kb      359.1kb
+green  open   .slo-observability.sli-v3.6.2026-09-04                                                qiG7H4esQU6xDsdpLolP9Q   1   1       1240            0    958.8kb        479.4kb      479.4kb
+green  open   .slo-observability.sli-v3.6.2026-09-05                                                kOd5qNe6Ry6GJ6xbIi0vlQ   1   1       1120            0    869.2kb        434.6kb      434.6kb
+green  open   .slo-observability.sli-v3.6.2026-09-06                                                jxDSjA7CTcy1gj4Mlk12Aw   1   1       1111            0    869.1kb        434.5kb      434.5kb
+green  open   .slo-observability.sli-v3.6.2026-09-07                                                BLavd5P3TdeM_zgpA-bwkQ   1   1       1216            0      687kb        343.5kb      343.5kb
+green  open   .slo-observability.sli-v3.6.2026-09-08                                                dIZHMjcdRxWtD1FK_v0sqQ   1   1       1231            0    860.7kb        430.3kb      430.3kb
+green  open   .slo-observability.sli-v3.6.2026-09-09                                                TNWr8iCRRXOsXttxdXEFnw   1   1       1277            0    584.1kb          292kb        292kb
+green  open   .slo-observability.sli-v3.6.2026-09-10                                                CACy7E-MREC0R6p6XBZCjw   1   1       1287            0    882.5kb        441.2kb      441.2kb
+green  open   .slo-observability.sli-v3.6.2026-09-11                                                -FG6aWi2RMW10VMe8x-q0A   1   1       1278            0    681.1kb        340.5kb      340.5kb
+green  open   .slo-observability.sli-v3.6.2026-09-12                                                2iTYWWdrScGL1kB6ywCpSA   1   1       1130            0    418.6kb        209.3kb      209.3kb
+green  open   .slo-observability.sli-v3.6.2026-09-13                                                N-zhUpMASzWQiIzjFepecQ   1   1       1138            0    643.9kb        321.9kb      321.9kb
+green  open   .slo-observability.sli-v3.6.2026-09-14                                                h-97-UoYR8mkPSQAlkbdsw   1   1       1261            0    593.3kb        296.6kb      296.6kb
+green  open   .slo-observability.sli-v3.6.2026-09-15                                                fa4ipMmjSiqU9U4aGskRCA   1   1       1287            0   1004.7kb        517.5kb      517.5kb
+green  open   .slo-observability.sli-v3.6.2026-09-16                                                VDURSps2RIylX6wvWpjxWA   1   1       1279            0    911.9kb        455.9kb      455.9kb
+green  open   .slo-observability.sli-v3.6.2026-09-17                                                r-Z6VjihRWCgle2qBxwsjA   1   1       1274            0    806.2kb        403.1kb      403.1kb
+green  open   .slo-observability.sli-v3.6.2026-09-18                                                sNRZuEMcQ-aWDBdItHTZeA   1   1       1277            0    977.9kb        488.9kb      488.9kb
+green  open   .slo-observability.sli-v3.6.2026-09-19                                                Z62vvNqbRIKUIBPI5HiCEA   1   1       1134            0    752.8kb        376.4kb      376.4kb
+green  open   .slo-observability.sli-v3.6.2026-09-20                                                1IyuZSuhTmSGSp1L-t46dg   1   1       1090            0    676.2kb        332.6kb      332.6kb
+green  open   .slo-observability.sli-v3.6.2026-09-21                                                6OZLbFxCRzuXbuaL4llmsw   1   1       1282            0    660.2kb        330.1kb      330.1kb
+green  open   .slo-observability.sli-v3.6.2026-09-22                                                k465kvMWSIasFMp3w4OhQw   1   1       1281            0    661.9kb        330.9kb      330.9kb
+green  open   .slo-observability.sli-v3.6.2026-09-23                                                lNZcG5RnSKahxEhmDYxYEA   1   1       1292            0    787.8kb        393.9kb      393.9kb
+green  open   .slo-observability.sli-v3.6.2026-09-24                                                f53Ky9NGSCqvUwEp4nzd-Q   1   1       1284            0      1.1mb        564.6kb      564.6kb
+green  open   .slo-observability.sli-v3.6.2026-09-25                                                hiQWwyFrSheffcLy6Mntnw   1   1       1266            0        1mb          557kb        557kb
+green  open   .slo-observability.sli-v3.6.2026-09-26                                                P1GR4TT3T-WBin4rOs9lOg   1   1       1139            0    866.6kb        438.6kb      438.6kb
+green  open   .slo-observability.sli-v3.6.2026-09-27                                                OOBvvBP9TnWUxqpQGdqujg   1   1       1166            0    500.5kb        255.5kb      255.5kb
+green  open   .slo-observability.sli-v3.6.2026-09-28                                                lp9W5mIERCe49VYPov1VyQ   1   1       1285            0    644.6kb        322.3kb      322.3kb
+green  open   .slo-observability.sli-v3.6.2026-09-29                                                d828pcNeQqe7n2ut4Y7sxw   1   1       1271            0    845.7kb        422.8kb      422.8kb
+green  open   .slo-observability.sli-v3.6.2026-09-30                                                1m0cLwSxRyyXNlDigTRCZA   1   1       1321            0     1018kb          509kb        509kb
+green  open   .slo-observability.sli-v3.6.2026-10-01                                                JSTUr-UyQUqpVTXtuINULQ   1   1       1438            0    850.2kb        425.1kb      425.1kb
+green  open   .slo-observability.sli-v3.6.2026-10-02                                                UEWfQakFR9-NkpTiH6khRg   1   1       1440            0    870.5kb        435.2kb      435.2kb
+green  open   .slo-observability.sli-v3.6.2026-10-03                                                nAJBj3S3S8i59QMuR_GmEw   1   1        535            0    736.8kb        368.4kb      368.4kb
+green  open   .slo-observability.summary-v3                                                         1-OAwshWQV23pcy8_Tk-HA   1   1          0            0       526b           263b         263b
+green  open   .slo-observability.summary-v3.3                                                       FqW_Ni9OT76iAmilRgOpSA   1   1         67            9    585.3kb        323.7kb      323.7kb
+green  open   .slo-observability.summary-v3.3.temp                                                  -eKcdSotT7ODHKLhV1Jsrg   1   1          0            0       510b           255b         255b
+green  open   .slo-observability.summary-v3.5                                                       Q242tBlySaG-RSPqT-SCMw   1   1        124            4    410.6kb        215.6kb      215.6kb
+green  open   .slo-observability.summary-v3.5.temp                                                  iagmd5SuToa6R0rgUJj3Xw   1   1          0            0       510b           255b         255b
+green  open   .slo-observability.summary-v3.6                                                       uo_SyzWOQqSGXDOettMZ7Q   1   1          1            0     42.1kb           21kb         21kb
+green  open   .slo-observability.summary-v3.6.temp                                                  TiY9yyEhTFucNvxipMCiZQ   1   1          1            0     41.2kb         20.6kb       20.6kb
+green  open   .slo-observability.summary-v3.temp                                                    oERDdsbASCiMPJDjEjgaOw   1   1          0            0       504b           252b         252b
+green  open   bridge-deployments                                                                    Z1IJ-gYWR2-2bgecbZOzpg   1   1         18            0     92.4kb         46.2kb       46.2kb
+green  open   partial-.ds-metrics-apm.app.covers_scheduler-default-2026.09.01-000001                DX-HuChOTge8vEkRoxRf-A   1   0     295594            0         0b             0b       18.1mb
+green  open   partial-.ds-metrics-apm.app.covers_scheduler-default-2026.09.08-000002                Gpy1Thx7TF2ueqdNll8N-g   1   0     327892            0         0b             0b         22mb
+green  open   partial-.ds-metrics-apm.app.covers_scheduler-default-2026.09.15-000003                Q_826oa9SWyiSHSdyZb44Q   1   0     455469            0         0b             0b       30.3mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.07.01-000272         kFIMbeW5RYeYHLzj0Q1Zeg   1   0      79381            0         0b             0b        6.9mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.07.08-000275         4r92u9hWQMe9E9VG623NTA   1   0      78982            0         0b             0b        6.8mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.07.15-000278         gOYVRXiVTBytUlLJ2avVpw   1   0      78870            0         0b             0b        6.9mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.07.22-000281         4-kxOjj1RTyq8qR_GNRc5g   1   0      59529            0         0b             0b        5.1mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.07.29-000284         4y5otkZqTiqoVwU4A5gKEQ   1   0      59300            0         0b             0b        5.1mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.08.05-000287         LxtMLmB2TEGqWWrh9OMvdQ   1   0      59300            0         0b             0b        5.1mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.08.12-000290         SCZ0vuxYT7WKHwSKh87d0Q   1   0      59213            0         0b             0b        5.1mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.08.19-000293         KdN4xKhXQKadBq4B4t4Dtw   1   0      61818            0         0b             0b        5.4mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.08.26-000296         zxcg9Pz2Tvmn8iz_wILROw   1   0      79003            0         0b             0b          7mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.09.02-000299         rn-o1tbRQGm0YKRDww0scQ   1   0      79011            0         0b             0b        6.8mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.09.09-000301         wIJphESNTCKmtwuLfs9-Hw   1   0      79115            0         0b             0b        6.5mb
+green  open   partial-.ds-metrics-apm.app.ivans_maintenance_batch-default-2026.09.16-000303         yMtuRg3lQnOEe1j428XGvA   1   0      79024            0         0b             0b        6.7mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.07.01-000344                   ucyrByuuS7i1AF_Ildk-Zw   1   0     961776            0         0b             0b       62.9mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.07.08-000347                   H9K0WpF5SkaSnZMrLBY6cA   1   0     793530            0         0b             0b       51.3mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.07.15-000350                   eAzubwl3QYObZ0TYWmT_Gw   1   0     921227            0         0b             0b       64.4mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.07.22-000353                   piaj3-B9RJOB4fI3JR8Qlw   1   0    1448884            0         0b             0b      103.2mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.07.29-000356                   b9WnEQvIRlWTmUGfZjnp7Q   1   0    1783698            0         0b             0b      125.5mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.08.05-000359                   mZgP_hi3RJm2gKbvTgh33A   1   0    1204277            0         0b             0b       81.3mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.08.12-000362                   qbZI0EP9QlepU82MaIIMxQ   1   0    1170047            0         0b             0b       78.4mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.08.19-000365                   rP7NzLjHQMec7sroVP9Gzg   1   0    1407797            0         0b             0b       96.2mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.08.26-000368                   HWezbJbDTE-qtcf9Qdz-3A   1   0     990538            0         0b             0b       68.8mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.09.02-000371                   EURuNQGbQMm_i-Fbn4QMMQ   1   0    1751934            0         0b             0b      123.8mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.09.09-000373                   rq1pu912Qk2GZ11bovUZMQ   1   0    1576640            0         0b             0b      110.7mb
+green  open   partial-.ds-metrics-apm.app.schedulef_api-default-2026.09.16-000375                   Z59w_7ayTZCr-Dt9LyE80g   1   0    1699440            0         0b             0b      118.3mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.07.01-000344                 iGlRikPJTX6hS_OAtD6cnQ   1   0    1097243            0         0b             0b       74.6mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.07.08-000347                 WA7gCMYJRcW2kXvLhHClOw   1   0     872203            0         0b             0b       58.4mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.07.15-000350                 xGpoYosiSW6IdLnHnOb_aQ   1   0     840587            0         0b             0b       56.9mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.07.22-000353                 op2P05AbQ-GAOZhDdFFfqg   1   0    1103678            0         0b             0b       76.5mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.07.29-000356                 sBGAIR1OQjamLFGm5C4xQg   1   0    1178986            0         0b             0b       83.2mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.08.05-000359                 h9bDm9n6S4u9PwUmwOt4bg   1   0    1116684            0         0b             0b       77.1mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.08.12-000362                 m0dafhOzRMWuOQvBSHccdw   1   0    1133320            0         0b             0b       79.1mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.08.19-000365                 GHGt1pmJQ526ypG0AuBCdQ   1   0    1141427            0         0b             0b         79mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.08.26-000368                 xT-VHkIKTb-cVAozHtCAGA   1   0     907075            0         0b             0b       62.3mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.09.02-000371                 5LgTuI0US5WA-X7f03r37g   1   0    1083587            0         0b             0b       77.1mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.09.09-000373                 UvscefGLQ7ORJGCqr_vlVQ   1   0    1126705            0         0b             0b       76.5mb
+green  open   partial-.ds-metrics-apm.app.schedulef_batch-default-2026.09.16-000375                 PdCxzAmKQm6PYnecx542SQ   1   0    1156074            0         0b             0b       79.6mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.07.01-000344              S3c9TjA0TJu56LUNfGZJAA   1   0     909550            0         0b             0b       61.2mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.07.08-000347              qTq_gs4cQgmypcPCFwtxZg   1   0     751769            0         0b             0b       50.9mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.07.15-000350              QsflBGa6Tb6ISMAUinSleg   1   0     908393            0         0b             0b       66.7mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.07.22-000353              cjNqBIxHQPSo3t8GBm82TA   1   0    1092611            0         0b             0b         80mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.07.29-000356              To-DHdwUQbW2ADTgEJOqLQ   1   0    1504979            0         0b             0b      111.1mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.08.05-000359              o4dW03SkSqaiagEUDQ4gOg   1   0    1164282            0         0b             0b       81.6mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.08.12-000362              Na2rsD67Re63Hx02dCl4NQ   1   0    1119012            0         0b             0b       78.3mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.08.19-000365              jXWnWeiaRDqOJY5litk-Og   1   0    1279237            0         0b             0b       89.8mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.08.26-000368              4RgUze9uRFCPgqSVlu4Qfg   1   0     944864            0         0b             0b       65.5mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.09.02-000371              xWLpCdj4Snm2u5JiAmWYuA   1   0    1275373            0         0b             0b       89.5mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.09.09-000373              9bRohWiaRXaol_uFi8WnIw   1   0    1083391            0         0b             0b       74.4mb
+green  open   partial-.ds-metrics-apm.app.schedulef_data_api-default-2026.09.16-000375              ZrqPZwSYQhWhIkBsB0Gzew   1   0    1238869            0         0b             0b       86.3mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.07.01-000152 QmqIrrzGRR2vx7BHSqOxOg   1   0     314355            0         0b             0b       18.4mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.07.08-000155 POhf0ThMRDuxjXnEBANTaw   1   0     191633            0         0b             0b       12.2mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.07.15-000158 VQRVSgnmTUagFj3fKNy35A   1   0     435513            0         0b             0b       28.2mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.07.22-000161 E4SV1fnRSw-Vw6YhHBEZKg   1   0     322720            0         0b             0b       19.8mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.07.29-000164 UXNH_eCNTaOJ1WR2Qz_LPw   1   0     589585            0         0b             0b       38.5mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.08.05-000167 7Y0GWA6tTg-kepdSkBLoMA   1   0     294923            0         0b             0b       16.9mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.08.12-000170 5YvHBxjeRBGxLYhA-9oYqw   1   0     560930            0         0b             0b       36.1mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.08.19-000173 ucAG8l1KSmi7Fn7kQ78MPQ   1   0     598381            0         0b             0b       39.7mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.08.26-000176 WJdW1ppqQTCW6xl-B3fEDA   1   0     251674            0         0b             0b       16.6mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.09.02-000179 o19TDmg7S3iU0M1ro-AS3w   1   0     262948            0         0b             0b       15.6mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.09.09-000181 H2emjq5pRlWMwlj5ZY71Cw   1   0     282239            0         0b             0b       15.5mb
+green  open   partial-.ds-metrics-apm.app.smartcomm_release_management_ws-default-2026.09.16-000183 PjdzK7F-Qyii5KDdn7y00g   1   0     336301            0         0b             0b       20.4mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.07.01-000074    SQTFAP52RCam52nNlTlveA   1   0      19080            0         0b             0b        1.8mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.07.08-000077    -IkPzrl-T46m6ONwh_tJwg   1   0      17328            0         0b             0b        1.7mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.07.15-000080    G0f84g4QRT-_ksAABkd4pw   1   0      16130            0         0b             0b        1.6mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.07.22-000083    WoLvAkWtQ_6aoUb9MZbN-Q   1   0       9364            0         0b             0b      975.2kb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.07.29-000086    oNdj4FZ6QR2NGAvD3WamZQ   1   0      11556            0         0b             0b        1.1mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.08.05-000089    5TXwHt_sTO2si7f8NpbHAQ   1   0      20722            0         0b             0b          2mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.08.12-000092    6HySNTnxRZmCN--jnc-xUg   1   0      20412            0         0b             0b          2mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.08.19-000095    TUVuvU0_R2uB8Y3IxYM6BA   1   0      21833            0         0b             0b        2.1mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.08.26-000098    lQ_mcdJsRMe17Kwig6SSOQ   1   0      20636            0         0b             0b          2mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.09.02-000101    ZfndzC_uTdOauifk5ZJxWw   1   0      18960            0         0b             0b        1.8mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.09.09-000103    PZj1jqVMSCGgrfBsAWgA0A   1   0      20659            0         0b             0b        1.9mb
+green  open   partial-.ds-metrics-apm.app.suruwt_cde_maintenance_batch-default-2026.09.16-000105    mcH_uQCxQMyVjt0ApRp25w   1   0      20994            0         0b             0b          2mb
+green  open   partial-.ds-metrics-kubernetes.state_deployment-default-2026.09.04-000001             kZTMFku8QHCqOzm9vFzEVA   1   0      43745            0         0b             0b      821.8kb
+green  open   partial-.ds-metrics-kubernetes.state_deployment-default-2026.09.11-000002             PwZgDLlqRwazNyoJgE4t0A   1   0      60374            0         0b             0b          1mb
+green  open   partial-.ds-metrics-kubernetes.state_deployment-default-2026.09.18-000004             F1G0ahO8Td2zC81jCN2PaQ   1   0      25548            0         0b             0b      346.1kb
