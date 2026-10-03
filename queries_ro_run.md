@@ -88,3 +88,53 @@ GET _cat/indices/.slo-observability*,*release*,*maint*,*blackout*,*schedule*,*de
 ```
 
 Once I have these and your answer on the CI control, I'll update the mock-up to the final data picture and then build MIM V3.
+
+---
+
+## Round 3 — remaining checks for MIM V3 (3 Oct 2026)
+
+Run these in **Discover (ES|QL mode)** unless marked *Dev Tools*, with the time picker shown for each, and upload the results as before (CSV, or the Console output). The log and metric indices are very large, so keep those to **Last 15 minutes**.
+
+What we already know from rounds 1–2: Infrastructure Health, Windows services, synthetics ping monitors, CMDB relationships and change requests are ready; 173 SLOs exist. These queries close the last gaps.
+
+**F (corrected). Releases and outage windows on changes** — *Last 1 year*
+The earlier version failed because a field name with a numeric part (`category.1`) needs backticks in ES|QL.
+```
+FROM servicenow-change-requests-* | STATS changes = COUNT(*), with_outage_window = COUNT(planned_outage_start_at), with_actual_start = COUNT(start_at), with_end = COUNT(end_at) BY type, category = `category.1` | SORT changes DESC | LIMIT 30
+```
+
+**H. SLO summary sample** — *Last 1 year*
+Shows the field names that link each SLO to its service, and whether your account can read the hidden SLO indices.
+```
+FROM .slo-observability.summary-v3* | LIMIT 5
+```
+If ES|QL refuses the hidden index, run this in *Dev Tools* instead:
+```
+GET .slo-observability.summary-v3.5/_search?size=3
+```
+
+**I. Which relationships connect servers to other CIs** — *no time filter needed*
+Tells us whether server → application links exist in the CMDB relationships (for "Applications on this CI").
+```
+FROM cmdb-ci-relations* | WHERE parent.class IN ("cmdb_ci_win_server", "cmdb_ci_linux_server", "cmdb_ci_aix_server") OR child.class IN ("cmdb_ci_win_server", "cmdb_ci_linux_server", "cmdb_ci_aix_server") | STATS links = COUNT(*) BY type.name, parent.class, child.class | SORT links DESC | LIMIT 40
+```
+
+**J. What "not_equal" means on Linux processes** — *Last 15 minutes*
+742 hosts are flagged `not_equal`; this shows what the flag is comparing.
+```
+FROM metrics-system.process-* | WHERE paladin.enrichment.computed.proc_diff == "not_equal" | LIMIT 5
+```
+
+**K. APM services per server** — *Last 15 minutes*
+Fallback for "Applications on this CI": which APM services run on each server.
+```
+FROM metrics-apm* | WHERE host.name IS NOT NULL | STATS services = VALUES(service.name) BY host.name | LIMIT 10
+```
+
+**L. Syslog sample, for the severity field** — *Last 15 minutes*
+Infrastructure logs carry the CI but no log level; this shows which field holds the syslog severity.
+```
+FROM logs-syslog-classic-default | LIMIT 3
+```
+
+**Access check for your Elastic admin:** the SLO summaries live in hidden `.slo-observability.*` indices. Everyone who views MIM V3 needs read access to them for the SLO Error Burn Rate panel to show data. Query H tells us whether your own account has it.
