@@ -138,3 +138,61 @@ FROM logs-syslog-classic-default | LIMIT 3
 ```
 
 **Access check for your Elastic admin:** the SLO summaries live in hidden `.slo-observability.*` indices. Everyone who views MIM V3 needs read access to them for the SLO Error Burn Rate panel to show data. Query H tells us whether your own account has it.
+
+---
+
+## Round 4 — "Service Dependency & Blast Radius" checks (4 Oct 2026)
+
+Run these in **Discover (ES|QL mode)** with the time picker shown, and upload the results as before (CSV, or the
+Console output). These answer whether we can build Senthil's *Service Dependency & Blast Radius* panel.
+
+**M. Dependency metrics sample** — *Last 15 minutes*
+What APM records about the calls each service makes (field names for downstream dependencies).
+```
+FROM metrics-apm.service_destination.1m-* | LIMIT 5
+```
+
+**N. Kinds of dependencies** — *Last 1 hour*
+How many services call databases, queues, HTTP endpoints, etc.
+```
+FROM metrics-apm.service_destination.1m-* | STATS callers = COUNT_DISTINCT(service.name), resources = COUNT_DISTINCT(TO_STRING(span.destination.service.resource)) BY target_type = TO_STRING(service.target.type) | SORT callers DESC
+```
+
+**O. What the dependency addresses look like** — *Last 1 hour*
+Shows whether a call to another service is recorded by name or by host:port.
+```
+FROM metrics-apm.service_destination.1m-* | STATS callers = VALUES(service.name) BY resource = TO_STRING(span.destination.service.resource) | SORT resource ASC | LIMIT 40
+```
+
+**P. Which host names each service is reached on** — *Last 15 minutes*
+Used to work out a service's callers (match the addresses in O to these host names).
+```
+FROM traces-apm* | WHERE processor.event == "transaction" AND url.domain IS NOT NULL | STATS transactions = COUNT(*) BY service.name, url.domain | SORT transactions DESC | LIMIT 40
+```
+
+**Q. CMDB fields on APM services** — *Last 15 minutes*
+Shows the business application, criticality and owner fields carried by APM service metrics.
+```
+FROM metrics-apm.service_transaction.1m-* | LIMIT 3
+```
+
+**R. Do CMDB relationships link applications to business services?** — *Last 1 year*
+```
+FROM cmdb-ci-relations* | WHERE parent.class LIKE "*service*" OR child.class LIKE "*service*" OR parent.class LIKE "*business*" OR child.class LIKE "*business*" | STATS links = COUNT(*) BY type.name, parent.class, child.class | SORT links DESC | LIMIT 40
+```
+
+**S. What a CMDB CI record holds** — *Last 1 year*
+May include criticality, owner or user-count fields.
+```
+FROM cmdb-cis* | LIMIT 3
+```
+
+**T. Does APM record users or sessions?** — *Last 15 minutes*
+For a "users affected" figure. An "Unknown column" error is also an answer (it means none).
+```
+FROM traces-apm* | WHERE processor.event == "transaction" | STATS docs = COUNT(*), with_user = COUNT(TO_STRING(user.id)), with_session = COUNT(TO_STRING(session.id)) BY agent = TO_STRING(agent.name) | SORT docs DESC | LIMIT 20
+```
+
+**U. Manual check — APM Service Map**
+In Kibana open **Observability → APM → Service Map** (or open any service and its *Service map* tab). If a map
+draws, the licence includes it and the dashboard can link to it. If you see a licence / upgrade message, it does not.
