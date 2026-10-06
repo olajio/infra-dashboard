@@ -1,0 +1,58 @@
+The P1 duration panel has the following error 
+
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "parsing_exception",
+        "reason": "line 4:14: Unknown query parameter [incident]; line 4:66: Unknown query parameter [incident]"
+      }
+    ],
+    "type": "parsing_exception",
+    "reason": "line 4:14: Unknown query parameter [incident]; line 4:66: Unknown query parameter [incident]"
+  },
+  "rawResponse": {
+    "error": {
+      "root_cause": [
+        {
+          "type": "parsing_exception",
+          "reason": "line 4:14: Unknown query parameter [incident]; line 4:66: Unknown query parameter [incident]"
+        }
+      ],
+      "type": "parsing_exception",
+      "reason": "line 4:14: Unknown query parameter [incident]; line 4:66: Unknown query parameter [incident]"
+    },
+    "status": 400
+  },
+  "isRestored": false
+}
+
+
+The Escalation panel has the following error details.
+
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "parsing_exception",
+        "reason": "line 2:37: Unknown query parameter [incident]"
+      }
+    ],
+    "type": "parsing_exception",
+    "reason": "line 2:37: Unknown query parameter [incident]"
+  },
+  "rawResponse": {
+    "error": {
+      "root_cause": [
+        {
+          "type": "parsing_exception",
+          "reason": "line 2:37: Unknown query parameter [incident]"
+        }
+      ],
+      "type": "parsing_exception",
+      "reason": "line 2:37: Unknown query parameter [incident]"
+    },
+    "status": 400
+  },
+  "isRestored": false
+}
