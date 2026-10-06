@@ -18,8 +18,8 @@ The dashboard has two sections and two controls:
 | | What it covers | Time window |
 |---|---|---|
 | **CI control** (top) | Picks the CI that section 2 investigates. Lists the CIs with P1 / P2 incidents in the last month; type to search. *(no CI selected)* clears it. | — |
-| **Incident control** (top) | Narrows the *Escalate* panel to one active P1 / P2 incident. *(all incidents)* clears it. No other panel uses it. | — |
-| **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month |
+| **Incident control** (top) | Narrows the *Escalate* panel and the *P1 Duration* tile to one active P1 / P2 incident. *(all incidents)* clears it. No other panel uses it. | — |
+| **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month (*Active P1 / P2 by Age*: last 7 days) |
 | **2 · Investigate the CI** | The CI picked in the control only | Time picker (last 24 h by default), except where a panel says otherwise |
 
 ---
@@ -32,9 +32,12 @@ The dashboard has two sections and two controls:
 
 The MIM lead opens MIM V3 and reads the top row from left to right.
 
+- **P1 Duration.** How long the longest-running active P1 has been open, its number and how many P1s are open.
+  When the lead picks an incident in the Incident control, the tile shows that incident instead.
 - **Incidents (P1 / P2) over time.** Is today normal? A P1 or P2 line that jumps above the rest of the month is the
   first sign of a major incident: many tickets for what is usually one failure.
-- **Active P1 / P2 by Age.** Incidents grouped as < 1h, 1 - 4h, 4 - 8h, 8 - 24h, 1 - 7d and > 7d. Anything
+- **Active P1 / P2 by Age.** Active incidents opened in the last 7 days, grouped as < 1h, 1 - 4h, 4 - 8h, 8 - 24h
+  and 1 - 7d. Anything
   orange or red (older than a day) has been sitting too long and is a candidate for escalation, whatever else is
   happening today.
 - **Active P1 / P2 by CI.** If one CI has several incidents against it, that CI is very likely the centre of the
@@ -111,9 +114,10 @@ below 1×, the service return to Running and the ping monitor go green.
 | Section | Panel | Status | What it shows | How it works |
 |---|---|---|---|---|
 | Control | **CI** | ✅ | The CI to investigate | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`) that every section-2 panel uses. |
-| Control | **Incident** | ✅ | One incident for *Escalate* | Lists every active P1 / P2 incident, plus *(all incidents)*. A query variable (`?incident`) used only by *Escalate*. |
+| Control | **Incident** | ✅ | One incident for *Escalate* and *P1 Duration* | Lists every active P1 / P2 incident, plus *(all incidents)*. A query variable (`?incident`) used only by those two panels. |
+| 1 | **P1 Duration** | ✅ | How long an incident has been open (e.g. "1h 14m", "3d 4h") | With *(all incidents)*: the longest-running active P1, titled "Longest: INC… · n active P1s". With an incident picked: that incident ("INC… · P2"), whatever its priority. Counted from `opened_at`; there is no "declared major incident" time in the data. |
 | 1 | **Incidents (P1 / P2) over time** | ✅ | New P1 / P2 per day, one line each: P1 (red), P2 (amber) | `servicenow-incidents-*`, counted by opened day over the last 30 days; days with none show 0 |
-| 1 | **Active P1 / P2 by Age** | ✅ | Active incidents aged < 1h, 1 - 4h, 4 - 8h, 8 - 24h, 1 - 7d, > 7d | Active = priority 1 / 2 and state not Resolved, Closed, Canceled, Cancelled; age from opened time. "> 7d" keeps older incidents in the count. |
+| 1 | **Active P1 / P2 by Age** | ✅ | Active incidents aged < 1h, 1 - 4h, 4 - 8h, 8 - 24h, 1 - 7d | Active P1 / P2 opened in the last 7 days (fixed). Active = priority 1 / 2 and state not Resolved, Closed, Canceled, Cancelled; age from opened time. Older active incidents are not counted here; they still appear in *Active Incidents*. |
 | 1 | **Active P1 / P2 by CI** | ✅ | The 10 CIs with the most active P1 / P2 | Grouped by the incident's Affected CI |
 | 1 | **Active P1 / P2 by State** | ✅ | New / In Progress / On-Hold | Grouped by state |
 | 1 | **Active Incidents (P1 / P2)** | ✅ | Every active P1 / P2 with SLA, group, age | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
