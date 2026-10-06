@@ -10,14 +10,15 @@ MIM V3 answers three questions, in order:
 2. **Why, and how bad?** Everything Elastic knows about the one CI behind the incident: its own health, the
    middleware and processes on it, the applications that depend on it, whether customers are feeling it, what the
    logs say and what changed on it recently.
-3. **Who do we call?** The CI's support group and the group the incident is with, with one-click links into
+3. **Who do we call?** The CI's support group and the group each incident is with, with one-click links into
    ServiceNow.
 
-The dashboard has two sections and one control:
+The dashboard has two sections and two controls:
 
 | | What it covers | Time window |
 |---|---|---|
 | **CI control** (top) | Picks the CI that section 2 investigates. Lists the CIs with P1 / P2 incidents in the last month; type to search. *(no CI selected)* clears it. | — |
+| **Incident control** (top) | Narrows the *Escalate* panel to one active P1 / P2 incident. *(all incidents)* clears it. No other panel uses it. | — |
 | **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month |
 | **2 · Investigate the CI** | The CI picked in the control only | Time picker (last 24 h by default), except where a panel says otherwise |
 
@@ -31,10 +32,11 @@ The dashboard has two sections and one control:
 
 The MIM lead opens MIM V3 and reads the top row from left to right.
 
-- **Incidents (P1 / P2) over time.** Is today normal? A bar that towers over the last month is the first sign of a
-  major incident — many tickets for what is usually one failure.
-- **Active P1 / P2 by Age.** Anything orange or red (older than a day) has been sitting too long and is a
-  candidate for escalation regardless of today's event.
+- **Incidents (P1 / P2) over time.** Is today normal? A P1 or P2 line that jumps above the rest of the month is the
+  first sign of a major incident: many tickets for what is usually one failure.
+- **Active P1 / P2 by Age.** Incidents grouped as < 1h, 1 - 4h, 4 - 8h, 8 - 24h, 1 - 7d and > 7d. Anything
+  orange or red (older than a day) has been sitting too long and is a candidate for escalation, whatever else is
+  happening today.
 - **Active P1 / P2 by CI.** If one CI has several incidents against it, that CI is very likely the centre of the
   problem. *In the example, three incidents point at `kau1s054`.*
 - **Active P1 / P2 by State.** A big "New" slice means incidents nobody has picked up yet.
@@ -43,14 +45,12 @@ The MIM lead opens MIM V3 and reads the top row from left to right.
 
 **Active Incidents (P1 / P2)** lists every active P1 / P2, P1 first and oldest first. For each one the lead sees:
 
-- the **SLA** (Breached, Breaching, Paused, Within SLA — straight from ServiceNow's SLA records);
-- an **Attention** column that says *why* this one needs a MIM lead: SLA breached or breaching, unassigned, still
-  New after 15 min (P1) / 30 min (P2), reassigned 3+ times, reopened, or a change on the same CI in the week before
-  it opened;
+- the **SLA**: Breached, Breaching, Paused or Within SLA, taken from ServiceNow's SLA records. How this is worked
+  out is explained in *MIM-V3-SLA-CALCULATION.md*;
 - the assignment group, the age and the description.
 
-*In the example, the P1 on `kau1s054` shows "Response SLA breached · Unassigned · Recent change on CI".* The lead
-clicks the incident to open it in ServiceNow if needed, then **selects `kau1s054` in the CI control**.
+*In the example, the P1 on `kau1s054` shows SLA Breached.* The lead clicks the incident to open it in ServiceNow if
+needed, then **selects `kau1s054` in the CI control**.
 
 ### Step 3 — Measure the impact (section 2)
 
@@ -87,9 +87,10 @@ policy-admin and the applications that depend on it.
 
 ### Step 6 — Escalate
 
-**Escalate** gives the lead the people to call without leaving the dashboard: the CI's class, environment and CMDB
-support group, how many active P1 / P2 incidents sit on it, and which group the latest one is assigned to. Clicking
-the CI or the incident opens it in ServiceNow.
+**Escalate** gives the lead the people to call without leaving the dashboard. It has one row per active P1 / P2
+incident on the CI, showing the incident, its priority and its assignment group, next to the CI's class,
+environment and CMDB support group. With several incidents on the CI, pick one in the **Incident control** to show
+only that one. Only the CI and the Active Incident are links; clicking either opens it in ServiceNow.
 
 The lead now:
 
@@ -110,13 +111,14 @@ below 1×, the service return to Running and the ping monitor go green.
 | Section | Panel | Status | What it shows | How it works |
 |---|---|---|---|---|
 | Control | **CI** | ✅ | The CI to investigate | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`) that every section-2 panel uses. |
-| 1 | **Incidents (P1 / P2) over time** | ✅ | New P1 / P2 per day, stacked P1 (red) / P2 (amber) | `servicenow-incidents-*`, counted by opened day over the last 30 days |
-| 1 | **Active P1 / P2 by Age** | ✅ | Active incidents in < 4 h, 4–24 h, 1–7 days, > 7 days | Active = priority 1 / 2 and state not Resolved, Closed, Canceled, Cancelled; age from opened time |
+| Control | **Incident** | ✅ | One incident for *Escalate* | Lists every active P1 / P2 incident, plus *(all incidents)*. A query variable (`?incident`) used only by *Escalate*. |
+| 1 | **Incidents (P1 / P2) over time** | ✅ | New P1 / P2 per day, one line each: P1 (red), P2 (amber) | `servicenow-incidents-*`, counted by opened day over the last 30 days; days with none show 0 |
+| 1 | **Active P1 / P2 by Age** | ✅ | Active incidents aged < 1h, 1 - 4h, 4 - 8h, 8 - 24h, 1 - 7d, > 7d | Active = priority 1 / 2 and state not Resolved, Closed, Canceled, Cancelled; age from opened time. "> 7d" keeps older incidents in the count. |
 | 1 | **Active P1 / P2 by CI** | ✅ | The 10 CIs with the most active P1 / P2 | Grouped by the incident's Affected CI |
 | 1 | **Active P1 / P2 by State** | ✅ | New / In Progress / On-Hold | Grouped by state |
-| 1 | **Active Incidents (P1 / P2)** | ✅ | Every active P1 / P2 with SLA, Attention, group, age | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused) and to `servicenow-change-requests` (change on the same CI in the 7 days before opening). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)". Incident and CI link to ServiceNow. |
+| 1 | **Active Incidents (P1 / P2)** | ✅ | Every active P1 / P2 with SLA, group, age | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
 | 2 | **How to use this section** | ✅ | One-line instruction | Text panel |
-| 2 | **Escalate** | ✅ | CI class, environment, CMDB support group, active P1 / P2 count, latest P1 / P2 and its assigned group | Incidents on the CI plus the CMDB enrichment on its server metrics; last month |
+| 2 | **Escalate** | ✅ | One row per active P1 / P2 on the CI: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group | Incidents on the CI (or the one in the Incident control) plus the CMDB enrichment on its server metrics; last month. CI and Active Incident link to ServiceNow; no other column is clickable. A CI with no active P1 / P2 still shows one row with its owners. If an incident is picked whose CI is not the one in the CI control, Class / Env / support group come from the incident record and may show "—". |
 | 2 | **Infra Health** | ✅ | Minutes since last data, CPU p90, peak memory, fullest disk — RAG coloured | System metrics matched on `ci.name` (equal to the host name). Amber ≥ 80 %, red ≥ 90 %; red if silent > 10 min. Empty if the CI is not a monitored server. |
 | 2 | **Middleware / DB Health** | ✅ | Healthy vs Down components on the CI | SQL Server metrics (`metricbeat-*` sql / mssql), middleware processes labelled by the Paladin monitoring enrichment (IBM MQ, IHS, JBoss, WebSphere) and Windows middleware services. Down = stopped or silent > 10 min. |
 | 2 | **Applications on this CI** | ⚠️ | Applications and software linked to the CI, and APM services on it | `cmdb-ci-relations` ("Runs on", etc., application-type CIs only) + APM services that sent data from the server in the last day. **Limit:** APM services running in Kubernetes report pod names, not the server, so they don't appear; fixed 30-day window. |
@@ -124,7 +126,7 @@ below 1×, the service return to Running and the ping monitor go green.
 | 2 | **Synthetics Health** | ✅ | Monitors that target the CI: status now, down checks | `synthetics-*`, ping monitors enriched with the CI, or monitors whose URL is the CI's host name. Browser journeys are tagged with the application, so they do not appear here. |
 | 2 | **Errors from the Logs** | ✅ | Warning-and-worse log lines from the CI, grouped by message | Syslog (server, WebSphere, JBoss, Red Hat, AIX, system), generic file logs, APM error and application logs, matched on `ci.name`; syslog severity code ≤ 4 or log level warning or worse; numbers replaced by # so repeats group together |
 | 2 | **Process Health** | ✅ | Stopped / not-seen processes and services first, then healthy middleware | Windows services (Stopped = Automatic service not running) and Paladin-labelled middleware processes; Not seen = silent > 10 min |
-| 2 | **Changes on this CI and linked CIs** | ⚠️ | Changes active in the last 7 days on the CI and on CMDB-linked CIs | `servicenow-change-requests` + `cmdb-ci-relations`. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
+| 2 | **Changes on this CI and linked CIs** | ⚠️ | Changes active in the last 7 days on the CI and on CMDB-linked CIs; the CI column shows which | `servicenow-change-requests` + `cmdb-ci-relations`. The selected CI's own changes first. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
 
 ---
 

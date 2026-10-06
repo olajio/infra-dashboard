@@ -41,6 +41,7 @@ for them.
 | 20 | An ES\|QL panel that reads any index with `@timestamp` always gets a time filter | Records without `@timestamp` (e.g. SLO summaries) silently disappear from that panel, even with no time field saved | MIM V3 reads SLO summaries in a panel of their own; panels with slowly-synced CMDB data use a fixed 30-day window |
 | 21 | ES\|QL cannot read a field that is an object in one index and a value in another | `type` (change type) vs `type.name` (CMDB relationship) breaks a combined query, even with `TO_STRING` | Read a sub-field that exists only on one side (`type.normalized`) |
 | 22 | `SPLIT` only accepts a one-character delimiter | `SPLIT(x, "::")` fails | Split on `":"` and take the first / last part |
+| 23 | An ES\|QL table cell is clickable only when its column name is a real field of the queried indices | A computed column that happens to share a field's name (e.g. `class`, `environment`) becomes clickable and shows the panel's links; a computed link column (e.g. `change`) is not clickable at all | Link columns are named after a real field (`ci.name`, `number`); other columns in MIM V3 *Escalate* use `esc_` names no index has |
 
 ---
 
@@ -133,6 +134,14 @@ use explicit `LIMIT 100` and paginate.
 Every URL drilldown on a table fires from every clickable column. The only way to confine a link to
 one column is to make the other columns non-clickable (`inMetricDimension` on the column). Wrapping a
 value in `TO_STRING()` does **not** do it.
+
+**On ES|QL tables, the column name decides whether a cell is clickable.** *(Observed in Kibana 9.4.1, MIM V3)*
+A cell gets *Filter for / Filter out* — and with them the panel's drilldown links — only when its column name is a
+field that exists in the queried indices (`ci.name`, `number`, `priority`, `state_name` …). A computed column named
+like a real field (`class`, `environment` in the ServiceNow data) is clickable even when marked as a metric; a
+computed column with a new name (`change`, `latest_p1_p2`) is never clickable. So: give link columns a real field
+name, and give every other column a name no index has (MIM V3 *Escalate* uses `esc_…`). URL drilldowns also need a
+Gold or higher licence; on a Basic licence the click just adds a filter.
 
 **A drilldown only sees the clicked cell.** *(Observed)*
 `{{event.value}}` and `{{event.points}}` carry the value you clicked, not the rest of the row. A URL
