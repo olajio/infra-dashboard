@@ -150,3 +150,15 @@ below 1×, the service return to Running and the ping monitor go green.
 
 Import `MIM V3.ndjson` in **Stack Management → Saved objects → Import**. It contains only the dashboard: every
 panel is ES|QL, so no data views are needed. MIM V1 and MIM V2 are untouched.
+
+**Re-importing a new version over an older one.** If you had the old version open and changed anything (picked a
+CI, changed the time range, entered edit mode), Kibana keeps those unsaved changes in the browser and lays them over
+the imported version, including the old set of controls. New controls then go missing and the panels that use
+them fail with *Unknown query parameter [incident]*. To fix it:
+
+1. Open MIM V3 and click **More (⋯) → Reset changes → Reset dashboard**. In edit mode, click **Exit edit** and
+   discard first.
+2. **Reload the page.** Both the CI and Incident controls are back.
+
+Do **not** click Save while the dashboard is in that state: it would save the dashboard without the new controls.
+If that has happened, import `MIM V3.ndjson` again (overwrite), then do steps 1 and 2.
