@@ -1,0 +1,2 @@
+[esql] > Unexpected error from Elasticsearch: verification_exception - Found 1 problem
+line 1:112: Unknown column [user.id]
