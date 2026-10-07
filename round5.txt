@@ -1,0 +1,434 @@
+# 196: POST /_query?format=json [200 OK]
+{
+  "took": 851,
+  "is_partial": false,
+  "completion_time_in_millis": 1791374179855,
+  "documents_found": 240055721,
+  "values_loaded": 478532044,
+  "rows_emitted": 480126578,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 125275367995,
+  "start_time_in_millis": 1791374179004,
+  "expiration_time_in_millis": 1791806179826,
+  "columns": [
+    {
+      "name": "services",
+      "type": "long"
+    },
+    {
+      "name": "env",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      492,
+      "cut1"
+    ],
+    [
+      431,
+      "ete1"
+    ],
+    [
+      426,
+      "prd1"
+    ],
+    [
+      418,
+      "stg1"
+    ],
+    [
+      78,
+      "cut2"
+    ],
+    [
+      72,
+      "ete2"
+    ],
+    [
+      42,
+      null
+    ],
+    [
+      36,
+      "ete3"
+    ],
+    [
+      33,
+      "cut3"
+    ],
+    [
+      31,
+      "drt1"
+    ],
+    [
+      18,
+      "ete4"
+    ],
+    [
+      15,
+      "cut4"
+    ],
+    [
+      7,
+      "ETE"
+    ],
+    [
+      7,
+      "stg2"
+    ],
+    [
+      6,
+      "drt2"
+    ],
+    [
+      4,
+      "CUT"
+    ],
+    [
+      4,
+      "DRT"
+    ],
+    [
+      4,
+      "prd2"
+    ],
+    [
+      3,
+      "CUT1"
+    ],
+    [
+      3,
+      "STG"
+    ],
+    [
+      3,
+      "stg"
+    ],
+    [
+      3,
+      "DRT2"
+    ],
+    [
+      3,
+      "cut"
+    ],
+    [
+      2,
+      "prd"
+    ],
+    [
+      2,
+      "UAT"
+    ],
+    [
+      2,
+      "Prod"
+    ],
+    [
+      2,
+      "QA"
+    ],
+    [
+      2,
+      "PRD"
+    ],
+    [
+      2,
+      "DEV"
+    ],
+    [
+      2,
+      "unknown"
+    ]
+  ]
+}
+# 205: POST /_query?format=json [200 OK]
+#! No limit defined, adding default limit of [1000]
+{
+  "took": 634,
+  "is_partial": false,
+  "completion_time_in_millis": 1791374180567,
+  "documents_found": 350030382,
+  "values_loaded": 700060764,
+  "rows_emitted": 700062028,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 96090068895,
+  "start_time_in_millis": 1791374179933,
+  "expiration_time_in_millis": 1791806180428,
+  "columns": [
+    {
+      "name": "docs",
+      "type": "long"
+    },
+    {
+      "name": "calls",
+      "type": "long"
+    },
+    {
+      "name": "outcome",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      5032555,
+      140087602,
+      "failure"
+    ],
+    [
+      344997827,
+      17261658498,
+      "success"
+    ]
+  ]
+}
+# 213: POST /_query?format=json [200 OK]
+#! No limit defined, adding default limit of [1000]
+{
+  "took": 156,
+  "is_partial": false,
+  "completion_time_in_millis": 1791374180810,
+  "documents_found": 122605,
+  "values_loaded": 251146,
+  "rows_emitted": 617990,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 298976230,
+  "start_time_in_millis": 1791374180654,
+  "expiration_time_in_millis": 1791806180628,
+  "columns": [
+    {
+      "name": "cis",
+      "type": "long"
+    },
+    {
+      "name": "incidents",
+      "type": "long"
+    },
+    {
+      "name": "in_apm",
+      "type": "boolean"
+    }
+  ],
+  "values": [
+    [
+      562,
+      7234,
+      false
+    ],
+    [
+      1,
+      418,
+      true
+    ]
+  ]
+}
+# 221: POST /_query?format=json [200 OK]
+{
+  "took": 42,
+  "is_partial": false,
+  "completion_time_in_millis": 1791374180978,
+  "documents_found": 7652,
+  "values_loaded": 22123,
+  "rows_emitted": 15500,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 11789049,
+  "start_time_in_millis": 1791374180936,
+  "expiration_time_in_millis": 1791806180830,
+  "columns": [
+    {
+      "name": "incidents",
+      "type": "long"
+    },
+    {
+      "name": "cis",
+      "type": "long"
+    },
+    {
+      "name": "ci_class",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      2800,
+      120,
+      "Linux Server"
+    ],
+    [
+      2719,
+      56,
+      "AIX Server"
+    ],
+    [
+      766,
+      127,
+      "Windows Server"
+    ],
+    [
+      415,
+      0,
+      null
+    ],
+    [
+      272,
+      14,
+      "IP Switch"
+    ],
+    [
+      265,
+      6,
+      "UNIX Cluster Node"
+    ],
+    [
+      151,
+      2,
+      "IP Router"
+    ],
+    [
+      75,
+      35,
+      "Mapped Application Service"
+    ],
+    [
+      56,
+      22,
+      "Application Service"
+    ],
+    [
+      47,
+      6,
+      "Tag-Based Application Service"
+    ],
+    [
+      22,
+      11,
+      "Calculated Application Service"
+    ],
+    [
+      17,
+      9,
+      "Infrastructure Service"
+    ],
+    [
+      14,
+      6,
+      "IBM LPAR Instance"
+    ],
+    [
+      6,
+      4,
+      "Printer"
+    ],
+    [
+      4,
+      2,
+      "Oracle Instance"
+    ],
+    [
+      3,
+      0,
+      "Communication Device"
+    ],
+    [
+      3,
+      2,
+      "Mainframe LPAR"
+    ],
+    [
+      2,
+      2,
+      "Storage Server"
+    ],
+    [
+      2,
+      1,
+      "Server"
+    ],
+    [
+      2,
+      1,
+      "Database"
+    ],
+    [
+      2,
+      2,
+      "Cloud DataBase"
+    ],
+    [
+      2,
+      2,
+      "Batch Job"
+    ],
+    [
+      2,
+      2,
+      "Service Instance"
+    ],
+    [
+      1,
+      1,
+      "Computer"
+    ],
+    [
+      1,
+      1,
+      "Oracle Database"
+    ],
+    [
+      1,
+      1,
+      "ESX Server"
+    ],
+    [
+      1,
+      1,
+      "F5 BIG-IP"
+    ],
+    [
+      1,
+      1,
+      "UPS"
+    ]
+  ]
+}
+# 230: POST /_query?format=json [200 OK]
+#! No limit defined, adding default limit of [1000]
+{
+  "took": 2429,
+  "is_partial": false,
+  "completion_time_in_millis": 1791374183490,
+  "documents_found": 350030382,
+  "values_loaded": 699747645,
+  "rows_emitted": 700061342,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 321396590217,
+  "start_time_in_millis": 1791374181061,
+  "expiration_time_in_millis": 1791806183433,
+  "columns": [
+    {
+      "name": "docs",
+      "type": "long"
+    },
+    {
+      "name": "services",
+      "type": "long"
+    },
+    {
+      "name": "resources",
+      "type": "long"
+    }
+  ],
+  "values": [
+    [
+      350030382,
+      515,
+      1766
+    ]
+  ]
+}
