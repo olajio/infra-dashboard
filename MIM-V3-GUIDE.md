@@ -15,7 +15,7 @@ MIM V3 answers four questions, in order:
 4. **What else is hit?** The services behind the CI, what they depend on, which services call them and which
    business applications those belong to.
 
-The dashboard has three sections and three controls:
+The dashboard has four sections and three controls:
 
 | | What it covers | Time window |
 |---|---|---|
@@ -25,6 +25,7 @@ The dashboard has three sections and three controls:
 | **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month (*Active P1 / P2 by Age*: last 7 days) |
 | **2 · Investigate the CI** | The CI picked in the control only | Time picker (last 24 h by default), except where a panel says otherwise |
 | **3 · Service Dependency & Blast Radius** | The service(s) from the Service control | Fixed last hour |
+| **4 · Related dashboards** | Links to the SRE and Infra dashboards | — |
 
 ---
 
@@ -170,6 +171,21 @@ below 1×, the service return to Running and the ping monitor go green.
 | Section 3 has no drawn dependency diagram | Kibana dashboards cannot draw a node-and-arrow map from ES\|QL | Click a service: the APM Service Map draws it |
 | Section 3 is empty for most incident CIs unless a service is picked | P1 / P2 are raised mostly against servers (Linux, AIX), network devices and application services; only servers with APM agents have services on them, and no incident CI is an APM business application (round 5, X and Y) | Pick the service in the Service control; longer term, record the affected business application / service on the incident |
 | Estimated user base | Not in Elastic | Add the ServiceNow user-base field to the CI enrichment |
+
+## Related dashboards (section 4): setting the links
+
+Section 4 has two text panels, **SRE dashboard** and **Infra dashboard**, each with an *Open the … dashboard* link.
+The links are placeholders (`https://SRE-DASHBOARD-LINK`, `https://INFRA-DASHBOARD-LINK`) until set:
+
+1. Open MIM V3 and click **Edit**.
+2. On the panel, open the panel menu (**⋯**) → **Edit** (or double-click the text).
+3. Replace the placeholder address inside the round brackets, `[Open the SRE dashboard](https://SRE-DASHBOARD-LINK)`,
+   with the dashboard's address. A Kibana dashboard on the same deployment can use the short form
+   `/app/dashboards#/view/<dashboard id>`.
+4. Delete the *"Link not set yet …"* line, then **Save** the dashboard.
+
+Links open in a new tab, so MIM V3 stays open on the bridge. A future re-import of `MIM V3.ndjson` puts the
+placeholders back, so note the two addresses (or send them over and they will be built in).
 
 ## Importing
 
