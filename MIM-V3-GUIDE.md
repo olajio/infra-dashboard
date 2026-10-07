@@ -3,7 +3,7 @@
 **File:** `MIM V3.ndjson` · **Dashboard:** MIM V3 · **Built from:** Naveen's MIM sketch (`naveen-mim suggestion.png`)
 **Default time range:** last 24 hours, refreshing every 5 minutes
 
-MIM V3 answers three questions, in order:
+MIM V3 answers four questions, in order:
 
 1. **What is going on?** Every active P1 / P2 incident across the estate, how old it is, where it sits and what
    state it is in.
@@ -12,15 +12,19 @@ MIM V3 answers three questions, in order:
    logs say and what changed on it recently.
 3. **Who do we call?** The CI's support group and the group each incident is with, with one-click links into
    ServiceNow.
+4. **What else is hit?** The services behind the CI, what they depend on, which services call them and which
+   business applications those belong to.
 
-The dashboard has two sections and two controls:
+The dashboard has three sections and three controls:
 
 | | What it covers | Time window |
 |---|---|---|
 | **CI control** (top) | Picks the CI that section 2 investigates. Lists the CIs with P1 / P2 incidents in the last month; type to search. *(no CI selected)* clears it. | — |
 | **Incident control** (top) | Narrows the *Escalate* panel and the *P1 Duration* tile to one active P1 / P2 incident. *(all incidents)* clears it. No other panel uses it. | — |
+| **Service control** (top) | Picks the service section 3 shows. *(services on this CI)* (the default) uses the production APM services running on the CI in the CI control; or type to pick any production service. | — |
 | **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month (*Active P1 / P2 by Age*: last 7 days) |
 | **2 · Investigate the CI** | The CI picked in the control only | Time picker (last 24 h by default), except where a panel says otherwise |
+| **3 · Service Dependency & Blast Radius** | The service(s) from the Service control | Fixed last hour |
 
 ---
 
@@ -102,6 +106,21 @@ The lead now:
   change (the Changes panel shows its group);
 - shares the evidence: the burn-rate chart, the stopped service, the first error and the change.
 
+### Step 7 — Size the blast radius (section 3)
+
+With the CI selected, section 3 shows the APM services running on it (**Services in scope**) and their health. If
+the CI is not a monitored server (an AIX box, a network device, an application service), pick the affected
+service in the **Service** control instead.
+
+- **Upstream — what they call**: the databases, queues and services they depend on. A *Failing* dependency here
+  points at the cause. *The Oracle database the service calls is failing 38 % of calls.*
+- **Downstream — who calls them**: the production services that call them, and how many of those calls fail. This
+  is the impact.
+- **Business applications impacted**: the CMDB business applications of those callers, worst first, with their
+  support groups, the teams to warn.
+
+Click a service name to open its **APM Service Map** for the drawn dependency diagram.
+
 During the bridge the dashboard keeps refreshing every five minutes, so the lead can watch the SLO burn fall back
 below 1×, the service return to Running and the ping monitor go green.
 
@@ -130,6 +149,10 @@ below 1×, the service return to Running and the ping monitor go green.
 | 2 | **Synthetics Health** | ✅ | Monitors that target the CI: status now, down checks | `synthetics-*`, ping monitors enriched with the CI, or monitors whose URL is the CI's host name. Browser journeys are tagged with the application, so they do not appear here. |
 | 2 | **Errors from the Logs** | ✅ | Warning-and-worse log lines from the CI, grouped by message | Syslog (server, WebSphere, JBoss, Red Hat, AIX, system), generic file logs, APM error and application logs, matched on `ci.name`; syslog severity code ≤ 4 or log level warning or worse; numbers replaced by # so repeats group together |
 | 2 | **Process Health** | ✅ | Stopped / not-seen processes and services first, then healthy middleware | Windows services (Stopped = Automatic service not running) and Paladin-labelled middleware processes; Not seen = silent > 10 min |
+| 3 | **Upstream — what they call** | ✅ | Each dependency of the services in scope: type, health, error %, average latency, calls, which service calls it | `metrics-apm.service_destination.1m-*`, production only. Failing ≥ 10 % failed calls, Degraded ≥ 1 %. Other services appear by host:port, as APM records them. |
+| 3 | **Services in scope** | ✅ | The services shown, with health, error %, average latency, transactions per minute, business application, APM number, support group | `metrics-apm.service_transaction.1m-*`; "(services on this CI)" = services whose APM host is the CI (`metrics-apm.internal-*`). Click a service to open its APM Service Map. |
+| 3 | **Downstream — who calls them** | ⚠️ | Production services calling the services in scope, with their business application, health of those calls, calls, latency, the host called | Hosts the services in scope answer on (`traces-apm*` transaction URL host) matched to every production service's dependency addresses. **Limit:** when several services share a host (an API gateway, e.g. `ecs-data-api.gcp.cna.com`), callers of that host are listed for each of them; *Via host* shows this. |
+| 3 | **Business applications impacted** | ⚠️ | The callers' CMDB business applications, worst first, with portfolio and support group | From the APM CMDB enrichment on the callers. **Limit:** no user counts or criticality (not in APM or the CMDB data). Click to open the application in the CMDB. |
 | 2 | **Changes on this CI and linked CIs** | ⚠️ | Changes active in the last 7 days on the CI and on CMDB-linked CIs; the CI column shows which | `servicenow-change-requests` + `cmdb-ci-relations`. The selected CI's own changes first. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
 
 ---
@@ -144,6 +167,8 @@ below 1×, the service return to Running and the ping monitor go green.
 | SLO panel not filtered to the CI's services | Kibana limitation (see *KIBANA-LIMITATIONS.md*) | Group SLOs by `ci.name` in Kibana where it makes sense — those follow the CI control |
 | Major-incident and bridge flags unused | `is_major_incident` and `has_been_handled_by_bridge` are empty on all P1 / P2 for a year | ServiceNow integration mapping |
 | Containerised services not linked to servers | APM reports pod names | Expected; use the application / SLO panels |
+| Section 3 has no drawn dependency diagram | Kibana dashboards cannot draw a node-and-arrow map from ES\|QL | Click a service: the APM Service Map draws it |
+| Section 3 is empty for most incident CIs unless a service is picked | P1 / P2 are raised mostly against servers (Linux, AIX), network devices and application services; only servers with APM agents have services on them, and no incident CI is an APM business application (round 5, X and Y) | Pick the service in the Service control; longer term, record the affected business application / service on the incident |
 | Estimated user base | Not in Elastic | Add the ServiceNow user-base field to the CI enrichment |
 
 ## Importing
@@ -159,6 +184,8 @@ them fail with *Unknown query parameter [incident]*. To fix it:
 1. Open MIM V3 and click **More (⋯) → Reset changes → Reset dashboard**. In edit mode, click **Exit edit** and
    discard first.
 2. **Reload the page.** Both the CI and Incident controls are back.
+
+The same applies to every new control (the **Service** control in this version).
 
 Do **not** click Save while the dashboard is in that state: it would save the dashboard without the new controls.
 If that has happened, import `MIM V3.ndjson` again (overwrite), then do steps 1 and 2.
