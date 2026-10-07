@@ -120,6 +120,19 @@ FROM logs-syslog-classic-default | LIMIT 3
 | S | `FROM cmdb-cis* \| LIMIT 3` | 1 year | CI records: name, class, install / operational status, location; no criticality or user-count field in the sample |
 | T | `FROM traces-apm* \| … with_user = COUNT(TO_STRING(user.id)) …` | 15 min | Error *Unknown column [user.id]*: APM records no user IDs, so "users impacted" cannot be shown |
 
+## Round 5 — Blast Radius design (results in `round5.txt`, `service_map.png`)
+
+Run in Dev Tools Console, which applies **no time filter**, so V, W and Z cover the whole retention.
+
+| # | Query | Answered |
+|---|---|---|
+| V | `FROM metrics-apm.service_transaction.1m-* \| STATS services = COUNT_DISTINCT(service.name) BY env = TO_STRING(service.environment)` | 426 services in `prd1`; production is also spelled `prd2`, `prd`, `Prod`, `PRD`. Non-production: `cut*`, `ete*`, `stg*`, `drt*`, `UAT`, `QA`, `DEV`; 42 services have no environment |
+| W | `FROM metrics-apm.service_destination.1m-* \| STATS docs = COUNT(*), calls = SUM(span.destination.service.response_time.count) BY outcome = TO_STRING(event.outcome)` | Failed calls are recorded: 140M failed vs 17.3B successful (0.8 %), so a per-dependency error % works |
+| X | incidents ∪ `metrics-apm.service_transaction.1m-*`, CIs present in both | 562 P1 / P2 CIs (7,234 incidents) in 6 months; **none** is an APM business application name (the single match is the blank CI). Deriving the service from the incident CI's name does not work |
+| Y | `FROM servicenow-incidents-* \| … STATS incidents, cis BY ci_class` (6 months) | P1 / P2 are raised mostly against servers: Linux 2,800, AIX 2,719, Windows 766; network 423; application services ~200 (Mapped, Application, Tag-Based, Calculated); 415 without a CI |
+| Z | `FROM metrics-apm.service_destination.1m-* \| STATS docs, services, resources` | 350M records, 515 calling services, 1,766 dependencies over the whole retention; a 15-minute window is a small fraction |
+| U | Manual: APM → Service Map | The map draws (licence includes it) and resolves service-to-service calls, e.g. cnac-service → CNACentral → elm-standardize-services → elm-hazard-services |
+
 ---
 
 ## Earlier checks
