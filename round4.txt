@@ -1,0 +1,3381 @@
+# 126: POST /_query?format=json [200 OK]
+{
+  "took": 65,
+  "is_partial": false,
+  "completion_time_in_millis": 1791352266898,
+  "documents_found": 15,
+  "values_loaded": 530,
+  "rows_emitted": 60,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 6659767,
+  "start_time_in_millis": 1791352266833,
+  "expiration_time_in_millis": 1791784266766,
+  "columns": [
+    {
+      "name": "@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "agent.name",
+      "type": "keyword"
+    },
+    {
+      "name": "agent.name.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "ci.class",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.class_name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.created_at",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_specific.pm_portfolio",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.environment",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.extracted_at",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingest_error.bridge_enrichment",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingested_at",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.install_status",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.is_monitored",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.last_discovered",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.name_normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.number",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.operational_status",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.short_description",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.name.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.support_group.l2.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.name.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.sync_metadata.timestamp",
+      "type": "date"
+    },
+    {
+      "name": "ci.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.updated_at",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.dataset",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.namespace",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.type",
+      "type": "keyword"
+    },
+    {
+      "name": "eda.ingest_allowed",
+      "type": "boolean"
+    },
+    {
+      "name": "eda.service.name",
+      "type": "keyword"
+    },
+    {
+      "name": "eda.service.name.text",
+      "type": "text"
+    },
+    {
+      "name": "event.outcome",
+      "type": "keyword"
+    },
+    {
+      "name": "event.success_count",
+      "type": "aggregate_metric_double"
+    },
+    {
+      "name": "ingest.pipeline",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.enrich_policy_by_name",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.enrich_policy_by_service_name",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.application_id",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.openinference_project_name",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.os_build_id",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.process_creation_time",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.process_runtime_description",
+      "type": "keyword"
+    },
+    {
+      "name": """labels.service_
+version""",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.service_application_id",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.service_group",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.service_id",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.service_node_name",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.telemetry_auto_version",
+      "type": "keyword"
+    },
+    {
+      "name": "metricset.interval",
+      "type": "keyword"
+    },
+    {
+      "name": "metricset.name",
+      "type": "keyword"
+    },
+    {
+      "name": "numeric_labels.process_id",
+      "type": "long"
+    },
+    {
+      "name": "numeric_labels.thread_id",
+      "type": "long"
+    },
+    {
+      "name": "observer.hostname",
+      "type": "keyword"
+    },
+    {
+      "name": "observer.type",
+      "type": "keyword"
+    },
+    {
+      "name": "observer.version",
+      "type": "keyword"
+    },
+    {
+      "name": "processor.event",
+      "type": "keyword"
+    },
+    {
+      "name": "service.environment",
+      "type": "keyword"
+    },
+    {
+      "name": "service.id",
+      "type": "keyword"
+    },
+    {
+      "name": "service.language.name",
+      "type": "keyword"
+    },
+    {
+      "name": "service.language.name.text",
+      "type": "text"
+    },
+    {
+      "name": "service.name",
+      "type": "keyword"
+    },
+    {
+      "name": "service.name.text",
+      "type": "text"
+    },
+    {
+      "name": "service.node.name",
+      "type": "keyword"
+    },
+    {
+      "name": "service.node.name.text",
+      "type": "text"
+    },
+    {
+      "name": "service.target.name",
+      "type": "keyword"
+    },
+    {
+      "name": "service.target.name.text",
+      "type": "text"
+    },
+    {
+      "name": "service.target.type",
+      "type": "keyword"
+    },
+    {
+      "name": "span.destination.service.resource",
+      "type": "keyword"
+    },
+    {
+      "name": "span.destination.service.response_time.count",
+      "type": "long"
+    },
+    {
+      "name": "span.destination.service.response_time.sum.us",
+      "type": "long"
+    },
+    {
+      "name": "span.name",
+      "type": "keyword"
+    },
+    {
+      "name": "span.name.text",
+      "type": "text"
+    },
+    {
+      "name": "system.process.cpu.start_time",
+      "type": "date"
+    },
+    {
+      "name": "tags",
+      "type": "keyword"
+    },
+    {
+      "name": "timestamp.us",
+      "type": "long"
+    },
+    {
+      "name": "transaction.duration.histogram",
+      "type": "histogram"
+    },
+    {
+      "name": "transaction.duration.summary",
+      "type": "aggregate_metric_double"
+    }
+  ],
+  "values": [
+    [
+      "2026-10-07T05:50:00.000Z",
+      "opentelemetry/java/opentelemetry-java-instrumentation",
+      null,
+      "2026-10-07T05:00:10.446Z",
+      "cmdb_ci_business_app",
+      "Business Application",
+      "2022-11-17T05:20:57.000Z",
+      "Policy Admin (Commercial and Specialty)",
+      "cnaprod.service-now",
+      "prod",
+      "2026-10-07T05:00:10.446Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      null,
+      "2026-10-07T05:00:11.422366890Z",
+      "In Production",
+      true,
+      "2023-10-30T16:15:19.000Z",
+      "Enterprise PolicyCenter",
+      null,
+      "enterprise policycenter",
+      "APM0003360",
+      "Operational",
+      "CNA Enterprise Policy Administration System",
+      "IT.A.Enterprise_policy_Center",
+      null,
+      "9680bdccdba24340643cb96c4e96192d",
+      "7777f197-48fd-46b4-9535-63f68d3c60d1",
+      "default",
+      null,
+      "2026-10-07T04:59:56.346Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      "2026-09-28T16:25:14.000Z",
+      "apm.service_destination.1m",
+      "default",
+      "metrics",
+      null,
+      null,
+      null,
+      "success",
+      null,
+      [
+        "apm.common@custom",
+        "metrics-apm.service_destination@custom"
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Red Hat, Inc. OpenJDK 64-Bit Server VM 17.0.13+11-LTS",
+      null,
+      null,
+      null,
+      "APM0003360",
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "1m",
+      "service_destination",
+      null,
+      null,
+      "apm-server-cna-apm-server-67fbb76df8-4rlzx",
+      "apm-server",
+      "9.5.3",
+      "metric",
+      "prd1",
+      "APM0003360",
+      "java",
+      null,
+      "papc-papcintcons1",
+      null,
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "pnlrp",
+      null,
+      "oracle",
+      "oracle",
+      2,
+      2685,
+      "SELECT pnlrp.DIM_PREM_LOSS_ACCT",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      "2026-10-07T05:50:00.000Z",
+      "opentelemetry/java/opentelemetry-java-instrumentation",
+      null,
+      "2026-10-07T05:00:10.446Z",
+      "cmdb_ci_business_app",
+      "Business Application",
+      "2022-11-17T05:20:57.000Z",
+      "Policy Admin (Commercial and Specialty)",
+      "cnaprod.service-now",
+      "prod",
+      "2026-10-07T05:00:10.446Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      null,
+      "2026-10-07T05:00:11.422366890Z",
+      "In Production",
+      true,
+      "2023-10-30T16:15:19.000Z",
+      "Enterprise PolicyCenter",
+      null,
+      "enterprise policycenter",
+      "APM0003360",
+      "Operational",
+      "CNA Enterprise Policy Administration System",
+      "IT.A.Enterprise_policy_Center",
+      null,
+      "9680bdccdba24340643cb96c4e96192d",
+      "7777f197-48fd-46b4-9535-63f68d3c60d1",
+      "default",
+      null,
+      "2026-10-07T04:59:56.346Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      "2026-09-28T16:25:14.000Z",
+      "apm.service_destination.1m",
+      "default",
+      "metrics",
+      null,
+      null,
+      null,
+      "success",
+      null,
+      [
+        "apm.common@custom",
+        "metrics-apm.service_destination@custom"
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Red Hat, Inc. OpenJDK 64-Bit Server VM 17.0.13+11-LTS",
+      null,
+      null,
+      null,
+      "APM0003360",
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "1m",
+      "service_destination",
+      null,
+      null,
+      "apm-server-cna-apm-server-67fbb76df8-4rlzx",
+      "apm-server",
+      "9.5.3",
+      "metric",
+      "prd1",
+      "APM0003360",
+      "java",
+      null,
+      "papc-papcintcons1",
+      null,
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "esbwsrrutil.cna.com:443",
+      null,
+      "http",
+      "esbwsrrutil.cna.com:443",
+      2,
+      40603,
+      "GET",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      "2026-10-07T05:50:00.000Z",
+      "opentelemetry/java/opentelemetry-java-instrumentation",
+      null,
+      "2026-10-07T05:00:10.446Z",
+      "cmdb_ci_business_app",
+      "Business Application",
+      "2022-11-17T05:20:57.000Z",
+      "Policy Admin (Commercial and Specialty)",
+      "cnaprod.service-now",
+      "prod",
+      "2026-10-07T05:00:10.446Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      null,
+      "2026-10-07T05:00:11.422366890Z",
+      "In Production",
+      true,
+      "2023-10-30T16:15:19.000Z",
+      "Enterprise PolicyCenter",
+      null,
+      "enterprise policycenter",
+      "APM0003360",
+      "Operational",
+      "CNA Enterprise Policy Administration System",
+      "IT.A.Enterprise_policy_Center",
+      null,
+      "9680bdccdba24340643cb96c4e96192d",
+      "7777f197-48fd-46b4-9535-63f68d3c60d1",
+      "default",
+      null,
+      "2026-10-07T04:59:56.346Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      "2026-09-28T16:25:14.000Z",
+      "apm.service_destination.1m",
+      "default",
+      "metrics",
+      null,
+      null,
+      null,
+      "success",
+      null,
+      [
+        "apm.common@custom",
+        "metrics-apm.service_destination@custom"
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Red Hat, Inc. OpenJDK 64-Bit Server VM 17.0.13+11-LTS",
+      null,
+      null,
+      null,
+      "APM0003360",
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "1m",
+      "service_destination",
+      null,
+      null,
+      "apm-server-cna-apm-server-67fbb76df8-4rlzx",
+      "apm-server",
+      "9.5.3",
+      "metric",
+      "prd1",
+      "APM0003360",
+      "java",
+      null,
+      "papc-papcintcons1",
+      null,
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "cna1bsys.cna.com:10288",
+      null,
+      "http",
+      "cna1bsys.cna.com:10288",
+      1,
+      352973,
+      "POST",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      "2026-10-07T05:50:00.000Z",
+      "opentelemetry/java/opentelemetry-java-instrumentation",
+      null,
+      "2026-10-07T05:00:10.446Z",
+      "cmdb_ci_business_app",
+      "Business Application",
+      "2022-11-17T05:20:57.000Z",
+      "Policy Admin (Commercial and Specialty)",
+      "cnaprod.service-now",
+      "prod",
+      "2026-10-07T05:00:10.446Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      null,
+      "2026-10-07T05:00:11.422366890Z",
+      "In Production",
+      true,
+      "2023-10-30T16:15:19.000Z",
+      "Enterprise PolicyCenter",
+      null,
+      "enterprise policycenter",
+      "APM0003360",
+      "Operational",
+      "CNA Enterprise Policy Administration System",
+      "IT.A.Enterprise_policy_Center",
+      null,
+      "9680bdccdba24340643cb96c4e96192d",
+      "7777f197-48fd-46b4-9535-63f68d3c60d1",
+      "default",
+      null,
+      "2026-10-07T04:59:56.346Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      "2026-09-28T16:25:14.000Z",
+      "apm.service_destination.1m",
+      "default",
+      "metrics",
+      null,
+      null,
+      null,
+      "success",
+      null,
+      [
+        "apm.common@custom",
+        "metrics-apm.service_destination@custom"
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Red Hat, Inc. OpenJDK 64-Bit Server VM 17.0.13+11-LTS",
+      null,
+      null,
+      null,
+      "APM0003360",
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "1m",
+      "service_destination",
+      null,
+      null,
+      "apm-server-cna-apm-server-67fbb76df8-4rlzx",
+      "apm-server",
+      "9.5.3",
+      "metric",
+      "prd1",
+      "APM0003360",
+      "java",
+      null,
+      "papc-papcintcons1",
+      null,
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "pnlrp",
+      null,
+      "oracle",
+      "oracle",
+      10,
+      4933,
+      "SELECT pnlrp.DIM_PREM_LOSS_POL",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      "2026-10-07T05:50:00.000Z",
+      "opentelemetry/java/opentelemetry-java-instrumentation",
+      null,
+      "2026-10-07T05:00:10.446Z",
+      "cmdb_ci_business_app",
+      "Business Application",
+      "2022-11-17T05:20:57.000Z",
+      "Policy Admin (Commercial and Specialty)",
+      "cnaprod.service-now",
+      "prod",
+      "2026-10-07T05:00:10.446Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      null,
+      "2026-10-07T05:00:11.422366890Z",
+      "In Production",
+      true,
+      "2023-10-30T16:15:19.000Z",
+      "Enterprise PolicyCenter",
+      null,
+      "enterprise policycenter",
+      "APM0003360",
+      "Operational",
+      "CNA Enterprise Policy Administration System",
+      "IT.A.Enterprise_policy_Center",
+      null,
+      "9680bdccdba24340643cb96c4e96192d",
+      "7777f197-48fd-46b4-9535-63f68d3c60d1",
+      "default",
+      null,
+      "2026-10-07T04:59:56.346Z",
+      "053ac5541b9fddd0314a98ac0a4bcb4e",
+      "2026-09-28T16:25:14.000Z",
+      "apm.service_destination.1m",
+      "default",
+      "metrics",
+      null,
+      null,
+      null,
+      "success",
+      null,
+      [
+        "apm.common@custom",
+        "metrics-apm.service_destination@custom"
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Red Hat, Inc. OpenJDK 64-Bit Server VM 17.0.13+11-LTS",
+      null,
+      null,
+      null,
+      "APM0003360",
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "1m",
+      "service_destination",
+      null,
+      null,
+      "apm-server-cna-apm-server-67fbb76df8-4rlzx",
+      "apm-server",
+      "9.5.3",
+      "metric",
+      "prd1",
+      "APM0003360",
+      "java",
+      null,
+      "papc-papcintcons1",
+      null,
+      "prd1-node1-papc-papcintcons1",
+      null,
+      "esb-v2.cna.com:443",
+      null,
+      "http",
+      "esb-v2.cna.com:443",
+      3,
+      1270337,
+      "POST",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  ]
+}
+# 135: POST /_query?format=json [200 OK]
+#! No limit defined, adding default limit of [1000]
+{
+  "took": 1813,
+  "is_partial": false,
+  "completion_time_in_millis": 1791352268884,
+  "documents_found": 348959404,
+  "values_loaded": 1046567543,
+  "rows_emitted": 697925204,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 335932078888,
+  "start_time_in_millis": 1791352267071,
+  "expiration_time_in_millis": 1791784268773,
+  "columns": [
+    {
+      "name": "callers",
+      "type": "long"
+    },
+    {
+      "name": "resources",
+      "type": "long"
+    },
+    {
+      "name": "target_type",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      493,
+      1691,
+      "http"
+    ],
+    [
+      253,
+      2,
+      "postgresql"
+    ],
+    [
+      71,
+      4,
+      "grpc"
+    ],
+    [
+      35,
+      2,
+      "oracle"
+    ],
+    [
+      28,
+      2,
+      "mssql"
+    ],
+    [
+      17,
+      3,
+      "db2"
+    ],
+    [
+      8,
+      57,
+      "jms"
+    ],
+    [
+      4,
+      1,
+      "BigQuery"
+    ],
+    [
+      4,
+      1,
+      "hsqldb"
+    ],
+    [
+      2,
+      0,
+      "genai"
+    ],
+    [
+      2,
+      1,
+      "h2"
+    ],
+    [
+      2,
+      0,
+      "db"
+    ],
+    [
+      1,
+      1,
+      "aws-api"
+    ]
+  ]
+}
+# 144: POST /_query?format=json [200 OK]
+{
+  "took": 1658,
+  "is_partial": false,
+  "completion_time_in_millis": 1791352270624,
+  "documents_found": 348959404,
+  "values_loaded": 697608139,
+  "rows_emitted": 698276230,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 176242799878,
+  "start_time_in_millis": 1791352268966,
+  "expiration_time_in_millis": 1791784270575,
+  "columns": [
+    {
+      "name": "callers",
+      "type": "keyword"
+    },
+    {
+      "name": "resource",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      [
+        "apex-prompt-genie",
+        "blport-webapp",
+        "blport-recurring-cc",
+        "model-api-center"
+      ],
+      "169.254.169.254:80"
+    ],
+    [
+      "efile",
+      "705ckjdttw6cz8i2xgu0mutnler7f534r2jpbryhm6.oastify.com:80"
+    ],
+    [
+      [
+        "apex-core",
+        "model-api-center",
+        "apex-prompt-genie",
+        "requote-override-online-backend"
+      ],
+      "BigQuery"
+    ],
+    [
+      "EPPWAS",
+      "VCLCH1D0154.cna.com:9082"
+    ],
+    [
+      "EPPWAS",
+      "VCLCH1D0155.cna.com:9082"
+    ],
+    [
+      "EPPWAS",
+      "VCLCH1D0156.cna.com:9082"
+    ],
+    [
+      "EPPWAS",
+      "VCLCH1D0157.cna.com:9082"
+    ],
+    [
+      "elm-standardize-services",
+      "VKAU1DAP0003.cna.com:8080"
+    ],
+    [
+      "CCIS",
+      "VKBLYDDB2591.cna.com"
+    ],
+    [
+      "identityiq",
+      "aat4012.id.cyberark.cloud:443"
+    ],
+    [
+      "identityiq",
+      "aat4013.id.cyberark.cloud:443"
+    ],
+    [
+      [
+        "abp-web",
+        "abp-batch",
+        "juno-doc-api"
+      ],
+      "abp-data-api-cut1.gcp.cna.com:443"
+    ],
+    [
+      [
+        "abp-web",
+        "juno-doc-api",
+        "abp-batch"
+      ],
+      "abp-data-api-ete1.gcp.cna.com:443"
+    ],
+    [
+      [
+        "abp-web",
+        "juno-doc-api",
+        "abp-batch"
+      ],
+      "abp-data-api-stg.gcp.cna.com:443"
+    ],
+    [
+      [
+        "abp-web",
+        "juno-doc-api",
+        "abp-batch"
+      ],
+      "abp-data-api.gcp.cna.com:443"
+    ],
+    [
+      [
+        "jupiter-orchestration",
+        "abp-web",
+        "juno-doc-api"
+      ],
+      "abp-doc-api-cut1.gcp.cna.com:443"
+    ],
+    [
+      [
+        "jupiter-orchestration",
+        "juno-doc-api",
+        "abp-web",
+        "abp-batch"
+      ],
+      "abp-doc-api-ete1.gcp.cna.com:443"
+    ],
+    [
+      [
+        "jupiter-orchestration",
+        "abp-web",
+        "juno-doc-api",
+        "abp-batch"
+      ],
+      "abp-doc-api-stg.gcp.cna.com:443"
+    ],
+    [
+      [
+        "abp-web",
+        "jupiter-orchestration",
+        "juno-doc-api",
+        "abp-batch"
+      ],
+      "abp-doc-api.gcp.cna.com:443"
+    ],
+    [
+      "efms-service-api",
+      "aem.publish.cna.com:443"
+    ],
+    [
+      "aere-svc",
+      "aere-relog-svc-cut1.gcp.cna.com:443"
+    ],
+    [
+      "aere-svc",
+      "aere-relog-svc-ete1.gcp.cna.com:443"
+    ],
+    [
+      "aere-svc",
+      "aere-relog-svc-stg.gcp.cna.com:443"
+    ],
+    [
+      "aere-svc",
+      "aere-relog-svc.gcp.cna.com:443"
+    ],
+    [
+      "central-api",
+      "agency-api.cna.com:443"
+    ],
+    [
+      "apex-prompt-genie",
+      "apex-core-api.gcp.cna.com:443"
+    ],
+    [
+      "elm-hazard-services",
+      "api-uat.cotality.com:443"
+    ],
+    [
+      [
+        "eqemetrx-batch-services",
+        "identityiq"
+      ],
+      "api.atlassian.com:443"
+    ],
+    [
+      "rst-api",
+      "api.cloudcms.com:443"
+    ],
+    [
+      [
+        "claimecm-dataoutbound-data-delivery-service",
+        "claimecm-dataoutbound-data-orchestrator-service"
+      ],
+      "api.cna.digitalowl.app:443"
+    ],
+    [
+      "elm-hazard-services",
+      "api.cotality.com:443"
+    ],
+    [
+      "entlegal-services",
+      "api.filevineapp.com:443"
+    ],
+    [
+      "eqemetrx-batch-services",
+      "api.github.com:443"
+    ],
+    [
+      [
+        "suruwt-api",
+        "suppe-batch",
+        "central-api"
+      ],
+      "api.powerbi.com:443"
+    ],
+    [
+      [
+        "papc-papcintcons1",
+        "epc",
+        "epc-papcintcons-pro"
+      ],
+      "api.wcirb.com:443"
+    ],
+    [
+      "CNACentral",
+      "api10.us1.cloudcms.com:443"
+    ],
+    [
+      "identityiq",
+      "apihub.us.document360.io:443"
+    ],
+    [
+      [
+        "elm-propertyattributes-services",
+        "champ-test-champ-api",
+        "assess-vehicle-svc",
+        "blport-profile-service"
+      ],
+      "apis.cna.com:443"
+    ],
+    [
+      "dataprotector-data-manager",
+      "app1.securiti.ai:443"
+    ],
+    [
+      "CCIS",
+      "app2connectapi-ete1.gcp.cna.com:443"
+    ]
+  ]
+}
+# 153: POST /_query?format=json [502 Bad Gateway]
+{
+  "statusCode": 502,
+  "error": "Bad Gateway",
+  "message": "An internal server error occurred. Check Kibana server logs for details."
+}
+# 162: POST /_query?format=json [200 OK]
+{
+  "took": 88,
+  "is_partial": false,
+  "completion_time_in_millis": 1791352300877,
+  "documents_found": 12,
+  "values_loaded": 300,
+  "rows_emitted": 48,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 16848005,
+  "start_time_in_millis": 1791352300789,
+  "expiration_time_in_millis": 1791784300703,
+  "columns": [
+    {
+      "name": "@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "agent.name",
+      "type": "keyword"
+    },
+    {
+      "name": "agent.name.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "ci.class",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.class_name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.created_at",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.customer_specific.pm_portfolio",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.environment",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.extracted_at",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingest_error.bridge_enrichment",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.ingested_at",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.install_status",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.is_monitored",
+      "type": "boolean"
+    },
+    {
+      "name": "ci.last_discovered",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.name.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.name_normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.number",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.operational_status",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.short_description",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.support_group.l2.name.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.support_group.l2.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.name",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.sync_metadata.name.text",
+      "type": "text"
+    },
+    {
+      "name": "ci.sync_metadata.timestamp",
+      "type": "date"
+    },
+    {
+      "name": "ci.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.updated_at",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.dataset",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.namespace",
+      "type": "keyword"
+    },
+    {
+      "name": "data_stream.type",
+      "type": "keyword"
+    },
+    {
+      "name": "eda.ingest_allowed",
+      "type": "boolean"
+    },
+    {
+      "name": "eda.service.name",
+      "type": "keyword"
+    },
+    {
+      "name": "eda.service.name.text",
+      "type": "text"
+    },
+    {
+      "name": "event.success_count",
+      "type": "aggregate_metric_double"
+    },
+    {
+      "name": "ingest.pipeline",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.enrich_policy_by_name",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.enrich_policy_by_service_name",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.application_id",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.openinference_project_name",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.os_build_id",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.process_creation_time",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.process_runtime_description",
+      "type": "keyword"
+    },
+    {
+      "name": """labels.service_
+version""",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.service_application_id",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.service_group",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.service_id",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.service_node_name",
+      "type": "keyword"
+    },
+    {
+      "name": "labels.telemetry_auto_version",
+      "type": "keyword"
+    },
+    {
+      "name": "metricset.interval",
+      "type": "keyword"
+    },
+    {
+      "name": "metricset.name",
+      "type": "keyword"
+    },
+    {
+      "name": "numeric_labels.process_id",
+      "type": "long"
+    },
+    {
+      "name": "numeric_labels.thread_id",
+      "type": "long"
+    },
+    {
+      "name": "observer.hostname",
+      "type": "keyword"
+    },
+    {
+      "name": "observer.type",
+      "type": "keyword"
+    },
+    {
+      "name": "observer.version",
+      "type": "keyword"
+    },
+    {
+      "name": "processor.event",
+      "type": "keyword"
+    },
+    {
+      "name": "service.environment",
+      "type": "keyword"
+    },
+    {
+      "name": "service.id",
+      "type": "keyword"
+    },
+    {
+      "name": "service.language.name",
+      "type": "keyword"
+    },
+    {
+      "name": "service.language.name.text",
+      "type": "text"
+    },
+    {
+      "name": "service.name",
+      "type": "keyword"
+    },
+    {
+      "name": "service.name.text",
+      "type": "text"
+    },
+    {
+      "name": "service.node.name",
+      "type": "keyword"
+    },
+    {
+      "name": "service.node.name.text",
+      "type": "text"
+    },
+    {
+      "name": "system.process.cpu.start_time",
+      "type": "date"
+    },
+    {
+      "name": "tags",
+      "type": "keyword"
+    },
+    {
+      "name": "timestamp.us",
+      "type": "long"
+    },
+    {
+      "name": "transaction.duration.histogram",
+      "type": "histogram"
+    },
+    {
+      "name": "transaction.duration.summary",
+      "type": "aggregate_metric_double"
+    },
+    {
+      "name": "transaction.type",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      "2026-08-19T05:41:00.000Z",
+      "opentelemetry/java/opentelemetry-java-instrumentation",
+      null,
+      "2026-08-19T03:28:29.226Z",
+      "cmdb_ci_business_app",
+      "Business Application",
+      "2022-11-17T05:22:14.000Z",
+      "Operations",
+      "cnaprod.service-now",
+      "prod",
+      "2026-08-19T03:28:29.226Z",
+      "3f7a41d41b9fddd0314a98ac0a4bcb27",
+      null,
+      "2026-08-19T03:28:29.498205973Z",
+      "In Production",
+      true,
+      "2026-04-03T21:06:31.000Z",
+      "New Business Submission Portal",
+      null,
+      "new business submission portal",
+      "APM0003825",
+      "Operational",
+      "Portal developed to handle email submission indexing and New Account Setup and Product Registration for Middle Markets and Construction business units.",
+      "IT.A.New_Business_Portal",
+      null,
+      "9479a84c1b36c114c71921b6b04bcb8c",
+      "d9bb6f9d-b7e4-4496-b32a-8d1f67a7c243",
+      "default",
+      null,
+      "2026-08-19T03:28:17.299Z",
+      "3f7a41d41b9fddd0314a98ac0a4bcb27",
+      "2026-08-11T15:33:00.000Z",
+      "apm.service_transaction.1m",
+      "default",
+      "metrics",
+      true,
+      "nbintake-data-repo",
+      null,
+      """{"sum":1.0,"value_count":1}""",
+      [
+        "apm.common@custom",
+        "metrics-apm.service_transaction@custom"
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.12+8-LTS",
+      null,
+      null,
+      "APM0003825",
+      null,
+      null,
+      null,
+      "1m",
+      "service_transaction",
+      null,
+      null,
+      "apm-server-cna-apm-server-6d65d87866-rdpqn",
+      "apm-server",
+      "9.3.2",
+      "metric",
+      "stg1",
+      "APM0003825",
+      "java",
+      null,
+      "nbintake-data-repo",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      """{"values":[250879.0],"counts":[1]}""",
+      """{"sum":250879.0,"value_count":1}""",
+      "request"
+    ],
+    [
+      "2026-08-19T05:41:00.000Z",
+      "opentelemetry/java/opentelemetry-java-instrumentation",
+      null,
+      "2026-08-19T03:28:27.076Z",
+      "cmdb_ci_business_app",
+      "Business Application",
+      "2022-11-17T05:23:05.000Z",
+      "Commercial",
+      "cnaprod.service-now",
+      "prod",
+      "2026-08-19T03:28:27.076Z",
+      "58bacdd41b9fddd0314a98ac0a4bcb54",
+      null,
+      "2026-08-19T03:28:27.710329753Z",
+      "In Production",
+      true,
+      "2024-02-02T14:41:34.000Z",
+      "Risk Support Tool",
+      null,
+      "risk support tool",
+      "APM0004135",
+      "Operational",
+      "The Risk Support tool is used by underwriting to pull in all pertinent information and to provide a score to assist in making consistent underwriting decisions.",
+      "IT.A.RST_Support",
+      null,
+      "4e807dccdba24340643cb96c4e96191d",
+      "d9bb6f9d-b7e4-4496-b32a-8d1f67a7c243",
+      "default",
+      null,
+      "2026-08-19T03:28:17.299Z",
+      "58bacdd41b9fddd0314a98ac0a4bcb54",
+      "2026-05-21T22:25:33.000Z",
+      "apm.service_transaction.1m",
+      "default",
+      "metrics",
+      null,
+      null,
+      null,
+      """{"sum":1.0,"value_count":1}""",
+      [
+        "apm.common@custom",
+        "metrics-apm.service_transaction@custom"
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Eclipse Adoptium OpenJDK 64-Bit Server VM 17.0.20+8",
+      null,
+      null,
+      "APM0004135",
+      null,
+      null,
+      null,
+      "1m",
+      "service_transaction",
+      null,
+      null,
+      "apm-server-cna-apm-server-6d65d87866-rdpqn",
+      "apm-server",
+      "9.3.2",
+      "metric",
+      "cut3",
+      "APM0004135",
+      "java",
+      null,
+      "rst-data",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      """{"values":[3455.0,3615.0,3647.0,3695.0,3743.0,3855.0,3951.0,3983.0,4095.0,4223.0,4287.0,4511.0,4895.0,5055.0,5119.0,5311.0,5343.0,5375.0,5407.0,5439.0,5471.0,5503.0,5599.0,5663.0,5727.0,5759.0,5823.0,5951.0,6047.0,6079.0,6111.0,6239.0,6687.0,7423.0,8447.0,8511.0,8575.0,8639.0,8767.0,8831.0,9023.0,9215.0,31359.0,2088959.0,2097151.0,2113535.0,2129919.0,2146303.0,2260991.0,2293759.0],"counts":[1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1,2,2,1,1,2,1,1,2,1,1,1,1,1,1,1,1,1,3,2,1,1,2,1,2,2,3,2,1,1,1]}""",
+      """{"sum":250879.0,"value_count":1}""",
+      "request"
+    ],
+    [
+      "2026-08-19T05:41:00.000Z",
+      "opentelemetry/java/opentelemetry-java-instrumentation",
+      null,
+      "2026-08-19T03:28:29.227Z",
+      "cmdb_ci_business_app",
+      "Business Application",
+      "2022-11-17T05:21:44.000Z",
+      "Operations",
+      "cnaprod.service-now",
+      "prod",
+      "2026-08-19T03:28:29.227Z",
+      "dc6a85941b9fddd0314a98ac0a4bcbc2",
+      null,
+      "2026-08-19T03:28:29.498286638Z",
+      "In Production",
+      true,
+      null,
+      "Jupiter",
+      null,
+      "jupiter",
+      "APM0003640",
+      "Operational",
+      "Jupiter web application enables CNA Operations staff to review Billing Accounts in assisting Direct Billing customers. The application enables quick search and sort in looking up account details such as payments, terms, schedule, account setup etc.",
+      "IT.A.Jupiter",
+      null,
+      "eae722811b72f5588ac08622604bcbbe",
+      "d9bb6f9d-b7e4-4496-b32a-8d1f67a7c243",
+      "default",
+      null,
+      "2026-08-19T03:28:17.299Z",
+      "dc6a85941b9fddd0314a98ac0a4bcbc2",
+      "2026-08-11T15:33:00.000Z",
+      "apm.service_transaction.1m",
+      "default",
+      "metrics",
+      true,
+      "jupiter-data-batch",
+      null,
+      """{"sum":1.0,"value_count":1}""",
+      [
+        "apm.common@custom",
+        "metrics-apm.service_transaction@custom"
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.12+8-LTS",
+      null,
+      null,
+      "APM0003640",
+      null,
+      null,
+      null,
+      "1m",
+      "service_transaction",
+      null,
+      null,
+      "apm-server-cna-apm-server-6d65d87866-rdpqn",
+      "apm-server",
+      "9.3.2",
+      "metric",
+      "cut1",
+      "APM0003640",
+      "java",
+      null,
+      "jupiter-data-batch",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      """{"values":[1951.0,1983.0,2607.0,3007.0,3263.0,497663.0,511999.0,544767.0,548863.0,565247.0],"counts":[1,1,1,1,1,1,1,2,1,1]}""",
+      """{"sum":250879.0,"value_count":1}""",
+      "unknown"
+    ]
+  ]
+}
+# 170: POST /_query?format=json [200 OK]
+{
+  "took": 710,
+  "is_partial": false,
+  "completion_time_in_millis": 1791352301691,
+  "documents_found": 1993657,
+  "values_loaded": 5973837,
+  "rows_emitted": 3992858,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 2422550473,
+  "start_time_in_millis": 1791352300981,
+  "expiration_time_in_millis": 1791784301503,
+  "columns": [
+    {
+      "name": "links",
+      "type": "long"
+    },
+    {
+      "name": "type.name",
+      "type": "keyword"
+    },
+    {
+      "name": "parent.class",
+      "type": "keyword"
+    },
+    {
+      "name": "child.class",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      560041,
+      "Hosted on::Hosts",
+      "cmdb_ci_cmp_resource",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      445764,
+      "Hosted on::Hosts",
+      "cmdb_ci_storage_vol_snapshot",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      246351,
+      "Hosted on::Hosts",
+      "cmdb_ci_kubernetes_replicaset",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      63693,
+      "Hosted on::Hosts",
+      "cmdb_ci_kubernetes_pod",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      61361,
+      "Hosted on::Hosts",
+      "cmdb_ci_google_datacenter",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      56447,
+      "Runs on::Runs",
+      "cmdb_ci_web_service",
+      "cmdb_ci_app_server_websphere"
+    ],
+    [
+      51076,
+      "Hosted on::Hosts",
+      "cmdb_ci_kubernetes_cluster_role",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      49215,
+      "Hosted on::Hosts",
+      "cmdb_ci_kubernetes_cluster_role_binding",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      46844,
+      "Runs on::Runs",
+      "cmdb_ci_lb_service",
+      "cmdb_ci_lb_bigip"
+    ],
+    [
+      44256,
+      "Uses::Used by",
+      "cmdb_ci_lb_service",
+      "cmdb_ci_lb_pool"
+    ],
+    [
+      36180,
+      "Uses::Used by",
+      "cmdb_ci_db_ora_instance",
+      "cmdb_ci_db_ora_service"
+    ],
+    [
+      24520,
+      "Managed by::Manages",
+      "cmdb_ci_db_ora_service",
+      "cmdb_ci_db_ora_listener"
+    ],
+    [
+      21684,
+      "Use End Point To::Use End Point From",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_endpoint_manual"
+    ],
+    [
+      17247,
+      "Distributed by::Distributes",
+      "cmdb_ci_apache_web_server",
+      "cmdb_ci_lb_service"
+    ],
+    [
+      16268,
+      "Hosted on::Hosts",
+      "cmdb_ci_kubernetes_node",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      14562,
+      "Depends on::Used by",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_storage_vol_snapshot"
+    ],
+    [
+      13958,
+      "Hosted on::Hosts",
+      "cmdb_ci_kubernetes_deployment",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      10360,
+      "Hosted on::Hosts",
+      "cmdb_ci_kubernetes_service",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      10350,
+      "Contains::Contained by",
+      "cmdb_ci_kubernetes_cluster",
+      "cmdb_ci_kubernetes_service"
+    ],
+    [
+      10286,
+      "Contains::Contained by",
+      "cmdb_ci_kubernetes_namespace",
+      "cmdb_ci_kubernetes_service"
+    ],
+    [
+      9106,
+      "Hosted on::Hosts",
+      "cmdb_ci_cloud_database",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      8108,
+      "Uses::Used by",
+      "cmdb_ci_service_discovered",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      6980,
+      "Implement End Point To::Implement End Point From",
+      "cmdb_ci_endpoint_manual",
+      "cmdb_ci_infra_service"
+    ],
+    [
+      6122,
+      "Hosted on::Hosts",
+      "cmdb_ci_kubernetes_namespace",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      6076,
+      "Runs on::Runs",
+      "cmdb_ci_lb_service",
+      null
+    ],
+    [
+      5942,
+      "Use End Point To::Use End Point From",
+      "cmdb_ci_appl_sharepoint",
+      "cmdb_ci_endpoint_sharepoint_service"
+    ],
+    [
+      5874,
+      "Uses::Used by",
+      "cmdb_ci_service_auto",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      5029,
+      "Applicative Flow To::Applicative Flow From",
+      "cmdb_ci_endpoint_sp_connection",
+      "cmdb_ci_endpoint_sharepoint_service"
+    ],
+    [
+      4735,
+      "Implement End Point To::Implement End Point From",
+      "cmdb_ci_endpoint_sharepoint_service",
+      "cmdb_ci_appl_sp_service"
+    ],
+    [
+      4722,
+      "Contains::Contained by",
+      "cmdb_ci_appl_sharepoint",
+      "cmdb_ci_appl_sp_service"
+    ],
+    [
+      4581,
+      "Consumes::Consumed by",
+      "cmdb_ci_business_app",
+      "cmdb_ci_service_calculated"
+    ],
+    [
+      4379,
+      "Runs on::Runs",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_win_server"
+    ],
+    [
+      4292,
+      "Distributed by::Distributes",
+      "cmdb_ci_win_server",
+      "cmdb_ci_lb_service"
+    ],
+    [
+      4154,
+      "Uses::Used by",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      4059,
+      "Uses::Used by",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      4042,
+      "Implement End Point To::Implement End Point From",
+      "cmdb_ci_endpoint_manual",
+      "cmdb_ci_service_auto"
+    ],
+    [
+      3903,
+      "Runs on::Runs",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_linux_server"
+    ],
+    [
+      3761,
+      "Depends on::Used by",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_app_server_websphere"
+    ],
+    [
+      3374,
+      "Distributed by::Distributes",
+      "cmdb_ci_linux_server",
+      "cmdb_ci_lb_service"
+    ],
+    [
+      3357,
+      "Depends on::Used by",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_cmp_resource"
+    ]
+  ]
+}
+# 179: POST /_query?format=json [200 OK]
+{
+  "took": 66,
+  "is_partial": false,
+  "completion_time_in_millis": 1791352301835,
+  "documents_found": 3,
+  "values_loaded": 126,
+  "rows_emitted": 21,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 20457952,
+  "start_time_in_millis": 1791352301769,
+  "expiration_time_in_millis": 1791784301703,
+  "columns": [
+    {
+      "name": "@timestamp",
+      "type": "date"
+    },
+    {
+      "name": "asset_tag",
+      "type": "keyword"
+    },
+    {
+      "name": "assignment_group",
+      "type": "text"
+    },
+    {
+      "name": "assignment_group.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.db-misc.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.db-misc.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.db-misc.urls",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.filebeat.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.filebeat.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.heartbeat-ntlm.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.heartbeat-ntlm.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.heartbeat-ntlm.ref_keys",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.heartbeat.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.heartbeat.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.heartbeat.ref_keys",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.metricbeat.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.metricbeat.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.newrelic.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.newrelic.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.newrelic.ref_keys",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.processlog.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.processlog.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.servicetrace.application.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.servicetrace.application.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.servicetrace.application.ref_application",
+      "type": "integer"
+    },
+    {
+      "name": "bridge.servicetrace.observer.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.servicetrace.observer.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.servicetrace.observer.ref_station",
+      "type": "integer"
+    },
+    {
+      "name": "bridge.telegraf.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.telegraf.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.uptrends.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.uptrends.geo.city_name",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.uptrends.geo.country_iso_code",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.uptrends.geo.country_name",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.uptrends.geo.location",
+      "type": "geo_point"
+    },
+    {
+      "name": "bridge.uptrends.geo.name",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.uptrends.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.uptrends.monitor_id",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.uptrends.monitor_name",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.uptrends.network.site_category",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.url_perfmon.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.url_perfmon.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "bridge.winlogbeat.assignment_group",
+      "type": "keyword"
+    },
+    {
+      "name": "bridge.winlogbeat.monitor_active",
+      "type": "boolean"
+    },
+    {
+      "name": "category.1",
+      "type": "keyword"
+    },
+    {
+      "name": "category.1.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "category.2",
+      "type": "keyword"
+    },
+    {
+      "name": "category.2.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "class",
+      "type": "keyword"
+    },
+    {
+      "name": "class_name",
+      "type": "keyword"
+    },
+    {
+      "name": "class_name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "company.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "company.industry",
+      "type": "keyword"
+    },
+    {
+      "name": "company.industry.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "company.iris_code",
+      "type": "keyword"
+    },
+    {
+      "name": "company.is_active",
+      "type": "boolean"
+    },
+    {
+      "name": "company.is_parent",
+      "type": "boolean"
+    },
+    {
+      "name": "company.name",
+      "type": "keyword"
+    },
+    {
+      "name": "company.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "company.parent.name",
+      "type": "keyword"
+    },
+    {
+      "name": "company.parent.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "company.parent.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "company.rbu",
+      "type": "keyword"
+    },
+    {
+      "name": "company.rbu.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "company.sub_industry",
+      "type": "keyword"
+    },
+    {
+      "name": "company.sub_industry.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "company.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "company.updated_at",
+      "type": "date"
+    },
+    {
+      "name": "created_at",
+      "type": "date"
+    },
+    {
+      "name": "criticality",
+      "type": "integer"
+    },
+    {
+      "name": "criticality_name",
+      "type": "keyword"
+    },
+    {
+      "name": "criticality_name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "customer_id",
+      "type": "keyword"
+    },
+    {
+      "name": "customer_specific.batch_job_id",
+      "type": "text"
+    },
+    {
+      "name": "customer_specific.batch_job_id.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "customer_specific.pm_porfolio",
+      "type": "keyword"
+    },
+    {
+      "name": "customer_specific.pm_porfolio.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "customer_specific.pm_porfolio.text",
+      "type": "text"
+    },
+    {
+      "name": "customer_specific.pm_portfolio",
+      "type": "keyword"
+    },
+    {
+      "name": "customer_specific.pm_portfolio.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "customer_specific.pm_portfolio.text",
+      "type": "text"
+    },
+    {
+      "name": "customer_specific_data.1",
+      "type": "keyword"
+    },
+    {
+      "name": "customer_specific_data.2",
+      "type": "keyword"
+    },
+    {
+      "name": "customer_specific_data.3",
+      "type": "keyword"
+    },
+    {
+      "name": "datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "device_type.name",
+      "type": "keyword"
+    },
+    {
+      "name": "device_type.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "duplicate_of",
+      "type": "text"
+    },
+    {
+      "name": "duplicate_of.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "enriched_at",
+      "type": "date"
+    },
+    {
+      "name": "environment",
+      "type": "keyword"
+    },
+    {
+      "name": "extracted_at",
+      "type": "date"
+    },
+    {
+      "name": "fqdn",
+      "type": "keyword"
+    },
+    {
+      "name": "fqdn.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.city.name",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.city.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.city.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.continent",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.country.iso_code",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.country.name",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.country.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.country.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.datasource",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.formatted_address",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.formatted_address.keywords",
+      "type": "text"
+    },
+    {
+      "name": "geo.formatted_address.text",
+      "type": "text"
+    },
+    {
+      "name": "geo.is_active",
+      "type": "boolean"
+    },
+    {
+      "name": "geo.location",
+      "type": "geo_point"
+    },
+    {
+      "name": "geo.location_code",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.location_code.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.name",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.place_id",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.state.name",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.state.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.state.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.type",
+      "type": "keyword"
+    },
+    {
+      "name": "geo.updated_at",
+      "type": "date"
+    },
+    {
+      "name": "id",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.bridge_enrichment",
+      "type": "text"
+    },
+    {
+      "name": "ingest_error.bridge_enrichment.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.bridge_enrichment_items",
+      "type": "text"
+    },
+    {
+      "name": "ingest_error.bridge_enrichment_items.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.enrich_locations",
+      "type": "text"
+    },
+    {
+      "name": "ingest_error.enrich_locations.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.message",
+      "type": "keyword"
+    },
+    {
+      "name": "ingest_error.message.keywords",
+      "type": "text"
+    },
+    {
+      "name": "ingest_error.message.text",
+      "type": "text"
+    },
+    {
+      "name": "ingested_at",
+      "type": "date"
+    },
+    {
+      "name": "install_status",
+      "type": "keyword"
+    },
+    {
+      "name": "ip_address",
+      "type": "ip"
+    },
+    {
+      "name": "is_monitored",
+      "type": "boolean"
+    },
+    {
+      "name": "is_stale",
+      "type": "boolean"
+    },
+    {
+      "name": "is_top_level_ci",
+      "type": "boolean"
+    },
+    {
+      "name": "last_discovered",
+      "type": "date"
+    },
+    {
+      "name": "mac_address",
+      "type": "keyword"
+    },
+    {
+      "name": "manufacturer.name",
+      "type": "keyword"
+    },
+    {
+      "name": "manufacturer.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "manufacturer.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "mirrored_at",
+      "type": "date"
+    },
+    {
+      "name": "model.name",
+      "type": "keyword"
+    },
+    {
+      "name": "model.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "model.number",
+      "type": "keyword"
+    },
+    {
+      "name": "model.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "name",
+      "type": "keyword"
+    },
+    {
+      "name": "name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "name_normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "number",
+      "type": "text"
+    },
+    {
+      "name": "number.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "operational_status",
+      "type": "keyword"
+    },
+    {
+      "name": "os.family",
+      "type": "keyword"
+    },
+    {
+      "name": "os.family.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "os.kernel",
+      "type": "keyword"
+    },
+    {
+      "name": "os.kernel.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "os.name",
+      "type": "keyword"
+    },
+    {
+      "name": "os.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "os.version",
+      "type": "keyword"
+    },
+    {
+      "name": "os.version.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "paladin_map.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "parents.class",
+      "type": "keyword"
+    },
+    {
+      "name": "parents.id",
+      "type": "keyword"
+    },
+    {
+      "name": "parents.name",
+      "type": "keyword"
+    },
+    {
+      "name": "parents.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "priority",
+      "type": "integer"
+    },
+    {
+      "name": "raw_data.name",
+      "type": "keyword"
+    },
+    {
+      "name": "raw_data.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "service_classification",
+      "type": "keyword"
+    },
+    {
+      "name": "service_classification.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "short_description",
+      "type": "keyword"
+    },
+    {
+      "name": "short_description.keywords",
+      "type": "text"
+    },
+    {
+      "name": "short_description.text",
+      "type": "text"
+    },
+    {
+      "name": "status_of_service.name",
+      "type": "keyword"
+    },
+    {
+      "name": "status_of_service.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "support_group.l1.name",
+      "type": "keyword"
+    },
+    {
+      "name": "support_group.l1.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "support_group.l1.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "support_group.l2.name",
+      "type": "keyword"
+    },
+    {
+      "name": "support_group.l2.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "support_group.l2.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "support_group.l3.name",
+      "type": "keyword"
+    },
+    {
+      "name": "support_group.l3.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "support_group.l3.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "sync_metadata.id",
+      "type": "text"
+    },
+    {
+      "name": "sync_metadata.id.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "sync_metadata.name",
+      "type": "text"
+    },
+    {
+      "name": "sync_metadata.name.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "sync_metadata.timestamp",
+      "type": "date"
+    },
+    {
+      "name": "sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "top_level_ci_depth",
+      "type": "integer"
+    },
+    {
+      "name": "top_level_parents.class",
+      "type": "keyword"
+    },
+    {
+      "name": "top_level_parents.id",
+      "type": "keyword"
+    },
+    {
+      "name": "top_level_parents.name",
+      "type": "keyword"
+    },
+    {
+      "name": "top_level_parents.name.normalized",
+      "type": "keyword"
+    },
+    {
+      "name": "unit",
+      "type": "keyword"
+    },
+    {
+      "name": "updated_at",
+      "type": "date"
+    }
+  ],
+  "values": [
+    [
+      "2026-10-07T05:37:04.825Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cmdb_ci_vmware_instance",
+      "VMware Virtual Machine Instance",
+      "vmware virtual machine instance",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-09-28T04:01:44.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-07T05:37:04.825Z",
+      null,
+      null,
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.2170549 41.7722028)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "65539f1efbe3c7108b28f2277befdccb",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-07T05:37:05.005Z",
+      "Installed",
+      null,
+      false,
+      false,
+      null,
+      "2026-10-05T04:02:35.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "VSLRCH1D150-clone23%2f09",
+      "vslrch1d150-clone23%2f09",
+      "vslrch1d150-clone23%2f09",
+      null,
+      null,
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "742bcbd3-0d9c-43c4-b9e2-1bb098bd7a18",
+      "742bcbd3-0d9c-43c4-b9e2-1bb098bd7a18",
+      "full_sync",
+      "full_sync",
+      "2026-10-07T05:29:56.001Z",
+      "65539f1efbe3c7108b28f2277befdccb",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-05T04:02:35.000Z"
+    ],
+    [
+      "2026-10-07T05:37:04.826Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cmdb_ci_vmware_instance",
+      "VMware Virtual Machine Instance",
+      "vmware virtual machine instance",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2024-09-28T21:33:01.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-07T05:37:04.826Z",
+      "vslrau1p479",
+      "vslrau1p479",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.2170549 41.7722028)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "7b5be3a747b4d21441c076edd46d43df",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-07T05:37:05.005Z",
+      "Installed",
+      "10.100.8.67",
+      false,
+      false,
+      null,
+      "2026-10-05T04:02:34.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "vslrau1p479",
+      "vslrau1p479",
+      "vslrau1p479",
+      null,
+      null,
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "742bcbd3-0d9c-43c4-b9e2-1bb098bd7a18",
+      "742bcbd3-0d9c-43c4-b9e2-1bb098bd7a18",
+      "full_sync",
+      "full_sync",
+      "2026-10-07T05:29:56.001Z",
+      "7b5be3a747b4d21441c076edd46d43df",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-05T04:02:35.000Z"
+    ],
+    [
+      "2026-10-07T05:37:04.826Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cmdb_ci_vmware_instance",
+      "VMware Virtual Machine Instance",
+      "vmware virtual machine instance",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2021-11-21T06:18:02.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "cnaprod.service-now",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-07T05:37:04.826Z",
+      "VSKCH1S100.cna.com",
+      "vskch1s100.cna.com",
+      "Aurora",
+      "aurora",
+      null,
+      null,
+      "US",
+      "United States",
+      "united states",
+      null,
+      "cnaprod.service-now.geocode-enriched-by-paladin",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      "4267 Meridian Pkwy, Aurora, IL 60504, USA",
+      null,
+      "POINT (-88.2170549 41.7722028)",
+      null,
+      null,
+      "Aurora - IL70",
+      "ChIJ57GUBrr5DogRda6waiyqj4c",
+      "Illinois",
+      "illinois",
+      null,
+      "79c8b40adb664300643cb96c4e9619a6",
+      null,
+      "2025-11-11T10:01:21.000Z",
+      "8551d288870449d00259553e3fbb3505",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-07T05:37:05.005Z",
+      "Installed",
+      "10.14.30.106",
+      false,
+      false,
+      null,
+      "2026-10-05T04:02:35.000Z",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "VSKCH1S100_Scream Test_21-09-2026",
+      "vskch1s100_scream test_21-09-2026",
+      "vskch1s100_scream test_21-09-2026",
+      null,
+      null,
+      "Operational",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "742bcbd3-0d9c-43c4-b9e2-1bb098bd7a18",
+      "742bcbd3-0d9c-43c4-b9e2-1bb098bd7a18",
+      "full_sync",
+      "full_sync",
+      "2026-10-07T05:29:56.001Z",
+      "8551d288870449d00259553e3fbb3505",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "2026-10-05T04:02:35.000Z"
+    ]
+  ]
+}
+# 187: POST /_query?format=json [400 Bad Request]
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "verification_exception",
+        "reason": """Found 1 problem
+line 2:116: Unknown column [user.id]"""
+      }
+    ],
+    "type": "verification_exception",
+    "reason": """Found 1 problem
+line 2:116: Unknown column [user.id]"""
+  },
+  "status": 400
+}
