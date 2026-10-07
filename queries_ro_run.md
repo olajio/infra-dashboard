@@ -196,3 +196,47 @@ FROM traces-apm* | WHERE processor.event == "transaction" | STATS docs = COUNT(*
 **U. Manual check — APM Service Map**
 In Kibana open **Observability → APM → Service Map** (or open any service and its *Service map* tab). If a map
 draws, the licence includes it and the dashboard can link to it. If you see a licence / upgrade message, it does not.
+
+## Round 5 — finishing the Blast Radius design (7 Oct 2026)
+
+Same as before: **Discover (ES|QL mode)** with the time picker shown, upload the results (CSV or Console output). An
+error is also an answer, so upload it too.
+
+**V. Environment names on APM services** — *Last 1 hour*
+So the panel can keep to production (round 4 showed `prd1`, `stg1`, `cut3` …).
+```
+FROM metrics-apm.service_transaction.1m-* | STATS services = COUNT_DISTINCT(service.name) BY env = TO_STRING(service.environment) | SORT services DESC | LIMIT 30
+```
+
+**W. Failed calls on dependencies** — *Last 1 hour*
+Whether failed calls are recorded, for the dependency health colour.
+```
+FROM metrics-apm.service_destination.1m-* | STATS docs = COUNT(*), calls = SUM(span.destination.service.response_time.count) BY outcome = TO_STRING(event.outcome)
+```
+
+**X. Do incident CIs match APM business applications?** — *Last 1 year*
+APM services carry their CMDB business application in `ci.name` (round 4, M and Q). This lists the P1 / P2 CIs of the
+last 6 months that are also an APM business application, so we know how often "derive the service from the CI"
+works.
+```
+FROM servicenow-incidents-*, metrics-apm.service_transaction.1m-* METADATA _index | WHERE (_index LIKE "*servicenow*" AND priority IN (1, 2) AND opened_at >= NOW() - 180 days) OR (_index LIKE "*apm*" AND @timestamp >= NOW() - 1 hour) | EVAL src = CASE(_index LIKE "*servicenow*", "incident", "apm") | STATS sources = VALUES(src), incidents = COUNT_DISTINCT(CASE(src == "incident", TO_STRING(number))) BY ci = TO_STRING(ci.name) | EVAL in_apm = MV_COUNT(sources) == 2 | STATS cis = COUNT(*), incidents = SUM(incidents) BY in_apm
+```
+
+**Y. Which CI classes P1 / P2 incidents are raised against** — *Last 1 year*
+```
+FROM servicenow-incidents-* | WHERE priority IN (1, 2) AND opened_at >= NOW() - 180 days | STATS incidents = COUNT_DISTINCT(number), cis = COUNT_DISTINCT(ci.name) BY ci_class = TO_STRING(ci.class_name) | SORT incidents DESC | LIMIT 30
+```
+
+**Z. Volume of dependency metrics** — *Last 15 minutes*
+To size the query that finds a service's callers.
+```
+FROM metrics-apm.service_destination.1m-* | STATS docs = COUNT(*), services = COUNT_DISTINCT(service.name), resources = COUNT_DISTINCT(TO_STRING(span.destination.service.resource))
+```
+
+**P2. Host names per service, with environment** — *Last 15 minutes* (P again, split by environment)
+```
+FROM traces-apm* | WHERE processor.event == "transaction" AND url.domain IS NOT NULL | STATS transactions = COUNT(*) BY service.name, env = TO_STRING(service.environment), url.domain | SORT transactions DESC | LIMIT 60
+```
+
+**U (still open). APM Service Map** — manual: open **Observability → APM → Service Map**. Does a map draw, or a
+licence / upgrade message?

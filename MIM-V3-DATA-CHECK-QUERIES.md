@@ -107,6 +107,21 @@ FROM logs-syslog-classic-default | LIMIT 3
 
 ---
 
+## Round 4 — Service Dependency & Blast Radius (results in `round4.txt`, `p.csv`, `t.txt`)
+
+| # | Query | Time | Answered |
+|---|---|---|---|
+| M | `FROM metrics-apm.service_destination.1m-* \| LIMIT 5` | 15 min | Each record is one service calling one dependency per minute: `service.name`, `span.destination.service.resource` (e.g. `oracle`, `esbwsrrutil.cna.com:443`), `service.target.type` / `name`, call count and total time (`span.destination.service.response_time.count` / `sum.us`), `event.outcome`. Records also carry the calling service's CMDB **business application** in `ci.*` (`ci.name` "Enterprise PolicyCenter", `ci.number` APM0003360, `ci.support_group.l2.name`, `ci.customer_specific.pm_portfolio`) and `service.environment` (`prd1`) |
+| N | `… \| STATS callers = COUNT_DISTINCT(service.name), resources = … BY target_type = TO_STRING(service.target.type)` | 1 h | 493 services make HTTP calls (1,691 addresses); 253 call PostgreSQL, 71 gRPC, 35 Oracle, 28 SQL Server, 17 DB2, 8 JMS |
+| O | `… \| STATS callers = VALUES(service.name) BY resource = TO_STRING(span.destination.service.resource)` | 1 h | Calls to other services are recorded by **host:port** (`abp-data-api.gcp.cna.com:443`), not by service name |
+| P | `FROM traces-apm* \| WHERE processor.event == "transaction" AND url.domain IS NOT NULL \| STATS transactions = COUNT(*) BY service.name, url.domain` | 15 min | (502 in Console; result in `p.csv`.) The host names each service answers on, e.g. `dmf` → `dmf.cna.com`. Matching these to O gives a service's callers. Non-production hosts (`-stg`, `-ete1`, `-cut1`) are mixed in |
+| Q | `FROM metrics-apm.service_transaction.1m-* \| LIMIT 3` | 15 min | Service metrics carry the same business-application fields as M; `labels.service_group` = the APM number; no criticality or user-count field |
+| R | `FROM cmdb-ci-relations* \| WHERE parent.class LIKE "*service*" … \| STATS links = COUNT(*) BY type.name, parent.class, child.class` | 1 year | (40 rows in the Console output.) `cmdb_ci_business_app` *Consumes* `cmdb_ci_service_calculated` (application services, 4,581), which *Runs on* Windows / Linux servers (4,379 / 3,903) — a server → application service → business application chain exists |
+| S | `FROM cmdb-cis* \| LIMIT 3` | 1 year | CI records: name, class, install / operational status, location; no criticality or user-count field in the sample |
+| T | `FROM traces-apm* \| … with_user = COUNT(TO_STRING(user.id)) …` | 15 min | Error *Unknown column [user.id]*: APM records no user IDs, so "users impacted" cannot be shown |
+
+---
+
 ## Earlier checks
 
 ### Round 1 for MIM V3 (before A – L)
