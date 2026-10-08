@@ -1,0 +1,259 @@
+{
+  "rawResponse": {
+    "id": "FlpqeEpHQVNrUVFDWkRrLWotQ2JnaHchdWt4RUt6YldRTzZBSG41d1RhQmFwZzo0NTk4OTkyMjI0",
+    "is_running": false,
+    "took": 291377,
+    "is_partial": false,
+    "completion_time_in_millis": 1791482554799,
+    "documents_found": 393086924,
+    "values_loaded": 1173211425,
+    "rows_emitted": 1599236952,
+    "bytes_read": 0,
+    "read_nanos": 0,
+    "cpu_nanos": 12857181760235,
+    "start_time_in_millis": 1791482263422,
+    "expiration_time_in_millis": 1791482606991,
+    "all_columns": [
+      {
+        "name": "ci",
+        "type": "keyword"
+      },
+      {
+        "name": "panels_with_data",
+        "type": "integer"
+      },
+      {
+        "name": "data_for",
+        "type": "keyword"
+      },
+      {
+        "name": "incident",
+        "type": "keyword"
+      },
+      {
+        "name": "service",
+        "type": "keyword"
+      }
+    ],
+    "columns": [
+      {
+        "name": "ci",
+        "type": "keyword"
+      },
+      {
+        "name": "panels_with_data",
+        "type": "integer"
+      },
+      {
+        "name": "data_for",
+        "type": "keyword"
+      },
+      {
+        "name": "incident",
+        "type": "keyword"
+      },
+      {
+        "name": "service",
+        "type": "keyword"
+      }
+    ],
+    "values": [
+      [
+        "vslrau1p228",
+        4,
+        "Infra, Middleware, Synthetics, APM",
+        "(all incidents)",
+        "billigportal"
+      ],
+      [
+        "vskau1p1025",
+        4,
+        "Infra, Processes, Synthetics, Changes",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vclau1p0147",
+        4,
+        "Infra, Middleware, Synthetics, Changes",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "kw3l1p74",
+        4,
+        "Infra, Processes, Synthetics, SQL",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "kau1pscxddc03",
+        4,
+        "Infra, Processes, Synthetics, SQL",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p104",
+        4,
+        "Infra, Middleware, Synthetics, Changes",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "aurcnacvtcmdcen",
+        4,
+        "Infra, Processes, Synthetics, Changes",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "prau1pdb0003",
+        4,
+        "Infra, Middleware, Synthetics, Changes",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "sau1h630",
+        3,
+        "Synthetics, Middleware, SQL",
+        "INC2669663",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p058",
+        3,
+        "Infra, Middleware, Synthetics",
+        "INC2670595",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p061",
+        3,
+        "Synthetics, Infra, Middleware",
+        "INC2652251",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p050",
+        3,
+        "Synthetics, Infra, Middleware",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p070",
+        3,
+        "Synthetics, Infra, Middleware",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vskau1p859",
+        3,
+        "Synthetics, Infra, Processes",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p043",
+        3,
+        "Synthetics, Infra, Middleware",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p509",
+        3,
+        "Infra, Middleware, Synthetics",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p042",
+        3,
+        "Synthetics, Infra, Middleware",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "surfsda5",
+        3,
+        "Synthetics, Middleware, SQL",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vskau1p185",
+        3,
+        "Infra, Processes, Synthetics",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "sau1h675",
+        3,
+        "Synthetics, Middleware, SQL",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p134",
+        3,
+        "Infra, Middleware, Synthetics",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p001",
+        3,
+        "Infra, Middleware, Synthetics",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "gprdwce1a-tab5",
+        3,
+        "Infra, Processes, Changes",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vskau1p945",
+        3,
+        "Infra, Processes, Synthetics",
+        "(all incidents)",
+        "(services on this CI)"
+      ],
+      [
+        "vslrau1p071",
+        3,
+        "Synthetics, Infra, Middleware",
+        "(all incidents)",
+        "(services on this CI)"
+      ]
+    ],
+    "_clusters": {
+      "total": 1,
+      "successful": 1,
+      "running": 0,
+      "skipped": 0,
+      "partial": 0,
+      "failed": 0,
+      "details": {
+        "(local)": {
+          "status": "successful",
+          "indices": "servicenow-incidents-*,.ds-metrics-system.cpu-default*,metrics-windows.service-*,metrics-system.process-*,metricbeat-*,logs-syslog-classic-*,synthetics-*,servicenow-change-requests-*,metrics-apm.internal-*",
+          "took": 291377,
+          "_shards": {
+            "total": 1034,
+            "successful": 1025,
+            "skipped": 9,
+            "failed": 0
+          }
+        }
+      }
+    }
+  }
+}
