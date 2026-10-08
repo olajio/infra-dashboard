@@ -134,6 +134,21 @@ Numbers are from the last hour / 15 minutes on 8 Oct, before the Query 3 fix; re
 demo. The services that topped the old Query 3 (RAPID, rmw-report-runner, cmt-batch, the listeners) were artefacts of
 the flaw above, so don't use them.
 
-**For section 2,** re-run the fixed Query 1 in Discover and pick its top `ci`.
+## Picks for section 2 from your Query 1 results (8 Oct)
+
+| CI | Incident control | Service control | Fills |
+|---|---|---|---|
+| `vslrau1p228` | *(all incidents)* | *(services on this CI)* (APM service `billigportal` runs on it) | Infra, Middleware, Synthetics, Applications **and section 3 without picking a service**: best all-round |
+| `vslrau1p061` | `INC2652251` (active P2) | pick a section-3 service | Infra, Middleware, Synthetics; *Escalate* and the *Longest open P1* tile show the incident |
+| `vslrau1p058` | `INC2670595` | pick a section-3 service | Infra, Middleware, Synthetics with an active incident |
+| `sau1h630` | `INC2669663` | pick a section-3 service | Synthetics, Middleware / DB (SQL Server) with an active incident |
+| `vskau1p1025`, `vclau1p0147` or `prau1pdb0003` | *(all incidents)* | pick a section-3 service | Infra, Processes / Middleware, Synthetics **and Changes** |
+
+No CI had warning-or-worse syslog lines in the 15 minutes Query 1 looked at, so *Errors from the Logs* may stay
+empty; it reads a wider set of logs over the time picker, so try *Last 24 hours*. Incidents get resolved: if the
+Incident control shows a ⚠ next to one, it has closed — re-run Query 1.
+
+*Tip: the CSV download from Discover can come out empty for ES|QL results like these; the table on screen (or
+Inspect → Response, as you did) has the rows.*
 
 **Before the demo:** after selecting values, don't click *Save*; use **More (⋯) → Reset changes** afterwards to clear them.

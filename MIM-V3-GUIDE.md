@@ -111,18 +111,22 @@ The lead now:
 
 ### Step 7 — Size the blast radius (section 3)
 
-With the CI selected, section 3 shows the APM services running on it (**Services in scope**) and their health. If
-the CI is not a monitored server (an AIX box, a network device, an application service), pick the affected
-service in the **Service** control instead.
+Section 3 reads left to right, like a dependency map: what the service depends on → the service → who depends on it.
+With the CI selected it shows the APM services running on the CI. If the CI is not a monitored server (an AIX box, a
+network device, an application service), pick the affected service in the **Service** control instead.
 
-- **Upstream — what they call**: the databases, queues and services they depend on. A *Failing* dependency here
-  points at the cause. *The Oracle database the service calls is failing 38 % of calls.*
-- **Downstream — who calls them**: the production services that call them, and how many of those calls fail. This
-  is the impact.
+- **⬅ Upstream — what they depend on**: a bar per database, queue or service they call; length = calls in the last
+  hour, colour = health, and the label shows the share that failed. A red bar points at the cause. *The Oracle
+  database the service calls: 38 % of calls failing.*
+- **Service health**: a tile per service, green / amber / red by the share of its own transactions that failed, with
+  its business application.
+- **Downstream — who is impacted ➡**: a bar per production service that calls them, coloured by how many of those
+  calls fail. This is the impact.
 - **Business applications impacted**: the CMDB business applications of those callers, worst first, with their
-  support groups, the teams to warn.
+  portfolio and support groups: the teams to warn.
 
-Click a service name to open its **APM Service Map** for the drawn dependency diagram.
+Click a service (a tile or a downstream bar) and choose *Open service in APM Service Map* for the drawn dependency
+diagram.
 
 During the bridge the dashboard keeps refreshing every five minutes, so the lead can watch the SLO burn fall back
 below 1×, the service return to Running and the ping monitor go green.
@@ -145,6 +149,8 @@ so MIM V3 stays open on the bridge.
   the **×** on the filter pill under the search bar.
 - **The CI control only lists CIs with a P1 / P2 opened in the last 31 days.** A CI outside that list cannot be
   picked. Type in the control to search the list.
+- **A ⚠ next to the picked incident means it is no longer active.** The Incident control lists active P1 / P2 only;
+  once the picked incident is resolved, *Escalate* shows no rows for it. Pick another incident or *(all incidents)*.
 - **The controls cannot be left empty.** Each has a "nothing selected" option instead: *(no CI selected)*,
   *(all incidents)*, *(services on this CI)*.
 - **Each control drives specific panels.** CI → section 2 and, through *(services on this CI)*, section 3.
@@ -190,8 +196,8 @@ so MIM V3 stays open on the bridge.
 - **Upstream shows dependencies as APM records them.** Databases appear by type or schema (e.g. `oracle`), other
   services by host:port (e.g. `abp-data-api.gcp.cna.com:443`).
 - **Shared host names can list callers twice.** When several services sit behind one host name (e.g.
-  `ecs-data-api.gcp.cna.com`), the callers of that host appear for each of those services. The "Via host" column
-  shows which host they called.
+  `ecs-data-api.gcp.cna.com`), the callers of that host appear for each of those services.
+- **Section 3 charts show the top 15** dependencies and callers, failing first. The APM Service Map shows them all.
 - **Callers are found only for services reached over HTTP on a CNA host name.** *Downstream* matches the host names a
   service answers on (its incoming requests); services reached only through queues (JMS), batch jobs, or services
   behind external host names show no callers.
@@ -210,7 +216,7 @@ so MIM V3 stays open on the bridge.
 ### Clicks and links
 
 - **Only some columns are clickable**, the ones with a link: Incident, Affected CI and Pri in *Active Incidents*;
-  CI and Active Incident in *Escalate*; Change and CI in *Changes*; service names in section 3; business
+  CI and Active Incident in *Escalate*; Change and CI in *Changes*; the Service health tiles and Downstream bars in section 3; business
   applications in *Business applications impacted*.
 - **The click menu lists every link of that panel.** Kibana cannot attach a link to one column, so each link is
   labelled with the column it belongs to (e.g. "Open incident in ServiceNow — use on the Incident column"). Pick
@@ -251,9 +257,9 @@ so MIM V3 stays open on the bridge.
 | 2 | **Errors from the Logs** | ✅ | Warning-and-worse log lines from the CI, grouped by message | Syslog (server, WebSphere, JBoss, Red Hat, AIX, system), generic file logs, APM error and application logs, matched on `ci.name`; syslog severity code ≤ 4 or log level warning or worse; numbers replaced by # so repeats group together |
 | 2 | **Process Health** | ✅ | Stopped / not-seen processes and services first, then healthy middleware | Windows services (Stopped = Automatic service not running) and Paladin-labelled middleware processes; Not seen = silent > 10 min |
 | 2 | **Changes on this CI and linked CIs** | ⚠️ | Changes active in the last 7 days on the CI and on CMDB-linked CIs; the CI column shows which | `servicenow-change-requests` + `cmdb-ci-relations`. The selected CI's own changes first. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
-| 3 | **Upstream — what they call** | ✅ | Each dependency of the services in scope: type, health, error %, average latency, calls, which service calls it | `metrics-apm.service_destination.1m-*`, production only. Failing ≥ 10 % failed calls, Degraded ≥ 1 %. Other services appear by host:port, as APM records them. |
-| 3 | **Services in scope** | ✅ | The services shown, with health, error %, average latency, transactions per minute, business application, APM number, support group | `metrics-apm.service_transaction.1m-*`; "(services on this CI)" = services whose APM host is the CI (`metrics-apm.internal-*`). Click a service to open its APM Service Map. |
-| 3 | **Downstream — who calls them** | ⚠️ | Production services calling the services in scope, with their business application, health of those calls, calls, latency, the host called | Hosts the services in scope answer on (URL host of their incoming-request transactions, CNA host names only) matched to every production service's dependency addresses. Batch / messaging transactions and external hosts (Google storage, Okta …) are ignored, since they record what a service calls rather than where it is reached. **Limit:** when several services share a host (an API gateway, e.g. `ecs-data-api.gcp.cna.com`), callers of that host are listed for each of them; *Via host* shows this. |
+| 3 | **⬅ Upstream — what they depend on** | ✅ | Horizontal bars: calls per dependency, coloured Failing / Degraded / Healthy, label with % failed; top 15 | `metrics-apm.service_destination.1m-*`, production only. Failing ≥ 10 % failed calls, Degraded ≥ 1 %. Other services appear by host:port, as APM records them. |
+| 3 | **Service health** | ✅ | One tile per service in scope: % of its transactions that failed, RAG background, business application | `metrics-apm.service_transaction.1m-*`; "(services on this CI)" = services whose APM host is the CI (`metrics-apm.internal-*`). Click a tile to open the APM Service Map. |
+| 3 | **Downstream — who is impacted ➡** | ⚠️ | Horizontal bars: calls per calling service, coloured by the health of those calls; top 15 | Hosts the services in scope answer on (URL host of their incoming-request transactions, CNA host names only) matched to every production service's dependency addresses. Batch / messaging transactions and external hosts (Google storage, Okta …) are ignored. **Limit:** when several services share a host (an API gateway), callers of that host are listed for each of them. Click a bar to open that service's APM Service Map. |
 | 3 | **Business applications impacted** | ⚠️ | The callers' CMDB business applications, worst first, with portfolio and support group | From the APM CMDB enrichment on the callers. **Limit:** no user counts or criticality (not in APM or the CMDB data). Click to open the application in the CMDB. |
 | Control | **Service** | ✅ | The service(s) for section 3 | Production APM services seen in the last day, plus *(services on this CI)*. A query variable (`?service`) used only by section 3. |
 | 4 | **SRE Dashboard** / **Infra Dashboard** | ✅ | Cards linking to the two dashboards | Text panels; the title of each card is the link (opens in a new tab). Addresses from `links.txt`. |
@@ -270,7 +276,7 @@ so MIM V3 stays open on the bridge.
 | SLO panel not filtered to the CI's services | Kibana limitation (see *KIBANA-LIMITATIONS.md*) | Group SLOs by `ci.name` in Kibana where it makes sense — those follow the CI control |
 | Major-incident and bridge flags unused | `is_major_incident` and `has_been_handled_by_bridge` are empty on all P1 / P2 for a year | ServiceNow integration mapping |
 | Containerised services not linked to servers | APM reports pod names | Expected; use the application / SLO panels |
-| Section 3 has no drawn dependency diagram | Kibana dashboards cannot draw a node-and-arrow map from ES\|QL | Click a service: the APM Service Map draws it |
+| Section 3 has no drawn node-and-arrow diagram | Kibana's Vega charts could draw one, but they cannot read the ES\|QL Service control (only the time range and filters), so the map could not follow the selected service | Section 3 is laid out left to right instead; click a service for the APM Service Map |
 | Section 3 is empty for most incident CIs unless a service is picked | P1 / P2 are raised mostly against servers (Linux, AIX), network devices and application services; only servers with APM agents have services on them, and no incident CI is an APM business application (round 5, X and Y) | Pick the service in the Service control; longer term, record the affected business application / service on the incident |
 | Estimated user base | Not in Elastic | Add the ServiceNow user-base field to the CI enrichment |
 
