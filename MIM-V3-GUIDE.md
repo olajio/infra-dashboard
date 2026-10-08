@@ -20,9 +20,9 @@ The dashboard has four sections and three controls:
 | | What it covers | Time window |
 |---|---|---|
 | **CI control** (top) | Picks the CI that section 2 investigates. Lists the CIs with P1 / P2 incidents in the last month; type to search. *(no CI selected)* clears it. | — |
-| **Incident control** (top) | Narrows the *Escalate* panel and the *P1 Duration* tile to one active P1 / P2 incident. *(all incidents)* clears it. No other panel uses it. | — |
+| **Incident control** (top) | Narrows the *Escalate* panel and the *Longest open P1* tile of *At a Glance* to one active P1 / P2 incident. *(all incidents)* clears it. No other panel uses it. | — |
 | **Service control** (top) | Picks the service section 3 shows. *(services on this CI)* (the default) uses the production APM services running on the CI in the CI control; or type to pick any production service. | — |
-| **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month (*Active P1 / P2 by Age*: last 7 days) |
+| **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month |
 | **2 · Investigate the CI** | The CI picked in the control only | Time picker (last 24 h by default), except where a panel says otherwise |
 | **3 · Service Dependency & Blast Radius** | The service(s) from the Service control | Fixed last hour |
 | **4 · Related dashboards** | Links to the SRE and Infra dashboards | — |
@@ -37,16 +37,19 @@ The dashboard has four sections and three controls:
 
 The MIM lead opens MIM V3 and reads the top row from left to right.
 
-- **P1 Duration.** How long the longest-running active P1 has been open, its number and how many P1s are open.
-  When the lead picks an incident in the Incident control, the tile shows that incident instead.
-- **Incidents (P1 / P2) over time.** Is today normal? A P1 or P2 line that jumps above the rest of the month is the
-  first sign of a major incident: many tickets for what is usually one failure.
-- **Active P1 / P2 by Age.** Active incidents opened in the last 7 days, grouped as < 1h, 1 - 4h, 4 - 8h, 8 - 24h
-  and 1 - 7d. Anything orange or red (older than a day) has been sitting too long and is a candidate for
-  escalation, whatever else is happening today.
-- **Active P1 / P2 by CI.** If one CI has several incidents against it, that CI is very likely the centre of the
-  problem. *In the example, three incidents point at `kau1s054`.*
-- **Active P1 / P2 by State.** A big "New" slice means incidents nobody has picked up yet.
+- **Active P1 / P2 at a Glance** — six tiles that sum up the state of play:
+  - **Longest open P1**: how long the longest-running active P1 has been open, with its number and CI. Pick an
+    incident in the Incident control and the tile shows that incident instead.
+  - **Active P1 · P2**: how many are open now.
+  - **Past target time**: P1 open 4 h or more, or P2 open 8 h or more.
+  - **Open more than 24 h**: candidates for escalation, whatever else is happening today.
+  - **Hotspot CI**: the CI with the most active P1 / P2. Several incidents on one CI is very likely the centre of the
+    problem. *In the example, three incidents point at `kau1s054`.* Shows "—" when no CI has more than one.
+  - **Not picked up (New)**: incidents nobody has picked up yet.
+- **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** — are we resolving within target? The average time to
+  resolve the P1 and P2 incidents opened each day, against the dashed target lines (red P1 4 h, amber P2 8 h). A
+  run of points above a line means incidents are taking longer than target. Hover a point for how many incidents
+  are behind it.
 
 ### Step 2 — Pick the incident (section 1, table)
 
@@ -145,7 +148,7 @@ so MIM V3 stays open on the bridge.
 - **The controls cannot be left empty.** Each has a "nothing selected" option instead: *(no CI selected)*,
   *(all incidents)*, *(services on this CI)*.
 - **Each control drives specific panels.** CI → section 2 and, through *(services on this CI)*, section 3.
-  Incident → *Escalate* and *P1 Duration* only. Service → section 3 only. Section 1 ignores all three.
+  Incident → *Escalate* and the *Longest open P1* tile only. Service → section 3 only. Section 1 ignores all three.
 - **For most incident CIs, you'll need to pick the service yourself.** Round 5 showed most P1 / P2s are raised
   against Linux / AIX servers, network devices or application services. Only servers with APM agents have services
   on them, so for the rest section 3 stays empty until you choose a service in the Service control.
@@ -157,7 +160,7 @@ so MIM V3 stays open on the bridge.
 
 - **A badge on a panel means a fixed window.** "Last 1 month", "Last 7 days", "Last 30 days" and "Last 1 hour"
   panels ignore the time picker. Panels without a badge follow the time picker.
-- **Section 1** is fixed to the last month, except *Active P1 / P2 by Age* (last 7 days). **Section 3** is fixed to
+- **Section 1** is fixed to the last month. **Section 3** is fixed to
   the last hour. **Section 2** follows the time picker (last 24 h by default), except *Escalate* (last month),
   *Applications on this CI* and *Changes* (last 30 days).
 - **Set the time picker to suit the question in section 2.** Use the last 15 minutes to see the CI's state *now*:
@@ -170,10 +173,13 @@ so MIM V3 stays open on the bridge.
 - **"(age)" in the SLA column is an estimate.** It appears when the incident has no ServiceNow SLA record: its age
   is compared with P1 4 h / P2 8 h (dashboard defaults, to be confirmed). Full rules: *MIM-V3-SLA-CALCULATION.md*.
 - **Active** everywhere means priority 1 or 2 and state not Resolved, Closed, Canceled or Cancelled.
-- **P1 Duration counts from the incident's opened time**, not from when a major incident was declared (no such
-  time exists in the data). With *(all incidents)* it shows the longest-running active P1.
-- **Active P1 / P2 by Age only counts incidents opened in the last 7 days.** Older active incidents still appear in
-  the *Active Incidents* table and in *P1 Duration*.
+- **"Longest open P1" counts from the incident's opened time**, not from when a major incident was declared (no such
+  time exists in the data).
+- **"Past target time" and the trend use the same targets**: P1 4 h, P2 8 h, the dashboard's age rule (to be
+  confirmed against CNA's resolution targets). "Past target time" counts incidents still open; the trend plots only
+  resolved incidents, by the day they were opened, using ServiceNow's `resolution_time`.
+- **One slow incident moves a day's average.** On days with one or two P1s, a single long incident can put the point
+  far above the line; hover the point to see how many incidents it averages.
 - **Health thresholds.** Infra Health: amber from 80 %, red from 90 %, red if the server has been silent more than
   10 minutes. Middleware and Process Health: *Down* / *Not seen* after 10 minutes without data. Section 3: *Failing*
   = 10 % or more of calls failed in the last hour, *Degraded* = 1 % or more.
@@ -231,12 +237,9 @@ so MIM V3 stays open on the bridge.
 | Section | Panel | Status | What it shows | How it works |
 |---|---|---|---|---|
 | Control | **CI** | ✅ | The CI to investigate | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`) that every section-2 panel uses. |
-| Control | **Incident** | ✅ | One incident for *Escalate* and *P1 Duration* | Lists every active P1 / P2 incident, plus *(all incidents)*. A query variable (`?incident`) used only by those two panels. |
-| 1 | **P1 Duration** | ✅ | How long an incident has been open (e.g. "1h 14m", "3d 4h") | With *(all incidents)*: the longest-running active P1, titled "Longest: INC… · n active P1s". With an incident picked: that incident ("INC… · P2"), whatever its priority. Counted from `opened_at`; there is no "declared major incident" time in the data. |
-| 1 | **Incidents (P1 / P2) over time** | ✅ | New P1 / P2 per day, one line each: P1 (red), P2 (amber) | `servicenow-incidents-*`, counted by opened day over the last 30 days; days with none show 0 |
-| 1 | **Active P1 / P2 by Age** | ✅ | Active incidents aged < 1h, 1 - 4h, 4 - 8h, 8 - 24h, 1 - 7d | Active P1 / P2 opened in the last 7 days (fixed). Active = priority 1 / 2 and state not Resolved, Closed, Canceled, Cancelled; age from opened time. Older active incidents are not counted here; they still appear in *Active Incidents*. |
-| 1 | **Active P1 / P2 by CI** | ✅ | The 10 CIs with the most active P1 / P2 | Grouped by the incident's Affected CI |
-| 1 | **Active P1 / P2 by State** | ✅ | New / In Progress / On-Hold | Grouped by state |
+| Control | **Incident** | ✅ | One incident for *Escalate* and the *Longest open P1* tile | Lists every active P1 / P2 incident, plus *(all incidents)*. A query variable (`?incident`) used only by those two panels. |
+| 1 | **Active P1 / P2 at a Glance** | ✅ | Six tiles: Longest open P1 (or the picked incident), Active P1 · P2, Past target time, Open more than 24 h, Hotspot CI, Not picked up (New) | `servicenow-incidents-*`, active P1 / P2. Replaces the earlier P1 Duration, Active by Age, Active by CI and Active by State widgets (client feedback, 8 Oct). Longest open P1 follows the Incident control. |
+| 1 | **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** | ✅ | Average time to resolve per opened day, P1 (red) and P2 (amber), with dashed target lines | Resolved P1 / P2 opened in the last 30 days; `resolution_time` (ServiceNow's opened → resolved seconds), or resolved_at − opened_at. Target lines are a reference-line layer. |
 | 1 | **Active Incidents (P1 / P2)** | ✅ | Every active P1 / P2 with SLA, group, age | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
 | 2 | **How to use this section** | ✅ | One-line instruction | Text panel |
 | 2 | **Escalate** | ✅ | One row per active P1 / P2 on the CI: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group | Incidents on the CI (or the one in the Incident control) plus the CMDB enrichment on its server metrics; last month. CI and Active Incident link to ServiceNow; no other column is clickable. A CI with no active P1 / P2 still shows one row with its owners. If an incident is picked whose CI is not the one in the CI control, Class / Env / support group come from the incident record and may show "—". |
