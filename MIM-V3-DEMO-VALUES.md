@@ -12,6 +12,10 @@ last 15 minutes to 1 hour, so the best picks change.
 
 ## Query 1 — CIs that fill section 2 (time picker: *Last 1 year*)
 
+*Run it in Discover, not Dev Tools Console: Console gives up after about 30 seconds (the "502 Bad Gateway" you saw).
+The first version used `IN` inside STATS, which Kibana 9.5 rejects ("Function IN not allowed in STATS"); this version
+is fixed.*
+
 Ranks the CIs in the **CI control** (P1 / P2 opened in the last 31 days) by how many section-2 data sources have data
 for them now. It also gives an active incident on the CI (for the **Incident** control) and a production APM service
 running on it (section 3).
@@ -23,14 +27,15 @@ FROM servicenow-incidents-*, .ds-metrics-system.cpu-default*, metrics-windows.se
       _index LIKE "*metricbeat*", "SQL", _index LIKE "*syslog*", "Logs", _index LIKE "*synthetics*", "Synthetics", "APM")
 | WHERE (src == "incident" AND TO_INTEGER(priority) IN (1, 2) AND opened_at >= NOW() - 31 days)
      OR (src == "Changes" AND (end_at >= NOW() - 7 days OR start_date >= NOW() - 7 days))
-     OR (src == "Logs" AND TO_INTEGER(syslog_severity_code) <= 4 AND @timestamp >= NOW() - 1 hour)
+     OR (src == "Logs" AND @timestamp >= NOW() - 15 minutes AND TO_INTEGER(syslog_severity_code) <= 4)
      OR (src == "Middleware" AND paladin.enrichment.computed.proc_type IS NOT NULL AND @timestamp >= NOW() - 15 minutes)
      OR (src NOT IN ("incident", "Changes", "Logs", "Middleware") AND @timestamp >= NOW() - 15 minutes)
 | EVAL key = TO_LOWER(CASE(src == "APM", TO_STRING(host.name), TO_STRING(ci.name)))
-| EVAL active = src == "incident" AND TO_STRING(state_name) NOT IN ("Resolved", "Closed", "Canceled", "Cancelled")
-| STATS sources = VALUES(CASE(src != "incident", src)), names = VALUES(CASE(src == "incident", TO_STRING(ci.name))),
-        active_incidents = VALUES(CASE(active, TO_STRING(number))),
-        services = VALUES(CASE(src == "APM" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"), TO_STRING(service.name)))
+| EVAL active = src == "incident" AND TO_STRING(state_name) NOT IN ("Resolved", "Closed", "Canceled", "Cancelled"),
+       prod_apm = src == "APM" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production")
+| EVAL source = CASE(src != "incident", src), inc_ci = CASE(src == "incident", TO_STRING(ci.name)),
+       inc_open = CASE(active, TO_STRING(number)), svc = CASE(prod_apm, TO_STRING(service.name))
+| STATS sources = VALUES(source), names = VALUES(inc_ci), active_incidents = VALUES(inc_open), services = VALUES(svc)
   BY key
 | WHERE names IS NOT NULL AND key IS NOT NULL
 | EVAL panels_with_data = COALESCE(MV_COUNT(sources), 0), has_active = CASE(active_incidents IS NOT NULL, 1, 0)
@@ -74,17 +79,23 @@ FROM metrics-apm.service_destination.1m-*
 Production services with the most callers. Picking one fills *Downstream — who calls them* and *Business applications
 impacted*. (`callers` can include the service itself if it calls its own host; the panel leaves that out.)
 
+*Fixed on 8 Oct: the first version counted batch and listener services (RAPID, cmt-batch, the ivans listeners …) as
+having dozens of callers, because their batch transactions record the URL they call (`storage.googleapis.com`,
+`metadata.google.internal`, `cna.okta.com`). Only incoming-request transactions on CNA host names count now, and hosts
+shared by more than 5 services are skipped. The dashboard's Downstream panel had the same flaw and is fixed too.*
+
 ```
 FROM traces-apm*, metrics-apm.service_destination.1m-* METADATA _index
 | WHERE TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production") AND @timestamp >= NOW() - 15 minutes
 | EVAL src = CASE(_index LIKE "*service_destination*", "dst", "trc")
-| WHERE src == "dst" OR (processor.event == "transaction" AND url.domain IS NOT NULL)
+| WHERE src == "dst" OR (processor.event == "transaction" AND transaction.type == "request" AND url.domain IS NOT NULL)
 | EVAL key = CASE(src == "trc", TO_LOWER(TO_STRING(url.domain)),
                   TO_LOWER(MV_FIRST(SPLIT(TO_STRING(span.destination.service.resource), ":"))))
-| STATS targets = VALUES(CASE(src == "trc", service.name)), callers = VALUES(CASE(src == "dst", service.name)),
-        apps = VALUES(CASE(src == "dst", TO_STRING(ci.name)))
-  BY key
-| WHERE targets IS NOT NULL AND callers IS NOT NULL
+| WHERE ENDS_WITH(key, "cna.com") OR NOT key LIKE "*.*"
+| EVAL target = CASE(src == "trc", service.name), caller = CASE(src == "dst", service.name),
+       caller_app = CASE(src == "dst", TO_STRING(ci.name))
+| STATS targets = VALUES(target), callers = VALUES(caller), apps = VALUES(caller_app) BY key
+| WHERE targets IS NOT NULL AND callers IS NOT NULL AND MV_COUNT(targets) <= 5
 | MV_EXPAND targets
 | STATS callers = COUNT_DISTINCT(callers), caller_apps = COUNT_DISTINCT(apps), hosts = VALUES(key) BY service = targets
 | SORT callers DESC
@@ -106,11 +117,23 @@ The best demo service appears near the top of **both** Query 2 and Query 3.
    fills from the CI. If not, pick a service that is near the top of Query 2 and Query 3.
 5. Click a service name in section 3 to open its APM Service Map.
 
-**Leads from the earlier data checks** (confirm with Queries 2 and 3 first):
-- `CNACentral` — the Service Map screenshot (`service_map.png`) shows it calling `dnb-service-api`,
-  `elm-standardize-services`, Oracle and PostgreSQL, and being called by `cnac-service`.
-- `papc-papcintcons1` (Enterprise PolicyCenter) — round 4 query M showed it calling Oracle and several HTTP services.
-- Services behind `abp-data-api.gcp.cna.com` and `abp-doc-api.gcp.cna.com` — round 4 query O showed `abp-web`,
-  `abp-batch`, `juno-doc-api` and `jupiter-orchestration` calling them.
+## Picks for section 3 from your results (8 Oct)
+
+These services came out near the top of both Query 2 (dependencies) and Query 3 (callers on their own CNA host names).
+Pick one in the **Service** control; the CI control can stay on anything.
+
+| Service | Business application | What it shows | Why |
+|---|---|---|---|
+| `document management facility prod` | Document Management Facility | Upstream: 14 dependencies, ~1 % failed calls (a *Degraded* row to talk about). Downstream: 6 calling services from 5 business applications on `dmf.cna.com` | **Best all-round demo** |
+| `ecs-retrieve-api` | Enterprise Content Service 2.0 | Upstream: 6 dependencies. Downstream: the most callers of any service (14, from 10 business applications) | Big blast radius. Note: `ecs-data-api.gcp.cna.com` is shared by four ECS services, so *Via host* explains the overlap |
+| `ecs-manage-api` | Enterprise Content Service 2.0 | 6 dependencies, 12 callers from 10 applications | Alternative to the above |
+| `jupiter-orchestration` | Jupiter | Upstream: 14 dependencies, 1.5 % failed calls | A *Degraded* upstream example |
+| `dmf` | Document Management Facility | 7 dependencies, the highest call volume (250k / hour), 6 callers | Busy, healthy service |
+
+Numbers are from the last hour / 15 minutes on 8 Oct, before the Query 3 fix; re-run Queries 2 and 3 on the day of the
+demo. The services that topped the old Query 3 (RAPID, rmw-report-runner, cmt-batch, the listeners) were artefacts of
+the flaw above, so don't use them.
+
+**For section 2,** re-run the fixed Query 1 in Discover and pick its top `ci`.
 
 **Before the demo:** after selecting values, don't click *Save*; use **More (⋯) → Reset changes** afterwards to clear them.

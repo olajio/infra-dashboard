@@ -186,8 +186,11 @@ so MIM V3 stays open on the bridge.
 - **Shared host names can list callers twice.** When several services sit behind one host name (e.g.
   `ecs-data-api.gcp.cna.com`), the callers of that host appear for each of those services. The "Via host" column
   shows which host they called.
-- **Callers are found only for services reached over HTTP.** *Downstream* matches the host names a service answers on;
-  services reached only through queues (JMS) or without a URL host show no callers.
+- **Callers are found only for services reached over HTTP on a CNA host name.** *Downstream* matches the host names a
+  service answers on (its incoming requests); services reached only through queues (JMS), batch jobs, or services
+  behind external host names show no callers.
+- **Picking demo values:** see *MIM-V3-DEMO-VALUES.md* for queries that find the CIs and services that fill the most
+  panels.
 - **No user counts or criticality.** Neither APM nor the CMDB data has them, so *Business applications impacted*
   ranks by the errors the callers see.
 - **Empty panels in section 2 usually mean "no data for this CI", not "healthy".** *Infra Health*, *Middleware /
@@ -247,7 +250,7 @@ so MIM V3 stays open on the bridge.
 | 2 | **Changes on this CI and linked CIs** | ⚠️ | Changes active in the last 7 days on the CI and on CMDB-linked CIs; the CI column shows which | `servicenow-change-requests` + `cmdb-ci-relations`. The selected CI's own changes first. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
 | 3 | **Upstream — what they call** | ✅ | Each dependency of the services in scope: type, health, error %, average latency, calls, which service calls it | `metrics-apm.service_destination.1m-*`, production only. Failing ≥ 10 % failed calls, Degraded ≥ 1 %. Other services appear by host:port, as APM records them. |
 | 3 | **Services in scope** | ✅ | The services shown, with health, error %, average latency, transactions per minute, business application, APM number, support group | `metrics-apm.service_transaction.1m-*`; "(services on this CI)" = services whose APM host is the CI (`metrics-apm.internal-*`). Click a service to open its APM Service Map. |
-| 3 | **Downstream — who calls them** | ⚠️ | Production services calling the services in scope, with their business application, health of those calls, calls, latency, the host called | Hosts the services in scope answer on (`traces-apm*` transaction URL host) matched to every production service's dependency addresses. **Limit:** when several services share a host (an API gateway, e.g. `ecs-data-api.gcp.cna.com`), callers of that host are listed for each of them; *Via host* shows this. |
+| 3 | **Downstream — who calls them** | ⚠️ | Production services calling the services in scope, with their business application, health of those calls, calls, latency, the host called | Hosts the services in scope answer on (URL host of their incoming-request transactions, CNA host names only) matched to every production service's dependency addresses. Batch / messaging transactions and external hosts (Google storage, Okta …) are ignored, since they record what a service calls rather than where it is reached. **Limit:** when several services share a host (an API gateway, e.g. `ecs-data-api.gcp.cna.com`), callers of that host are listed for each of them; *Via host* shows this. |
 | 3 | **Business applications impacted** | ⚠️ | The callers' CMDB business applications, worst first, with portfolio and support group | From the APM CMDB enrichment on the callers. **Limit:** no user counts or criticality (not in APM or the CMDB data). Click to open the application in the CMDB. |
 | Control | **Service** | ✅ | The service(s) for section 3 | Production APM services seen in the last day, plus *(services on this CI)*. A query variable (`?service`) used only by section 3. |
 | 4 | **SRE Dashboard** / **Infra Dashboard** | ✅ | Cards linking to the two dashboards | Text panels; the title of each card is the link (opens in a new tab). Addresses from `links.txt`. |
