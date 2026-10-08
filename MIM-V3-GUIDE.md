@@ -20,7 +20,7 @@ The dashboard has four sections and three controls:
 | | What it covers | Time window |
 |---|---|---|
 | **CI control** (top) | Picks the CI that section 2 investigates. Lists the CIs with P1 / P2 incidents in the last month; type to search. *(no CI selected)* clears it. | — |
-| **Incident control** (top) | Narrows the *Escalate* panel and the *Longest open P1* tile of *At a Glance* to one active P1 / P2 incident. *(all incidents)* clears it. No other panel uses it. | — |
+| **Incident control** (top) | Narrows the *Escalate* panel and the *Longest P1* tile of *At a Glance* to one active P1 / P2 incident. *(all incidents)* clears it. No other panel uses it. | — |
 | **Service control** (top) | Picks the service section 3 shows. *(services on this CI)* (the default) uses the production APM services running on the CI in the CI control; or type to pick any production service. | — |
 | **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month |
 | **2 · Investigate the CI** | The CI picked in the control only | Time picker (last 24 h by default), except where a panel says otherwise |
@@ -37,15 +37,19 @@ The dashboard has four sections and three controls:
 
 The MIM lead opens MIM V3 and reads the top row from left to right.
 
-- **Active P1 / P2 at a Glance** — six tiles that sum up the state of play:
-  - **Longest open P1**: how long the longest-running active P1 has been open, with its number and CI. Pick an
-    incident in the Incident control and the tile shows that incident instead.
-  - **Active P1 · P2**: how many are open now.
-  - **Past target time**: P1 open 4 h or more, or P2 open 8 h or more.
+- **Active P1 / P2 at a Glance** — eight tiles, each green / amber / red so problems stand out:
+  - **Longest P1 (hours)**: how long the longest-running active P1 has been open, with its age, number and CI;
+    amber from 80 % of the 4 h target, red past it. Pick an incident in the Incident control and the tile shows that
+    incident instead ("Selected (hours)", against its own P1 / P2 target).
+  - **Active P1** (red when any) and **Active P2** (amber from 1, red from 5): how many are open now.
+  - **Past target time**: P1 open 4 h or more, or P2 open 8 h or more (red when any).
   - **Open more than 24 h**: candidates for escalation, whatever else is happening today.
-  - **Hotspot CI**: the CI with the most active P1 / P2. Several incidents on one CI is very likely the centre of the
-    problem. *In the example, three incidents point at `kau1s054`.* Shows "—" when no CI has more than one.
+  - **Hotspot CI**: the most active P1 / P2 on one CI, with the CI's name. Several incidents on one CI is very likely
+    the centre of the problem. *In the example, three incidents point at `kau1s054`.*
   - **Not picked up (New)**: incidents nobody has picked up yet.
+  - **Reassigned 3+ times**: incidents being passed between teams.
+
+  Counts are amber from 1 and red from 3 unless stated above.
 - **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** — are we resolving within target? The average time to
   resolve the P1 and P2 incidents opened each day, against the dashed target lines (red P1 4 h, amber P2 8 h). A
   run of points above a line means incidents are taking longer than target. Hover a point for how many incidents
@@ -154,7 +158,7 @@ so MIM V3 stays open on the bridge.
 - **The controls cannot be left empty.** Each has a "nothing selected" option instead: *(no CI selected)*,
   *(all incidents)*, *(services on this CI)*.
 - **Each control drives specific panels.** CI → section 2 and, through *(services on this CI)*, section 3.
-  Incident → *Escalate* and the *Longest open P1* tile only. Service → section 3 only. Section 1 ignores all three.
+  Incident → *Escalate* and the *Longest P1* tile only. Service → section 3 only. Section 1 ignores all three.
 - **For most incident CIs, you'll need to pick the service yourself.** Round 5 showed most P1 / P2s are raised
   against Linux / AIX servers, network devices or application services. Only servers with APM agents have services
   on them, so for the rest section 3 stays empty until you choose a service in the Service control.
@@ -179,7 +183,7 @@ so MIM V3 stays open on the bridge.
 - **"(age)" in the SLA column is an estimate.** It appears when the incident has no ServiceNow SLA record: its age
   is compared with P1 4 h / P2 8 h (dashboard defaults, to be confirmed). Full rules: *MIM-V3-SLA-CALCULATION.md*.
 - **Active** everywhere means priority 1 or 2 and state not Resolved, Closed, Canceled or Cancelled.
-- **"Longest open P1" counts from the incident's opened time**, not from when a major incident was declared (no such
+- **"Longest P1 (hours)" counts from the incident's opened time**, not from when a major incident was declared (no such
   time exists in the data).
 - **"Past target time" and the trend use the same targets**: P1 4 h, P2 8 h, the dashboard's age rule (to be
   confirmed against CNA's resolution targets). "Past target time" counts incidents still open; the trend plots only
@@ -243,11 +247,11 @@ so MIM V3 stays open on the bridge.
 | Section | Panel | Status | What it shows | How it works |
 |---|---|---|---|---|
 | Control | **CI** | ✅ | The CI to investigate | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`) that every section-2 panel uses. |
-| Control | **Incident** | ✅ | One incident for *Escalate* and the *Longest open P1* tile | Lists every active P1 / P2 incident, plus *(all incidents)*. A query variable (`?incident`) used only by those two panels. |
-| 1 | **Active P1 / P2 at a Glance** | ✅ | Six tiles: Longest open P1 (or the picked incident), Active P1 · P2, Past target time, Open more than 24 h, Hotspot CI, Not picked up (New) | `servicenow-incidents-*`, active P1 / P2. Replaces the earlier P1 Duration, Active by Age, Active by CI and Active by State widgets (client feedback, 8 Oct). Longest open P1 follows the Incident control. |
+| Control | **Incident** | ✅ | One incident for *Escalate* and the *Longest P1* tile | Lists every active P1 / P2 incident, plus *(all incidents)*. A query variable (`?incident`) used only by those two panels. |
+| 1 | **Active P1 / P2 at a Glance** | ✅ | Eight RAG-coloured tiles: Longest P1 (hours) (or the picked incident), Active P1, Active P2, Past target time, Open more than 24 h, Hotspot CI, Not picked up (New), Reassigned 3+ times | `servicenow-incidents-*`, active P1 / P2. Replaces the earlier P1 Duration, Active by Age, Active by CI and Active by State widgets (client feedback, 8 Oct). Longest open P1 follows the Incident control. |
 | 1 | **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** | ✅ | Average time to resolve per opened day, P1 (red) and P2 (amber), with dashed target lines | Resolved P1 / P2 opened in the last 30 days; `resolution_time` (ServiceNow's opened → resolved seconds), or resolved_at − opened_at. Target lines are a reference-line layer. |
 | 1 | **Active Incidents (P1 / P2)** | ✅ | Every active P1 / P2 with SLA, group, age | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
-| 2 | **How to use this section** | ✅ | One-line instruction | Text panel |
+| 2 | **How to use this section** | ✅ | Orange one-line banner across the top of section 2 | A metric panel showing a fixed message (no data needed) |
 | 2 | **Escalate** | ✅ | One row per active P1 / P2 on the CI: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group | Incidents on the CI (or the one in the Incident control) plus the CMDB enrichment on its server metrics; last month. CI and Active Incident link to ServiceNow; no other column is clickable. A CI with no active P1 / P2 still shows one row with its owners. If an incident is picked whose CI is not the one in the CI control, Class / Env / support group come from the incident record and may show "—". |
 | 2 | **Infra Health** | ✅ | Minutes since last data, CPU p90, peak memory, fullest disk — RAG coloured | System metrics matched on `ci.name` (equal to the host name). Amber ≥ 80 %, red ≥ 90 %; red if silent > 10 min. Empty if the CI is not a monitored server. |
 | 2 | **Middleware / DB Health** | ✅ | Healthy vs Down components on the CI | SQL Server metrics (`metricbeat-*` sql / mssql), middleware processes labelled by the Paladin monitoring enrichment (IBM MQ, IHS, JBoss, WebSphere) and Windows middleware services. Down = stopped or silent > 10 min. |
