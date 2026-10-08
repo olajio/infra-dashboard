@@ -1,0 +1,7 @@
+Feedback on the MIM Dashbaord:
+Widget: 1,3,4 and 5 combined
+Widget-2: Target lines (P1 - 4hrs; P2 - 8hrs)
+Widget-4: Change the title and also try different look and feel
+Dependency map - Senthil loves it. But, he wants to experiment if that can make little appealing. If we cannot, then also, he is fine with what we have
+
+Also, most of the dashboards show empty panels, cen you help me select value for CI, incidents and service that would populate the panels in section 2 and 3
