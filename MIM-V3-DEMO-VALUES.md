@@ -51,7 +51,7 @@ FROM servicenow-incidents-*, .ds-metrics-system.cpu-default*, metrics-windows.se
 | `ci` | The CI, exactly as the CI control lists it | **CI** control |
 | `panels_with_data` | How many of the sources below have data for it (max 8) | Pick the highest |
 | `data_for` | Which panels will show data: Infra → *Infra Health*; Processes, Middleware, SQL → *Middleware / DB Health* and *Process Health*; Logs → *Errors from the Logs*; Synthetics → *Synthetics Health*; Changes → *Changes on this CI*; APM → *Applications on this CI* and section 3 | — |
-| `incident` | An active P1 / P2 on the CI, or *(all incidents)* if none is open | **Incident** control (fills *Escalate* and the *Longest P1* tile) |
+| `incident` | An active P1 / P2 on the CI, or *(all incidents)* if none is open | **Incident** control (fills *Escalate*) |
 | `service` | A production APM service running on the CI, or *(services on this CI)* if none | **Service** control; leave it on *(services on this CI)* when a service is listed |
 
 *Escalate* always fills once a CI is picked. *SLO Error Burn Rate* does not depend on the CI.
@@ -112,7 +112,7 @@ The best demo service appears near the top of **both** Query 2 and Query 3.
 
 1. **Section 1** needs no selection: it shows all active P1 / P2.
 2. Pick the top `ci` from Query 1 in the **CI** control: section 2 fills.
-3. Pick its `incident` in the **Incident** control: *Escalate* narrows to it and the *Longest P1* tile shows its age.
+3. Pick its `incident` in the **Incident** control: *Escalate* narrows to it.
 4. If Query 1 listed a `service` for that CI, leave the **Service** control on *(services on this CI)*: section 3
    fills from the CI. If not, pick a service that is near the top of Query 2 and Query 3.
 5. Click a service name in section 3 to open its APM Service Map.
@@ -139,7 +139,7 @@ the flaw above, so don't use them.
 | CI | Incident control | Service control | Fills |
 |---|---|---|---|
 | `vslrau1p228` | *(all incidents)* | *(services on this CI)* (APM service `billigportal` runs on it) | Infra, Middleware, Synthetics, Applications **and section 3 without picking a service**: best all-round |
-| `vslrau1p061` | `INC2652251` (active P2) | pick a section-3 service | Infra, Middleware, Synthetics; *Escalate* and the *Longest P1* tile show the incident |
+| `vslrau1p061` | `INC2652251` (active P2) | pick a section-3 service | Infra, Middleware, Synthetics; *Escalate* shows the incident |
 | `vslrau1p058` | `INC2670595` | pick a section-3 service | Infra, Middleware, Synthetics with an active incident |
 | `sau1h630` | `INC2669663` | pick a section-3 service | Synthetics, Middleware / DB (SQL Server) with an active incident |
 | `vskau1p1025`, `vclau1p0147` or `prau1pdb0003` | *(all incidents)* | pick a section-3 service | Infra, Processes / Middleware, Synthetics **and Changes** |
