@@ -240,3 +240,51 @@ FROM traces-apm* | WHERE processor.event == "transaction" AND url.domain IS NOT 
 
 **U (still open). APM Service Map** — manual: open **Observability → APM → Service Map**. Does a map draw, or a
 licence / upgrade message?
+
+## Round 6 — `cmdb_app_dependencies_v2` for app relationships and "applications impacted" (9 Oct 2026)
+
+Run in **Dev Tools Console** (no time filter; the index appears to have no `@timestamp`, so Discover's time picker may
+hide its rows). If a query 502s in Console, run it in Discover with *Last 1 year* and note that. Upload the results to
+`round6.txt`.
+
+**AA. One full record** — what fields exist (is there an `@timestamp`?)
+```
+POST /_query?format=json
+{ "query": "FROM cmdb_app_dependencies_v2 | LIMIT 2" }
+```
+
+**AB. Size and freshness**
+```
+POST /_query?format=json
+{ "query": "FROM cmdb_app_dependencies_v2 | STATS docs = COUNT(*), with_child_name = COUNT(child_ci.name.keyword), parents = COUNT_DISTINCT(parent_ci.name.keyword), children = COUNT_DISTINCT(child_ci.name.keyword)" }
+```
+
+**AC. Which kinds of CI point at which** (whole index, not the 10k sample)
+```
+POST /_query?format=json
+{ "query": "FROM cmdb_app_dependencies_v2 | WHERE child_ci.name.keyword IS NOT NULL | STATS rows = COUNT(*), parents = COUNT_DISTINCT(parent_ci.name.keyword), children = COUNT_DISTINCT(child_ci.name.keyword) BY parent_ci.class.keyword, child_ci.class.keyword | SORT rows DESC | LIMIT 60" }
+```
+
+**AD. Names of the relationship types** (the dependency index only has the ServiceNow ID; the relations index has both)
+```
+POST /_query?format=json
+{ "query": "FROM cmdb-ci-relations* | STATS links = COUNT(*) BY type.sys_id, type.name | SORT links DESC | LIMIT 40" }
+```
+
+**AE. The CI from the demo**
+```
+POST /_query?format=json
+{ "query": "FROM cmdb_app_dependencies_v2 | WHERE parent_ci.name.keyword == \"Automated Claim Transaction PROD\" OR child_ci.name.keyword == \"Automated Claim Transaction PROD\" OR parent_ci.name.keyword == \"Automated Claim Transaction\" | STATS rows = COUNT(*) BY parent_ci.name.keyword, parent_ci.class.keyword, child_ci.class.keyword, relationship.latest.servicenow.event.type.value | SORT rows DESC | LIMIT 50" }
+```
+
+**AF. Do application services point at business applications (or the other way)?**
+```
+POST /_query?format=json
+{ "query": "FROM cmdb_app_dependencies_v2 | WHERE parent_ci.class.keyword LIKE \"*service*\" OR child_ci.class.keyword LIKE \"*service*\" OR parent_ci.class.keyword == \"cmdb_ci_business_app\" OR child_ci.class.keyword == \"cmdb_ci_business_app\" | STATS rows = COUNT(*) BY parent_ci.class.keyword, child_ci.class.keyword | SORT rows DESC | LIMIT 30" }
+```
+
+**AG. Coverage: how many P1 / P2 CIs (last 6 months) the dependency index knows about**
+```
+POST /_query?format=json
+{ "query": "FROM servicenow-incidents-*, cmdb_app_dependencies_v2 METADATA _index | WHERE (_index LIKE \"*servicenow*\" AND priority IN (1, 2) AND opened_at >= NOW() - 180 days) OR _index LIKE \"*cmdb_app_dependencies*\" | EVAL src = CASE(_index LIKE \"*servicenow*\", \"inc\", \"dep\") | EVAL as_child = CASE(src == \"dep\", TO_STRING(child_ci.name.keyword)), as_parent = CASE(src == \"dep\", TO_STRING(parent_ci.name.keyword)), inc_ci = CASE(src == \"inc\", TO_STRING(ci.name)), key = COALESCE(inc_ci, as_child) | EVAL is_inc = CASE(src == \"inc\", 1, 0), parent_of = CASE(src == \"dep\", as_parent) | STATS inc = MAX(is_inc), parents = COUNT_DISTINCT(parent_of) BY key | WHERE inc == 1 | STATS cis = COUNT(*), with_parents = COUNT(CASE(parents > 0, 1)), avg_parents = AVG(parents)" }
+```
