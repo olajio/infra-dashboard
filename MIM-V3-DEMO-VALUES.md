@@ -112,6 +112,9 @@ The best demo service appears near the top of **both** Query 2 and Query 3.
 
 1. **Section 1** needs no selection: it shows all active P1 / P2.
 2. Pick the top `ci` from Query 1 in the **CI** control: section 2 fills.
+   For the dependency panels, also try **Automated Claim Transaction PROD**: its server panels stay empty (it is an
+   application service), but *Applications that depend on this CI* lists the 30+ application services that depend
+   on it and *What this CI runs on* lists its servers. Pick one of those servers in the CI control to see its health.
 3. Pick its `incident` in the **Incident** control: *Escalate* narrows to it.
 4. If Query 1 listed a `service` for that CI, leave the **Service** control on *(services on this CI)*: section 3
    fills from the CI. If not, pick a service that is near the top of Query 2 and Query 3.

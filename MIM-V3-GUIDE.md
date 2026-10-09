@@ -41,10 +41,16 @@ The MIM lead opens MIM V3 and reads the top row from left to right.
   - **Active P1** (red when any) and **Active P2** (amber from 1, red from 5): how many are open now.
   - **Past target time**: P1 open 4 h or more, or P2 open 8 h or more (red when any).
   - **Open more than 24 h**: candidates for escalation, whatever else is happening today.
-  - **Hotspot CI (2+ P1)**: the most P1s open on a single CI, shown only when a CI has two or more (amber at 2, red
-    from 3), with every such CI and its count underneath, e.g. "3 P1 · kau1s054 | 2 P1 · vslrau1p061". Several P1s
-    on one CI is very likely the centre of the problem. Green 0 = no CI has more than one P1.
+  - **Hotspot CI**: CIs with more than one active P1 (the footnote on the tile says so). The number is the most P1s
+    open on a single CI (amber at 2, red from 3), with every such CI and its count underneath, e.g. "CIs with more
+    than 1 P1: 3 P1 · kau1s054 | 2 P1 · vslrau1p061". Several P1s on one CI is very likely the centre of the
+    problem. Green 0 = no CI has more than one P1.
   - **Not picked up (New)**: incidents nobody has picked up yet.
+- **Applications impacted** — the business impact in one number: how many applications depend on a CI with an active
+  P1 / P2 (from the CMDB dependency index: business applications and application services that have that CI as a
+  child, plus the CI itself when it is an application). Green 0, amber from 1, red from 10. The tile names the
+  first five and says how many incident CIs they depend on. One hop only: an application that depends on an
+  impacted application is not counted.
 - **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** — are we resolving within target? The average time to
   resolve the P1 and P2 incidents opened each day, against the dashed target lines (red P1 4 h, amber P2 8 h). A
   run of points above a line means incidents are taking longer than target. Hover a point for how many incidents
@@ -65,6 +71,14 @@ needed, then **selects `kau1s054` in the CI control**.
 
 Section 2 now shows `kau1s054` only.
 
+- **Blast radius** and **Applications that depend on this CI** — who is hurt if this CI is down. The count tile
+  (amber from 1, red from 5) and the list of business applications and application services that depend on the CI
+  in the CMDB, read as "<application> <how> this CI" (*Underwriting Tools PROD Runs on this CI*), with their CMDB
+  status and APM number. Pick one of them in the CI control to follow the chain upwards.
+- **What this CI runs on** — the other direction: the servers, databases, Kubernetes services and application
+  services the CI runs on or uses, with their CMDB status (Non-operational / Repair in progress first). For an
+  application-service CI such as *Automated Claim Transaction PROD*, whose own server panels are empty, this is
+  where its servers are: pick one in the CI control to see its live health in the panels below.
 - **Applications on this CI** — the blast radius. The applications and software that run on or depend on the CI
   (from the CMDB relationships) and the APM services sending data from it. *Three applications live on this
   server, including the policy-admin service.*
@@ -167,7 +181,9 @@ so MIM V3 stays open on the bridge.
   panels ignore the time picker. Panels without a badge follow the time picker.
 - **Section 1** is fixed to the last month. **Section 3** is fixed to
   the last hour. **Section 2** follows the time picker (last 24 h by default), except *Escalate* (last month),
-  *Applications on this CI* and *Changes* (last 30 days).
+  *Applications on this CI* and *Changes* (last 30 days). The three CMDB dependency panels (*Blast radius*,
+  *Applications that depend on this CI*, *What this CI runs on*) and section 1's *Applications impacted* have no time
+  window at all: the dependency index has no timestamp.
 - **Set the time picker to suit the question in section 2.** Use the last 15 minutes to see the CI's state *now*:
   *Infra Health* shows CPU p90 and peak memory over the whole range, so a 24-hour range can show yesterday's peak.
   Use a range starting before the incident opened to see the first errors in the logs.
@@ -244,11 +260,15 @@ so MIM V3 stays open on the bridge.
 |---|---|---|---|---|
 | Control | **CI** | ✅ | The CI to investigate | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`) that every section-2 panel uses. |
 | Control | **Incident** | ✅ | One incident for *Escalate* | Lists every active P1 / P2 incident, plus *(all incidents)*. A query variable (`?incident`) used only by those two panels. |
-| 1 | **Active P1 / P2 at a Glance** | ✅ | Six RAG-coloured tiles: Active P1, Active P2, Past target time, Open more than 24 h, Hotspot CI (2+ P1, with the CIs listed), Not picked up (New) | `servicenow-incidents-*`, active P1 / P2. Replaces the earlier P1 Duration, Active by Age, Active by CI and Active by State widgets (client feedback, 8 Oct). |
+| 1 | **Active P1 / P2 at a Glance** | ✅ | Six RAG-coloured tiles: Active P1, Active P2, Past target time, Open more than 24 h, Hotspot CI (CIs with more than 1 P1, listed with their counts), Not picked up (New) | `servicenow-incidents-*`, active P1 / P2. Replaces the earlier P1 Duration, Active by Age, Active by CI and Active by State widgets (client feedback, 8 Oct). |
+| 1 | **Applications impacted** | ✅ | Count of applications that depend on a CI with an active P1 / P2, RAG background, first five named | Active P1 / P2 (last month) joined to `cmdb_app_dependencies_v2` on the incident CI = the record's child; parents of class business application or application service (by tags, calculated, discovered, auto), retired ones left out; plus the incident CI itself when it is such a parent. A Vega panel, because a Lens panel cannot read the dependency index together with the incidents (*KIBANA-LIMITATIONS.md*, row 20). |
 | 1 | **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** | ✅ | Average time to resolve per opened day, P1 (red) and P2 (amber), with dashed target lines | Resolved P1 / P2 opened in the last 30 days; `resolution_time` (ServiceNow's opened → resolved seconds), or resolved_at − opened_at. Target lines are a reference-line layer. |
 | 1 | **Active Incidents (P1 / P2)** | ✅ | Every active P1 / P2 with SLA, group, age | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
 | 2 | **How to use this section** | ✅ | Orange one-line banner across the top of section 2 | A metric panel showing a fixed message (no data needed) |
 | 2 | **Escalate** | ✅ | One row per active P1 / P2 on the CI: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group | Incidents on the CI (or the one in the Incident control) plus the CMDB enrichment on its server metrics; last month. CI and Active Incident link to ServiceNow; no other column is clickable. A CI with no active P1 / P2 still shows one row with its owners. If an incident is picked whose CI is not the one in the CI control, Class / Env / support group come from the incident record and may show "—". |
+| 2 | **Blast radius** | ✅ | Count of applications that depend on the CI, split into application services and business applications | `cmdb_app_dependencies_v2`: records whose child is the CI and whose parent is a business application or application service, not retired. Amber from 1, red from 5. No time window. |
+| 2 | **Applications that depend on this CI** | ✅ | Those applications: kind, how they depend ("Runs on", "Depends on", "Consumes" …), CMDB status, env, APM number | Same records; relationship names from the ServiceNow relationship-type IDs (round 6, AD). Business applications first. Application links to the CMDB. |
+| 2 | **What this CI runs on** | ⚠️ | What the CI runs on or uses: servers, app servers, databases, Kubernetes services, application services; CMDB status | `cmdb_app_dependencies_v2`: records whose parent is the CI; batch jobs, endpoints, disks, network and cloud-account records left out, retired items left out. Item links to the CMDB. **Limit:** CMDB status only, no live health: a Lens panel cannot read the dependency index together with metrics (no timestamp on it); pick an item in the CI control for its live health. |
 | 2 | **Infra Health** | ✅ | Minutes since last data, CPU p90, peak memory, fullest disk — RAG coloured | System metrics matched on `ci.name` (equal to the host name). Amber ≥ 80 %, red ≥ 90 %; red if silent > 10 min. Empty if the CI is not a monitored server. |
 | 2 | **Middleware / DB Health** | ✅ | Healthy vs Down components on the CI | SQL Server metrics (`metricbeat-*` sql / mssql), middleware processes labelled by the Paladin monitoring enrichment (IBM MQ, IHS, JBoss, WebSphere) and Windows middleware services. Down = stopped or silent > 10 min. |
 | 2 | **Applications on this CI** | ⚠️ | Applications and software linked to the CI, and APM services on it | `cmdb-ci-relations` ("Runs on", etc., application-type CIs only) + APM services that sent data from the server in the last day. **Limit:** APM services running in Kubernetes report pod names, not the server, so they don't appear; fixed 30-day window. |
@@ -279,6 +299,7 @@ so MIM V3 stays open on the bridge.
 | Section 3 has no drawn node-and-arrow diagram | Kibana's Vega charts could draw one, but they cannot read the ES\|QL Service control (only the time range and filters), so the map could not follow the selected service | Section 3 is laid out left to right instead; click a service for the APM Service Map |
 | Section 3 is empty for most incident CIs unless a service is picked | P1 / P2 are raised mostly against servers (Linux, AIX), network devices and application services; only servers with APM agents have services on them, and no incident CI is an APM business application (round 5, X and Y) | Pick the service in the Service control; longer term, record the affected business application / service on the incident |
 | Estimated user base | Not in Elastic | Add the ServiceNow user-base field to the CI enrichment |
+| *What this CI runs on* has CMDB status, not live health; *Applications that depend on this CI* cannot show the applications' own P1 / P2 | `cmdb_app_dependencies_v2` has no timestamp, and Kibana filters every row of a Lens panel on the timestamp of the other indices it reads (incidents, metrics), so the dependency records would vanish | Add an `@timestamp` (sync time) to the dependency index records, e.g. a `set` processor in its ingest pipeline. The live version of the panel (server reporting / CPU, APM error rate, active P1 / P2 per item) is built and tested, ready to switch on |
 
 ## Related dashboards (section 4): the links
 

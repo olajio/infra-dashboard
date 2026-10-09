@@ -1,7 +1,35 @@
 # MIM V3 — using `cmdb_app_dependencies_v2` for app relationships and "applications impacted"
 
-**Status:** proposal, based on the 10,000-row sample (`cmdb_app_dependencies_v2.csv`); Round 6 queries
-(`queries_ro_run.md`) confirm it against the whole index before building · **Date:** 9 Oct 2026
+**Status:** built in MIM V3 (9 Oct 2026) after Round 6 · **Date:** 9 Oct 2026
+
+## Round 6 results and what was built
+
+| Query | Result | Consequence |
+|---|---|---|
+| AA | No `@timestamp`; `*_ci.*` fields are text with a `.keyword` sub-field; missing values are often the string `"null"` | Panels use the `.keyword` fields and treat `"null"` as empty. Lens panels must read the index on its own (below) |
+| AB | 10.6 M records, 7.8 M with a child name; 1.05 M parents, 0.76 M children | Too big to scan without a filter: every query filters on the CI name or on application classes first |
+| AC, AF | Mostly infrastructure (disks, storage, Kubernetes, cloud, network). Application pairs: business application → application service (Consumes), application service → servers (Runs on), → batch jobs (Uses), → other application services (Depends on) | "Applications" = business applications and application services (by tags, calculated, discovered, auto) |
+| AD | Names of the 29 relationship types | Shown as "Runs on", "Depends on", "Consumes" … |
+| AE | *Automated Claim Transaction PROD* depends on 436 batch jobs, 3 servers, Kubernetes, Tomcat and other services; 30+ application services depend on it | Its section 2 now lists both directions |
+| AG | 375 of 425 P1 / P2 CIs (6 months) have parents in the index, 362 on average, mostly infrastructure | Counting only application parents is essential |
+
+**Built:**
+
+1. Section 1 — **Applications impacted** tile.
+2. Section 2 — **Blast radius** (count), **Applications that depend on this CI** and **What this CI runs on** (CMDB
+   status).
+
+**Not possible yet — live health in *What this CI runs on*:** Kibana filters every row of a Lens ES|QL panel on
+the timestamp it finds in the indices the panel reads. A panel that reads this index together with metrics or
+incidents therefore loses every dependency record (no timestamp), whatever the panel's settings (*KIBANA-LIMITATIONS.md*,
+row 20). *Applications impacted* avoids it as a Vega panel (Vega adds no time filter), but Vega cannot follow the CI
+control, so that route is closed for section 2. **Fix:** give the dependency records an `@timestamp` (the sync time,
+e.g. a `set` processor in the index's ingest pipeline). The live version (active P1 / P2 on each item, server
+reporting and CPU, APM error rate for Kubernetes services) is written and tested, ready to switch on.
+
+---
+
+*The proposal below is kept as written before Round 6.*
 
 ## What the sample shows
 
