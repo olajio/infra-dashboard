@@ -25,7 +25,7 @@ The dashboard has four sections and three controls:
 | **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month |
 | **2 · Investigate the CI** | The CI picked in the control only | Time picker (last 24 h by default), except where a panel says otherwise |
 | **3 · Service Dependency & Blast Radius** | The service(s) from the Service control | Fixed last hour |
-| **4 · Related dashboards** | Links to the SRE and Infra dashboards | — |
+| **4 · Related dashboards** | Links to the Applications Operations and Infra dashboards | — |
 
 ---
 
@@ -137,7 +137,7 @@ below 1×, the service return to Running and the ping monitor go green.
 
 ### Step 8 — Look wider (section 4)
 
-If the problem is bigger than one CI or one service, the two cards at the bottom open the **SRE Dashboard**
+If the problem is bigger than one CI or one service, the two cards at the bottom open the **Applications Operations Dashboard**
 (applications, services, SLOs) and the **Infra Dashboard** (servers and platforms across the estate) in a new tab,
 so MIM V3 stays open on the bridge.
 
@@ -230,7 +230,7 @@ so MIM V3 stays open on the bridge.
   edit a query, do not EVAL / RENAME / DISSECT into a link column (see *MIM-V3-LINKS-INVESTIGATION.md*).
 - **Service names open the APM Service Map** (last hour, all environments), which draws the dependency diagram that a
   Kibana dashboard cannot.
-- **The SRE and Infra cards in section 4** open those dashboards in a new tab.
+- **The Applications Operations and Infra cards in section 4** open those dashboards in a new tab.
 
 ### Speed and access
 
@@ -269,7 +269,7 @@ so MIM V3 stays open on the bridge.
 | 3 | **Downstream — who is impacted ➡** | ⚠️ | Horizontal bars: calls per calling service, coloured by the health of those calls; top 15 | Hosts the services in scope answer on (URL host of their incoming-request transactions, CNA host names only) matched to every production service's dependency addresses. Batch / messaging transactions and external hosts (Google storage, Okta …) are ignored. **Limit:** when several services share a host (an API gateway), callers of that host are listed for each of them. Click a bar to open that service's APM Service Map. |
 | 3 | **Business applications impacted** | ⚠️ | The callers' CMDB business applications, worst first, with portfolio and support group | From the APM CMDB enrichment on the callers. **Limit:** no user counts or criticality (not in APM or the CMDB data). Click to open the application in the CMDB. |
 | Control | **Service** | ✅ | The service(s) for section 3 | Production APM services seen in the last day, plus *(services on this CI)*. A query variable (`?service`) used only by section 3. |
-| 4 | **SRE Dashboard** / **Infra Dashboard** | ✅ | Cards linking to the two dashboards | Text panels; the title of each card is the link (opens in a new tab). Addresses from `links.txt`. |
+| 4 | **Applications Operations Dashboard** / **Infra Dashboard** | ✅ | Cards linking to the two dashboards | Text panels; the title of each card is the link (opens in a new tab). Addresses from `links.txt`. |
 
 ---
 
@@ -293,7 +293,7 @@ The two cards link to:
 
 | Card | Address |
 |---|---|
-| SRE Dashboard | https://kibana-prod.gcp.cna.com/app/r/s/b4Jas |
+| Applications Operations Dashboard | https://kibana-prod.gcp.cna.com/app/r/s/b4Jas |
 | Infra Dashboard | https://kibana-prod.gcp.cna.com/app/r/s/3A7f1 |
 
 The addresses come from `links.txt` and are built into `MIM V3.ndjson`. To change one, update `links.txt` and
