@@ -1,0 +1,1587 @@
+# 340: POST /_query?format=json [200 OK]
+{
+  "took": 55,
+  "is_partial": false,
+  "completion_time_in_millis": 1791568811781,
+  "documents_found": 2,
+  "values_loaded": 44,
+  "rows_emitted": 14,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 42199261,
+  "start_time_in_millis": 1791568811726,
+  "expiration_time_in_millis": 1792000811778,
+  "columns": [
+    {
+      "name": "child",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.class",
+      "type": "text"
+    },
+    {
+      "name": "child_ci.class.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.environment",
+      "type": "text"
+    },
+    {
+      "name": "child_ci.environment.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.install_status",
+      "type": "text"
+    },
+    {
+      "name": "child_ci.install_status.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.last_updated",
+      "type": "date"
+    },
+    {
+      "name": "child_ci.name",
+      "type": "text"
+    },
+    {
+      "name": "child_ci.name.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.number.servicenow.event.number.value",
+      "type": "text"
+    },
+    {
+      "name": "child_ci.number.servicenow.event.number.value.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.operational_status",
+      "type": "text"
+    },
+    {
+      "name": "child_ci.operational_status.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.sys_id",
+      "type": "text"
+    },
+    {
+      "name": "child_ci.sys_id.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "ci.number",
+      "type": "keyword"
+    },
+    {
+      "name": "parent",
+      "type": "keyword"
+    },
+    {
+      "name": "parent_ci.class",
+      "type": "text"
+    },
+    {
+      "name": "parent_ci.class.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "parent_ci.environment",
+      "type": "text"
+    },
+    {
+      "name": "parent_ci.environment.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "parent_ci.install_status",
+      "type": "text"
+    },
+    {
+      "name": "parent_ci.install_status.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "parent_ci.last_updated",
+      "type": "date"
+    },
+    {
+      "name": "parent_ci.name",
+      "type": "text"
+    },
+    {
+      "name": "parent_ci.name.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "parent_ci.number.servicenow.event.number.value",
+      "type": "text"
+    },
+    {
+      "name": "parent_ci.number.servicenow.event.number.value.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "parent_ci.operational_status",
+      "type": "text"
+    },
+    {
+      "name": "parent_ci.operational_status.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "parent_ci.sys_id",
+      "type": "text"
+    },
+    {
+      "name": "parent_ci.sys_id.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "relationship.latest.servicenow.event.type.value",
+      "type": "keyword"
+    },
+    {
+      "name": "service.environment",
+      "type": "text"
+    },
+    {
+      "name": "service.environment.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "service.id",
+      "type": "keyword"
+    },
+    {
+      "name": "service.name",
+      "type": "text"
+    },
+    {
+      "name": "service.name.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "service.service.id",
+      "type": "text"
+    },
+    {
+      "name": "service.service.name",
+      "type": "text"
+    }
+  ],
+  "values": [
+    [
+      "c45aa3b6a5bcf69072b2105b0ac0b78c",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "null",
+      "00efe29b472c6290d254f78b416d43d4",
+      "cmdb_ci_computer",
+      "cmdb_ci_computer",
+      "null",
+      "null",
+      "1",
+      "1",
+      "2026-09-09T05:53:03.000Z",
+      "win11-dszrvyobe",
+      "win11-dszrvyobe",
+      null,
+      null,
+      "1",
+      "1",
+      "00efe29b472c6290d254f78b416d43d4",
+      "00efe29b472c6290d254f78b416d43d4",
+      "25242fb2377a9200738d021a54990e88",
+      "null",
+      "null",
+      "null",
+      "null",
+      "null",
+      null,
+      null
+    ],
+    [
+      "c7a0038843f9fe904a58cdf3922e54b3",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "null",
+      "00efe29b472c6290d254f78b416d43d4",
+      "cmdb_ci_computer",
+      "cmdb_ci_computer",
+      "null",
+      "null",
+      "1",
+      "1",
+      "2026-09-09T05:53:03.000Z",
+      "win11-dszrvyobe",
+      "win11-dszrvyobe",
+      null,
+      null,
+      "1",
+      "1",
+      "00efe29b472c6290d254f78b416d43d4",
+      "00efe29b472c6290d254f78b416d43d4",
+      "25242fb2377a9200738d021a54990e88",
+      "null",
+      "null",
+      "null",
+      "null",
+      "null",
+      null,
+      null
+    ]
+  ]
+}
+# 344: POST /_query?format=json [200 OK]
+#! No limit defined, adding default limit of [1000]
+{
+  "took": 1744,
+  "is_partial": false,
+  "completion_time_in_millis": 1791568813631,
+  "documents_found": 10605446,
+  "values_loaded": 17666779,
+  "rows_emitted": 21210947,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 34585077012,
+  "start_time_in_millis": 1791568811887,
+  "expiration_time_in_millis": 1792000813579,
+  "columns": [
+    {
+      "name": "docs",
+      "type": "long"
+    },
+    {
+      "name": "with_child_name",
+      "type": "long"
+    },
+    {
+      "name": "parents",
+      "type": "long"
+    },
+    {
+      "name": "children",
+      "type": "long"
+    }
+  ],
+  "values": [
+    [
+      10605446,
+      7767945,
+      1046087,
+      759193
+    ]
+  ]
+}
+# 348: POST /_query?format=json [200 OK]
+{
+  "took": 2691,
+  "is_partial": false,
+  "completion_time_in_millis": 1791568816424,
+  "documents_found": 7767945,
+  "values_loaded": 29796468,
+  "rows_emitted": 15578648,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 52256234260,
+  "start_time_in_millis": 1791568813733,
+  "expiration_time_in_millis": 1792000816381,
+  "columns": [
+    {
+      "name": "rows",
+      "type": "long"
+    },
+    {
+      "name": "parents",
+      "type": "long"
+    },
+    {
+      "name": "children",
+      "type": "long"
+    },
+    {
+      "name": "parent_ci.class.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.class.keyword",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      652784,
+      941,
+      129,
+      "cmdb_ci_disk_type",
+      "cmdb_ci_availability_zone"
+    ],
+    [
+      584048,
+      0,
+      268,
+      null,
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      510143,
+      985,
+      46,
+      "cmdb_ci_disk_type",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      434647,
+      442948,
+      145,
+      "cmdb_ci_storage_vol_snapshot",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      363276,
+      1081,
+      370685,
+      "cmdb_ci_storage_volume",
+      "cmdb_ci_storage_vol_snapshot"
+    ],
+    [
+      296778,
+      45080,
+      213,
+      "cmdb_ci_computer",
+      "cmdb_ci_network_adapter"
+    ],
+    [
+      219789,
+      326,
+      11,
+      "cmdb_ci_compute_template",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      171964,
+      45,
+      140,
+      "cmdb_ci_google_datacenter",
+      "cmdb_ci_availability_zone"
+    ],
+    [
+      167311,
+      163273,
+      4,
+      "cmdb_ci_storage_vol_snapshot",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      151431,
+      7729,
+      7729,
+      "cmdb_ci_endpoint_block",
+      "cmdb_ci_storage_volume"
+    ],
+    [
+      150098,
+      26938,
+      55,
+      "cmdb_ci_vmware_instance",
+      "cmdb_ci_endpoint_block"
+    ],
+    [
+      142768,
+      130786,
+      116,
+      "cmdb_ci_kubernetes_replicaset",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      128159,
+      124126,
+      1108,
+      "cmdb_ci_storage_vol_snapshot",
+      "cmdb_ci_storage_volume"
+    ],
+    [
+      127913,
+      118987,
+      139,
+      "cmdb_ci_kubernetes_replicaset",
+      "cmdb_ci_kubernetes_cluster"
+    ],
+    [
+      102516,
+      3331,
+      27,
+      "cmdb_ci_cloud_database",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      102067,
+      56153,
+      2046,
+      "cmdb_ci_kubernetes_pod",
+      "cmdb_ci_docker_container"
+    ],
+    [
+      100342,
+      56219,
+      921,
+      "cmdb_ci_kubernetes_pod",
+      "cmdb_ci_docker_image"
+    ],
+    [
+      83362,
+      42854,
+      20,
+      "cmdb_ci_computer",
+      "cmdb_ci_disk"
+    ],
+    [
+      79546,
+      55,
+      24,
+      "cmdb_ci_storage_volume",
+      "cmdb_ci_vcenter_datacenter"
+    ],
+    [
+      69968,
+      521,
+      3114,
+      "cmdb_ci_ip_switch",
+      "dscy_switchport"
+    ],
+    [
+      67918,
+      355,
+      69,
+      "cmdb_ci_storage_controller",
+      "cmdb_ci_fc_port"
+    ],
+    [
+      63311,
+      20138,
+      26,
+      "cmdb_ci_computer",
+      "cmdb_ci_disk_partition"
+    ],
+    [
+      61135,
+      62,
+      1475,
+      "cmdb_ci_google_datacenter",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      60932,
+      384,
+      39264,
+      "cmdb_ci_linux_server",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      59062,
+      58977,
+      91,
+      "cmdb_ci_kubernetes_pod",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      53195,
+      17,
+      1404,
+      "cmdb_ci_web_service",
+      "cmdb_ci_app_server_websphere"
+    ],
+    [
+      52560,
+      654,
+      4034,
+      "cmdb_ci_ip_switch",
+      "dscy_router_interface"
+    ],
+    [
+      51560,
+      1559,
+      3217,
+      "cmdb_ci_db_ora_instance",
+      "cmdb_ci_config_file_tracked"
+    ],
+    [
+      51168,
+      877,
+      42499,
+      "cmdb_ci_kubernetes_namespace",
+      "cmdb_ci_kubernetes_replicaset"
+    ],
+    [
+      48293,
+      20066,
+      41,
+      "cmdb_ci_computer",
+      "cmdb_ci_file_system"
+    ],
+    [
+      48227,
+      1710,
+      2268,
+      "cmdb_ci_lvm_pool",
+      "cmdb_ci_lvm_pool_member"
+    ],
+    [
+      46844,
+      12755,
+      30,
+      "cmdb_ci_lb_service",
+      "cmdb_ci_lb_bigip"
+    ],
+    [
+      46668,
+      777,
+      788,
+      "cmdb_ci_app_server_websphere",
+      "cmdb_ci_app_server_websphere"
+    ],
+    [
+      45557,
+      41821,
+      7,
+      "cmdb_ci_storage_volume",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      44244,
+      11130,
+      10787,
+      "cmdb_ci_lb_service",
+      "cmdb_ci_lb_pool"
+    ],
+    [
+      41518,
+      7887,
+      2482,
+      "cmdb_ci_lb_pool",
+      "cmdb_ci_lb_pool_member"
+    ],
+    [
+      41011,
+      30,
+      11104,
+      "cmdb_ci_lb_bigip",
+      "cmdb_ci_lb_pool"
+    ],
+    [
+      40513,
+      33133,
+      24,
+      "cmdb_ci_vmware_nic",
+      "cmdb_ci_vcenter_datacenter"
+    ],
+    [
+      40445,
+      340,
+      157,
+      "cmdb_ci_ip_switch",
+      "dscy_route_next_hop"
+    ],
+    [
+      40405,
+      33090,
+      33090,
+      "cmdb_ci_endpoint_vnic",
+      "cmdb_ci_vmware_nic"
+    ],
+    [
+      39331,
+      26832,
+      32202,
+      "cmdb_ci_vmware_instance",
+      "cmdb_ci_endpoint_vnic"
+    ],
+    [
+      37404,
+      27579,
+      24,
+      "cmdb_ci_vmware_instance",
+      "cmdb_ci_vcenter_datacenter"
+    ],
+    [
+      36753,
+      2326,
+      1691,
+      "cmdb_ci_linux_server",
+      "cmdb_ci_storage_device"
+    ],
+    [
+      36333,
+      22,
+      28599,
+      "cmdb_ci_availability_zone",
+      "cmdb_ci_storage_volume"
+    ],
+    [
+      35280,
+      96,
+      19,
+      "cmdb_ci_ip_router",
+      "dscy_route_next_hop"
+    ],
+    [
+      34833,
+      2076,
+      1728,
+      "cmdb_ci_linux_server",
+      "cmdb_ci_lvm_pool"
+    ],
+    [
+      33475,
+      23193,
+      14,
+      "cmdb_ci_computer",
+      "cmdb_ci_memory_module"
+    ],
+    [
+      33105,
+      2396,
+      891,
+      "cmdb_ci_linux_server",
+      "cmdb_ci_file_system"
+    ],
+    [
+      32979,
+      29640,
+      7,
+      "cmdb_ci_vm_instance",
+      "cmdb_ci_google_datacenter"
+    ],
+    [
+      30202,
+      86,
+      54,
+      "cmdb_ci_file_system",
+      "cmdb_ci_disk"
+    ],
+    [
+      28889,
+      224,
+      217,
+      "dscy_route_interface",
+      "dscy_route_next_hop"
+    ],
+    [
+      28748,
+      40,
+      28980,
+      "cmdb_ci_kubernetes_cluster",
+      "cmdb_ci_kubernetes_pod"
+    ],
+    [
+      28404,
+      355,
+      62,
+      "cmdb_ci_kubernetes_cluster_role",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      27956,
+      340,
+      14315,
+      "cmdb_ci_ip_switch",
+      "dscy_route_interface"
+    ],
+    [
+      27383,
+      180,
+      351,
+      "cmdb_ci_kubernetes_cluster",
+      "cmdb_ci_kubernetes_cluster_role"
+    ],
+    [
+      27318,
+      365,
+      61,
+      "cmdb_ci_kubernetes_cluster_role_binding",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      26913,
+      22668,
+      135,
+      "cmdb_ci_computer",
+      "dscy_router_interface"
+    ],
+    [
+      26359,
+      180,
+      358,
+      "cmdb_ci_kubernetes_cluster",
+      "cmdb_ci_kubernetes_cluster_role_binding"
+    ],
+    [
+      26034,
+      314,
+      17018,
+      "cmdb_ci_aix_server",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      25466,
+      305,
+      4,
+      "cmdb_ci_kubernetes_cluster_role",
+      "cmdb_ci_google_datacenter"
+    ]
+  ]
+}
+# 352: POST /_query?format=json [200 OK]
+{
+  "took": 624,
+  "is_partial": false,
+  "completion_time_in_millis": 1791568817148,
+  "documents_found": 34126908,
+  "values_loaded": 68253797,
+  "rows_emitted": 68255714,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 12853632719,
+  "start_time_in_millis": 1791568816524,
+  "expiration_time_in_millis": 1792000816981,
+  "columns": [
+    {
+      "name": "links",
+      "type": "long"
+    },
+    {
+      "name": "type.sys_id",
+      "type": "keyword"
+    },
+    {
+      "name": "type.name",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      22202479,
+      "5f985e0ec0a8010e00a9714f2a172815",
+      "Hosted on::Hosts"
+    ],
+    [
+      3979321,
+      "55c95bf6c0a8010e0118ec7056ebc54d",
+      "Contains::Contained by"
+    ],
+    [
+      3029957,
+      "25242fb2377a9200738d021a54990e88",
+      "Owns::Owned by"
+    ],
+    [
+      499542,
+      "cb5592603751200032ff8c00dfbe5d17",
+      "Uses::Used by"
+    ],
+    [
+      463441,
+      "0a84a51173ee130051a5d6dcb7f6a761",
+      "Replicates to::Replicated by"
+    ],
+    [
+      448958,
+      "45e94a74532221007c949096a11c0861",
+      "Implement End Point To::Implement End Point From"
+    ],
+    [
+      379718,
+      "d93304fb0a0a0b78006081a72ef08444",
+      "Virtualized by::Virtualizes"
+    ],
+    [
+      352384,
+      "aa9434870ab301544ce2943bf03fd7a8",
+      "Registered on::Has registered"
+    ],
+    [
+      334892,
+      "e7490a74532221007c949096a11c08b2",
+      "Use End Point To::Use End Point From"
+    ],
+    [
+      315808,
+      "55c913d3c0a8010e012d1563182d6050",
+      "Members::Member of"
+    ],
+    [
+      314288,
+      "60bc4e22c0a8010e01f074cbe6bd73c3",
+      "Runs on::Runs"
+    ],
+    [
+      282155,
+      "5599a965c0a8010e00da3b58b113d70e",
+      "Connects to::Connected by"
+    ],
+    [
+      230957,
+      "f67e9ecdff602000dada361332f49d35",
+      "Provides::Provided by"
+    ],
+    [
+      222244,
+      "9aac679137303100dcd445cbbebe5d7f",
+      "Controller for::Controlled by"
+    ],
+    [
+      172919,
+      "72e003db0b032200639be0d425673aa1",
+      "Provisioned From::Provisioned"
+    ],
+    [
+      135773,
+      "1a9cb166f1571100a92eb60da2bce5c5",
+      "Depends on::Used by"
+    ],
+    [
+      124953,
+      "4afd799338a02000c18673032c71b817",
+      "Provided By::Provides"
+    ],
+    [
+      118019,
+      "85d98503ff100200d699ffffffffff8c",
+      "Applicative Flow To::Applicative Flow From"
+    ],
+    [
+      111651,
+      "3deab95338a02000c18673032c71b876",
+      "Connected by::Connects"
+    ],
+    [
+      73535,
+      "c6fd799338a02000c18673032c71b81d",
+      "Provides storage for::Stored on"
+    ],
+    [
+      71674,
+      "0e8ffb1537303100dcd445cbbebe5d40",
+      "Exports to::Imports from"
+    ],
+    [
+      58804,
+      "281d7566f1571100a92eb60da2bce50d",
+      "IP Connection::IP Connection"
+    ],
+    [
+      45008,
+      "6afd799338a02000c18673032c71b87b",
+      "Used by::Uses"
+    ],
+    [
+      37314,
+      "0898719c37020100dcd48c00dfbe5d43",
+      "Distributed by::Distributes"
+    ],
+    [
+      33534,
+      "1bb40e370a0a0b323d85a1ce84f8feae",
+      "Instantiates::Instantiated by"
+    ],
+    [
+      26451,
+      "bf83653c0ab30150761028c73a4de0f4",
+      "Managed by::Manages"
+    ],
+    [
+      19154,
+      "a99d39118f10310091769012cbbe4429",
+      "Cluster of::Cluster"
+    ],
+    [
+      18381,
+      "7ef874d2fb42cf508b28f2277befdce2",
+      "Connected by::Connects"
+    ],
+    [
+      8620,
+      "d47f6f911b233300e61b21b6bc4bcb7e",
+      "Cloud Deployment::Cloud Machine"
+    ],
+    [
+      7059,
+      "41008aa6ef32010098d5925495c0fb94",
+      "Consumes::Consumed by"
+    ],
+    [
+      6194,
+      "de5aeb6a0ab3015854626f204fb7b1c0",
+      "Defines resources for::Gets resources from"
+    ],
+    [
+      668,
+      "11ee47317f723100ed1c3b19befa91f9",
+      "Impacts::Impacted By"
+    ],
+    [
+      455,
+      "3deab95338a02000c18673032c71b876",
+      "Connected by::Connects to"
+    ],
+    [
+      309,
+      "c8c685710b22130005d90d2835673aa8",
+      "Master of::Stack Member of"
+    ],
+    [
+      106,
+      "c57e96cdff602000dada361332f49d18",
+      "Consumed by::Consumes"
+    ],
+    [
+      77,
+      "061398a637432100dcd445cbbebe5da6",
+      "Discovers::Discovered from"
+    ],
+    [
+      48,
+      "1f865f38dbae87004a65d5ab5e961979",
+      "Manages::Managed by"
+    ],
+    [
+      22,
+      "c99a3358fb8dcf10dbacfaba75efdc15",
+      "References::Refrenced by"
+    ],
+    [
+      12,
+      "03d9c8d9dba77300da86f26b68961911",
+      "Deployment:: Machine"
+    ],
+    [
+      8,
+      "6811d1d7c7d350108052620927c2604b",
+      "Interfaced by::Interfaces"
+    ]
+  ]
+}
+# 357: POST /_query?format=json [200 OK]
+{
+  "took": 156,
+  "is_partial": false,
+  "completion_time_in_millis": 1791568817411,
+  "documents_found": 678,
+  "values_loaded": 2711,
+  "rows_emitted": 1698,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 377533879,
+  "start_time_in_millis": 1791568817255,
+  "expiration_time_in_millis": 1792000817382,
+  "columns": [
+    {
+      "name": "rows",
+      "type": "long"
+    },
+    {
+      "name": "parent_ci.name.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "parent_ci.class.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.class.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "relationship.latest.servicenow.event.type.value",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      436,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_batch_job",
+      "cb5592603751200032ff8c00dfbe5d17"
+    ],
+    [
+      66,
+      "Automated Claim Transaction",
+      "cmdb_ci_business_app",
+      "cmdb_ci_docker_container",
+      "null"
+    ],
+    [
+      32,
+      "Automated Claim Transaction",
+      "cmdb_ci_business_app",
+      "cmdb_ci_kubernetes_service",
+      "null"
+    ],
+    [
+      24,
+      "Automated Claim Transaction",
+      "cmdb_ci_business_app",
+      "cmdb_ci_docker_image",
+      "null"
+    ],
+    [
+      24,
+      "Automated Claim Transaction",
+      "cmdb_ci_business_app",
+      "cmdb_ci_kubernetes_deployment",
+      "null"
+    ],
+    [
+      15,
+      "Manual Endpoint",
+      "cmdb_ci_endpoint_manual",
+      "cmdb_ci_service_by_tags",
+      "45e94a74532221007c949096a11c0861"
+    ],
+    [
+      13,
+      "Automated Claim Transaction",
+      "cmdb_ci_business_app",
+      "cmdb_ci_service_calculated",
+      "41008aa6ef32010098d5925495c0fb94"
+    ],
+    [
+      10,
+      "Automated Claim Transaction",
+      "cmdb_ci_business_app",
+      "cmdb_ci_endpoint_tcp",
+      "e7490a74532221007c949096a11c08b2"
+    ],
+    [
+      8,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_calculated",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      5,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_technical",
+      "41008aa6ef32010098d5925495c0fb94"
+    ],
+    [
+      4,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_discovered",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      3,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      2,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_linux_server",
+      "60bc4e22c0a8010e01f074cbe6bd73c3"
+    ],
+    [
+      2,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_endpoint_manual",
+      "e7490a74532221007c949096a11c08b2"
+    ],
+    [
+      1,
+      "Thomson Reuters ONESOURCE 1099 PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Third Party Administrator Processing PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Second Claim Close PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Payment Hub PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Enterprise Claim Hub PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Claim Recovery System PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "HealthPro SIR PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_gcp_project",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Public Interface PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Merlin Management view Warehouse and Datamarts PROD",
+      "cmdb_ci_service_discovered",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_kubernetes_namespace",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Cadency PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Automated Claim Transaction",
+      "cmdb_ci_business_app",
+      "cmdb_ci_service_by_tags",
+      "41008aa6ef32010098d5925495c0fb94"
+    ],
+    [
+      1,
+      "Federal Information Returns Depository PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Unit Statistical Reporting PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Claim WC EDI PROD",
+      "cmdb_ci_service_discovered",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_mainframe_lpar",
+      "60bc4e22c0a8010e01f074cbe6bd73c3"
+    ],
+    [
+      1,
+      "Enterprise Integration Claims PROD",
+      "cmdb_ci_service_discovered",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Claim Center PROD",
+      "cmdb_ci_service_discovered",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "ProCede PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_cloud_service_account",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Producer Information File PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      null,
+      "e7490a74532221007c949096a11c08b2"
+    ],
+    [
+      1,
+      "NetMap PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Global Intranet PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Professional Liability Management Information System PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Financial Interface - Premium PROD",
+      "cmdb_ci_service_discovered",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Unified Pricing System RAPID PROD",
+      "cmdb_ci_service_discovered",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Regional Input Output System PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Automated Claim Transaction PROD",
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_app_server_tomcat",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "COVERS PROD",
+      "cmdb_ci_service_discovered",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Claim Manually Rated Lines PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Claim Information Master Source PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ],
+    [
+      1,
+      "Inland Marine Information System PROD",
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_service_by_tags",
+      "1a9cb166f1571100a92eb60da2bce5c5"
+    ]
+  ]
+}
+# 362: POST /_query?format=json [200 OK]
+{
+  "took": 389,
+  "is_partial": false,
+  "completion_time_in_millis": 1791568817920,
+  "documents_found": 1637806,
+  "values_loaded": 2689908,
+  "rows_emitted": 3278908,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 955462568,
+  "start_time_in_millis": 1791568817531,
+  "expiration_time_in_millis": 1792000817787,
+  "columns": [
+    {
+      "name": "rows",
+      "type": "long"
+    },
+    {
+      "name": "parent_ci.class.keyword",
+      "type": "keyword"
+    },
+    {
+      "name": "child_ci.class.keyword",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      584048,
+      null,
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      434647,
+      "cmdb_ci_storage_vol_snapshot",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      142768,
+      "cmdb_ci_kubernetes_replicaset",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      61135,
+      "cmdb_ci_google_datacenter",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      59062,
+      "cmdb_ci_kubernetes_pod",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      53195,
+      "cmdb_ci_web_service",
+      "cmdb_ci_app_server_websphere"
+    ],
+    [
+      46844,
+      "cmdb_ci_lb_service",
+      "cmdb_ci_lb_bigip"
+    ],
+    [
+      44244,
+      "cmdb_ci_lb_service",
+      "cmdb_ci_lb_pool"
+    ],
+    [
+      28404,
+      "cmdb_ci_kubernetes_cluster_role",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      27318,
+      "cmdb_ci_kubernetes_cluster_role_binding",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      17247,
+      "cmdb_ci_apache_web_server",
+      "cmdb_ci_lb_service"
+    ],
+    [
+      12183,
+      "cmdb_ci_kubernetes_node",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      9106,
+      "cmdb_ci_cloud_database",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      7978,
+      "cmdb_ci_kubernetes_deployment",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      5784,
+      "cmdb_ci_kubernetes_service",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      5430,
+      "cmdb_ci_kubernetes_namespace",
+      "cmdb_ci_kubernetes_service"
+    ],
+    [
+      5429,
+      "cmdb_ci_kubernetes_cluster",
+      "cmdb_ci_kubernetes_service"
+    ],
+    [
+      5139,
+      "cmdb_ci_db_ora_service",
+      "cmdb_ci_db_ora_listener"
+    ],
+    [
+      4815,
+      "cmdb_ci_service_discovered",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      4735,
+      "cmdb_ci_endpoint_sharepoint_service",
+      "cmdb_ci_appl_sp_service"
+    ],
+    [
+      4439,
+      "cmdb_ci_business_app",
+      "cmdb_ci_service_calculated"
+    ],
+    [
+      4152,
+      "cmdb_ci_win_server",
+      "cmdb_ci_lb_service"
+    ],
+    [
+      4097,
+      "cmdb_ci_db_ora_instance",
+      "cmdb_ci_db_ora_service"
+    ],
+    [
+      3462,
+      "cmdb_ci_kubernetes_namespace",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      3293,
+      "cmdb_ci_linux_server",
+      "cmdb_ci_lb_service"
+    ],
+    [
+      3129,
+      "cmdb_ci_service_by_tags",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      3083,
+      "cmdb_ci_compute_security_group",
+      "cmdb_ci_cloud_service_account"
+    ],
+    [
+      2524,
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_batch_job"
+    ],
+    [
+      2444,
+      "cmdb_ci_app_server_tomcat",
+      "cmdb_ci_lb_service"
+    ],
+    [
+      2404,
+      "cmdb_ci_service_calculated",
+      "cmdb_ci_win_server"
+    ]
+  ]
+}
+# 367: POST /_query?format=json [200 OK]
+#! No limit defined, adding default limit of [1000]
+{
+  "took": 5060,
+  "is_partial": false,
+  "completion_time_in_millis": 1791568823086,
+  "documents_found": 10613006,
+  "values_loaded": 28286934,
+  "rows_emitted": 101970494,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 84387889633,
+  "start_time_in_millis": 1791568818026,
+  "expiration_time_in_millis": 1792000823003,
+  "columns": [
+    {
+      "name": "cis",
+      "type": "long"
+    },
+    {
+      "name": "with_parents",
+      "type": "long"
+    },
+    {
+      "name": "avg_parents",
+      "type": "double"
+    }
+  ],
+  "values": [
+    [
+      425,
+      375,
+      362.0988235294118
+    ]
+  ]
+}
