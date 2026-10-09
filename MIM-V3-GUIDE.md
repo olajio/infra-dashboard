@@ -225,6 +225,9 @@ so MIM V3 stays open on the bridge.
 - **The click menu lists every link of that panel.** Kibana cannot attach a link to one column, so each link is
   labelled with the column it belongs to (e.g. "Open incident in ServiceNow — use on the Incident column"). Pick
   the one for the column you clicked. *Apply filter to current view* adds a filter instead (see above).
+- **On Kibana 9.5, links only work on real fields.** Kibana 9.5 greys out ⊕ (*"…relies on a field created at query
+  time"*) on any column the query creates or renames. MIM V3's link columns are built to stay real fields; if you
+  edit a query, do not EVAL / RENAME / DISSECT into a link column (see *MIM-V3-LINKS-INVESTIGATION.md*).
 - **Service names open the APM Service Map** (last hour, all environments), which draws the dependency diagram that a
   Kibana dashboard cannot.
 - **The SRE and Infra cards in section 4** open those dashboards in a new tab.

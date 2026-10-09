@@ -1,7 +1,51 @@
 # MIM V3: links work in edit mode but not in view mode (investigation)
 
-**Status:** open, waiting on three checks from Kibana 9.5.3 (see *Next steps*) · **Last updated:** 9 Oct 2026
+**Status:** root cause found, fix shipped in `MIM V3.ndjson` (9 Oct) — to be confirmed on Kibana 9.5.3 · **Last updated:** 9 Oct 2026
 **Dashboard:** MIM V3 (`MIM V3.ndjson`) · **Kibana:** 9.5.3 (build 2026-09-01)
+
+## Root cause and fix (summary)
+
+Clicking ⊕ on a linked cell in view mode showed it greyed out with the message **"You can't apply a filter or drill
+down this value because it relies on a field created at query time"**.
+
+Kibana 9.5 blocks filters **and** links on any table column that the ES|QL query *creates*. It decides this from the
+query text, with Kibana's own `getQuerySummary` (`@kbn/esql-utils`): a column counts as created if its name appears
+anywhere in the query as
+
+- the target of `EVAL x = …`;
+- the new name in `RENAME a AS x`;
+- a field in a `DISSECT` / `GROK` pattern;
+- the name of a `STATS` result (`STATS x = MAX(…)`), or `BY x = …`.
+
+A column that only passes through `STATS … BY field` (or `MV_EXPAND`, `KEEP`, `WHERE`, `SORT`) stays a real field.
+
+MIM V3's link columns were rebuilt with `RENAME` / `DISSECT` (e.g. `RENAME inc AS number`, `RENAME app AS ci.name`), so
+9.5 treated them as computed. Running Kibana's own function on the old export confirmed it:
+
+| Panel | Link columns before | After the fix |
+|---|---|---|
+| Active Incidents (P1 / P2) | Incident, Pri, Affected CI: computed | real fields |
+| Escalate | Active Incident: computed (CI was fine) | real fields |
+| Changes on this CI and linked CIs | Change, CI: computed | real fields |
+| Downstream — who is impacted | calling service: computed | real field |
+| Business applications impacted | business application: computed | real field |
+| Service health | service: already a real field | real field |
+
+**Fix:** the five queries were rewritten so each link column reaches the table only through `STATS … BY <field>`. The
+details that used to be packed and unpacked (SLA verdict, CI owners, linked CIs, callers) are now spread onto the rows
+with `INLINE STATS … BY <key>`, which adds columns without renaming anything. Every panel returns the same rows as
+before (all automated checks pass). Kibana's own function now reports every link column as a real field, and the link
+menu opens in view mode locally.
+
+**Why edit mode worked:** the Lens editor works out the columns its own way, so the 9.5 "created at query time" check
+did not block them there.
+
+**Why the console errors are not the cause:** the errors in `console_error.txt` (a Content Security Policy notice about
+an inline script, and the Kibana newsfeed failing to load) appear on MIM V1 too, where filtering works.
+
+**Still to confirm on 9.5.3:** on MIM V1 / V2, ⊕ filters straight away with no menu. If MIM V3's ⊕ also filters
+straight away now instead of offering the ServiceNow links, Kibana 9.5 shows links somewhere other than the ⊕ menu
+(e.g. the cell's expand ⤢ popover or a separate cell button), and this page will be updated.
 
 ## The problem
 
@@ -57,7 +101,7 @@ problem, and 9.5.3 predates the fix.
 (the same mechanism that once dropped the Incident control). This could explain "worked after a re-import, broke
 later", but not "works in edit mode, fails in view mode" in the same session. Not yet ruled out.
 
-## Next steps (in progress)
+## Original next steps (done 9 Oct)
 
 Three checks on the 9.5.3 cluster, in **view mode**:
 
