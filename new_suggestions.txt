@@ -1,0 +1,53 @@
+Add the user count - Put a place-holder
+
+
+
+Alert related to the application that resulted in the incident
+
+
+
+Use incident to automatically filter for affected CI
+
+
+
+Move incident as first filter, incident as second filter
+
+
+
+Include a table to automatically select
+
+ 
+
+separate Middleware and DB
+
+ 
+
+Host health rather Infra 
+
+ 
+
+limit to 30 days in Changes
+
+ 
+
+Alerts should be displayed
+
+ 
+
+service health
+
+ 
+
+are there any open alerts that are not converted to incidents
+
+
+
+When an incident is selected, all the sections should show all information about the incident. (In incident, show the affected CI)
+
+ 
+
+number of users likely impacted either via cmdb static users or RUM
+
+ 
+
+Assigned MIM
