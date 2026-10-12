@@ -19,11 +19,11 @@ The dashboard has four sections and three controls:
 
 | | What it covers | Time window |
 |---|---|---|
-| **CI control** (top) | Picks the CI that section 2 investigates. Lists the CIs with P1 / P2 incidents in the last month; type to search. *(no CI selected)* clears it. | — |
-| **Incident control** (top) | Narrows the *Escalate* panel to one active P1 / P2 incident. *(all incidents)* clears it. No other panel uses it. | — |
-| **Service control** (top) | Picks the service section 3 shows. *(services on this CI)* (the default) uses the production APM services running on the CI in the CI control; or type to pick any production service. | — |
+| **Incident control** (top, first) | Picks the incident to work on. Each option is "number · affected CI" (e.g. *INC100 · kau1s054*); sections 2 and 3 then show that CI, and *Escalate* shows that incident. Lists the active P1 / P2; type to search. *(all incidents)* clears it. | — |
+| **CI control** (top, second) | Picks a CI directly, when no incident is picked (an incident overrides it). Lists the CIs with P1 / P2 incidents in the last month; type to search. *(no CI selected)* clears it. | — |
+| **Service control** (top) | Picks the service section 3 shows. *(services on this CI)* (the default) uses the production APM services running on the selected CI (the incident's affected CI, else the CI control); or type to pick any production service. | — |
 | **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month |
-| **2 · Investigate the CI** | The CI picked in the control only | Time picker (last 24 h by default), except where a panel says otherwise |
+| **2 · Investigate the CI** | The picked incident's affected CI (or the CI picked in the CI control) only | Time picker (last 24 h by default), except where a panel says otherwise |
 | **3 · Service Dependency & Blast Radius** | The service(s) from the Service control | Fixed last hour |
 | **4 · Related dashboards** | Links to the Applications Operations and Infra dashboards | — |
 
@@ -46,6 +46,8 @@ The MIM lead opens MIM V3 and reads the top row from left to right.
     than 1 P1: 3 P1 · kau1s054 | 2 P1 · vslrau1p061". Several P1s on one CI is very likely the centre of the
     problem. Green 0 = no CI has more than one P1.
   - **Not picked up (New)**: incidents nobody has picked up yet.
+- **Users impacted** — a placeholder for now (grey, "—"): user counts are not in Elastic yet. It will show the users of
+  the impacted applications once ServiceNow sends them.
 - **Applications impacted** — the business impact in one number: how many applications depend on a CI with an active
   P1 / P2 (from the CMDB dependency index: business applications and application services that have that CI as a
   child, plus the CI itself when it is an application). Green 0, amber from 1, red from 10. The tile names the
@@ -65,7 +67,8 @@ The MIM lead opens MIM V3 and reads the top row from left to right.
 - the assignment group, the age and the description.
 
 *In the example, the P1 on `kau1s054` shows SLA Breached.* The lead clicks the incident to open it in ServiceNow if
-needed, then **selects `kau1s054` in the CI control**.
+needed, then **selects it in the Incident control** (*INC100 · kau1s054*): sections 2 and 3 now show its affected
+CI, `kau1s054`. (Picking `kau1s054` in the CI control does the same; when an incident is picked, it wins.)
 
 ### Step 3 — Measure the impact (section 2)
 
@@ -162,8 +165,11 @@ so MIM V3 stays open on the bridge.
   the **×** on the filter pill under the search bar.
 - **The CI control only lists CIs with a P1 / P2 opened in the last 31 days.** A CI outside that list cannot be
   picked. Type in the control to search the list.
+- **An incident overrides the CI control.** With an incident picked, sections 2 and 3 follow its affected CI whatever
+  the CI control says. Set the Incident control back to *(all incidents)* to use the CI control again.
 - **A ⚠ next to the picked incident means it is no longer active.** The Incident control lists active P1 / P2 only;
-  once the picked incident is resolved, *Escalate* shows no rows for it. Pick another incident or *(all incidents)*.
+  once the picked incident is resolved, *Escalate* shows no rows for it, while sections 2 and 3 keep showing its CI.
+  Pick another incident or *(all incidents)*.
 - **The controls cannot be left empty.** Each has a "nothing selected" option instead: *(no CI selected)*,
   *(all incidents)*, *(services on this CI)*.
 - **Each control drives specific panels.** CI → section 2 and, through *(services on this CI)*, section 3.
@@ -258,10 +264,11 @@ so MIM V3 stays open on the bridge.
 
 | Section | Panel | Status | What it shows | How it works |
 |---|---|---|---|---|
-| Control | **CI** | ✅ | The CI to investigate | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`) that every section-2 panel uses. |
-| Control | **Incident** | ✅ | One incident for *Escalate* | Lists every active P1 / P2 incident, plus *(all incidents)*. A query variable (`?incident`) used only by those two panels. |
+| Control | **Incident** (first) | ✅ | The incident to work on; sections 2 and 3 follow its affected CI | Lists every active P1 / P2 as "number · affected CI", plus *(all incidents)*. A query variable (`?incident`); every section 2 and 3 query takes the CI from the part after " · " (and the number from the part before, for *Escalate*), so no extra lookup is needed. |
+| Control | **CI** (second) | ✅ | The CI to investigate when no incident is picked | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`), used by sections 2 and 3 only while the Incident control is on *(all incidents)*. |
 | 1 | **Active P1 / P2 at a Glance** | ✅ | Six RAG-coloured tiles: Active P1, Active P2, Past target time, Open more than 24 h, Hotspot CI (CIs with more than 1 P1, listed with their counts), Not picked up (New) | `servicenow-incidents-*`, active P1 / P2. Replaces the earlier P1 Duration, Active by Age, Active by CI and Active by State widgets (client feedback, 8 Oct). |
 | 1 | **Applications impacted** | ✅ | Count of applications that depend on a CI with an active P1 / P2, RAG background, first five named | Active P1 / P2 (last month) joined to `cmdb_app_dependencies_v2` on the incident CI = the record's child; parents of class business application or application service (by tags, calculated, discovered, auto), retired ones left out; plus the incident CI itself when it is such a parent. A Vega panel, because a Lens panel cannot read the dependency index together with the incidents (*KIBANA-LIMITATIONS.md*, row 20). |
+| 1 | **Users impacted** | ⚠️ | Grey placeholder tile, "—" | No user-count data in Elastic yet (none on incidents, the CMDB enrichment or the dependency index). Will show the user base of the impacted applications once ServiceNow sends it; same tile style as *Applications impacted*. |
 | 1 | **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** | ✅ | Average time to resolve per opened day, P1 (red) and P2 (amber), with dashed target lines | Resolved P1 / P2 opened in the last 30 days; `resolution_time` (ServiceNow's opened → resolved seconds), or resolved_at − opened_at. Target lines are a reference-line layer. |
 | 1 | **Active Incidents (P1 / P2)** | ✅ | Every active P1 / P2 with SLA, group, age | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
 | 2 | **How to use this section** | ✅ | Orange one-line banner across the top of section 2 | A metric panel showing a fixed message (no data needed) |
