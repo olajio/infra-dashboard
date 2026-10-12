@@ -93,10 +93,12 @@ At this point the lead knows the incident is real, customer-facing and tied to o
 
 ### Step 4 — Confirm it is this CI (section 2)
 
-- **Infra Health** — the server's own telemetry: minutes since it last reported, CPU, memory, fullest disk, each
+- **Server Health** — the server's own telemetry: minutes since it last reported, CPU, memory, fullest disk, each
   green / amber / red. *CPU is at 92 % and the disk is 88 % full.*
-- **Middleware / DB Health** — the SQL Server, IBM MQ, IBM HTTP Server, JBoss, WebSphere and Windows middleware
-  services on the CI: healthy vs down. *Two components are down.*
+- **Middleware Health** — the IBM MQ, IBM HTTP Server, JBoss, WebSphere and Windows middleware services (IIS …) on
+  the CI: healthy vs down. *The IBM HTTP Server has stopped reporting.*
+- **Database Health** — the databases on the CI (SQL Server metrics, and SQL Server, Oracle, Db2 … processes and
+  Windows services): healthy vs down. *The MSSQLSERVER service is stopped.*
 
 ### Step 5 — Find the cause (section 2)
 
@@ -191,7 +193,7 @@ so MIM V3 stays open on the bridge.
   *Applications that depend on this CI*, *What this CI runs on*) and section 1's *Applications impacted* have no time
   window at all: the dependency index has no timestamp.
 - **Set the time picker to suit the question in section 2.** Use the last 15 minutes to see the CI's state *now*:
-  *Infra Health* shows CPU p90 and peak memory over the whole range, so a 24-hour range can show yesterday's peak.
+  *Server Health* shows CPU p90 and peak memory over the whole range, so a 24-hour range can show yesterday's peak.
   Use a range starting before the incident opened to see the first errors in the logs.
 - **The dashboard refreshes every 5 minutes.** Click **Refresh** for an immediate update.
 
@@ -205,8 +207,8 @@ so MIM V3 stays open on the bridge.
   resolved incidents, by the day they were opened, using ServiceNow's `resolution_time`.
 - **One slow incident moves a day's average.** On days with one or two P1s, a single long incident can put the point
   far above the line; hover the point to see how many incidents it averages.
-- **Health thresholds.** Infra Health: amber from 80 %, red from 90 %, red if the server has been silent more than
-  10 minutes. Middleware and Process Health: *Down* / *Not seen* after 10 minutes without data. Section 3: *Failing*
+- **Health thresholds.** Server Health: amber from 80 %, red from 90 %, red if the server has been silent more than
+  10 minutes. Middleware, Database and Process Health: *Down* / *Not seen* after 10 minutes without data. Section 3: *Failing*
   = 10 % or more of calls failed in the last hour, *Degraded* = 1 % or more.
 - **Check the call count before trusting an error %.** In section 3, a service with 20 calls in the hour and 2
   failures shows 10 % *Failing*; the *Calls* / *Per min* columns show how much traffic is behind the figure.
@@ -224,8 +226,8 @@ so MIM V3 stays open on the bridge.
   panels.
 - **No user counts or criticality.** Neither APM nor the CMDB data has them, so *Business applications impacted*
   ranks by the errors the callers see.
-- **Empty panels in section 2 usually mean "no data for this CI", not "healthy".** *Infra Health*, *Middleware /
-  DB Health* and *Process Health* are empty when the CI is not a monitored server (e.g. a network device or an
+- **Empty panels in section 2 usually mean "no data for this CI", not "healthy".** *Server Health*, *Middleware
+  Health*, *Database Health* and *Process Health* are empty when the CI is not a monitored server (e.g. a network device or an
   application service).
 - **The SLO panel is not filtered to the CI's services.** It shows the CI's own per-CI SLOs (★) first, then every
   SLO burning ≥ 1×. Compare the names with *Applications on this CI*.
@@ -276,8 +278,9 @@ so MIM V3 stays open on the bridge.
 | 2 | **Blast radius** | ✅ | Count of applications that depend on the CI, split into application services and business applications | `cmdb_app_dependencies_v2`: records whose child is the CI and whose parent is a business application or application service, not retired. Amber from 1, red from 5. No time window. |
 | 2 | **Applications that depend on this CI** | ✅ | Those applications: kind, how they depend ("Runs on", "Depends on", "Consumes" …), CMDB status, env, APM number | Same records; relationship names from the ServiceNow relationship-type IDs (round 6, AD). Business applications first. Application links to the CMDB. |
 | 2 | **What this CI runs on** | ⚠️ | What the CI runs on or uses: servers, app servers, databases, Kubernetes services, application services; CMDB status | `cmdb_app_dependencies_v2`: records whose parent is the CI; batch jobs, endpoints, disks, network and cloud-account records left out, retired items left out. Item links to the CMDB. **Limit:** CMDB status only, no live health: a Lens panel cannot read the dependency index together with metrics (no timestamp on it); pick an item in the CI control for its live health. |
-| 2 | **Infra Health** | ✅ | Minutes since last data, CPU p90, peak memory, fullest disk — RAG coloured | System metrics matched on `ci.name` (equal to the host name). Amber ≥ 80 %, red ≥ 90 %; red if silent > 10 min. Empty if the CI is not a monitored server. |
-| 2 | **Middleware / DB Health** | ✅ | Healthy vs Down components on the CI | SQL Server metrics (`metricbeat-*` sql / mssql), middleware processes labelled by the Paladin monitoring enrichment (IBM MQ, IHS, JBoss, WebSphere) and Windows middleware services. Down = stopped or silent > 10 min. |
+| 2 | **Server Health** | ✅ | Minutes since last data, CPU p90, peak memory, fullest disk — RAG coloured | System metrics matched on `ci.name` (equal to the host name). Amber ≥ 80 %, red ≥ 90 %; red if silent > 10 min. Empty if the CI is not a monitored server. |
+| 2 | **Middleware Health** | ✅ | Healthy vs Down middleware components on the CI | Middleware processes labelled by the Paladin monitoring enrichment (IBM MQ, IHS, JBoss, WebSphere) and Windows middleware services (IIS, MQ, Tomcat …). Down = stopped or silent > 10 min. |
+| 2 | **Database Health** | ✅ | Healthy vs Down database components on the CI | SQL Server metrics (`metricbeat-*` sql / mssql), plus processes and Windows services whose name is a database engine (SQL Server, Oracle, Db2, PostgreSQL, MySQL, MongoDB, Sybase, Informix). Down = stopped or silent > 10 min. Split from the former *Middleware / DB Health* (12 Oct). |
 | 2 | **Applications on this CI** | ⚠️ | Applications and software linked to the CI, and APM services on it | `cmdb-ci-relations` ("Runs on", etc., application-type CIs only) + APM services that sent data from the server in the last day. **Limit:** APM services running in Kubernetes report pod names, not the server, so they don't appear; fixed 30-day window. |
 | 2 | **SLO Error Burn Rate** | ⚠️ | 1-hour burn rate per SLO: page now (≥ 14.4×), burning (≥ 1×), on track | `.slo-observability.summary-*` (173 Kibana SLOs). The CI's own per-CI SLOs (★) first, then every SLO burning ≥ 1×. **Limit:** Kibana cannot combine SLO summaries with timestamped data in one panel, so for service SLOs it cannot filter to "services on this CI" — compare names with *Applications on this CI*. Viewers need read access to the hidden `.slo-observability.*` indices. |
 | 2 | **Synthetics Health** | ✅ | Monitors that target the CI: status now, down checks | `synthetics-*`, ping monitors enriched with the CI, or monitors whose URL is the CI's host name. Browser journeys are tagged with the application, so they do not appear here. |
