@@ -361,3 +361,40 @@ What happens next, depending on the answers:
 
 **Built:** *Open Alerts with No Incident* (section 1) and *Alerts on this CI* (section 2).
 
+## Round 8 — where the assigned MIM is recorded (13 Oct 2026)
+
+The incident index (`servicenow-incidents-*`) has no MIM field: only `assigned_to`, `assignment_group` and the group's
+manager, and `is_major_incident` is empty. The raw ServiceNow incident records in `.ds-logs-servicenow.event-*` carry
+every filled-in ServiceNow field, including MIM fields (`u_mim_notification_count`, `u_required_p1_bridge`,
+`u_managed_p2` on a P4 in round 7). These queries find the field that names the MIM on P1 / P2 incidents. Run in
+**Dev Tools Console** and upload the output to `round8.txt`.
+
+**AO. Three recent P1 / P2 incident records, every filled-in field**
+```
+GET .ds-logs-servicenow.event-default-*/_search
+{ "size": 3, "sort": [ { "@timestamp": "desc" } ], "_source": [ "servicenow.event.*", "@timestamp" ],
+  "query": { "bool": { "filter": [
+    { "range": { "@timestamp": { "gte": "now-14d" } } },
+    { "term": { "servicenow.event.table_name": "incident" } },
+    { "terms": { "servicenow.event.priority.value": [ "1", "2" ] } } ] } } }
+```
+
+**AP. Every incident field whose name suggests a MIM, major incident or bridge**
+```
+GET .ds-logs-servicenow.event-default-*/_field_caps?fields=servicenow.event.*mim*,servicenow.event.*major*,servicenow.event.*bridge*&filter_path=fields.*.*.type
+```
+
+**AQ. The same for manager / coordinator / commander / promoted fields**
+```
+GET .ds-logs-servicenow.event-default-*/_field_caps?fields=servicenow.event.*manager*,servicenow.event.*coordinat*,servicenow.event.*command*,servicenow.event.*promot*&filter_path=fields.*.*.type
+```
+
+**AR. Which ServiceNow tables reach this index** (a separate MIM or bridge table would show up here)
+```
+POST /_query?format=json
+{ "query": "FROM .ds-logs-servicenow.event-default-* | WHERE @timestamp >= NOW() - 1 day | STATS records = COUNT(*) BY servicenow.event.table_name | SORT records DESC | LIMIT 50" }
+```
+
+If AO–AQ show the field (for example a MIM user reference), the dashboard adds an **Assigned MIM** column to *Active
+Incidents* and *Escalate*, read from the latest ServiceNow record of each incident.
+
