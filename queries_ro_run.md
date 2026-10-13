@@ -347,3 +347,17 @@ What happens next, depending on the answers:
 | No incident number, but alerts name the CI / node (AK) | **Alerts on this CI** (section 2): alerts on the incident's CI from shortly before it opened — matched by CI and time, and labelled as such |
 | A state, type or cleared field exists (AK) | **Open alerts with no incident** (section 1): alerts still open whose CI has no active incident (or with no incident number, if AL finds one) |
 
+### Round 7 results (13 Oct)
+
+| Query | Result | Consequence |
+|---|---|---|
+| AH | Netcool: `.ds-bridge-alerts-netcool-*` (~8k records a day). `.ds-logs-servicenow.event-*` is large (~300k a day). Also `paladin-alerts-*` (not used yet) | Netcool is the alert source |
+| AI | Netcool records carry the CMDB CI (`ci.name`, class, support group), `node`, `severity` (0 = clear … 5 = critical), `netcool.type_name` (problem / resolution), `netcool.identifier`, `first_occurrence`, `last_occurrence`, `netcool.tally`, `netcool.acknowledged_name`. **No incident or ticket number** | Alerts are tied to incidents by CI and time |
+| AJ | The ServiceNow "event" index holds ServiceNow table records (`servicenow.event.table_name` = cmdb_ci, incident, change_request …), not monitoring alerts | Not used for alerts |
+| AK | 400: field pattern too complex | Not needed after AI |
+| AL | Incident numbers only in ServiceNow table records (incidents, changes), not in alerts | Confirms AI |
+| AM | Netcool ~8k / day; ServiceNow events ~140k–375k / day | Netcool panels can scan 30 days |
+| AN | CMDB relations: 34.2M records, 129k updated in the last 7 days, oldest 2023-09 | *Changes* and *Applications on this CI* need a long panel window ("Last 5 years"); the 7-day limit on changes stays in the query |
+
+**Built:** *Open Alerts with No Incident* (section 1) and *Alerts on this CI* (section 2).
+

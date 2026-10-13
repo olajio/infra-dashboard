@@ -70,6 +70,11 @@ The MIM lead opens MIM V3 and reads the top row from left to right.
 needed, then **selects it in the Incident control** (*INC100 · kau1s054*): sections 2 and 3 now show its affected
 CI, `kau1s054`. (Picking `kau1s054` in the CI control does the same; when an incident is picked, it wins.)
 
+**Open Alerts with No Incident**, under the table, answers "is anything else broken that nobody has raised yet?":
+Netcool alerts still open (latest record not a clear) on CIs with no open incident of any priority, critical first.
+*A UPS battery fault on `lonely01` has been open 20 hours with no incident.* Pick its CI in the CI control to
+investigate it, or raise the incident in ServiceNow.
+
 ### Step 3 — Measure the impact (section 2)
 
 Section 2 now shows `kau1s054` only.
@@ -93,6 +98,12 @@ At this point the lead knows the incident is real, customer-facing and tied to o
 
 ### Step 4 — Confirm it is this CI (section 2)
 
+- **Alerts on this CI** — the Netcool alerts on the CI, open ones and cleared ones, with when each started compared
+  with the picked incident. **Likely trigger** = first seen up to 2 h before the incident opened (listed first);
+  *Earlier* = longer before; *After* = once the incident was open. *A Major "CPU utilisation above 95 %" alert started
+  28 minutes before INC100: the likely trigger.* Netcool does not record which incident an alert raised, so this is a
+  match by CI and time.
+
 - **Server Health** — the server's own telemetry: minutes since it last reported, CPU, memory, fullest disk, each
   green / amber / red. *CPU is at 92 % and the disk is 88 % full.*
 - **Middleware Health** — the IBM MQ, IBM HTTP Server, JBoss, WebSphere and Windows middleware services (IIS …) on
@@ -106,7 +117,7 @@ At this point the lead knows the incident is real, customer-facing and tied to o
   IBM HTTP Server instance has not been seen for 25 minutes.*
 - **Errors from the Logs** — the warning-and-worse lines from the CI's server and application logs, grouped by
   message. *"MSSQLSERVER terminated unexpectedly", followed by SQL timeouts in policy-admin.*
-- **Changes on this CI and linked CIs** — was there a change just before? On the CI itself and on CIs linked to it
+- **Changes in the Last 7 Days on this CI and Linked CIs** — was there a change just before? On the CI itself and on CIs linked to it
   in the CMDB (its ESX host, cluster, switch, applications). *An emergency change on `kau1s054` ended unsuccessful
   two hours before the incident opened.*
 
@@ -187,9 +198,13 @@ so MIM V3 stays open on the bridge.
 
 - **A badge on a panel means a fixed window.** "Last 1 month", "Last 7 days", "Last 30 days" and "Last 1 hour"
   panels ignore the time picker. Panels without a badge follow the time picker.
-- **Section 1** is fixed to the last month. **Section 3** is fixed to
+- **Section 1** is fixed to the last month (*Open Alerts with No Incident*: last 30 days). **Section 3** is fixed to
   the last hour. **Section 2** follows the time picker (last 24 h by default), except *Escalate* (last month),
-  *Applications on this CI* (last 30 days) and *Changes* (last 7 days). The three CMDB dependency panels (*Blast radius*,
+  *Alerts on this CI* (last 7 days), *Applications on this CI* and *Changes* ("Last 5 years", see below).
+- **"Last 5 years" on Changes and Applications on this CI does not mean old data.** *Changes* lists only changes with
+  activity in the last 7 days (the query does that). The long window is for the CMDB relationship records, which are
+  stored only when a relationship changes: 129k of 34M were updated in the last week (round 7, AN), so a shorter
+  window would hide most linked CIs. *Applications on this CI* limits its APM part to the last day the same way. The three CMDB dependency panels (*Blast radius*,
   *Applications that depend on this CI*, *What this CI runs on*) and section 1's *Applications impacted* have no time
   window at all: the dependency index has no timestamp.
 - **Set the time picker to suit the question in section 2.** Use the last 15 minutes to see the CI's state *now*:
@@ -272,8 +287,10 @@ so MIM V3 stays open on the bridge.
 | 1 | **Applications impacted** | ✅ | Count of applications that depend on a CI with an active P1 / P2, RAG background, first five named | Active P1 / P2 (last month) joined to `cmdb_app_dependencies_v2` on the incident CI = the record's child; parents of class business application or application service (by tags, calculated, discovered, auto), retired ones left out; plus the incident CI itself when it is such a parent. A Vega panel, because a Lens panel cannot read the dependency index together with the incidents (*KIBANA-LIMITATIONS.md*, row 20). |
 | 1 | **Users impacted** | ⚠️ | Grey placeholder tile, "—" | No user-count data in Elastic yet (none on incidents, the CMDB enrichment or the dependency index). Will show the user base of the impacted applications once ServiceNow sends it; same tile style as *Applications impacted*. |
 | 1 | **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** | ✅ | Average time to resolve per opened day, P1 (red) and P2 (amber), with dashed target lines | Resolved P1 / P2 opened in the last 30 days; `resolution_time` (ServiceNow's opened → resolved seconds), or resolved_at − opened_at. Target lines are a reference-line layer. |
+| 1 | **Open Alerts with No Incident** | ⚠️ | Netcool alerts still open on CIs with no open incident: CI, severity, alert, open for, last seen, count, ack, node, class, support group | `.ds-bridge-alerts-netcool-*` (CMDB-enriched `ci.name`) + `servicenow-incidents-*` (any priority, not closed). Open = the alert's latest record is not severity 0 or a resolution. Last 30 days. CI links to the CMDB. **Limit:** alerts carry no incident number, so "no incident" means no open incident on the same CI; an alert whose node is not in the CMDB shows an empty CI and is listed. |
 | 1 | **Active Incidents (P1 / P2)** | ✅ | Every active P1 / P2 with SLA, group, age | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
 | 2 | **How to use this section** | ✅ | Orange one-line banner across the top of section 2 | A metric panel showing a fixed message (no data needed) |
+| 2 | **Alerts on this CI** | ⚠️ | The CI's Netcool alerts: Open / Cleared, severity, text, timing against the picked incident, first / last seen, count, ack | `.ds-bridge-alerts-netcool-*` on `ci.name` (or node "<CI>.cna.com"), one row per `netcool.identifier`; the picked incident's `opened_at` for the timing. Likely trigger = first seen ≤ 2 h before the incident opened. Last 7 days. **Limit:** a match by CI and time, not a recorded link (round 7: no incident or ticket field on the alerts). |
 | 2 | **Escalate** | ✅ | One row per active P1 / P2 on the CI: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group | Incidents on the CI (or the one in the Incident control) plus the CMDB enrichment on its server metrics; last month. CI and Active Incident link to ServiceNow; no other column is clickable. A CI with no active P1 / P2 still shows one row with its owners. If an incident is picked whose CI is not the one in the CI control, Class / Env / support group come from the incident record and may show "—". |
 | 2 | **Blast radius** | ✅ | Count of applications that depend on the CI, split into application services and business applications | `cmdb_app_dependencies_v2`: records whose child is the CI and whose parent is a business application or application service, not retired. Amber from 1, red from 5. No time window. |
 | 2 | **Applications that depend on this CI** | ✅ | Those applications: kind, how they depend ("Runs on", "Depends on", "Consumes" …), CMDB status, env, APM number | Same records; relationship names from the ServiceNow relationship-type IDs (round 6, AD). Business applications first. Application links to the CMDB. |
@@ -286,7 +303,7 @@ so MIM V3 stays open on the bridge.
 | 2 | **Synthetics Health** | ✅ | Monitors that target the CI: status now, down checks | `synthetics-*`, ping monitors enriched with the CI, or monitors whose URL is the CI's host name. Browser journeys are tagged with the application, so they do not appear here. |
 | 2 | **Errors from the Logs** | ✅ | Warning-and-worse log lines from the CI, grouped by message | Syslog (server, WebSphere, JBoss, Red Hat, AIX, system), generic file logs, APM error and application logs, matched on `ci.name`; syslog severity code ≤ 4 or log level warning or worse; numbers replaced by # so repeats group together |
 | 2 | **Process Health** | ✅ | Stopped / not-seen processes and services first, then healthy middleware | Windows services (Stopped = Automatic service not running) and Paladin-labelled middleware processes; Not seen = silent > 10 min |
-| 2 | **Changes on this CI and linked CIs** | ⚠️ | Changes active in the last 7 days on the CI and on CMDB-linked CIs; the CI column shows which | `servicenow-change-requests` + `cmdb-ci-relations`. The selected CI's own changes first. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
+| 2 | **Changes in the Last 7 Days on this CI and Linked CIs** | ⚠️ | Changes active in the last 7 days on the CI and on CMDB-linked CIs; the CI column shows which | `servicenow-change-requests` + `cmdb-ci-relations`. The selected CI's own changes first. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
 | 3 | **⬅ Upstream — what they depend on** | ✅ | Horizontal bars: calls per dependency, coloured Failing / Degraded / Healthy, label with % failed; top 15 | `metrics-apm.service_destination.1m-*`, production only. Failing ≥ 10 % failed calls, Degraded ≥ 1 %. Other services appear by host:port, as APM records them. |
 | 3 | **Service health** | ✅ | One tile per service in scope: % of its transactions that failed, RAG background, business application | `metrics-apm.service_transaction.1m-*`; "(services on this CI)" = services whose APM host is the CI (`metrics-apm.internal-*`). Click a tile to open the APM Service Map. |
 | 3 | **Downstream — who is impacted ➡** | ⚠️ | Horizontal bars: calls per calling service, coloured by the health of those calls; top 15 | Hosts the services in scope answer on (URL host of their incoming-request transactions, CNA host names only) matched to every production service's dependency addresses. Batch / messaging transactions and external hosts (Google storage, Okta …) are ignored. **Limit:** when several services share a host (an API gateway), callers of that host are listed for each of them. Click a bar to open that service's APM Service Map. |
@@ -302,6 +319,7 @@ so MIM V3 stays open on the bridge.
 |---|---|---|
 | No acknowledgement time (time to acknowledge) | Incidents carry no assigned / acknowledged timestamps; the response SLA says *whether* it was met, not *when* | ServiceNow: send assigned / acknowledged timestamps |
 | No maintenance windows or releases | No outage-window or actual-start values on 148k change requests; no release or maintenance index | ServiceNow: export maintenance schedules and releases (or Caused-by-change on incidents) to Elastic |
+| Alert → incident link is inferred | Netcool alerts carry no incident or ticket number (round 7, AI / AL); the ServiceNow event index holds ServiceNow table records (incidents, changes, CIs), not alerts | Netcool / ServiceNow integration: write the incident number back to the alert (e.g. Netcool's TTNumber), or send ServiceNow `em_alert` records with their incident |
 | Change → incident link is inferred | Incidents have no "Caused by change"; matched on the same CI within 7 days | ServiceNow: send Caused-by-change |
 | SLO panel not filtered to the CI's services | Kibana limitation (see *KIBANA-LIMITATIONS.md*) | Group SLOs by `ci.name` in Kibana where it makes sense — those follow the CI control |
 | Major-incident and bridge flags unused | `is_major_incident` and `has_been_handled_by_bridge` are empty on all P1 / P2 for a year | ServiceNow integration mapping |
