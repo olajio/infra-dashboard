@@ -26,7 +26,7 @@ Host health rather Infra
 
  
 
-limit to 30 days in Changes
+limit to 7 days in Changes
 
  
 
