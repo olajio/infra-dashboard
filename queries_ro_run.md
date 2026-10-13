@@ -288,3 +288,62 @@ POST /_query?format=json
 POST /_query?format=json
 { "query": "FROM servicenow-incidents-*, cmdb_app_dependencies_v2 METADATA _index | WHERE (_index LIKE \"*servicenow*\" AND priority IN (1, 2) AND opened_at >= NOW() - 180 days) OR _index LIKE \"*cmdb_app_dependencies*\" | EVAL src = CASE(_index LIKE \"*servicenow*\", \"inc\", \"dep\") | EVAL as_child = CASE(src == \"dep\", TO_STRING(child_ci.name.keyword)), as_parent = CASE(src == \"dep\", TO_STRING(parent_ci.name.keyword)), inc_ci = CASE(src == \"inc\", TO_STRING(ci.name)), key = COALESCE(inc_ci, as_child) | EVAL is_inc = CASE(src == \"inc\", 1, 0), parent_of = CASE(src == \"dep\", as_parent) | STATS inc = MAX(is_inc), parents = COUNT_DISTINCT(parent_of) BY key | WHERE inc == 1 | STATS cis = COUNT(*), with_parents = COUNT(CASE(parents > 0, 1)), avg_parents = AVG(parents)" }
 ```
+
+## Round 7 — alerts behind an incident, and open alerts with no incident (13 Oct 2026)
+
+Goal: (1) show the alerts that led to the selected incident; (2) show open alerts that never became an incident. The
+dashboard needs to know how an alert names its CI, whether it records the incident it raised, and how it says it is
+open. Run in **Dev Tools Console** and upload the output to `round7.txt`. Each query is limited to the last 1–7 days.
+
+**AH. Which alert / event indices exist**
+```
+GET _cat/indices/*alert*,*netcool*,*servicenow.event*,*em_alert*,*em_event*?v&s=index&h=index,docs.count,store.size
+```
+
+**AI. Two raw Netcool alerts** — all their fields
+```
+POST /_query?format=json
+{ "query": "FROM .ds-bridge-alerts-netcool-default-* | WHERE @timestamp >= NOW() - 1 day | LIMIT 2" }
+```
+
+**AJ. Two ServiceNow events** — all their fields
+```
+POST /_query?format=json
+{ "query": "FROM .ds-logs-servicenow.event-default-* | WHERE @timestamp >= NOW() - 1 day | LIMIT 2" }
+```
+
+**AK. The fields that could link an alert to a CI, an incident, or say whether it is open**
+```
+GET .ds-bridge-alerts-netcool-default-*,.ds-logs-servicenow.event-default-*/_field_caps?fields=*node*,*ci*,*host*,*ticket*,*incident*,*TT*,*tt*,*alert*,*severity*,*state*,*status*,*ack*,*clear*,*type*&filter_path=fields.*.*.type,fields.*.*.indices
+```
+
+**AL. Does any alert or event carry an incident number?** (incident numbers look like `INC2669663`)
+```
+GET .ds-bridge-alerts-netcool-default-*,.ds-logs-servicenow.event-default-*/_search
+{ "size": 3, "_source": true,
+  "query": { "bool": {
+    "filter": [ { "range": { "@timestamp": { "gte": "now-7d" } } } ],
+    "must": [ { "query_string": { "query": "INC2*", "default_field": "*", "lenient": true } } ] } } }
+```
+
+**AM. Volume per day** — decides how much a panel can scan
+```
+POST /_query?format=json
+{ "query": "FROM .ds-bridge-alerts-netcool-default-*, .ds-logs-servicenow.event-default-* METADATA _index | WHERE @timestamp >= NOW() - 7 days | EVAL src = CASE(_index LIKE \"*netcool*\", \"netcool\", \"sn_event\") | STATS docs = COUNT(*) BY src, day = DATE_TRUNC(1 day, @timestamp) | SORT src, day" }
+```
+
+**AN. Freshness of the CMDB relations** — the *Changes* panel is now fixed to 7 days; relation records older than that
+would drop the "linked CIs" from it
+```
+POST /_query?format=json
+{ "query": "FROM cmdb-ci-relations* | STATS records = COUNT(*), last_7_days = COUNT(CASE(@timestamp >= NOW() - 7 days, 1)), oldest = MIN(@timestamp), newest = MAX(@timestamp)" }
+```
+
+What happens next, depending on the answers:
+
+| Finding | Panel |
+|---|---|
+| Alerts or events record the incident number (AL / AK: a ticket or incident field) | **Alerts behind this incident** (section 2): the alerts linked to the picked incident, exactly |
+| No incident number, but alerts name the CI / node (AK) | **Alerts on this CI** (section 2): alerts on the incident's CI from shortly before it opened — matched by CI and time, and labelled as such |
+| A state, type or cleared field exists (AK) | **Open alerts with no incident** (section 1): alerts still open whose CI has no active incident (or with no incident number, if AL finds one) |
+

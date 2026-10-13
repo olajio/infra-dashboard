@@ -189,7 +189,7 @@ so MIM V3 stays open on the bridge.
   panels ignore the time picker. Panels without a badge follow the time picker.
 - **Section 1** is fixed to the last month. **Section 3** is fixed to
   the last hour. **Section 2** follows the time picker (last 24 h by default), except *Escalate* (last month),
-  *Applications on this CI* and *Changes* (last 30 days). The three CMDB dependency panels (*Blast radius*,
+  *Applications on this CI* (last 30 days) and *Changes* (last 7 days). The three CMDB dependency panels (*Blast radius*,
   *Applications that depend on this CI*, *What this CI runs on*) and section 1's *Applications impacted* have no time
   window at all: the dependency index has no timestamp.
 - **Set the time picker to suit the question in section 2.** Use the last 15 minutes to see the CI's state *now*:
