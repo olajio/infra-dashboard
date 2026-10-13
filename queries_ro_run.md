@@ -398,3 +398,28 @@ POST /_query?format=json
 If AO–AQ show the field (for example a MIM user reference), the dashboard adds an **Assigned MIM** column to *Active
 Incidents* and *Escalate*, read from the latest ServiceNow record of each incident.
 
+### Round 8 results (13 Oct)
+
+| Query | Result | Consequence |
+|---|---|---|
+| AO | 0 hits: in the raw records `priority.value` is coded (e.g. `13` = "3 - Medium"), not 1 / 2 | Incidents are matched by number instead |
+| AP | ServiceNow Major Incident Management fields exist: `major_incident_state`, `u_required_p1_bridge`, `u_mim_notification_count` | — |
+| AQ | `promoted_by`, `promoted_on` (who promoted the incident to a major incident, and when) | **Assigned MIM = `promoted_by`** |
+| AR | Tables in the index: cmdb_ci (most), cmdb_ci_appl, cmdb_rel_ci, servers, services, **incident** (~4k records a day), rm_release, change_request | No separate MIM table |
+| round8.csv | Export of `servicenow-incidents-*`: `assignment_group.name` and `assignment_group.manager.name` filled on every incident; no MIM field | Fallback when no `promoted_by`: the group manager, marked "(group manager)" |
+
+**Built:** *Assigned MIM* column in *Active Incidents* and *Escalate*.
+
+**Optional check (AS): how often P1 / P2 incidents carry `promoted_by`** — if the count is near zero, the column will
+mostly show group managers, and the MIM must be recorded somewhere else in ServiceNow
+```
+POST /_query?format=json
+{ "query": "FROM .ds-logs-servicenow.event-default-* | WHERE @timestamp >= NOW() - 30 days AND servicenow.event.table_name == \"incident\" | EVAL promoted = CASE(servicenow.event.promoted_by.display_value IS NOT NULL AND servicenow.event.promoted_by.display_value != \"\", servicenow.event.number.value) | STATS incidents = COUNT_DISTINCT(servicenow.event.number.value), promoted = COUNT_DISTINCT(promoted) BY priority = servicenow.event.priority.display_value | SORT priority" }
+```
+
+**AT. Who promotes, and to what state** (names the MIMs, if the field is used)
+```
+POST /_query?format=json
+{ "query": "FROM .ds-logs-servicenow.event-default-* | WHERE @timestamp >= NOW() - 90 days AND servicenow.event.table_name == \"incident\" AND servicenow.event.promoted_by.display_value != \"\" | STATS incidents = COUNT_DISTINCT(servicenow.event.number.value) BY promoted_by = servicenow.event.promoted_by.display_value, state = servicenow.event.major_incident_state.display_value | SORT incidents DESC | LIMIT 20" }
+```
+
