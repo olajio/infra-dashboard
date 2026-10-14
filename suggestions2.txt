@@ -1,0 +1,21 @@
+first six panels are not needed. Avtive P1 P2, can be shown on a barchat, or pie chat, no need for hotspot CI. Remove all four panels. only keep active P1 and P2
+
+
+
+Users Impacted: Put a Number for now as a placeholder, then work with ATOS team to ingest the data for users-imapcted
+
+
+
+Remove the ribbon, "Pick the incident (or Ci....)
+
+
+
+All these widgets should be clickable or show more information about which middleware, or databases, or server is down. We should be able to drill down or at least show whish servers these are. How best to make it such that this section is very appealing
+
+
+
+Applications on this CI and Changes should be looking at the Last 7 days
+
+
+
+For the links to "Application Operations Dashboard" and "Infra Dashboard", remove all the text and use only the hyper links alone
