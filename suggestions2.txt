@@ -1,4 +1,4 @@
-first six panels are not needed. Avtive P1 P2, can be shown on a barchat, or pie chat, no need for hotspot CI. Remove all four panels. only keep active P1 and P2
+Not all first six panels are not needed. Only Active P1 and Active P2. But these can be shown on a single panel. Could be a bar chat, pie chat, a donut... no need for hotspot CI. Remove all four panels. only keep active P1 and P2
 
 
 
