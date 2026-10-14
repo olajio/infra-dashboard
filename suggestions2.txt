@@ -2,7 +2,7 @@ first six panels are not needed. Avtive P1 P2, can be shown on a barchat, or pie
 
 
 
-Users Impacted: Put a Number for now as a placeholder, then work with ATOS team to ingest the data for users-imapcted
+Users Impacted: Put a Number for now as a placeholder for demo purposes only, then work with ATOS team to ingest the data for users-impacted later
 
 
 
