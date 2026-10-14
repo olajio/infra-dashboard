@@ -423,3 +423,10 @@ POST /_query?format=json
 { "query": "FROM .ds-logs-servicenow.event-default-* | WHERE @timestamp >= NOW() - 90 days AND servicenow.event.table_name == \"incident\" AND servicenow.event.promoted_by.display_value != \"\" | STATS incidents = COUNT_DISTINCT(servicenow.event.number.value) BY promoted_by = servicenow.event.promoted_by.display_value, state = servicenow.event.major_incident_state.display_value | SORT incidents DESC | LIMIT 20" }
 ```
 
+### Round 9 results (AS, AT — 14 Oct)
+
+| Query | Result | Consequence |
+|---|---|---|
+| AS | Last 30 days: P1 2 of 3 incidents promoted to major incident; P2 0 of 2,539; lower priorities 1 of ~26k | *Assigned MIM* shows the real MIM on promoted P1s and the assignment group's manager, marked "(group manager)", on everything else |
+| AT | Last 90 days: all promotions by Matt Huelsman (3 Accepted, 1 Canceled) | `promoted_by` names the MIM; kept as built |
+
