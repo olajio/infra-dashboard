@@ -1,6 +1,7 @@
 # Review of `updated mim dashboard.ndjson` (15 Oct 2026)
 
-Compared with `MIM V3.ndjson` in this repo. Nothing has been changed yet.
+Compared with `MIM V3.ndjson` in this repo. **Update 15 Oct: fixed** — see *Fixes* at the end; the colleague's file is
+kept unchanged and the fixed result is `MIM V3.ndjson`.
 
 ## What is unchanged
 
@@ -73,3 +74,21 @@ repo version, so everything from 9–14 Oct is intact.
   - add CMDB status and CMDB links.
 - Restore the 24-hour default and expanded sections.
 - Run Round 10 first to settle the class lists.
+
+## Fixes (15 Oct, `tools/mim_v3_patch_2026-10-15.py`)
+
+| # | Bug | Fix |
+|---|---|---|
+| 1, 2 | Class filters too broad (`*db*` matched every class) | Exact ServiceNow classes from round 10 (AU / AV) for the client's lists, e.g. `cmdb_ci_app_server_tomcat`, `cmdb_ci_db_mssql_instance`, `cmdb_ci_linux_server`, `cmdb_ci_business_app`; Kubernetes / Docker / containers dropped from Middleware |
+| 3 | Views ignored the Incident / CI controls | They follow the picked incident's CI, else the CI control, like section 2 |
+| 4 | Extra filter control could blank the dashboard | Removed, with its data view |
+| 5 | Whole-index scans with nothing selected | Nothing is read until a CI is picked (the query filters on the CI first) |
+| 6 | Default time 3 years | Back to the last 24 hours |
+| 7 | Sections saved collapsed | All open; the new section is named *3 · Related CIs by Type (CMDB)* and placed after section 2 (sections renumbered 1–5) |
+| 8 | One direction only; the CI listed in its own view | Both directions ("this CI runs on it" / "it runs on this CI"), the CI itself left out |
+| 9 | No status | CMDB operational status as a badge, non-operational first. **Still no CMDB link:** the name comes from either side of the relationship, which Kibana 9.5 counts as created by the query |
+| 10 | Raw headers, row numbers, no descriptions | Readable headers and type names, descriptions, sorted by status, type and name |
+
+Also added: **Application Health** and **Services of the Application** (section 4) with an **Application** control —
+the "application health from its services" request.
+

@@ -49,7 +49,7 @@
 2. **Number of users likely impacted** from CMDB static user counts or real-user monitoring (RUM). The dashboard shows
    a demo number until ATOS ingests the data.
 
-### New request (15 Oct): related CIs grouped by CI class
+### New request (15 Oct): related CIs grouped by CI class — **done 15 Oct** (section 3, *MIM-V3-REVIEW-UPDATED-DASHBOARD.md*)
 See `relationships1.png` and `relatiosnhips2.png`. For the selected CI, fill the Middleware, Database, Server and
 Application views from its **CMDB relationships**, grouping each related CI by its class:
 
@@ -68,7 +68,7 @@ Application views from its **CMDB relationships**, grouping each related CI by i
 - **Limit:** the dependency index has no timestamp, so these grouped panels can show CMDB status but not live
   health (up / down) unless an `@timestamp` is added to the index (same blocker as *What this CI runs on*).
 
-### New request (15 Oct): application health from its services
+### New request (15 Oct): application health from its services — **done 15 Oct** (section 4: *Application Health*, *Services of the Application*, Application control)
 Rate each application by the health of its associated services, so the MIM can see which application to look at and
 then drill down to the services that are down or degraded.
 

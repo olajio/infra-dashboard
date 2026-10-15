@@ -133,7 +133,7 @@ check('Applications: APM on this server, last 7 days', [(r['application'], r['he
 
 check('banner removed', 'How to use this section' in P, False)
 ctrls = sorted(dash['attributes']['pinned_panels']['panels'].values(), key=lambda c: c['order'])
-check('controls: Incident, CI, Service', [c['config']['title'] for c in ctrls], ['Incident', 'CI', 'Service'])
+check('controls: Incident, CI, Service first', [c['config']['title'] for c in ctrls][:3], ['Incident', 'CI', 'Service'])
 check('time windows', {t: P[t]['embeddableConfig'].get('time_range', {}).get('from') for t in
                        ('Applications on this CI', 'Changes in the Last 7 Days on this CI', 'Active P1 / P2')},
       {'Applications on this CI': 'now-7d', 'Changes in the Last 7 Days on this CI': 'now-7d', 'Active P1 / P2': 'now-1M'})

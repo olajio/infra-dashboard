@@ -481,3 +481,15 @@ What the answers decide:
 | AY | Whether applications map to several services, i.e. whether a roll-up adds value over the per-service view |
 | AZ | What the panel would show today, and whether the 10 % / 1 % thresholds give a sensible spread |
 
+### Round 10 results (15 Oct)
+
+| Query | Result | Consequence |
+|---|---|---|
+| AU, AV | 275 classes. The client's lists exist as e.g. `cmdb_ci_app_server_tomcat` / `_jboss` / `_jb_module` / `_tomcat_war` / `_weblogic` / `_websphere` / `_ws_ear` / `cmdb_ci_app_server`; `cmdb_ci_db_ora_instance` / `_ora_service` / `_mssql_instance` / `_mssql_database` / `_mssql_analysis` / `_mssql_integration` / `_mssql_reporting` / `_db2_instance` / `_mysql_instance` / `_postgresql_instance` / `_syb_instance` / `_mongodb_instance` / `_hbase_instance` / `_instance` / `_instance_size`, `cmdb_ci_cassandra_instance`, `cmdb_ci_cloud_database`; servers `cmdb_ci_win_server`, `_linux_server`, `_aix_server`, `_hpux_server`, `_solaris_server`, `_esx_server`, `_hyper_v_server`, `_server`, `_mainframe_lpar`, `_ibm_frame`, `_isam_server`, `_storage_server`, `_net_app_server`, `_lb_bigip`, `_lb_netscaler`; `cmdb_ci_business_app` | Exact class lists in the four views. No "DB2 Subsystem" class in the index: DB2 instances are used |
+| AW | *Automated Claim Transaction PROD* runs on 2 Linux servers, a mainframe LPAR and Tomcat, uses 432 batch jobs; used by 27 application services and its business application | Both directions are needed |
+| AX | 398 of 400 production APM services carry `ci.name` and `ci.number` | Application health can rely on APM alone |
+| AY | Up to 25 services per application (Surety External Agency Integration 25, CNA.COM 15, PolicyCenter 13 …) | The roll-up adds value over the per-service view |
+| AZ | Last hour: 15 applications Failing, 15+ Degraded at the 10 % / 1 % thresholds | Built with the same thresholds as section 4; the transaction count is shown so low-traffic noise can be judged |
+
+**Built:** the fixed related-CI views (section 3) and *Application Health* / *Services of the Application* (section 4).
+

@@ -15,17 +15,19 @@ MIM V3 answers four questions, in order:
 4. **What else is hit?** The services behind the CI, what they depend on, which services call them and which
    business applications those belong to.
 
-The dashboard has four sections and three controls:
+The dashboard has five sections and four controls:
 
 | | What it covers | Time window |
 |---|---|---|
-| **Incident control** (top, first) | Picks the incident to work on. Each option is "number · affected CI" (e.g. *INC100 · kau1s054*); sections 2 and 3 then show that CI, and *Escalate* shows that incident. Lists the active P1 / P2; type to search. *(all incidents)* clears it. | — |
+| **Incident control** (top, first) | Picks the incident to work on. Each option is "number · affected CI" (e.g. *INC100 · kau1s054*); sections 2 to 4 then show that CI, and *Escalate* shows that incident. Lists the active P1 / P2; type to search. *(all incidents)* clears it. | — |
 | **CI control** (top, second) | Picks a CI directly, when no incident is picked (an incident overrides it). Lists the CIs with P1 / P2 incidents in the last month; type to search. *(no CI selected)* clears it. | — |
-| **Service control** (top) | Picks the service section 3 shows. *(services on this CI)* (the default) uses the production APM services running on the selected CI (the incident's affected CI, else the CI control); or type to pick any production service. | — |
+| **Service control** (top) | Picks the service section 4 shows. *(services on this CI)* (the default) uses the production APM services running on the selected CI (the incident's affected CI, else the CI control); or type to pick any production service. | — |
 | **1 · Major Incident Overview** | All active P1 / P2 incidents, all CIs | Fixed last month |
 | **2 · Investigate the CI** | The picked incident's affected CI (or the CI picked in the CI control) only | Time picker (last 24 h by default), except where a panel says otherwise |
-| **3 · Service Dependency & Blast Radius** | The service(s) from the Service control | Fixed last hour |
-| **4 · Related dashboards** | Links to the Applications Operations and Infra dashboards | — |
+| **Application control** (top, fourth) | Picks the business application whose services *Services of the Application* lists. *(all applications)* (the default) lists every service, worst first. | — |
+| **3 · Related CIs by Type (CMDB)** | The middleware, databases, servers and business applications related to the selected CI in the CMDB | None (CMDB data, no timestamp) |
+| **4 · Application & Service Health, Dependencies** | Every application's health from its services; the services of the picked application; the service(s) from the Service control with their dependencies | Fixed last hour |
+| **5 · Related dashboards** | Links to the Applications Operations and Infra dashboards | — |
 
 ---
 
@@ -62,7 +64,7 @@ The MIM lead opens MIM V3 and reads the top row from left to right.
 - the assignment group, the age and the description.
 
 *In the example, the P1 on `kau1s054` shows SLA Breached.* The lead clicks the incident to open it in ServiceNow if
-needed, then **selects it in the Incident control** (*INC100 · kau1s054*): sections 2 and 3 now show its affected
+needed, then **selects it in the Incident control** (*INC100 · kau1s054*): sections 2 to 4 now show its affected
 CI, `kau1s054`. (Picking `kau1s054` in the CI control does the same; when an incident is picked, it wins.)
 
 **Open Alerts with No Incident**, under the table, answers "is anything else broken that nobody has raised yet?":
@@ -136,9 +138,27 @@ The lead now:
   change (the Changes panel shows its group);
 - shares the evidence: the burn-rate chart, the stopped service, the first error and the change.
 
-### Step 7 — Size the blast radius (section 3)
+### Step 6b — See what the CI is built from (section 3)
 
-Section 3 reads left to right, like a dependency map: what the service depends on → the service → who depends on it.
+**Related CIs by Type** lists what the selected CI is related to in the CMDB, in four views: **Middleware** (Tomcat,
+JBoss, WebLogic, WebSphere …), **Database** (Oracle, MS SQL, DB2, MySQL, PostgreSQL …), **Server** (Windows, Linux,
+AIX, mainframe LPAR, ESX …) and **Application** (business applications). Both directions are shown: "this CI runs on
+it" (the CI uses it) and "it runs on this CI" (it uses the CI), with the CMDB status, non-operational first. *For the
+application service Automated Claim Transaction PROD: Tomcat on vslrau1p276, an Oracle instance, two Linux servers
+(one non-operational) and the mainframe LPAR.* These are CMDB records, not live health: pick a server in the CI
+control to see its health in section 2.
+
+### Step 6c — Which application to look at (section 4, top row)
+
+**Application Health** rates every production business application by the health of its services in the last hour,
+worst first: Failing (a service with 10 % or more failed transactions), Degraded (1 % or more) or Healthy, with how
+many services are failing or degraded. Pick an application in the **Application control**: **Services of the
+Application** then lists its services, worst first, with error rate, latency and throughput; click a service to open
+its APM Service Map.
+
+### Step 7 — Size the blast radius (section 4)
+
+Section 4 reads left to right, like a dependency map: what the service depends on → the service → who depends on it.
 With the CI selected it shows the APM services running on the CI. If the CI is not a monitored server (an AIX box, a
 network device, an application service), pick the affected service in the **Service** control instead.
 
@@ -158,7 +178,7 @@ diagram.
 During the bridge the dashboard keeps refreshing every five minutes, so the lead can watch the SLO burn fall back
 below 1×, the service return to Running and the ping monitor go green.
 
-### Step 8 — Look wider (section 4)
+### Step 8 — Look wider (section 5)
 
 If the problem is bigger than one CI or one service, the two links at the bottom open the **Applications Operations Dashboard**
 (applications, services, SLOs) and the **Infra Dashboard** (servers and platforms across the estate) in a new tab,
@@ -176,18 +196,18 @@ so MIM V3 stays open on the bridge.
   the **×** on the filter pill under the search bar.
 - **The CI control only lists CIs with a P1 / P2 opened in the last 31 days.** A CI outside that list cannot be
   picked. Type in the control to search the list.
-- **An incident overrides the CI control.** With an incident picked, sections 2 and 3 follow its affected CI whatever
+- **An incident overrides the CI control.** With an incident picked, sections 2 to 4 follow its affected CI whatever
   the CI control says. Set the Incident control back to *(all incidents)* to use the CI control again.
 - **A ⚠ next to the picked incident means it is no longer active.** The Incident control lists active P1 / P2 only;
-  once the picked incident is resolved, *Escalate* shows no rows for it, while sections 2 and 3 keep showing its CI.
+  once the picked incident is resolved, *Escalate* shows no rows for it, while sections 2 to 4 keep showing its CI.
   Pick another incident or *(all incidents)*.
 - **The controls cannot be left empty.** Each has a "nothing selected" option instead: *(no CI selected)*,
   *(all incidents)*, *(services on this CI)*.
-- **Each control drives specific panels.** CI → section 2 and, through *(services on this CI)*, section 3.
-  Incident → *Escalate* only. Service → section 3 only. Section 1 ignores all three.
+- **Each control drives specific panels.** CI → section 2 and, through *(services on this CI)*, section 4.
+  Incident → *Escalate* only. Service → section 4 only. Section 1 ignores all three.
 - **For most incident CIs, you'll need to pick the service yourself.** Round 5 showed most P1 / P2s are raised
   against Linux / AIX servers, network devices or application services. Only servers with APM agents have services
-  on them, so for the rest section 3 stays empty until you choose a service in the Service control.
+  on them, so for the rest section 4 stays empty until you choose a service in the Service control.
 - **Selections are unsaved changes.** Picking a CI or an incident does not change the saved dashboard. Do not click
   *Save* with a CI picked unless you want every viewer to open MIM V3 on that CI. Use **More (⋯) → Reset changes**
   to go back to the saved state.
@@ -196,7 +216,7 @@ so MIM V3 stays open on the bridge.
 
 - **A badge on a panel means a fixed window.** "Last 1 month", "Last 7 days", "Last 30 days" and "Last 1 hour"
   panels ignore the time picker. Panels without a badge follow the time picker.
-- **Section 1** is fixed to the last month (*Open Alerts with No Incident*: last 30 days). **Section 3** is fixed to
+- **Section 1** is fixed to the last month (*Open Alerts with No Incident*: last 30 days). **Section 4** is fixed to
   the last hour. **Section 2** follows the time picker (last 24 h by default), except *Escalate* (last month),
   *Alerts on this CI*, *Applications on this CI* and *Changes* (last 7 days).
 - **Changes shows few linked CIs.** ServiceNow stores a CMDB relationship record only when the relationship changes
@@ -219,17 +239,17 @@ so MIM V3 stays open on the bridge.
 - **One slow incident moves a day's average.** On days with one or two P1s, a single long incident can put the point
   far above the line; hover the point to see how many incidents it averages.
 - **Health thresholds.** Server Health: amber from 80 %, red from 90 %, red if the server has been silent more than
-  10 minutes. Middleware, Database and Process Health: *Down* / *Not seen* after 10 minutes without data. Section 3: *Failing*
+  10 minutes. Middleware, Database and Process Health: *Down* / *Not seen* after 10 minutes without data. Section 4: *Failing*
   = 10 % or more of calls failed in the last hour, *Degraded* = 1 % or more.
-- **Check the call count before trusting an error %.** In section 3, a service with 20 calls in the hour and 2
+- **Check the call count before trusting an error %.** In section 4, a service with 20 calls in the hour and 2
   failures shows 10 % *Failing*; the *Calls* / *Per min* columns show how much traffic is behind the figure.
-- **Section 3 is production only** (`prd1`, `prd2`, `prd`, `prod`, `production`). Test environments (cut, ete, stg,
+- **Section 4 is production only** (`prd1`, `prd2`, `prd`, `prod`, `production`). Test environments (cut, ete, stg,
   drt …) are left out.
 - **Upstream shows dependencies as APM records them.** Databases appear by type or schema (e.g. `oracle`), other
   services by host:port (e.g. `abp-data-api.gcp.cna.com:443`).
 - **Shared host names can list callers twice.** When several services sit behind one host name (e.g.
   `ecs-data-api.gcp.cna.com`), the callers of that host appear for each of those services.
-- **Section 3 charts show the top 15** dependencies and callers, failing first. The APM Service Map shows them all.
+- **Section 4 charts show the top 15** dependencies and callers, failing first. The APM Service Map shows them all.
 - **Callers are found only for services reached over HTTP on a CNA host name.** *Downstream* matches the host names a
   service answers on (its incoming requests); services reached only through queues (JMS), batch jobs, or services
   behind external host names show no callers.
@@ -248,7 +268,7 @@ so MIM V3 stays open on the bridge.
 ### Clicks and links
 
 - **Only some columns are clickable**, the ones with a link: Incident, Affected CI and Pri in *Active Incidents*;
-  CI and Active Incident in *Escalate*; Change and CI in *Changes*; the Service health tiles and Downstream bars in section 3; business
+  CI and Active Incident in *Escalate*; Change and CI in *Changes*; the Service health tiles and Downstream bars in section 4; business
   applications in *Business applications impacted*.
 - **The click menu lists every link of that panel.** Kibana cannot attach a link to one column, so each link is
   labelled with the column it belongs to (e.g. "Open incident in ServiceNow — use on the Incident column"). Pick
@@ -258,12 +278,12 @@ so MIM V3 stays open on the bridge.
   edit a query, do not EVAL / RENAME / DISSECT into a link column (see *MIM-V3-LINKS-INVESTIGATION.md*).
 - **Service names open the APM Service Map** (last hour, all environments), which draws the dependency diagram that a
   Kibana dashboard cannot.
-- **The Applications Operations and Infra links in section 4** open those dashboards in a new tab.
+- **The Applications Operations and Infra links in section 5** open those dashboards in a new tab.
 
 ### Speed and access
 
 - **Speed is untested on real data.** The *Downstream* and *Business applications impacted* panels read an hour of
-  trace and dependency data each time they refresh. If they are slow, collapse section 3 when you do not need it
+  trace and dependency data each time they refresh. If they are slow, collapse section 4 when you do not need it
   (Kibana does not load panels in a collapsed section) and report it so the queries can be narrowed.
 - **Viewers need read access to every index the panels use**: `servicenow-*`, `cmdb-ci-relations*`, `metrics-*`,
   `metricbeat-*`, `logs-*`, `synthetics-*`, `traces-apm*` and the hidden `.slo-observability.*`. A panel the viewer
@@ -277,8 +297,8 @@ so MIM V3 stays open on the bridge.
 
 | Section | Panel | Status | What it shows | How it works |
 |---|---|---|---|---|
-| Control | **Incident** (first) | ✅ | The incident to work on; sections 2 and 3 follow its affected CI | Lists every active P1 / P2 as "number · affected CI", plus *(all incidents)*. A query variable (`?incident`); every section 2 and 3 query takes the CI from the part after " · " (and the number from the part before, for *Escalate*), so no extra lookup is needed. |
-| Control | **CI** (second) | ✅ | The CI to investigate when no incident is picked | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`), used by sections 2 and 3 only while the Incident control is on *(all incidents)*. |
+| Control | **Incident** (first) | ✅ | The incident to work on; sections 2 to 4 follow its affected CI | Lists every active P1 / P2 as "number · affected CI", plus *(all incidents)*. A query variable (`?incident`); every section 2 and 3 query takes the CI from the part after " · " (and the number from the part before, for *Escalate*), so no extra lookup is needed. |
+| Control | **CI** (second) | ✅ | The CI to investigate when no incident is picked | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`), used by sections 2 to 4 only while the Incident control is on *(all incidents)*. |
 | 1 | **Active P1 / P2** | ✅ | Donut: active P1 (red) and P2 (amber) with their counts | `servicenow-incidents-*`, active P1 / P2, one count per incident. Replaces the six-tile *At a Glance* (client feedback, 14 Oct: Past target time, Open more than 24 h, Hotspot CI and Not picked up removed). |
 | 1 | **Applications impacted** | ✅ | Count of applications that depend on a CI with an active P1 / P2, RAG background, first five named | Active P1 / P2 (last month) joined to `cmdb_app_dependencies_v2` on the incident CI = the record's child; parents of class business application or application service (by tags, calculated, discovered, auto), retired ones left out; plus the incident CI itself when it is such a parent. A Vega panel, because a Lens panel cannot read the dependency index together with the incidents (*KIBANA-LIMITATIONS.md*, row 20). |
 | 1 | **Users impacted** | ⚠️ | **Demo number** (2,500), blue tile marked "Demo value" | For presentations only. No user-count data in Elastic yet (none on incidents, the CMDB enrichment or the dependency index); the real figure will come once ATOS ingests user counts. |
@@ -299,12 +319,16 @@ so MIM V3 stays open on the bridge.
 | 2 | **Errors from the Logs** | ✅ | Warning-and-worse log lines from the CI, grouped by message | Syslog (server, WebSphere, JBoss, Red Hat, AIX, system), generic file logs, APM error and application logs, matched on `ci.name`; syslog severity code ≤ 4 or log level warning or worse; numbers replaced by # so repeats group together |
 | 2 | **Process Health** | ✅ | Stopped / not-seen processes and services first, then healthy middleware | Windows services (Stopped = Automatic service not running) and Paladin-labelled middleware processes; Not seen = silent > 10 min |
 | 2 | **Changes in the Last 7 Days on this CI** | ⚠️ | Changes active in the last 7 days on the CI, and on CMDB-linked CIs when the link was recorded in the same 7 days; the CI column shows which | `servicenow-change-requests` + `cmdb-ci-relations`. The selected CI's own changes first. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
-| 3 | **⬅ Upstream — what they depend on** | ✅ | Horizontal bars: calls per dependency, coloured Failing / Degraded / Healthy, label with % failed; top 15 | `metrics-apm.service_destination.1m-*`, production only. Failing ≥ 10 % failed calls, Degraded ≥ 1 %. Other services appear by host:port, as APM records them. |
-| 3 | **Service health** | ✅ | One tile per service in scope: % of its transactions that failed, RAG background, business application | `metrics-apm.service_transaction.1m-*`; "(services on this CI)" = services whose APM host is the CI (`metrics-apm.internal-*`). Click a tile to open the APM Service Map. |
-| 3 | **Downstream — who is impacted ➡** | ⚠️ | Horizontal bars: calls per calling service, coloured by the health of those calls; top 15 | Hosts the services in scope answer on (URL host of their incoming-request transactions, CNA host names only) matched to every production service's dependency addresses. Batch / messaging transactions and external hosts (Google storage, Okta …) are ignored. **Limit:** when several services share a host (an API gateway), callers of that host are listed for each of them. Click a bar to open that service's APM Service Map. |
-| 3 | **Business applications impacted** | ⚠️ | The callers' CMDB business applications, worst first, with portfolio and support group | From the APM CMDB enrichment on the callers. **Limit:** no user counts or criticality (not in APM or the CMDB data). Click to open the application in the CMDB. |
-| Control | **Service** | ✅ | The service(s) for section 3 | Production APM services seen in the last day, plus *(services on this CI)*. A query variable (`?service`) used only by section 3. |
-| 4 | **Applications Operations Dashboard** / **Infra Dashboard** | ✅ | Cards linking to the two dashboards | Text panels; the title of each card is the link (opens in a new tab). Addresses from `links.txt`. |
+| 3 | **Middleware View / Database View / Server View / Application View** | ⚠️ | The CIs related to the selected CI in the CMDB, by class: related CI, type, relationship (both directions), CMDB status, env | `cmdb_app_dependencies_v2`, exact ServiceNow classes from round 10 (AU / AV) for the lists in `relationships1.png` / `relatiosnhips2.png`; retired CIs left out. Follows the Incident / CI controls. **Limit:** CMDB status only, no live health (the index has no timestamp); the name is not a link (it comes from either side of the relationship, which Kibana 9.5 counts as created by the query). Built by a colleague, fixed 15 Oct (*MIM-V3-REVIEW-UPDATED-DASHBOARD.md*). |
+| 4 | **Application Health** | ✅ | Every production business application: health from its services (Failing / Degraded / Healthy), failing and degraded service counts, worst service error rate, application error rate, transactions, APM number, support group | `metrics-apm.service_transaction.1m-*`, business application from the APM CMDB enrichment (`ci.name`, on 398 of 400 production services, round 10). Last hour. Application links to the CMDB. |
+| 4 | **Services of the Application** | ✅ | The services of the application in the Application control (all when none is picked), worst first, with error rate, latency, throughput | Same data; click a service for its APM Service Map. Last hour. |
+| 4 | **⬅ Upstream — what they depend on** | ✅ | Horizontal bars: calls per dependency, coloured Failing / Degraded / Healthy, label with % failed; top 15 | `metrics-apm.service_destination.1m-*`, production only. Failing ≥ 10 % failed calls, Degraded ≥ 1 %. Other services appear by host:port, as APM records them. |
+| 4 | **Service health** | ✅ | One tile per service in scope: % of its transactions that failed, RAG background, business application | `metrics-apm.service_transaction.1m-*`; "(services on this CI)" = services whose APM host is the CI (`metrics-apm.internal-*`). Click a tile to open the APM Service Map. |
+| 4 | **Downstream — who is impacted ➡** | ⚠️ | Horizontal bars: calls per calling service, coloured by the health of those calls; top 15 | Hosts the services in scope answer on (URL host of their incoming-request transactions, CNA host names only) matched to every production service's dependency addresses. Batch / messaging transactions and external hosts (Google storage, Okta …) are ignored. **Limit:** when several services share a host (an API gateway), callers of that host are listed for each of them. Click a bar to open that service's APM Service Map. |
+| 4 | **Business applications impacted** | ⚠️ | The callers' CMDB business applications, worst first, with portfolio and support group | From the APM CMDB enrichment on the callers. **Limit:** no user counts or criticality (not in APM or the CMDB data). Click to open the application in the CMDB. |
+| Control | **Service** | ✅ | The service(s) for section 4 | Production APM services seen in the last day, plus *(services on this CI)*. A query variable (`?service`) used only by section 4. |
+| Control | **Application** | ✅ | The application for *Services of the Application* | Production business applications with APM data in the last day, plus *(all applications)*. A query variable (`?application`) used only by that panel. |
+| 5 | **Applications Operations Dashboard** / **Infra Dashboard** | ✅ | Cards linking to the two dashboards | Text panels; the title of each card is the link (opens in a new tab). Addresses from `links.txt`. |
 
 ---
 
@@ -320,12 +344,12 @@ so MIM V3 stays open on the bridge.
 | Assigned MIM may fall back to the group manager | `servicenow-incidents-*` has no MIM field (round 8). The raw ServiceNow incident records (`.ds-logs-servicenow.event-*`) carry ServiceNow's Major Incident Management fields; the dashboard uses `promoted_by` (who promoted the incident to a major incident) and otherwise shows `assignment_group.manager.name`, marked "(group manager)" | If MIMs are recorded elsewhere in ServiceNow (a custom field, or the bridge record), add that field to the incident export |
 | Major-incident and bridge flags unused | `is_major_incident` and `has_been_handled_by_bridge` are empty on all P1 / P2 for a year | ServiceNow integration mapping |
 | Containerised services not linked to servers | APM reports pod names | Expected; use the application / SLO panels |
-| Section 3 has no drawn node-and-arrow diagram | Kibana's Vega charts could draw one, but they cannot read the ES\|QL Service control (only the time range and filters), so the map could not follow the selected service | Section 3 is laid out left to right instead; click a service for the APM Service Map |
-| Section 3 is empty for most incident CIs unless a service is picked | P1 / P2 are raised mostly against servers (Linux, AIX), network devices and application services; only servers with APM agents have services on them, and no incident CI is an APM business application (round 5, X and Y) | Pick the service in the Service control; longer term, record the affected business application / service on the incident |
+| Section 4 has no drawn node-and-arrow diagram | Kibana's Vega charts could draw one, but they cannot read the ES\|QL Service control (only the time range and filters), so the map could not follow the selected service | Section 4 is laid out left to right instead; click a service for the APM Service Map |
+| Section 4 is empty for most incident CIs unless a service is picked | P1 / P2 are raised mostly against servers (Linux, AIX), network devices and application services; only servers with APM agents have services on them, and no incident CI is an APM business application (round 5, X and Y) | Pick the service in the Service control; longer term, record the affected business application / service on the incident |
 | Estimated user base | Not in Elastic | Add the ServiceNow user-base field to the CI enrichment |
 | *What this CI runs on* has CMDB status, not live health; *Applications that depend on this CI* cannot show the applications' own P1 / P2 | `cmdb_app_dependencies_v2` has no timestamp, and Kibana filters every row of a Lens panel on the timestamp of the other indices it reads (incidents, metrics), so the dependency records would vanish | Add an `@timestamp` (sync time) to the dependency index records, e.g. a `set` processor in its ingest pipeline. The live version of the panel (server reporting / CPU, APM error rate, active P1 / P2 per item) is built and tested, ready to switch on |
 
-## Related dashboards (section 4): the links
+## Related dashboards (section 5): the links
 
 The two links (link text only, 14 Oct) go to:
 
@@ -335,7 +359,7 @@ The two links (link text only, 14 Oct) go to:
 | Infra Dashboard | https://kibana-prod.gcp.cna.com/app/r/s/3A7f1 |
 
 The addresses come from `links.txt` and are stored in `MIM V3.ndjson`. To change one, update both (the link text in
-the two section-4 panels of `MIM V3.ndjson`), so a re-import keeps it. A quick fix in Kibana (**Edit** → panel **⋯** → **Edit**, change the address in
+the two section-5 panels of `MIM V3.ndjson`), so a re-import keeps it. A quick fix in Kibana (**Edit** → panel **⋯** → **Edit**, change the address in
 the round brackets of the title, **Save**) is lost at the next re-import.
 
 ## Importing
