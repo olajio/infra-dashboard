@@ -31,7 +31,7 @@ are confirmed not to be emptied by Kibana's time filter. Not yet tried on the 9.
 1. **Server classes too small to read in the image** — ISAM Server and F5 BIG-IP as "Load Balancer" are included.
    *Confirmed.*
 2. **DB2** — there is no "DB2 Subsystem" class in the data, so DB2 Instance is used. *Confirmed.*
-3. **Clickable names in the four views** — *decision pending, see the images below.*
+3. **Clickable names in the four views** — *decided: keep the four views* (comparison below).
 4. **Noise in Application Health** — *decided:* a service needs **at least 20 transactions in the hour** before its
    error rate can mark it, or its application, Failing or Degraded. Below that it shows as **Low traffic** (grey) in
    *Services of the Application*, with its error rate still visible, but it does not count towards the application's
@@ -72,3 +72,19 @@ The files in `tools/` are the working record of how `MIM V3.ndjson` was changed 
 
 They are kept in the repo because the earlier versions were lost when the work environment was reset. They can be
 moved to a separate branch if they are in the way.
+
+## Update 16 Oct (suggestions2.txt) — done
+
+`tools/mim_v3_patch_2026-10-16.py`, checked by `tools/test_mim_v3_2026-10-16.py`.
+
+| Ask | Done |
+|---|---|
+| Users impacted: text "Real count to be incorporated from ServiceNow and RUM" | Yes, on a black tile (the 2,500 demo number stays) |
+| Remove *Applications impacted* | Yes |
+| *Active Incidents (P1 / P2)* columns, in order: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id; remove Assigned MIM | Yes (from `assigned_to.name` / `.email`, `assignment_group.manager.name` / `.email`). Opened, Age and Short description were not in the list, so they are gone too |
+| *Open Alerts with No Incident*: last 24 hours | Yes |
+| *Escalate* (Investigate the CI) columns: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id; remove Assigned MIM | Yes |
+| Remove *CMDB status* from *Applications that depend on this CI* | Yes |
+| Remove *What this CI runs on* | Yes |
+| First two panels on a black background | Yes: *Active P1 / P2* is now a Vega donut on black (Kibana's standard charts cannot take a background colour), *Users impacted* on black; text in white, P1 red, P2 amber |
+
