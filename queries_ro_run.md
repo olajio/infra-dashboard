@@ -430,3 +430,54 @@ POST /_query?format=json
 | AS | Last 30 days: P1 2 of 3 incidents promoted to major incident; P2 0 of 2,539; lower priorities 1 of ~26k | *Assigned MIM* shows the real MIM on promoted P1s and the assignment group's manager, marked "(group manager)", on everything else |
 | AT | Last 90 days: all promotions by Matt Huelsman (3 Accepted, 1 Canceled) | `promoted_by` names the MIM; kept as built |
 
+## Round 10 — CI classes for the grouped relationships, and APM coverage for application health (15 Oct 2026)
+
+Run in **Dev Tools Console** and upload the output to `round10.txt`. AU–AW use the CMDB dependency index (no
+`@timestamp`, no time filter needed); AX–AZ use APM, last day / last hour.
+
+**AU. Every class that appears as a child (the CI that something runs on / uses)**
+```
+POST /_query?format=json
+{ "query": "FROM cmdb_app_dependencies_v2 | WHERE child_ci.class.keyword IS NOT NULL | STATS rows = COUNT(*), cis = COUNT_DISTINCT(child_ci.name.keyword) BY class = child_ci.class.keyword | SORT rows DESC | LIMIT 300" }
+```
+
+**AV. Every class that appears as a parent (the CI that runs on / uses something)**
+```
+POST /_query?format=json
+{ "query": "FROM cmdb_app_dependencies_v2 | WHERE parent_ci.class.keyword IS NOT NULL | STATS rows = COUNT(*), cis = COUNT_DISTINCT(parent_ci.name.keyword) BY class = parent_ci.class.keyword | SORT rows DESC | LIMIT 300" }
+```
+
+**AW. What the demo CI is related to, by class and direction** (checks the four groups on a real application service)
+```
+POST /_query?format=json
+{ "query": "FROM cmdb_app_dependencies_v2 | WHERE parent_ci.name.keyword == \"Automated Claim Transaction PROD\" OR child_ci.name.keyword == \"Automated Claim Transaction PROD\" | EVAL direction = CASE(parent_ci.name.keyword == \"Automated Claim Transaction PROD\", \"runs on / uses\", \"used by\"), other_class = CASE(parent_ci.name.keyword == \"Automated Claim Transaction PROD\", child_ci.class.keyword, parent_ci.class.keyword), other = CASE(parent_ci.name.keyword == \"Automated Claim Transaction PROD\", child_ci.name.keyword, parent_ci.name.keyword) | STATS cis = COUNT_DISTINCT(other), examples = VALUES(other) BY direction, other_class | EVAL examples = MV_SLICE(examples, 0, 2) | SORT direction, cis DESC" }
+```
+
+**AX. How many production APM services carry their business application** (`ci.name` from the APM CMDB enrichment)
+```
+POST /_query?format=json
+{ "query": "FROM metrics-apm.service_transaction.1m-* | WHERE @timestamp >= NOW() - 1 day AND TO_LOWER(TO_STRING(service.environment)) IN (\"prd1\", \"prd2\", \"prd\", \"prod\", \"production\") | EVAL has_app = CASE(ci.name IS NOT NULL, 1, 0), has_number = CASE(ci.number IS NOT NULL, 1, 0) | STATS with_app = MAX(has_app), with_number = MAX(has_number) BY service.name | STATS services = COUNT(*), with_app = SUM(with_app), with_number = SUM(with_number)" }
+```
+
+**AY. How many services each application has** (the 30 largest, and the spread)
+```
+POST /_query?format=json
+{ "query": "FROM metrics-apm.service_transaction.1m-* | WHERE @timestamp >= NOW() - 1 day AND TO_LOWER(TO_STRING(service.environment)) IN (\"prd1\", \"prd2\", \"prd\", \"prod\", \"production\") AND ci.name IS NOT NULL | STATS services = COUNT_DISTINCT(service.name), names = VALUES(service.name), numbers = VALUES(ci.number) BY application = ci.name | EVAL names = MV_SLICE(names, 0, 4) | SORT services DESC | LIMIT 30" }
+```
+
+**AZ. Preview of the roll-up: application health from its services, last hour** (Failing ≥ 10 % errors, Degraded ≥ 1 %)
+```
+POST /_query?format=json
+{ "query": "FROM metrics-apm.service_transaction.1m-* | WHERE @timestamp >= NOW() - 1 hour AND TO_LOWER(TO_STRING(service.environment)) IN (\"prd1\", \"prd2\", \"prd\", \"prod\", \"production\") AND ci.name IS NOT NULL | STATS ok = SUM(event.success_count), n = COUNT(event.success_count) BY application = ci.name, service.name | EVAL error_pct = CASE(n > 0, ROUND((n - ok) * 100.0 / n, 1)) | EVAL failing = CASE(error_pct >= 10, 1, 0), degraded = CASE(error_pct >= 1 AND error_pct < 10, 1, 0) | STATS services = COUNT(*), failing = SUM(failing), degraded = SUM(degraded), worst_error_pct = MAX(error_pct) BY application | EVAL health = CASE(failing > 0, \"Failing\", degraded > 0, \"Degraded\", \"Healthy\") | SORT failing DESC, degraded DESC, worst_error_pct DESC | LIMIT 30" }
+```
+
+What the answers decide:
+
+| Query | Decides |
+|---|---|
+| AU, AV | The exact ServiceNow class names for the Middleware, Database, Server and Application groups (e.g. `cmdb_ci_app_server_tomcat`), including the server classes too small to read in `relatiosnhips2.png` |
+| AW | Which groups a real application service actually has, and in which direction (runs on vs used by) |
+| AX | Whether the application-health roll-up can rely on APM's `ci.name` alone (a high share = yes) or needs the CMDB link as a fallback |
+| AY | Whether applications map to several services, i.e. whether a roll-up adds value over the per-service view |
+| AZ | What the panel would show today, and whether the 10 % / 1 % thresholds give a sensible spread |
+
