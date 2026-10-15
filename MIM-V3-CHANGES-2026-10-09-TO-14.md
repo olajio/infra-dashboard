@@ -49,6 +49,25 @@
 2. **Number of users likely impacted** from CMDB static user counts or real-user monitoring (RUM). The dashboard shows
    a demo number until ATOS ingests the data.
 
+### New request (15 Oct): related CIs grouped by CI class
+See `relationships1.png` and `relatiosnhips2.png`. For the selected CI, fill the Middleware, Database, Server and
+Application views from its **CMDB relationships**, grouping each related CI by its class:
+
+| Group | CMDB classes |
+|---|---|
+| Middleware (application servers) | Application Server, JBoss, JBoss module, Tomcat, Tomcat WAR, WebLogic, IBM WebSphere, WebSphere EAR |
+| Database | Cassandra Instance, Cloud DataBase, DB2 Subsystem, HBase Instance, Database Instance, DB Instance Size, MongoDB Instance, SQL Server Analysis / Integration / Reporting Services, MS SQL DataBase, MSFT SQL Instance, MySQL Instance, Oracle Instance, Oracle DB Service, PostgreSQL Instance, Sybase Instance |
+| Server | AIX, ESX, HPUX, Hyper-V, IBM Frame, Load Balancer, Citrix Netscaler, Linux, IBM Mainframe, Mainframe LPAR, Network Appliance Hardware, Server, Solaris, Storage Server, Windows Server (some names in the image too small to read; confirm the full list) |
+| Application | Business Application (application-to-application relationships) |
+
+- Source: `cmdb_app_dependencies_v2` carries each related CI's class (`child_ci.class` / `parent_ci.class`), so the
+  grouping is a refinement of *What this CI runs on*, which today mixes all classes in one list.
+- Lets application-service CIs (e.g. *Automated Claim Transaction PROD*) show their middleware, databases and servers.
+- To do first: confirm the full class list (the ServiceNow class names, e.g. `cmdb_ci_app_server_tomcat`) with a
+  query on the dependency index.
+- **Limit:** the dependency index has no timestamp, so these grouped panels can show CMDB status but not live
+  health (up / down) unless an `@timestamp` is added to the index (same blocker as *What this CI runs on*).
+
 ### Needs clarifying
 3. **"Service health"** (`new_suggestions.txt`). Section 3 already has Service health tiles; what is wanted beyond
    that?
