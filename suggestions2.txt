@@ -19,3 +19,26 @@ Applications on this CI and Changes should be looking at the Last 7 days
 
 
 For the links to "Application Operations Dashboard" and "Infra Dashboard", remove all the text and use only the hyper links alone
+
+
+####
+User impacted: Box should be updated with the text "Real count to be incorporfated from servicenow and RUM.
+ 
+Remove "Applications Impacted" panel
+ 
+In the "Active Incidents (P1 / P2)" panel, the following columns should be present in the following order: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee(use field "assigned_to.name" to populate this value for this column), Assignee Email(use field "assigned_to.email" to populate this value for this column),  Group Manager Name(assignment_group.manager.name to populate this value for this column), Manager Email Id(use field assignment_group.manager.email), remove "Assigned MIM" column
+ 
+
+"Open Alerts with No incident panel" should be looking at last 24 hours
+ 
+For "Investigate the CI": The following columns should be on the table: CI,	Active Incident	Priority,	Class,	Env,	CI support group,	Assignment Group, Assignee(use field "assigned_to.name" to populate this value for this column), Assignee Email(use field "assigned_to.email" to populate this value for this column),  Group Manager Name(assignment_group.manager.name to populate this value for this column), Manager Email Id(use field assignment_group.manager.email), remove "Assigned MIM" column
+ 
+ 
+remove the "CMDB status" field from the Applications that depends on this CI
+ 
+ 
+"What this CI runs on" table should be removed
+ 
+The first two panel the background colors should be black. The text could be other colors
+
+ 
