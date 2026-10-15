@@ -68,6 +68,26 @@ Application views from its **CMDB relationships**, grouping each related CI by i
 - **Limit:** the dependency index has no timestamp, so these grouped panels can show CMDB status but not live
   health (up / down) unless an `@timestamp` is added to the index (same blocker as *What this CI runs on*).
 
+### New request (15 Oct): application health from its services
+Rate each application by the health of its associated services, so the MIM can see which application to look at and
+then drill down to the services that are down or degraded.
+
+- **Not covered today.** Section 3's *Service health* rates single services (the picked one, or those on the selected
+  CI); *Business applications impacted* rolls up only the applications whose services call the picked service;
+  section 1's *Applications impacted* counts applications from the CMDB without health.
+- **Proposed:** an *Application health* panel. One row or tile per business application with its worst service
+  status (Failing / Degraded / Healthy), how many of its services are failing or degraded, and its error rate.
+  Worst first, scoped to the applications related to the selected incident / CI, or to all applications when none is
+  picked.
+- **Drill down:** clicking an application lists its services with their health (error rate, latency, throughput), and
+  from there the APM Service Map, as section 3 does today.
+- **Data:** APM transaction metrics already carry the business application on each service (`ci.name`, `ci.number`
+  from the APM CMDB enrichment), so the roll-up can be live with no dependency-index join. The CMDB link business
+  application → Kubernetes services in `cmdb_app_dependencies_v2` can fill gaps, but without live health (no
+  timestamp on that index).
+- **To check first:** how many production APM services carry `ci.name`, and whether one application maps to several
+  services as expected (a short query round).
+
 ### Needs clarifying
 3. **"Service health"** (`new_suggestions.txt`). Section 3 already has Service health tiles; what is wanted beyond
    that?
