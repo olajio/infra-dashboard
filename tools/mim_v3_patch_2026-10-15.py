@@ -26,6 +26,7 @@ uid = lambda name: str(uuid.uuid5(NS, name))
 SEL_CI = '(CASE(?incident == "(all incidents)", ?ci, SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)))'
 PROD = '("prd1", "prd2", "prd", "prod", "production")'
 ALL_APPS = '(all applications)'
+MIN_TX = 20      # a service needs this many transactions in the hour before its error rate can make it Failing / Degraded
 
 objs = [json.loads(l) for l in open(SRC) if l.strip()]
 dash = next(o for o in objs if o.get('type') == 'dashboard')
@@ -201,21 +202,25 @@ APP_CTRL_Q = f'''FROM metrics-apm.service_transaction.1m-*
 | KEEP application'''
 _TX = f'''FROM metrics-apm.service_transaction.1m-*
 | WHERE TO_LOWER(TO_STRING(service.environment)) IN {PROD} AND ci.name IS NOT NULL'''
-_SERVICE_HEALTH = '''| EVAL error_pct = CASE(okn > 0, ROUND((okn - ok) * 100.0 / okn, 1))
-| EVAL health = CASE(okn IS NULL OR okn == 0, "No traffic", error_pct >= 10, "Failing", error_pct >= 1, "Degraded", "Healthy")'''
+_SERVICE_HEALTH = f'''| EVAL error_pct = CASE(okn > 0, ROUND((okn - ok) * 100.0 / okn, 1))
+| EVAL health = CASE(okn IS NULL OR okn == 0, "No traffic", okn < {MIN_TX}, "Low traffic", error_pct >= 10, "Failing",
+                     error_pct >= 1, "Degraded", "Healthy")'''
 APP_HEALTH = _TX + f'''
 | STATS ok = SUM(event.success_count), okn = COUNT(event.success_count), tx = COUNT(transaction.duration.summary),
         nums = VALUES(TO_STRING(ci.number)), groups = VALUES(TO_STRING(ci.support_group.l2.name))
   BY ci.name, service.name
 {_SERVICE_HEALTH}
-| EVAL is_failing = CASE(health == "Failing", 1, 0), is_degraded = CASE(health == "Degraded", 1, 0)
-| STATS services = COUNT(*), failing = SUM(is_failing), degraded = SUM(is_degraded), worst_error_pct = MAX(error_pct),
+| EVAL is_failing = CASE(health == "Failing", 1, 0), is_degraded = CASE(health == "Degraded", 1, 0),
+       is_rated = CASE(health IN ("Failing", "Degraded", "Healthy"), 1, 0), rated_error_pct = CASE(is_rated == 1, error_pct)
+| STATS services = COUNT(*), failing = SUM(is_failing), degraded = SUM(is_degraded), rated = SUM(is_rated),
+        worst_error_pct = MAX(rated_error_pct),
         bad = SUM(okn - ok), calls = SUM(okn), tx = SUM(tx), nums = VALUES(nums), groups = VALUES(groups)
   BY ci.name
-| EVAL app_health = CASE(failing > 0, "Failing", degraded > 0, "Degraded", calls > 0, "Healthy", "No traffic"),
+| EVAL app_health = CASE(failing > 0, "Failing", degraded > 0, "Degraded", rated > 0, "Healthy", calls > 0, "Low traffic",
+                        "No traffic"),
        app_error_pct = CASE(calls > 0, ROUND(bad * 100.0 / calls, 1)),
        app_number = COALESCE(MV_FIRST(nums), "—"), app_support = COALESCE(MV_FIRST(groups), "—"),
-       rank = CASE(failing > 0, 1, degraded > 0, 2, calls > 0, 3, 4)
+       rank = CASE(failing > 0, 1, degraded > 0, 2, rated > 0, 3, 4)
 | SORT rank ASC, failing DESC, degraded DESC, worst_error_pct DESC, ci.name ASC
 | LIMIT 200
 | KEEP ci.name, app_health, failing, degraded, services, worst_error_pct, app_error_pct, tx, app_number, app_support'''
@@ -227,12 +232,12 @@ APP_SERVICES = _TX + f'''
 {_SERVICE_HEALTH}
 | EVAL minutes = GREATEST(DATE_DIFF("minutes", ?_tstart, ?_tend), 1)
 | EVAL latency_ms = CASE(tx > 0, ROUND(dur / tx / 1000.0, 0)), per_min = ROUND(tx * 1.0 / minutes, 1),
-       rank = CASE(health == "Failing", 1, health == "Degraded", 2, health == "Healthy", 3, 4)
+       rank = CASE(health == "Failing", 1, health == "Degraded", 2, health == "Healthy", 3, health == "Low traffic", 4, 5)
 | SORT rank ASC, error_pct DESC, service.name ASC
 | LIMIT 300
 | KEEP service.name, ci.name, health, error_pct, latency_ms, per_min, tx'''
 
-HEALTH = [('Failing', RED), ('Degraded', AMBER), ('Healthy', GREEN), ('No traffic', GREY)]
+HEALTH = [('Failing', RED), ('Degraded', AMBER), ('Healthy', GREEN), ('Low traffic', '#6f87a6'), ('No traffic', GREY)]
 num = lambda cid, label, es='long', dec=0, suffix=None: col(cid, label, 'number', es, {
     'id': 'number', 'params': dict({'decimals': dec}, **({'suffix': suffix} if suffix else {}))})
 apps_tpl = P('Business applications impacted')
@@ -246,7 +251,9 @@ app_health = table_panel(
     apps_tpl, 'mim-v3:app-health', 'Application Health',
     'Every production business application with APM data, rated by the health of its services in the last hour: '
     'Failing = at least one service with 10 % or more failed transactions, Degraded = at least one with 1 % or more, '
-    'Healthy otherwise; worst first. Failing / Degraded = how many of its services; Worst = the worst service\'s '
+    f'Healthy otherwise; worst first. A service needs at least {MIN_TX} transactions in the hour to be rated (fewer = '
+    '"Low traffic", shown in the services list but not counted here, so one failed call out of two does not make an '
+    'application Failing). Failing / Degraded = how many of its services; Worst = the worst service\'s '
     'error rate; App = the application\'s overall error rate. To see which services, pick the application in the '
     'Application control: "Services of the Application" lists them. Click an application to open it in the '
     'ServiceNow CMDB. From the APM CMDB enrichment on each service (398 of 400 production services carry their '
@@ -267,7 +274,8 @@ app_health['embeddableConfig']['time_range'] = HOUR
 app_services = table_panel(
     apps_tpl, 'mim-v3:app-services', 'Services of the Application',
     'The services of the application picked in the Application control (all applications when none is picked), '
-    'worst first: health (Failing ≥ 10 % failed transactions, Degraded ≥ 1 %), error rate, average latency, '
+    f'worst first: health (Failing ≥ 10 % failed transactions, Degraded ≥ 1 %; Low traffic = under {MIN_TX} '
+    'transactions in the hour, error rate shown but not rated), error rate, average latency, '
     'throughput. Click a service to open its APM Service Map. Last 1 hour (fixed).',
     APP_SERVICES,
     [col('service.name', 'Service'), col('ci.name', 'Application'), col('health', 'Health'),

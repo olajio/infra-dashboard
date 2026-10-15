@@ -82,6 +82,8 @@ load('metrics-apm.service_transaction.1m-test', [
     tx(5, 'clmact-db-api', 'Automated Claim Transaction', 100, 97),      # 3 % -> Degraded
     tx(5, 'clmact-event-gen', 'Automated Claim Transaction', 100, 100),  # Healthy
     tx(5, 'juno-api', 'Juno', 100, 98),                                  # Degraded
+    tx(5, 'juno-tiny-batch', 'Juno', 4, 2),                              # 50 % failed but 4 calls: Low traffic
+    tx(5, 'lonely-svc', 'Quiet App', 3, 0),                              # the app's only service: Low traffic
     tx(5, 'phub-payment', 'Payment Hub', 100, 100),                      # Healthy
     tx(5, 'phub-batch', 'Payment Hub', 50, 50),
     tx(5, 'stage-svc', 'Payment Hub', 100, 0, env='stg1'),               # not production: ignored
@@ -147,16 +149,20 @@ R, cols = run('Application Health')
 check('Application Health: worst first', [(r['ci.name'], r['app_health'], r['failing'], r['degraded'], r['services'],
                                            r['worst_error_pct'], r['app_error_pct']) for r in R], [
     ('Automated Claim Transaction', 'Failing', 1, 1, 3, 20.0, 7.7),
-    ('Juno', 'Degraded', 0, 1, 1, 2.0, 2.0),
-    ('Payment Hub', 'Healthy', 0, 0, 2, 0.0, 0.0)])
+    ('Juno', 'Degraded', 0, 1, 2, 2.0, 3.8),
+    ('Payment Hub', 'Healthy', 0, 0, 2, 0.0, 0.0),
+    ('Quiet App', 'Low traffic', 0, 0, 1, None, 100.0)])
 R, cols = run('Services of the Application', application='Automated Claim Transaction')
 check('Services of the picked application, worst first', [(r['service.name'], r['health'], r['error_pct']) for r in R], [
     ('clmact-pymt-subs', 'Failing', 20.0), ('clmact-db-api', 'Degraded', 3.0), ('clmact-event-gen', 'Healthy', 0.0)])
-check('Services with no application picked', len(run('Services of the Application')[0]), 6)
+check('Services with no application picked', len(run('Services of the Application')[0]), 8)
+check('low-traffic services are listed, not rated', [(r['service.name'], r['health'], r['error_pct']) for r in
+      run('Services of the Application', application='Juno')[0]], [('juno-api', 'Degraded', 2.0),
+                                                                    ('juno-tiny-batch', 'Low traffic', 50.0)])
 
 ctrl = next(c for c in A['pinned_panels']['panels'].values() if c['config']['variable_name'] == 'application')
 check('Application control options', [r['application'] for r in esql(ctrl['config']['esql_query'], [])[0]],
-      [ALL_APPS, 'Automated Claim Transaction', 'Juno', 'Old App', 'Payment Hub'])
+      [ALL_APPS, 'Automated Claim Transaction', 'Juno', 'Old App', 'Payment Hub', 'Quiet App'])
 check('controls in order', [c['config']['title'] for c in sorted(A['pinned_panels']['panels'].values(),
                                                                  key=lambda c: c['order'])],
       ['Incident', 'CI', 'Service', 'Application'])
