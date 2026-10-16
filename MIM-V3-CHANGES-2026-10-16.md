@@ -18,9 +18,25 @@ Section 3 keeps the four views (Middleware, Database, Server, Application), as a
 **Checks:** the test (`tools/test_mim_v3_2026-10-16.py`) passes on local Elasticsearch / Kibana 9.4.1, the link
 check passes, and screenshots were taken. Nothing has been checked on the 9.5.3 cluster yet.
 
+## Re-check of the current version (16 Oct, later)
+The cluster still has this version, and `MIM V3.ndjson` in the repo is byte-for-byte the 16 Oct version
+(commit `9886491`). Re-checked against local Elasticsearch / Kibana 9.4.1:
+
+- All three tests pass: 14 Oct (15 checks), 15 Oct (18 checks), 16 Oct (13 checks). The 14 Oct test was updated
+  because *Active P1 / P2* became a Vega donut on 16 Oct; it now runs the donut's own query.
+- All link columns are real fields, so Kibana 9.5 allows the links.
+- All 31 queries (panels, both Vega panels, four controls) parse. 21 run with the small test data. The other 10 stop
+  only on "Unknown column" / "Unknown index", because the test data does not include those fields: Time to Resolve,
+  Open Alerts with No Incident, Alerts on this CI, Process, Synthetics, Logs, Changes, Upstream, Downstream, Business
+  applications impacted. None of these were changed on 16 Oct, and they read the real fields on the cluster.
+- The dashboard imports cleanly; the top row shows the black donut and Users impacted tile, and Active Incidents shows
+  the ten columns.
+
+So nothing in the dashboard file needs changing. What is left is on the cluster side, below.
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard
+### 1. Import the dashboard (already done if the cluster has the 16 Oct version)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept

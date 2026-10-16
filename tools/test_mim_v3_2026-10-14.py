@@ -45,6 +45,7 @@ def load(index, docs, mapping=None):
 
 inc = lambda n, p, state, ci: {'@timestamp': ago(minutes=1), 'number': n, 'priority': p, 'state_name': state,
                                'opened_at': ago(hours=1), 'ci': {'name': ci}}
+call('DELETE', '/servicenow-incidents-t16')  # left by the 16 Oct test
 load('servicenow-incidents-t', [inc('INC1', 1, 'In Progress', CI), inc('INC1', 1, 'In Progress', CI),  # two syncs
                                 inc('INC2', 1, 'New', 'x2'), inc('INC3', 2, 'In Progress', 'x3'),
                                 inc('INC4', 2, 'On Hold', 'x4'), inc('INC5', 2, 'In Progress', 'x5'),
@@ -107,8 +108,12 @@ def check(name, got, want):
         fails.append(name)
 
 
-R, cols = run('Active P1 / P2')
-check('Active P1 / P2 donut', [(r['priority_label'], r['incidents']) for r in R], [('P1', 2), ('P2', 3)])
+# Active P1 / P2 is a Vega donut since 16 Oct: run its ES|QL, which carries its own one-month window
+donut_q = json.loads(P['Active P1 / P2']['embeddableConfig']['savedVis']['params']['spec'])['data'][0]['url']['query']
+r = call('POST', '/_query?format=json', {'query': donut_q})
+assert 'error' not in r, json.dumps(r)[:900]
+check('Active P1 / P2 donut', [tuple(v) for v in r['values']], [(2, 'P1'), (3, 'P2')])
+check('Active P1 / P2 window', 'NOW() - 1 month' in donut_q, True)
 
 R, cols = run('Middleware Health')
 check('Middleware columns', cols, ['component', 'health', 'minutes_since', 'ci.name'])
@@ -135,8 +140,8 @@ check('banner removed', 'How to use this section' in P, False)
 ctrls = sorted(dash['attributes']['pinned_panels']['panels'].values(), key=lambda c: c['order'])
 check('controls: Incident, CI, Service first', [c['config']['title'] for c in ctrls][:3], ['Incident', 'CI', 'Service'])
 check('time windows', {t: P[t]['embeddableConfig'].get('time_range', {}).get('from') for t in
-                       ('Applications on this CI', 'Changes in the Last 7 Days on this CI', 'Active P1 / P2')},
-      {'Applications on this CI': 'now-7d', 'Changes in the Last 7 Days on this CI': 'now-7d', 'Active P1 / P2': 'now-1M'})
+                       ('Applications on this CI', 'Changes in the Last 7 Days on this CI')},
+      {'Applications on this CI': 'now-7d', 'Changes in the Last 7 Days on this CI': 'now-7d'})
 check('link cards are links only', [P[t]['embeddableConfig']['content'] for t in ('SRE dashboard', 'Infra dashboard')], [
     '## 🛡️ [Applications Operations Dashboard ›](https://kibana-prod.gcp.cna.com/app/r/s/b4Jas)',
     '## 🖥️ [Infra Dashboard ›](https://kibana-prod.gcp.cna.com/app/r/s/3A7f1)'])
