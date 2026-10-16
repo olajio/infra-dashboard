@@ -167,8 +167,8 @@ check('controls in order', [c['config']['title'] for c in sorted(A['pinned_panel
                                                                  key=lambda c: c['order'])],
       ['Incident', 'CI', 'Service', 'Application'])
 check('sections', [(s['title'], s['collapsed']) for s in A['sections']], [
-    ('1 · Major Incident Overview', False), ('2 · Investigate the CI', False), ('3 · Related CIs by Type (CMDB)', False),
-    ('4 · Application & Service Health, Dependencies', False), ('5 · Related dashboards', False)])
+    ('1 · Major Incident Overview', False), ('2 · Investigate the CI', False),   # views moved into 2 in round h
+    ('3 · Application & Service Health, Dependencies', False), ('4 · Related dashboards', False)])
 check('default time', (A['timeFrom'], A['timeTo']), ('now-24h', 'now'))
 check('no extra filter control', [p['type'] for p in panels if p['type'] == 'options_list_control'], [])
 

@@ -3,6 +3,10 @@
 *16 Oct 2026. Explanation and options only: **nothing in this document has been applied to the dashboard.** The
 decisions at the end are yours.*
 
+> **Update, later 16 Oct:** at your request, the four related-CI views moved into section 2 (*Investigate the CI*), right
+> after *Blast radius* and *Applications that depend on this CI*; the old section 3 is gone and sections 4 and 5 are now
+> 3 and 4. Below, "section 3" means those views and "section 4" means *Application & Service Health*.
+
 ## Short answer
 
 - **Section 2 (*Investigate the CI*) looks *inside* the CI.** It shows what is reported from the CI itself right now:

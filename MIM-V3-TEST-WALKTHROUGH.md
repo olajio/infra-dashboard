@@ -46,10 +46,10 @@ Leave the controls at their defaults: Incident **(all incidents)**, CI **(no CI 
 
 | # | Do | You should see | ✓ |
 |---|---|---|---|
-| 2.1 | In the **Incident** control, pick `<number> · <CI>` | Sections 2, 3 and 4 now show the incident's Affected CI. The CI control can stay at "(no CI selected)": while an incident is picked, its CI wins | ☐ |
+| 2.1 | In the **Incident** control, pick `<number> · <CI>` | Sections 2 and 3 now show the incident's Affected CI. The CI control can stay at "(no CI selected)": while an incident is picked, its CI wins | ☐ |
 | 2.2 | Set the time picker to start **at least 2 hours before the incident was opened** (e.g. *Last 7 days* for an older incident) | Panels that follow the time picker (Server, Middleware, Database, Process, Synthetics, Logs) now cover the start of the problem. Panels marked with a fixed range (e.g. *Last 7 days*) do not change | ☐ |
 
-If the incident has **no CI** (`<number> · (no CI)`), sections 2–4 stay empty. Ask the assignment group which CI is
+If the incident has **no CI** (`<number> · (no CI)`), sections 2 and 3 stay empty. Ask the assignment group which CI is
 affected, then set the Incident control back to **(all incidents)** and pick the CI in the **CI** control. The CI
 control lists only CIs that had a P1 / P2 / P3 in the last 31 days.
 
@@ -76,7 +76,7 @@ incident, and the time it started.
 
 ---
 
-## Step 4 — Check the CIs around it (sections 2 and 3)
+## Step 4 — Check the CIs around it (section 2)
 
 The cause is not always on the incident's own CI. A database, middleware server or host it runs on may be the real
 problem.
@@ -85,17 +85,17 @@ problem.
 |---|---|---|---|---|
 | 4.1 | **Blast radius** | How many applications depend on this CI. Amber from 1, red from 5 | A count, split into business applications and application services | ☐ |
 | 4.2 | **Applications that depend on this CI** | The applications that will be affected, read as "<application> <how> this CI". Click one to open it in ServiceNow | Business applications first, then application services. Columns: Application, Kind, How, Env, APM number | ☐ |
-| 4.3 | Section 3 — **Middleware / Database / Server / Application View** | The CIs this CI runs on or uses ("this CI runs on it"), and the ones that use it ("it runs on this CI"). Compare their names with the Alerts, Changes and Logs panels: a changed or alerting database or host is a strong lead | Four tables: Related CI, Type, Relationship, Env. No status column. Empty view = no relationship of that class in the CMDB | ☐ |
+| 4.3 | **Middleware / Database / Server / Application View** (section 2, after *Applications that depend on this CI*) | The CIs this CI runs on or uses ("this CI runs on it"), and the ones that use it ("it runs on this CI"). Compare their names with the Alerts, Changes and Logs panels: a changed or alerting database or host is a strong lead | Four tables: Related CI, Type, Relationship, Env. No status column. Empty view = no relationship of that class in the CMDB | ☐ |
 
-The section 3 views come from the CMDB and show **no live health**. To check a related CI's health:
+These four views come from the CMDB and show **no live health**. To check a related CI's health:
 
 - If it had a P1 / P2 / P3 in the last 31 days, set the Incident control to **(all incidents)** and pick it in the **CI**
   control. Section 2 then shows its alerts, changes, health and logs.
-- Otherwise open the **Infra Dashboard** (section 5) for servers, or look it up in ServiceNow.
+- Otherwise open the **Infra Dashboard** (section 4) for servers, or look it up in ServiceNow.
 
 ---
 
-## Step 5 — Check the services and the applications impacted (section 4)
+## Step 5 — Check the services and the applications impacted (section 3)
 
 Most useful when the CI runs APM-instrumented services. Leave the Service control at **(services on this CI)**.
 
@@ -118,7 +118,7 @@ the CI's services.
 |---|---|---|
 | Likely-trigger alert, Down component, red Server Health tile or stopped service **on the incident's CI** | The CI itself | The incident's **assignment group** (it should already be working on it) |
 | A change on the CI that ended shortly before the incident | The change | The change's **assignment group** (column in *Changes*), together with the incident's group |
-| Problem on a **related CI** (section 3, or the CI column in *Changes*), or a red **Upstream** bar | The dependency | That CI's support group in ServiceNow. Make sure the incident's assignment group knows |
+| Problem on a **related CI** (the related-CI views, or the CI column in *Changes*), or a red **Upstream** bar | The dependency | That CI's support group in ServiceNow. Make sure the incident's assignment group knows |
 | Many **Open Alerts with No Incident** on CIs of the same application | A wider problem | Raise or link an incident for those CIs |
 | Nothing found | Not visible in monitoring | The assignment group, asking what they have found so far |
 
@@ -152,7 +152,7 @@ starts from the overview.
 - **Alerts and incidents** are linked by CI and time only; Netcool alerts carry no incident number.
 - **Open Alerts with No Incident** looks at the last 24 hours; an open incident not updated in that time is missed,
   so its alerts can show as "no incident".
-- **Section 3** is CMDB data with no live health (the dependency index has no timestamp).
+- **The related-CI views** (section 2) are CMDB data with no live health (the dependency index has no timestamp).
 - **Changes** mostly shows changes on the CI itself; changes on linked CIs appear only when the CMDB link was updated
   in the same week.
 - **The CI control** lists only CIs that had a P1 / P2 / P3 in the last 31 days.

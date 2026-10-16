@@ -107,9 +107,20 @@ Time to Resolve log axis started at 1.0 h, cutting off lines that went below it.
 column is a real field on 9.5.3. The Incident control was checked too: it lists incidents not updated in the last 24 h,
 so 9.5's time handling does not affect the controls.
 
+## Eighth round: related-CI views moved into "Investigate the CI" (16 Oct, later)
+
+| What changed | Where |
+|---|---|
+| *Middleware View*, *Database View*, *Server View* and *Application View* moved into **2 · Investigate the CI**, right after *Blast radius* and *Applications that depend on this CI* | The health panels, Logs and Changes move down below them |
+| The empty **3 · Related CIs by Type (CMDB)** section removed | Sections are now 1 · Major Incident Overview, 2 · Investigate the CI, **3** · Application & Service Health, Dependencies, **4** · Related dashboards |
+| Three panel descriptions that named a section by number | Updated, and the guide and walkthrough renumbered |
+
+Checked on Kibana 9.5.3 (panel order and section titles); all nine tests pass, including the new
+`tools/test_mim_v3_2026-10-16h.py`.
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second, fourth, fifth, sixth and seventh rounds changed it)
+### 1. Import the dashboard (needed again: the second and fourth to eighth rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept
