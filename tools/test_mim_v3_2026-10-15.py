@@ -125,25 +125,8 @@ def check(name, got, want):
         fails.append(name)
 
 
-row = lambda r: (r['related_ci'], r['ci_type'], r['relation'])
-check('Middleware View, application service', [row(r) for r in run('Middleware View', ci=ACT)[0]],
-      [('Tomcat@vslrau1p276:8081', 'Tomcat', 'this CI depends on it')])
-check('Database View, application service', [row(r) for r in run('Database View', ci=ACT)[0]],
-      [('oradb01', 'Oracle Instance', 'this CI depends on it')])
-check('Server View, application service (retired left out)',
-      [row(r) for r in run('Server View', ci=ACT)[0]], [
-          ('vslrau1p174', 'Linux Server', 'this CI runs on it'),
-          ('vslrau1p276', 'Linux Server', 'this CI runs on it'),
-          ('CNA1BSYS', 'Mainframe LPAR', 'this CI runs on it')])
-check('Application View: the business application using it', [row(r) for r in run('Application View', ci=ACT)[0]],
-      [('Automated Claim Transaction', 'Business Application', 'it consumes this CI')])
-check('Middleware View, server (the other direction)', [row(r) for r in run('Middleware View', ci=SRV)[0]],
-      [('WebSphere@vslrau1p276', 'IBM WebSphere', 'it runs on this CI')])
-check('Database View, server', [row(r) for r in run('Database View', ci=SRV)[0]],
-      [('mssql@vslrau1p276', 'MSFT SQL Instance', 'it runs on this CI')])
-check('Server View follows the incident', run('Server View', incident=f'INC1 · {ACT}')[0], run('Server View', ci=ACT)[0])
-check('views empty with no CI', [len(run(f'{g} View')[0]) for g in ('Middleware', 'Database', 'Server', 'Application')],
-      [0, 0, 0, 0])
+# The related-CI views and the applications table read the full relationship graph since round i (16 Oct):
+# their rows are checked by test_mim_v3_2026-10-16i.py.
 
 R, cols = run('Application Health')
 check('Application Health: worst first', [(r['ci.name'], r['app_health'], r['failing'], r['degraded'], r['services'],

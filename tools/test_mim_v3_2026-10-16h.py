@@ -27,8 +27,8 @@ check('sections', [s['title'] for s in A['sections']],
 order = [title(p) for p in sorted(panels, key=lambda p: (p['gridData']['y'], p['gridData']['x']))
          if sec[p['gridData']['sectionId']] == '2 · Investigate the CI']
 check('section 2 reading order', order[:9], [
-    'Escalate', 'Alerts on this CI', 'Blast radius', 'Applications that depend on this CI',
-    'Middleware View', 'Database View', 'Server View', 'Application View', 'Middleware Health'])
+    'Escalate', 'Alerts on this CI', 'Blast radius', 'Applications related to this CI',   # names since round i
+    'Middleware View', 'Database View', 'Server View', 'Other related CIs', 'Middleware Health'])
 check('no panel left in a removed section', [title(p) for p in panels if p['gridData']['sectionId'] not in sec], [])
 check('no description names an old section number',
       [title(p) for p in panels if any(f'section {n}' in (p['embeddableConfig'].get('description') or '')

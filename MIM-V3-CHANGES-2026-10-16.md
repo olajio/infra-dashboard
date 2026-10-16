@@ -118,9 +118,28 @@ so 9.5's time handling does not affect the controls.
 Checked on Kibana 9.5.3 (panel order and section titles); all nine tests pass, including the new
 `tools/test_mim_v3_2026-10-16h.py`.
 
+## Ninth round: no blind spots in related CIs; one applications table; "Times fired" (16 Oct, later)
+
+Details, the reasons and screenshots: *MIM-V3-RELATED-CIS-NO-BLIND-SPOTS.md*.
+
+| What changed | Why |
+|---|---|
+| The related-CI panels read **`cmdb-ci-relations*`**, the full ServiceNow relationship graph, instead of `cmdb_app_dependencies_v2` | The extract missed many relationships that ServiceNow shows |
+| **Applications related to this CI** replaces *Applications that depend on this CI* and *Application View*: every application, both directions | They overlapped (e.g. *Claim Center* "consumes this CI" was in both), and the old name hid that some rows are applications the CI itself uses |
+| **Other related CIs** (where *Application View* was): every related CI whose class is in none of the lists | Classes outside the Middleware / Database / Server lists appeared nowhere |
+| Retired CIs shown, marked "· retired", listed last; links marked for deletion left out | Retired CIs were hidden |
+| CI name matched exactly, in UPPER and in lower case | A different case missed the match |
+| Fixed range **Last 5 years** on these panels | Relationship records are only re-sent when they change (oldest 2023); the time picker hid most of them |
+| *Blast radius* counts from the same graph | So it agrees with the table |
+| **"Count" → "Times fired"** in *Open Alerts with No Incident* and *Alerts on this CI* | Clearer name; same Netcool tally |
+
+Trade-off: the Application column of the merged table no longer opens ServiceNow (Kibana 9.5 blocks links on a name
+taken from either side of a link). Checked on Kibana / Elasticsearch 9.5.3; all ten tests pass, including the new
+`tools/test_mim_v3_2026-10-16i.py`.
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second and fourth to eighth rounds changed it)
+### 1. Import the dashboard (needed again: the second and fourth to ninth rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept
@@ -136,7 +155,7 @@ Viewers need read access to every index the panels read, or the panel shows an e
 | Data | Indices |
 |---|---|
 | ServiceNow | `servicenow-incidents-*`, `servicenow-task-sla-*`, `servicenow-change-requests-*` |
-| CMDB | `cmdb-ci-relations*`, `cmdb_app_dependencies_v2` |
+| CMDB | `cmdb-ci-relations*` (since the ninth round the dashboard no longer reads `cmdb_app_dependencies_v2`) |
 | Netcool alerts | `.ds-bridge-alerts-netcool-default-*` (hidden backing indices) |
 | Server metrics | `.ds-metrics-system.cpu-default*`, `.ds-metrics-system.memory-default*`, `.ds-metrics-system.filesystem-default*` (hidden), `metrics-system.process-*`, `metrics-windows.service-*`, `metricbeat-*` |
 | APM | `metrics-apm.service_transaction.1m-*`, `metrics-apm.service_destination.1m-*`, `metrics-apm.internal-*`, `traces-apm*`, `logs-apm.app.*`, `logs-apm.error-*` |
@@ -156,7 +175,7 @@ grant those patterns too.
 - Click-through links work in view mode (Active Incidents, Escalate, the CMDB links).
 
 ## Not dashboard changes (need other teams)
-- **Live health in the CMDB views:** needs an `@timestamp` on `cmdb_app_dependencies_v2`.
+- **Live health in the CMDB views:** needs a lookup copy of `cmdb-ci-relations*` (option (b) in *MIM-V3-CI-VS-CMDB-RELATIONSHIPS.md*).
 - **Real users-impacted count:** needs ATOS to ingest the ServiceNow / RUM user counts.
 - **Exact alert-to-incident link:** needs the Netcool / ServiceNow integration to write the incident number back to the
   alert.

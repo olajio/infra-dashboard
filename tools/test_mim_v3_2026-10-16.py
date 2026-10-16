@@ -125,9 +125,8 @@ check('Escalate rows', [tuple(r.values()) for r in R], [
     (CI, 'INC1', 1, 'Windows Server', 'prod', 'IT.I.Wintel', 'IT.I.Wintel', 'Ann Lee', 'ann.lee@cna.com', 'Mark Boss',
      'mark.boss@cna.com')])
 check('Escalate follows the incident', run('Escalate', incident=f'INC1 · {CI}')[0], R)
-R, cols = run('Applications that depend on this CI', ci=CI)
-check('Applications that depend on this CI: no CMDB status', cols,
-      ['parent_ci.name.keyword', 'app_kind', 'app_how', 'app_env', 'app_number'])
+check('Applications related to this CI (merged in round i): no CMDB status', labels('Applications related to this CI'),
+      ['Application', 'Kind', 'How', 'Env'])
 check('Open Alerts window', P['Open Alerts with No Incident']['embeddableConfig']['time_range']['from'], 'now-24h')
 spec = json.loads(P['Active P1 / P2 / P3']['embeddableConfig']['savedVis']['params']['spec'])
 check('donut query', [(r['label'], r['incidents']) for r in esql(spec['data'][0]['url']['query'])[0]], [('P1', 1), ('P2', 1)])

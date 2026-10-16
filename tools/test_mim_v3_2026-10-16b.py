@@ -33,18 +33,12 @@ def esql(q, params):
     return [dict(zip(cols, v)) for v in r['values']], cols
 
 
-for t in ('Middleware View', 'Database View', 'Server View', 'Application View'):
+for t in ('Middleware View', 'Database View', 'Server View', 'Other related CIs'):   # rows: test_..._16i.py
     ec = P[t]['embeddableConfig']
     L = next(iter(ec['attributes']['state']['datasourceStates']['textBased']['layers'].values()))
-    rows, cols = esql(L['query']['esql'], [{'ci': ACT}, {'incident': '(all incidents)'}])
-    check(f'{t}: query columns', cols, ['related_ci', 'ci_type', 'relation', 'related_env'])
     check(f'{t}: table columns', [c['label'] for c in L['columns']], ['Related CI', 'Type', 'Relationship', 'Env'])
     check(f'{t}: no status anywhere', 'CMDB status' in json.dumps(P[t]) or 'operational status' in ec['description'],
           False)
-rows, _ = esql(next(iter(P['Server View']['embeddableConfig']['attributes']['state']['datasourceStates']['textBased']
-                         ['layers'].values()))['query']['esql'], [{'ci': ACT}, {'incident': '(all incidents)'}])
-check('Server View: non-operational CI still listed, sorted by type then name', [r['related_ci'] for r in rows],
-      ['vslrau1p174', 'vslrau1p276', 'CNA1BSYS'])
 
 for t in ('Active P1 / P2 / P3', 'Users impacted'):
     spec = json.loads(P[t]['embeddableConfig']['savedVis']['params']['spec'])

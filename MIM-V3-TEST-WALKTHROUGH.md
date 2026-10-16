@@ -84,8 +84,8 @@ problem.
 | # | Panel | What to look for | You should see | ✓ |
 |---|---|---|---|---|
 | 4.1 | **Blast radius** | How many applications depend on this CI. Amber from 1, red from 5 | A count, split into business applications and application services | ☐ |
-| 4.2 | **Applications that depend on this CI** | The applications that will be affected, read as "<application> <how> this CI". Click one to open it in ServiceNow | Business applications first, then application services. Columns: Application, Kind, How, Env, APM number | ☐ |
-| 4.3 | **Middleware / Database / Server / Application View** (section 2, after *Applications that depend on this CI*) | The CIs this CI runs on or uses ("this CI runs on it"), and the ones that use it ("it runs on this CI"). Compare their names with the Alerts, Changes and Logs panels: a changed or alerting database or host is a strong lead | Four tables: Related CI, Type, Relationship, Env. No status column. Empty view = no relationship of that class in the CMDB | ☐ |
+| 4.2 | **Applications related to this CI** | The applications that will be affected: those whose How reads "it … this CI" (e.g. "it consumes this CI"). Rows reading "this CI … it" are applications the CI itself uses | Every related application, both directions, business applications first. Columns: Application, Kind, How, Env. Compare with the CI's related items in ServiceNow: nothing should be missing | ☐ |
+| 4.3 | **Middleware / Database / Server View** and **Other related CIs** (section 2, after *Applications related to this CI*) | The CIs this CI runs on or uses ("this CI runs on it"), and the ones that use it ("it runs on this CI"). Compare their names with the Alerts, Changes and Logs panels: a changed or alerting database or host is a strong lead | Four tables: Related CI, Type, Relationship, Env. Retired CIs last, marked "· retired". Empty view = no relationship of that kind in the CMDB. Every related item in ServiceNow should appear in one of the five tables | ☐ |
 
 These four views come from the CMDB and show **no live health**. To check a related CI's health:
 
