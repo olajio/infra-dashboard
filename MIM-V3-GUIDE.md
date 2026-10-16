@@ -43,18 +43,19 @@ The MIM lead opens MIM V3 and reads the top row from left to right.
   the middle and each count beside it.
 - **Users impacted** — a placeholder number (2,500, demo only): *"Real count to be incorporated from
   ServiceNow and RUM"*.
-- **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** — are we resolving within target? The average time to
-  resolve the P1 and P2 incidents opened each day, against the dashed target lines (red P1 4 h, amber P2 8 h). A
-  run of points above a line means incidents are taking longer than target. Hover a point for how many incidents
-  are behind it.
+- **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** — are we resolving within target? The
+  average time to resolve the P1, P2 and P3 incidents opened each day, against the dashed target lines (red P1 4 h,
+  amber P2 8 h, blue P3 24 h). Incidents still open count with their age so far, so a live P1 shows up on the day it
+  was opened and its point climbs until it is resolved. A run of points above a line means incidents are taking
+  longer than target. The time axis is logarithmic, so the 4 h, 8 h and 24 h lines stay readable next to incidents
+  that took days.
 
 ### Step 2 — Pick the incident (section 1, table)
 
 **Active Incidents (P1 / P2 / P3)** lists every active P1, P2 and P3, P1 first and oldest first. For each one the lead sees:
 
 - the **SLA**: Breached, Breaching, Paused or Within SLA, taken from ServiceNow's SLA records. How this is worked
-  out is explained in *MIM-V3-SLA-CALCULATION.md*. A P3 with no SLA record shows "No SLA record" (no P3 target
-  agreed yet);
+  out is explained in *MIM-V3-SLA-CALCULATION.md*;
 - the people: the **Assignment Group**, the **Assignee** and the **Group Manager**, each with an email address
   (`assigned_to.name` / `.email`, `assignment_group.manager.name` / `.email`).
 
@@ -221,13 +222,13 @@ so MIM V3 stays open on the bridge.
 ### Reading the numbers
 
 - **"(age)" in the SLA column is an estimate.** It appears when the incident has no ServiceNow SLA record: its age
-  is compared with P1 4 h / P2 8 h (dashboard defaults, to be confirmed). Full rules: *MIM-V3-SLA-CALCULATION.md*.
+  is compared with P1 4 h / P2 8 h / P3 24 h. Full rules: *MIM-V3-SLA-CALCULATION.md*.
 - **Active** everywhere means priority 1, 2 or 3 and state not Resolved, Closed, Canceled or Cancelled.
-- **The trend's target lines** are P1 4 h and P2 8 h, the dashboard's age rule (to be confirmed against CNA's
-  resolution targets). The trend plots only resolved incidents, by the day they were opened, using ServiceNow's
-  `resolution_time`.
+- **The trend's target lines** are P1 4 h, P2 8 h and P3 24 h, the same targets as the SLA age rule. Each incident
+  counts once, on the day it was opened: resolved ones by ServiceNow's `resolution_time`, open ones by their age so
+  far (a minimum that grows until they are resolved). Canceled incidents are left out.
 - **One slow incident moves a day's average.** On days with one or two P1s, a single long incident can put the point
-  far above the line; hover the point to see how many incidents it averages.
+  far above the line.
 - **Health thresholds.** Server Health: amber from 80 %, red from 90 %, red if the server has been silent more than
   10 minutes. Middleware, Database and Process Health: *Down* / *Not seen* after 10 minutes without data. Section 4: *Failing*
   = 10 % or more of calls failed in the last hour, *Degraded* = 1 % or more.
@@ -292,9 +293,9 @@ so MIM V3 stays open on the bridge.
 | Control | **CI** (second) | ✅ | The CI to investigate when no incident is picked | Lists every CI with a P1 / P2 / P3 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`), used by sections 2 to 4 only while the Incident control is on *(all incidents)*. |
 | 1 | **Active P1 / P2 / P3** | ✅ | Donut: active P1 (red), P2 (amber) and P3 (blue), total in the middle | Vega chart, transparent, text in Kibana's theme colours (reads in light and dark mode); P1 / P2 / P3 colours match the priority badges in Active Incidents. `servicenow-incidents-*`, active P1 / P2 / P3, one count per incident, last month. |
 | 1 | **Users impacted** | ⚠️ | Placeholder number (2,500, demo only), "Real count to be incorporated from ServiceNow and RUM" | No user-count data in Elastic yet. |
-| 1 | **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** | ✅ | Average time to resolve per opened day, P1 (red) and P2 (amber), with dashed target lines | Resolved P1 / P2 opened in the last 30 days; `resolution_time` (ServiceNow's opened → resolved seconds), or resolved_at − opened_at. Target lines are a reference-line layer. P3 is not plotted until a P3 target is agreed. |
+| 1 | **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** | ✅ | Average time to resolve per opened day, P1 (red), P2 (amber) and P3 (blue), with dashed target lines, log axis | P1 / P2 / P3 opened in the last 30 days, one value per incident: `resolution_time` (ServiceNow's opened → resolved seconds) or resolved_at − opened_at; still open → age so far; canceled left out. Points always drawn. Target lines are a reference-line layer. |
 | 1 | **Open Alerts with No Incident** | ⚠️ | Netcool alerts still open on CIs with no open incident: CI, severity, alert, open for, last seen, count, ack, node, class, support group | `.ds-bridge-alerts-netcool-*` (CMDB-enriched `ci.name`) + `servicenow-incidents-*` (any priority, not closed). Open = the alert's latest record is not severity 0 or a resolution. Last 24 hours (alerts and open incidents seen in that window). CI links to the CMDB. **Limit:** alerts carry no incident number, so "no incident" means no open incident on the same CI; an alert whose node is not in the CMDB shows an empty CI and is listed. |
-| 1 | **Active Incidents (P1 / P2 / P3)** | ✅ | Every active P1 / P2 / P3: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)"; a P3 with no SLA record shows "No SLA record" (no P3 target agreed). Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
+| 1 | **Active Incidents (P1 / P2 / P3)** | ✅ | Every active P1 / P2 / P3: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h, P3 24 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
 | 2 | **Alerts on this CI** | ⚠️ | The CI's Netcool alerts: Open / Cleared, severity, text, timing against the picked incident, first / last seen, count, ack | `.ds-bridge-alerts-netcool-*` on `ci.name` (or node "<CI>.cna.com"), one row per `netcool.identifier`; the picked incident's `opened_at` for the timing. Likely trigger = first seen ≤ 2 h before the incident opened. Last 7 days. **Limit:** a match by CI and time, not a recorded link (round 7: no incident or ticket field on the alerts). |
 | 2 | **Escalate** | ✅ | One row per active P1 / P2 / P3 on the CI: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id | Incidents on the CI (or the one in the Incident control) plus the CMDB enrichment on its server metrics; last month. CI and Active Incident link to ServiceNow; no other column is clickable. A CI with no active P1 / P2 / P3 still shows one row with its owners. If an incident is picked whose CI is not the one in the CI control, Class / Env / support group come from the incident record and may show "—". |
 | 2 | **Blast radius** | ✅ | Count of applications that depend on the CI, split into application services and business applications | `cmdb_app_dependencies_v2`: records whose child is the CI and whose parent is a business application or application service, not retired. Amber from 1, red from 5. No time window. |

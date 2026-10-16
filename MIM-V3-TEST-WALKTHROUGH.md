@@ -38,8 +38,7 @@ Leave the controls at their defaults: Incident **(all incidents)**, CI **(no CI 
 | 1.6 | Look at **Open Alerts with No Incident** | Open Netcool alerts from the last 24 hours on CIs that have **no** open incident, critical first. Anything critical here is a problem nobody has raised yet. It may be linked to your incident (same application, same time) | ☐ |
 
 > **What "SLA" means.** Breached, Breaching (75 % used or due within 30 min), Paused (On Hold) or Within SLA, from
-> ServiceNow's SLA records. "(age)" means the incident has no SLA record, so its age is compared with P1 4 h / P2 8 h. A P3 with no SLA record shows "No SLA record":
-> there is no agreed P3 target to compare its age with.
+> ServiceNow's SLA records. "(age)" means the incident has no SLA record, so its age is compared with P1 4 h / P2 8 h / P3 24 h.
 
 ---
 

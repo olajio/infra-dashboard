@@ -19,7 +19,7 @@ The two are matched on **incident number** (`number` = `task_number`). An incide
 **Response** SLA and a **Resolution** SLA. The dashboard treats a record as a Response SLA when its `contract_name`
 contains "respon", and as a Resolution SLA otherwise.
 
-Only **active P1 / P2** incidents are listed: priority 1 or 2 and state not Resolved, Closed, Canceled or Cancelled.
+Only **active P1 / P2 / P3** incidents are listed: priority 1, 2 or 3 and state not Resolved, Closed, Canceled or Cancelled.
 
 ## 2. Step 1: rate each SLA record
 
@@ -51,15 +51,17 @@ If an incident has no (non-cancelled) SLA record, its age since `opened_at` is c
 |---|---|
 | P1 | 4 hours |
 | P2 | 8 hours |
+| P3 | 24 hours |
 
 | Status | Rule |
 |---|---|
 | **Breached (age)** | Age ≥ target |
-| **At risk (age)** | Age ≥ 80 % of target (P1 from 3 h 12 min, P2 from 6 h 24 min) |
+| **At risk (age)** | Age ≥ 80 % of target (P1 from 3 h 12 min, P2 from 6 h 24 min, P3 from 19 h 12 min) |
 | **Within SLA (age)** | Otherwise |
 
-The 4 h / 8 h targets are dashboard defaults, not values read from ServiceNow. Please confirm they match CNA's P1 /
-P2 resolution targets. They are one number each in the query, so they are easy to change.
+The 4 h / 8 h / 24 h targets are set in the dashboard, not read from ServiceNow (P3 24 h confirmed 16 Oct 2026).
+They are one number each in the query, so they are easy to change. The Time to Resolve chart uses the same targets
+for its dashed lines.
 
 ## 5. Colours
 

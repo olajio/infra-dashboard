@@ -1,5 +1,5 @@
 """Check that P3 incidents are included (16 Oct, fourth round): controls, Active donut, Active Incidents (SLA for a
-P3 with and without an SLA record), Escalate; P4 and resolved incidents stay out; Time to Resolve stays P1 / P2.
+P3 with and without an SLA record), Escalate; P4 and resolved incidents stay out.
 
 Usage: test_mim_v3_2026-10-16d.py MIM_V3_NDJSON
 """
@@ -94,18 +94,17 @@ check('donut counts', [(r['label'], r['incidents']) for r in esql(spec['data'][0
       [('P1', 1), ('P2', 1), ('P3', 2)])
 check('donut colours', (spec['scales'][0]['domain'], spec['scales'][0]['range']),
       (['P1', 'P2', 'P3'], ['#d6453d', '#c98a0b', '#3f6fb5']))
-check('Active Incidents: P1-P3, P3 SLA from its record or "No SLA record"',
+check('Active Incidents: P1-P3, P3 SLA from its record, else age vs 24 h (round e)',
       sorted((r['number'], r['priority'], r['sla'], r['assignee']) for r in run('Active Incidents (P1 / P2 / P3)')), [
           ('INC1', 1, 'Breached (age)', 'Ann Lee'), ('INC2', 2, 'Breached (age)', 'Bo Chan'),
-          ('INC3', 3, 'Within SLA', 'Cy Dee'), ('INC4', 3, 'No SLA record', 'Di Eck')])
+          ('INC3', 3, 'Within SLA', 'Cy Dee'), ('INC4', 3, 'Breached (age)', 'Di Eck')])  # 30 h old, no SLA record, P3 target 24 h
 check('Escalate shows a P3', [(r['number'], r['esc_priority'], r['assignee'], r['group_manager'])
                               for r in run('Escalate', incident='INC4 · p3other')], [('INC4', 3, 'Di Eck', 'Mark Boss')])
 badges = [c for p in ('Active Incidents (P1 / P2 / P3)', 'Escalate') for c in
           P[p]['embeddableConfig']['attributes']['state']['visualization']['columns'] if c['columnId'] in ('priority', 'esc_priority')]
 check('priority badges have a P3 colour', [[s['color'] for s in c['palette']['params']['colorStops']] for c in badges],
       [['#d6453d', '#c98a0b', '#3f6fb5']] * 2)
-tq = P['P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)']['embeddableConfig']['attributes']['state']['query']['esql']
-check('Time to Resolve stays P1 / P2', 'priority IN (1, 2) AND' in tq, True)
+# Time to Resolve covers P3 since round e: see test_mim_v3_2026-10-16e.py
 for idx in ('servicenow-incidents-t16d', 'servicenow-task-sla-t16d'):   # do not leak into the other tests
     call('DELETE', f'/{idx}')
 print('\n' + ('ALL CHECKS PASSED' if not fails else f'FAILED: {fails}'))

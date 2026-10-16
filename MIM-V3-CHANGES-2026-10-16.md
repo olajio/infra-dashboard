@@ -58,15 +58,29 @@ Requested so that more CIs, with more telemetry, can be picked for demos.
 | **Active Incidents (P1 / P2 / P3)** (renamed) | Lists P3s; a P3 that has a ServiceNow SLA record shows its real SLA status. A P3 **with no SLA record** shows **"No SLA record"**, because there is no agreed P3 target to compare its age with (P1 4 h / P2 8 h unchanged) |
 | **Escalate** | Shows the people for a P3 as well |
 | Priority badges | P3 has its own colour (blue) in Active Incidents and Escalate |
-| **P1 / P2 Time to Resolve vs Target** | Unchanged, still P1 / P2. Tell me the P3 target and I will add it with its own dashed line |
+| **P1 / P2 Time to Resolve vs Target** | Unchanged in this round; P3 added in the fifth round below |
 
 Preview with test data: `mim-v3-p3-preview.png`. Checks: all five tests pass, including the new
 `tools/test_mim_v3_2026-10-16d.py` (a P3 with and without an SLA record; a P4 and a resolved P3 stay out). Rebuilding
 from the colleague's export with the four patch scripts gives the same file byte for byte.
 
+## Fifth round: P3 target 24 h, Time to Resolve fixed (16 Oct, later)
+
+| Where | What changed |
+|---|---|
+| **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** (renamed) | P3 added, with a blue dashed 24 h line. The time axis is now **logarithmic**: on a normal axis, P3 values of a day or more flatten the P1 and P2 lines against the bottom (compared side by side before choosing) |
+| Same chart — **the live P1 that did not show** | Two causes. (1) The chart only plotted **resolved** incidents, so an open P1 had no point until it was resolved. Now an open incident counts with its **age so far**: it appears on the day it was opened and its point climbs past the target while it stays open. (2) Kibana's "auto" point setting can hide a priority that has incidents on one day only (a single point with no line); points are now always drawn |
+| Same chart — counting | Each incident counts once. An incident synced several times used to weigh once per copy in the day's average. Canceled incidents are left out |
+| **Active Incidents** SLA column | A P3 with no ServiceNow SLA record is compared with **24 h** and marked "(age)", like P1 4 h / P2 8 h ("No SLA record" is gone) |
+
+Preview with test data (a live P1 opened 6 h ago at the far right, above its 4 h line; a P2 resolved on one day only):
+`mim-v3-time-to-resolve-p3-preview.png`. Checks: all six tests pass, including the new
+`tools/test_mim_v3_2026-10-16e.py` (an incident synced three times counts once, the live P1 is plotted by its age,
+canceled and P4 left out).
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second and fourth rounds changed it)
+### 1. Import the dashboard (needed again: the second, fourth and fifth rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept
