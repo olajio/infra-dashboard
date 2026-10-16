@@ -44,7 +44,7 @@ load('servicenow-incidents-t16d', [
     inc('INC1', 1, 'In Progress', 'p1host', 'Ann Lee'), inc('INC2', 2, 'New', 'p2host', 'Bo Chan'),
     inc('INC3', 3, 'In Progress', 'p3host', 'Cy Dee'), inc('INC4', 3, 'New', 'p3other', 'Di Eck'),
     inc('INC5', 4, 'New', 'p4host', 'Ed Fox'), inc('INC6', 3, 'Resolved', 'p3done', 'Fi Gee')],
-    {'@timestamp': DATE, 'number': KW, 'priority': INT, 'state_name': KW, 'opened_at': DATE,
+    {'@timestamp': DATE, 'number': KW, 'priority': INT, 'state_name': KW, 'opened_at': DATE, 'short_description': KW,
      'ci': obj(name=KW), 'assigned_to': obj(name=KW, email=KW), 'assignment_group': obj(name=KW, manager=obj(name=KW, email=KW))})
 load('servicenow-task-sla-t16d', [{'@timestamp': ago(minutes=1), 'task_number': 'INC3', 'stage': 'in_progress',
                                    'task_has_breached': False, 'percentage': 20, 'planned_end_time': ahead(days=2),

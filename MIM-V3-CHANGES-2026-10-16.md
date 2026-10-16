@@ -137,9 +137,22 @@ Trade-off: the Application column of the merged table no longer opens ServiceNow
 taken from either side of a link). Checked on Kibana / Elasticsearch 9.5.3; all ten tests pass, including the new
 `tools/test_mim_v3_2026-10-16i.py`.
 
+## Tenth round: Application Health follows the CI; production only; Short description; Changes moved (16 Oct, later)
+
+Details: *MIM-V3-APP-HEALTH-BY-CI-AND-PROD-ONLY.md*.
+
+| What changed | Detail |
+|---|---|
+| **Application Health** follows the selected CI | Applications related to the incident's CI (or the CI control): CMDB-linked business applications, applications with APM services on the CI, or the CI itself. All production applications when nothing is selected. It ignored both controls before |
+| **Production only** | Related-CI tables, Blast radius, Applications on this CI, Open Alerts with No Incident: environment starting "prod" / "prd" (any case). Blank environments kept; the selected CI itself never hidden |
+| **Short description** back in Active Incidents | Last column |
+| **Changes in the Last 7 Days on this CI** right after Escalate | Section 2 order: Escalate, Changes, Alerts, Blast radius / Applications, views, health, Logs |
+
+All eleven tests pass on 9.5.3, including the new `tools/test_mim_v3_2026-10-16j.py`.
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second and fourth to ninth rounds changed it)
+### 1. Import the dashboard (needed again: the second and fourth to tenth rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept

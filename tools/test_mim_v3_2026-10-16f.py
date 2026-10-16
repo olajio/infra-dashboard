@@ -30,7 +30,8 @@ for old in ('servicenow-incidents-t', 'servicenow-incidents-t16', 'servicenow-in
     call('DELETE', f'/{old}')
 call('PUT', f'/{IDX}', {'mappings': {'properties': {
     '@timestamp': {'type': 'date'}, 'number': {'type': 'keyword'}, 'priority': {'type': 'integer'},
-    'state_name': {'type': 'keyword'}, 'opened_at': {'type': 'date'}, 'ci': {'properties': {'name': {'type': 'keyword'}}},
+    'state_name': {'type': 'keyword'}, 'opened_at': {'type': 'date'}, 'short_description': {'type': 'keyword'},
+    'ci': {'properties': {'name': {'type': 'keyword'}}},
     'assigned_to': {'properties': {'name': {'type': 'keyword'}, 'email': {'type': 'keyword'}}},
     'assignment_group': {'properties': {'name': {'type': 'keyword'}, 'manager': {'properties': {
         'name': {'type': 'keyword'}, 'email': {'type': 'keyword'}}}}}}}})

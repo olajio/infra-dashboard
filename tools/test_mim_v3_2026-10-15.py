@@ -90,6 +90,13 @@ load('metrics-apm.service_transaction.1m-test', [
     tx(90, 'old-svc', 'Old App', 100, 0),                                # older than the last hour
 ])
 
+# Application Health also reads the CMDB relationship graph since round j: make sure the index exists (empty)
+call('DELETE', '/cmdb-ci-relations-t15')
+call('PUT', '/cmdb-ci-relations-t15', {'mappings': {'properties': {
+    '@timestamp': {'type': 'date'}, 'is_marked_for_deletion': {'type': 'boolean'}, 'type': obj(name=KW),
+    'parent': obj(name=KW, **{'class': KW}, environment=KW, install_status=KW),
+    'child': obj(name=KW, **{'class': KW}, environment=KW, install_status=KW)}}})
+
 # ------------------------------------------------------------------ run the stored queries
 dash = json.loads(open(sys.argv[1]).readline())
 A = dash['attributes']

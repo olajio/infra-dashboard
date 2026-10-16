@@ -32,7 +32,7 @@ Leave the controls at their defaults: Incident **(all incidents)**, CI **(no CI 
 |---|---|---|---|
 | 1.1 | Look at **Active P1 / P2 / P3** | A donut with the total in the middle and the P1 (red), P2 (amber) and P3 (blue) counts beside it. The counts match the active P1 / P2 / P3 list in ServiceNow | ☐ |
 | 1.2 | Look at **Users impacted** | The demo number **2,500** and "Real count to be incorporated from ServiceNow and RUM". This tile is a placeholder; do not use the number | ☐ |
-| 1.3 | Look at **Active Incidents (P1 / P2 / P3)** | One row per active incident, P1 first, oldest first: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id | ☐ |
+| 1.3 | Look at **Active Incidents (P1 / P2 / P3)** | One row per active incident, P1 first, oldest first: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id, Short description | ☐ |
 | 1.4 | Choose the incident to work on: a **P1** before a P2 before a P3, then **SLA** Breached → Breaching → Within SLA | Note its **number**, **Affected CI**, **Assignee** and **Group Manager** in the test record | ☐ |
 | 1.5 | Click the incident number → *Open incident in ServiceNow* | The ticket opens in ServiceNow. Assignee and assignment group match the row | ☐ |
 | 1.6 | Look at **Open Alerts with No Incident** | Open Netcool alerts from the last 24 hours on CIs that have **no** open incident, critical first. Anything critical here is a problem nobody has raised yet. It may be linked to your incident (same application, same time) | ☐ |
@@ -105,7 +105,7 @@ Most useful when the CI runs APM-instrumented services. Leave the Service contro
 | 5.2 | **⬅ Upstream — what they depend on** | A **red bar**: calls to a database, queue or other service that are failing. This points at the cause | Top 15 dependencies, failing first | ☐ |
 | 5.3 | **Downstream — who is impacted ➡** | Calling services with failing calls: the impacted side | Top 15 callers, failing first. Click one to open its Service Map | ☐ |
 | 5.4 | **Business applications impacted** | The business applications of those callers, worst first, with their support group | Click one to open it in ServiceNow | ☐ |
-| 5.5 | **Application Health**, then pick the worst application in the **Application** control | Which applications are Failing / Degraded right now (all of production, last hour). **Services of the Application** then lists that application's services, worst first | "Low traffic" services (under 20 transactions in the hour) are listed but not rated | ☐ |
+| 5.5 | **Application Health**, then pick the worst application in the **Application** control | Which of the applications related to the incident's CI are Failing / Degraded right now (last hour); all of production when no CI is selected. **Services of the Application** then lists that application's services, worst first | "Low traffic" services (under 20 transactions in the hour) are listed but not rated | ☐ |
 
 To follow one service, pick it in the **Service** control. The four panels above then show that service instead of
 the CI's services.

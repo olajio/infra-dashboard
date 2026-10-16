@@ -113,10 +113,10 @@ labels = lambda t: [c['label'] for c in next(iter(P[t]['embeddableConfig']['attr
 R, cols = run('Active Incidents (P1 / P2 / P3)')
 check('Active Incidents columns', labels('Active Incidents (P1 / P2 / P3)'), [
     'Incident', 'Pri', 'Affected CI', 'State', 'SLA', 'Assignment Group', 'Assignee', 'Assignee Email',
-    'Group Manager Name', 'Manager Email Id'])
+    'Group Manager Name', 'Manager Email Id', 'Short description'])   # Short description back in round j
 check('Active Incidents rows', [tuple(r.values()) for r in R], [
-    ('INC1', 1, CI, 'In Progress', 'Within SLA', 'IT.I.Wintel', 'Ann Lee', 'ann.lee@cna.com', 'Mark Boss', 'mark.boss@cna.com'),
-    ('INC2', 2, 'otherci', 'New', 'Within SLA (age)', 'IT.A.Apps', '—', '—', 'Olga Head', 'olga.head@cna.com')])
+    ('INC1', 1, CI, 'In Progress', 'Within SLA', 'IT.I.Wintel', 'Ann Lee', 'ann.lee@cna.com', 'Mark Boss', 'mark.boss@cna.com', 'INC1'),
+    ('INC2', 2, 'otherci', 'New', 'Within SLA (age)', 'IT.A.Apps', '—', '—', 'Olga Head', 'olga.head@cna.com', 'INC2')])
 R, cols = run('Escalate', ci=CI)
 check('Escalate columns', labels('Escalate'), [
     'CI', 'Active Incident', 'Priority', 'Class', 'Env', 'CI support group', 'Assignment Group', 'Assignee',
