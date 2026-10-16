@@ -274,9 +274,10 @@ so MIM V3 stays open on the bridge.
 - **Speed is untested on real data.** The *Downstream* and *Business applications impacted* panels read an hour of
   trace and dependency data each time they refresh. If they are slow, collapse section 4 when you do not need it
   (Kibana does not load panels in a collapsed section) and report it so the queries can be narrowed.
-- **Viewers need read access to every index the panels use**: `servicenow-*`, `cmdb-ci-relations*`, `metrics-*`,
-  `metricbeat-*`, `logs-*`, `synthetics-*`, `traces-apm*` and the hidden `.slo-observability.*`. A panel the viewer
-  cannot read shows an error, not "no results".
+- **Viewers need read access to every index the panels use**: `servicenow-*`, `cmdb-ci-relations*`,
+  `cmdb_app_dependencies_v2`, `metrics-*`, `metricbeat-*`, `logs-*`, `synthetics-*`, `traces-apm*` and the hidden
+  `.ds-bridge-alerts-netcool-default-*`, `.ds-metrics-system.*` and `.slo-observability.*`. A panel the viewer cannot
+  read shows an error, not "no results". The full list is in *MIM-V3-CHANGES-2026-10-16.md*.
 
 ---
 
