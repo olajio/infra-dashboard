@@ -40,7 +40,8 @@ The dashboard has five sections and four controls:
 The MIM lead opens MIM V3 and reads the top row from left to right.
 
 - **Active P1 / P2 / P3** — a donut (transparent background): P1 (red), P2 (amber) and P3 (blue) incidents active now, with the total in
-  the middle and each count beside it.
+  the middle and each count beside it. P1, P2 and P3 are always listed (0 shown faded), and every priority with an
+  active incident gets a visible slice, even one P2 next to hundreds of P3s; the numbers are the real counts.
 - **Users impacted** — a placeholder number (2,500, demo only): *"Real count to be incorporated from
   ServiceNow and RUM"*.
 - **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** — are we resolving within target? The
@@ -291,7 +292,7 @@ so MIM V3 stays open on the bridge.
 |---|---|---|---|---|
 | Control | **Incident** (first) | ✅ | The incident to work on; sections 2 to 4 follow its affected CI | Lists every active P1 / P2 / P3 as "number · affected CI", plus *(all incidents)*. A query variable (`?incident`); every section 2 and 3 query takes the CI from the part after " · " (and the number from the part before, for *Escalate*), so no extra lookup is needed. |
 | Control | **CI** (second) | ✅ | The CI to investigate when no incident is picked | Lists every CI with a P1 / P2 / P3 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`), used by sections 2 to 4 only while the Incident control is on *(all incidents)*. |
-| 1 | **Active P1 / P2 / P3** | ✅ | Donut: active P1 (red), P2 (amber) and P3 (blue), total in the middle | Vega chart, transparent, text in Kibana's theme colours (reads in light and dark mode); P1 / P2 / P3 colours match the priority badges in Active Incidents. `servicenow-incidents-*`, active P1 / P2 / P3, one count per incident, last month. |
+| 1 | **Active P1 / P2 / P3** | ✅ | Donut: active P1 (red), P2 (amber) and P3 (blue), total in the middle | Vega chart, transparent, text in Kibana's theme colours (reads in light and dark mode); P1 / P2 / P3 colours match the priority badges in Active Incidents. `servicenow-incidents-*`, active P1 / P2 / P3, one count per incident, last month, same active rule as Active Incidents. Every non-zero priority gets at least 6 % of the ring (a smaller slice was hidden by the gap between slices). |
 | 1 | **Users impacted** | ⚠️ | Placeholder number (2,500, demo only), "Real count to be incorporated from ServiceNow and RUM" | No user-count data in Elastic yet. |
 | 1 | **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** | ✅ | Average time to resolve per opened day, P1 (red), P2 (amber) and P3 (blue), with dashed target lines, log axis | P1 / P2 / P3 opened in the last 30 days, one value per incident: `resolution_time` (ServiceNow's opened → resolved seconds) or resolved_at − opened_at; still open → age so far; canceled left out. Points always drawn. Target lines are a reference-line layer. |
 | 1 | **Open Alerts with No Incident** | ⚠️ | Netcool alerts still open on CIs with no open incident: CI, severity, alert, open for, last seen, count, ack, node, class, support group | `.ds-bridge-alerts-netcool-*` (CMDB-enriched `ci.name`) + `servicenow-incidents-*` (any priority, not closed). Open = the alert's latest record is not severity 0 or a resolution. Last 24 hours (alerts and open incidents seen in that window). CI links to the CMDB. **Limit:** alerts carry no incident number, so "no incident" means no open incident on the same CI; an alert whose node is not in the CMDB shows an empty CI and is listed. |

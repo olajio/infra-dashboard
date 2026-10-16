@@ -78,9 +78,23 @@ Preview with test data (a live P1 opened 6 h ago at the far right, above its 4 h
 `tools/test_mim_v3_2026-10-16e.py` (an incident synced three times counts once, the live P1 is plotted by its age,
 canceled and P4 left out).
 
+## Sixth round: the donut showed only P3 (16 Oct, later)
+
+Seen live: the Active Incidents table had active P2 and P3, but the *Active P1 / P2 / P3* donut showed only P3.
+Details, before / after images and a query to confirm it on the cluster: *MIM-V3-TIME-TO-RESOLVE-AND-DONUT.md*.
+
+| What changed | Why |
+|---|---|
+| Every priority with an active incident gets at least 6 % of the ring | With many P3s, a P2 slice was thinner than the gap between slices and was not drawn at all (reproduced: 1 P2 next to 300 P3s gave a solid blue ring) |
+| The legend always lists P1, P2 and P3, 0 shown faded | A priority with no incidents used to disappear instead of reading 0 |
+| The donut uses the same active-incident rule as the Active Incidents table | So the two panels always count the same incidents |
+
+Checks: all seven tests pass, including the new `tools/test_mim_v3_2026-10-16f.py` (donut and table give the same
+counts; duplicates, a resolved P2, a P4 and a non-incident number left out).
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second, fourth and fifth rounds changed it)
+### 1. Import the dashboard (needed again: the second, fourth, fifth and sixth rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept
