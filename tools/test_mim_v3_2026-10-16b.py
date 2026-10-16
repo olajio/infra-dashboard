@@ -46,17 +46,17 @@ rows, _ = esql(next(iter(P['Server View']['embeddableConfig']['attributes']['sta
 check('Server View: non-operational CI still listed, sorted by type then name', [r['related_ci'] for r in rows],
       ['vslrau1p174', 'vslrau1p276', 'CNA1BSYS'])
 
-for t in ('Active P1 / P2', 'Users impacted'):
+for t in ('Active P1 / P2 / P3', 'Users impacted'):
     spec = json.loads(P[t]['embeddableConfig']['savedVis']['params']['spec'])
-    marks = spec['marks'] if t == 'Active P1 / P2' else spec['marks'][0]['marks']
+    marks = spec['marks'] if t == 'Active P1 / P2 / P3' else spec['marks'][0]['marks']
     texts = [m for m in marks if m['type'] == 'text']
     check(f'{t}: no background', ('background' in spec, '#000000' in json.dumps(spec)), (False, False))
     check(f'{t}: text uses theme colours',
           [m.get('style') or m['encode']['update']['fill'].get('scale') for m in texts],
-          ['guide-title', 'guide-label', 'colour'] if t == 'Active P1 / P2' else
+          ['guide-title', 'guide-label', 'colour'] if t == 'Active P1 / P2 / P3' else
           ['guide-label', 'guide-label', 'guide-label', 'guide-title'])
-spec = json.loads(P['Active P1 / P2']['embeddableConfig']['savedVis']['params']['spec'])
-check('donut colours match the priority badges', spec['scales'][0]['range'], ['#d6453d', '#c98a0b'])
+spec = json.loads(P['Active P1 / P2 / P3']['embeddableConfig']['savedVis']['params']['spec'])
+check('donut colours match the priority badges', spec['scales'][0]['range'], ['#d6453d', '#c98a0b', '#3f6fb5'])  # P3 blue added in round d
 check('Users impacted group not filled', 'fill' in json.loads(P['Users impacted']['embeddableConfig']['savedVis']['params']
                                                                ['spec'])['marks'][0]['encode']['update'], False)
 print('\n' + ('ALL CHECKS PASSED' if not fails else f'FAILED: {fails}'))

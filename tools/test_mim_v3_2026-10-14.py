@@ -109,10 +109,10 @@ def check(name, got, want):
 
 
 # Active P1 / P2 is a Vega donut since 16 Oct: run its ES|QL, which carries its own one-month window
-donut_q = json.loads(P['Active P1 / P2']['embeddableConfig']['savedVis']['params']['spec'])['data'][0]['url']['query']
+donut_q = json.loads(P['Active P1 / P2 / P3']['embeddableConfig']['savedVis']['params']['spec'])['data'][0]['url']['query']
 r = call('POST', '/_query?format=json', {'query': donut_q})
 assert 'error' not in r, json.dumps(r)[:900]
-check('Active P1 / P2 donut', [tuple(v) for v in r['values']], [(2, 'P1'), (3, 'P2')])
+check('Active P1 / P2 donut', [tuple(v) for v in r['values']], [(2, 'P1'), (3, 'P2'), (1, 'P3')])  # INC7 (P3) counted since 16 Oct
 check('Active P1 / P2 window', 'NOW() - 1 month' in donut_q, True)
 
 R, cols = run('Middleware Health')

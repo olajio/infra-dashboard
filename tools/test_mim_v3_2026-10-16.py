@@ -110,8 +110,8 @@ def run(t, ci='(no CI selected)', incident='(all incidents)'):
 
 labels = lambda t: [c['label'] for c in next(iter(P[t]['embeddableConfig']['attributes']['state']['datasourceStates']
                                                    ['textBased']['layers'].values()))['columns']]
-R, cols = run('Active Incidents (P1 / P2)')
-check('Active Incidents columns', labels('Active Incidents (P1 / P2)'), [
+R, cols = run('Active Incidents (P1 / P2 / P3)')
+check('Active Incidents columns', labels('Active Incidents (P1 / P2 / P3)'), [
     'Incident', 'Pri', 'Affected CI', 'State', 'SLA', 'Assignment Group', 'Assignee', 'Assignee Email',
     'Group Manager Name', 'Manager Email Id'])
 check('Active Incidents rows', [tuple(r.values()) for r in R], [
@@ -129,7 +129,7 @@ R, cols = run('Applications that depend on this CI', ci=CI)
 check('Applications that depend on this CI: no CMDB status', cols,
       ['parent_ci.name.keyword', 'app_kind', 'app_how', 'app_env', 'app_number'])
 check('Open Alerts window', P['Open Alerts with No Incident']['embeddableConfig']['time_range']['from'], 'now-24h')
-spec = json.loads(P['Active P1 / P2']['embeddableConfig']['savedVis']['params']['spec'])
+spec = json.loads(P['Active P1 / P2 / P3']['embeddableConfig']['savedVis']['params']['spec'])
 check('donut query', [(r['label'], r['incidents']) for r in esql(spec['data'][0]['url']['query'])[0]], [('P1', 1), ('P2', 1)])
 spec = json.loads(P['Users impacted']['embeddableConfig']['savedVis']['params']['spec'])
 check('Users impacted text', spec['data'][0]['values'][0]['detail'],

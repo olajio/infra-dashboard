@@ -1,6 +1,6 @@
 # MIM V3 — test walkthrough: from an incident to its cause and the right person
 
-A step-by-step run through the MIM V3 dashboard for one live P1 / P2 incident. It does two jobs:
+A step-by-step run through the MIM V3 dashboard for one live P1, P2 or P3 incident. It does two jobs:
 
 - **Teaches the flow** a Major Incident Manager (MIM) follows: pick the incident → find the likely cause → see who and
   what is impacted → escalate to the person assigned to the ticket, or their manager.
@@ -18,7 +18,7 @@ Time needed: about 20 minutes per incident. Run it on at least two incidents: on
 |---|---|
 | The current `MIM V3.ndjson` is imported (overwrite), then **More → Reset changes** and reload | ☐ |
 | Your Kibana role can read every index the dashboard uses (list in *MIM-V3-CHANGES-2026-10-16.md*); a panel you cannot read shows an error, not "no results" | ☐ |
-| There is at least one **active** P1 or P2 in ServiceNow (state not Resolved / Closed / Canceled). The Incident control only lists active incidents | ☐ |
+| There is at least one **active** P1, P2 or P3 in ServiceNow (state not Resolved / Closed / Canceled). The Incident control only lists active incidents | ☐ |
 | ServiceNow is open in another tab, so you can compare what the dashboard shows with the ticket | ☐ |
 
 Leave the controls at their defaults: Incident **(all incidents)**, CI **(no CI selected)**, Service
@@ -30,15 +30,16 @@ Leave the controls at their defaults: Incident **(all incidents)**, CI **(no CI 
 
 | # | Do | You should see | ✓ |
 |---|---|---|---|
-| 1.1 | Look at **Active P1 / P2** | A donut with the total in the middle and the P1 (red) and P2 (amber) counts beside it. The counts match the active P1 / P2 list in ServiceNow | ☐ |
+| 1.1 | Look at **Active P1 / P2 / P3** | A donut with the total in the middle and the P1 (red), P2 (amber) and P3 (blue) counts beside it. The counts match the active P1 / P2 / P3 list in ServiceNow | ☐ |
 | 1.2 | Look at **Users impacted** | The demo number **2,500** and "Real count to be incorporated from ServiceNow and RUM". This tile is a placeholder; do not use the number | ☐ |
-| 1.3 | Look at **Active Incidents (P1 / P2)** | One row per active incident, P1 first, oldest first: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id | ☐ |
-| 1.4 | Choose the incident to work on: a **P1** before a P2, then **SLA** Breached → Breaching → Within SLA | Note its **number**, **Affected CI**, **Assignee** and **Group Manager** in the test record | ☐ |
+| 1.3 | Look at **Active Incidents (P1 / P2 / P3)** | One row per active incident, P1 first, oldest first: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id | ☐ |
+| 1.4 | Choose the incident to work on: a **P1** before a P2 before a P3, then **SLA** Breached → Breaching → Within SLA | Note its **number**, **Affected CI**, **Assignee** and **Group Manager** in the test record | ☐ |
 | 1.5 | Click the incident number → *Open incident in ServiceNow* | The ticket opens in ServiceNow. Assignee and assignment group match the row | ☐ |
 | 1.6 | Look at **Open Alerts with No Incident** | Open Netcool alerts from the last 24 hours on CIs that have **no** open incident, critical first. Anything critical here is a problem nobody has raised yet. It may be linked to your incident (same application, same time) | ☐ |
 
 > **What "SLA" means.** Breached, Breaching (75 % used or due within 30 min), Paused (On Hold) or Within SLA, from
-> ServiceNow's SLA records. "(age)" means the incident has no SLA record, so its age is compared with P1 4 h / P2 8 h.
+> ServiceNow's SLA records. "(age)" means the incident has no SLA record, so its age is compared with P1 4 h / P2 8 h. A P3 with no SLA record shows "No SLA record":
+> there is no agreed P3 target to compare its age with.
 
 ---
 
@@ -51,7 +52,7 @@ Leave the controls at their defaults: Incident **(all incidents)**, CI **(no CI 
 
 If the incident has **no CI** (`<number> · (no CI)`), sections 2–4 stay empty. Ask the assignment group which CI is
 affected, then set the Incident control back to **(all incidents)** and pick the CI in the **CI** control. The CI
-control lists only CIs that had a P1 / P2 in the last 31 days.
+control lists only CIs that had a P1 / P2 / P3 in the last 31 days.
 
 ---
 
@@ -89,7 +90,7 @@ problem.
 
 The section 3 views come from the CMDB and show **no live health**. To check a related CI's health:
 
-- If it had a P1 / P2 in the last 31 days, set the Incident control to **(all incidents)** and pick it in the **CI**
+- If it had a P1 / P2 / P3 in the last 31 days, set the Incident control to **(all incidents)** and pick it in the **CI**
   control. Section 2 then shows its alerts, changes, health and logs.
 - Otherwise open the **Infra Dashboard** (section 5) for servers, or look it up in ServiceNow.
 
@@ -155,7 +156,7 @@ starts from the overview.
 - **Section 3** is CMDB data with no live health (the dependency index has no timestamp).
 - **Changes** mostly shows changes on the CI itself; changes on linked CIs appear only when the CMDB link was updated
   in the same week.
-- **The CI control** lists only CIs that had a P1 / P2 in the last 31 days.
+- **The CI control** lists only CIs that had a P1 / P2 / P3 in the last 31 days.
 
 ---
 

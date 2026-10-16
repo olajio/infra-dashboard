@@ -13,7 +13,8 @@ Since then `MIM V3.ndjson` is changed by patch scripts kept here, so the work ca
 | `mim_v3_patch_2026-10-16.py` / `test_mim_v3_2026-10-16.py` | The 16 Oct changes (suggestions2.txt update): people columns in Active Incidents and Escalate (Assigned MIM removed), Applications impacted and What this CI runs on removed, Open Alerts 24 h, Active P1 / P2 as a Vega donut, Users impacted text (both black until the second round below) |
 
 | `mim_v3_patch_2026-10-16b.py` / `test_mim_v3_2026-10-16b.py` | The second 16 Oct round: CMDB status removed from the four section 3 views, Active P1 / P2 and Users impacted transparent with theme text colours, descriptions that named removed panels corrected. Run the 15 Oct test before this test (it loads the dependency data) |
+| `mim_v3_patch_2026-10-16d.py` / `test_mim_v3_2026-10-16d.py` | P3 incidents included: Incident and CI controls, Active donut (P3 blue), Active Incidents (a P3 with no SLA record shows "No SLA record"), Escalate. Time to Resolve stays P1 / P2. Run after `mim_v3_patch_2026-10-16b.py`; the test cleans up its own data |
 
 To rebuild `MIM V3.ndjson` from the colleague's export, run the patches in order:
-`mim_v3_patch_2026-10-15.py "updated mim dashboard.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16b.py "MIM V3.ndjson" "MIM V3.ndjson"`.
-Tests: `test_mim_v3_2026-10-14.py`, `-16.py`, `-15.py`, `-16b.py`, each with `"MIM V3.ndjson"`, against a local Elasticsearch on port 9200.
+`mim_v3_patch_2026-10-15.py "updated mim dashboard.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16b.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16d.py "MIM V3.ndjson" "MIM V3.ndjson"`.
+Tests: `test_mim_v3_2026-10-14.py`, `-16.py`, `-15.py`, `-16b.py`, `-16d.py`, each with `"MIM V3.ndjson"`, against a local Elasticsearch on port 9200.

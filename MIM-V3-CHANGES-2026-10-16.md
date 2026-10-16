@@ -47,9 +47,26 @@ Checks: all four tests pass (`tools/test_mim_v3_2026-10-14.py`, `-16.py`, `-15.p
 checked in Kibana's light and dark themes. Running the three patch scripts on the colleague's export rebuilds
 `MIM V3.ndjson` byte for byte.
 
+## Fourth round: P3 incidents included (16 Oct, later)
+
+Requested so that more CIs, with more telemetry, can be picked for demos.
+
+| Where | What changed |
+|---|---|
+| **Incident** and **CI** controls | List P1, P2 and P3 incidents (and their CIs) |
+| **Active P1 / P2 / P3** (donut, renamed) | Counts P3 too, in blue |
+| **Active Incidents (P1 / P2 / P3)** (renamed) | Lists P3s; a P3 that has a ServiceNow SLA record shows its real SLA status. A P3 **with no SLA record** shows **"No SLA record"**, because there is no agreed P3 target to compare its age with (P1 4 h / P2 8 h unchanged) |
+| **Escalate** | Shows the people for a P3 as well |
+| Priority badges | P3 has its own colour (blue) in Active Incidents and Escalate |
+| **P1 / P2 Time to Resolve vs Target** | Unchanged, still P1 / P2. Tell me the P3 target and I will add it with its own dashed line |
+
+Preview with test data: `mim-v3-p3-preview.png`. Checks: all five tests pass, including the new
+`tools/test_mim_v3_2026-10-16d.py` (a P3 with and without an SLA record; a P4 and a resolved P3 stay out). Rebuilding
+from the colleague's export with the four patch scripts gives the same file byte for byte.
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second round changed it)
+### 1. Import the dashboard (needed again: the second and fourth rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept
