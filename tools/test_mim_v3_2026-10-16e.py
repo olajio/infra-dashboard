@@ -1,6 +1,6 @@
 """Check the fifth 16 Oct round: Time to Resolve covers P1-P3 with targets 4 h / 8 h / 24 h, counts each incident once,
 plots open incidents by their age so far (the live P1 that did not show), leaves canceled ones out, always draws
-points, uses a log axis; Active Incidents compares a P3 without an SLA record with 24 h.
+points, axes from 0 h with P3 on its own right axis (round g; it was log in round e); Active Incidents compares a P3 without an SLA record with 24 h.
 
 Usage: test_mim_v3_2026-10-16e.py MIM_V3_NDJSON
 """
@@ -83,19 +83,22 @@ layers = st['datasourceStates']['textBased']['layers']
 data_id = next(l['layerId'] for l in vis['layers'] if l['layerType'] == 'data')
 ref = next(l for l in vis['layers'] if l['layerType'] == 'referenceLine')
 rows = esql(layers[data_id]['query']['esql'])
-got = [(r['pri'], r['day'][:10], r['avg_hours'], r['incidents'], r['open_now']) for r in rows]
-check('per incident, open by age so far, canceled and P4 out', got, [
-    ('P1', iso(day)[:10], 4.0, 2, 0),                     # INC1 once (2 h) + INC2 (6 h)
-    ('P1', iso(NOW - timedelta(hours=5))[:10], 5.0, 1, 1),  # the live P1, 5 h so far
-    ('P2', iso(day)[:10], 9.0, 1, 0),
-    ('P3', iso(day)[:10], 30.0, 1, 0)])
+got = [(r['day'][:10], r['p1_hours'], r['p2_hours'], r['p3_hours'], r['incidents'], r['open_now']) for r in rows]
+check('per incident, open by age so far, canceled and P4 out (one row per day since round g)', got, [
+    (iso(day)[:10], 4.0, 9.0, 30.0, 4, 0),                          # INC1 once (2 h) + INC2 (6 h); P2 9 h; P3 30 h
+    (iso(NOW - timedelta(hours=5))[:10], 5.0, None, None, 1, 1)])   # the live P1, 5 h so far
 check('target lines', (esql(layers[ref['layerId']]['query']['esql']),
                        [(y['forAccessor'], y['color'], y['lineStyle']) for y in ref['yConfig']]),
       ([{'p1_target': 4.0, 'p2_target': 8.0, 'p3_target': 24.0}],
        [('p1_target', '#d6453d', 'dashed'), ('p2_target', '#c98a0b', 'dashed'), ('p3_target', '#3f6fb5', 'dashed')]))
-check('P3 colour', [a['color']['colorCode'] for a in next(l for l in vis['layers'] if l['layerType'] == 'data')
-                    ['colorMapping']['assignments']], ['#d6453d', '#c98a0b', '#3f6fb5'])
-check('points always drawn, log axis', (vis.get('pointVisibility'), vis.get('yLeftScale')), ('always', 'log'))
+check('colours and axes: P1 / P2 left, P3 right', [(y['forAccessor'], y['color'], y['axisMode']) for y in
+      next(l for l in vis['layers'] if l['layerType'] == 'data')['yConfig']],
+      [('p1_hours', '#d6453d', 'left'), ('p2_hours', '#c98a0b', 'left'), ('p3_hours', '#3f6fb5', 'right')])
+check('P3 target on the right axis', [(y['forAccessor'], y['axisMode']) for y in ref['yConfig']],
+      [('p1_target', 'left'), ('p2_target', 'left'), ('p3_target', 'right')])
+check('points always drawn; both axes linear from 0 h (round g)',
+      (vis.get('pointVisibility'), vis.get('yLeftScale'), vis.get('yRightScale'), vis['yLeftExtent'], vis['yRightExtent']),
+      ('always', 'linear', 'linear', {'mode': 'full'}, {'mode': 'full'}))
 check('both query copies agree', st['query']['esql'] == layers[data_id]['query']['esql'], True)
 q = P['Active Incidents (P1 / P2 / P3)']['embeddableConfig']['attributes']['state']['query']['esql']
 check('Active Incidents: P3 compared with 24 h', 'target = CASE(priority == 1, 240, priority == 2, 480, 1440)' in q, True)

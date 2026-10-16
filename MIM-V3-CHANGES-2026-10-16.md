@@ -68,7 +68,7 @@ from the colleague's export with the four patch scripts gives the same file byte
 
 | Where | What changed |
 |---|---|
-| **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** (renamed) | P3 added, with a blue dashed 24 h line. The time axis is now **logarithmic**: on a normal axis, P3 values of a day or more flatten the P1 and P2 lines against the bottom (compared side by side before choosing) |
+| **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** (renamed) | P3 added, with a blue dashed 24 h line. The time axis was made **logarithmic** (replaced in the seventh round by two axes from 0 h, because the log axis cut off values under 1 h) |
 | Same chart — **the live P1 that did not show** | Two causes. (1) The chart only plotted **resolved** incidents, so an open P1 had no point until it was resolved. Now an open incident counts with its **age so far**: it appears on the day it was opened and its point climbs past the target while it stays open. (2) Kibana's "auto" point setting can hide a priority that has incidents on one day only (a single point with no line); points are now always drawn |
 | Same chart — counting | Each incident counts once. An incident synced several times used to weigh once per copy in the day's average. Canceled incidents are left out |
 | **Active Incidents** SLA column | A P3 with no ServiceNow SLA record is compared with **24 h** and marked "(age)", like P1 4 h / P2 8 h ("No SLA record" is gone) |
@@ -92,9 +92,24 @@ Details, before / after images and a query to confirm it on the cluster: *MIM-V3
 Checks: all seven tests pass, including the new `tools/test_mim_v3_2026-10-16f.py` (donut and table give the same
 counts; duplicates, a resolved P2, a P4 and a non-incident number left out).
 
+## Seventh round: donut still wrong on the cluster; Time to Resolve from 0 h (16 Oct, later)
+
+Reported with `bad_donut.png`: the donut read **P2 0** while the Active Incidents table listed active P2s; and the
+Time to Resolve log axis started at 1.0 h, cutting off lines that went below it. Details and before / after images:
+*MIM-V3-TIME-TO-RESOLVE-AND-DONUT.md*, part 5.
+
+| What changed | Why |
+|---|---|
+| The donut has a fixed panel time range, **Last 1 month**, the same as Active Incidents | **Kibana 9.5 applies the dashboard's time range to Vega ES\|QL queries by itself** (9.4, used for testing until now, did not). With the dashboard on "Last 24 hours", the donut only counted incidents whose record was updated in the last 24 h, so long-running On Hold P2s were missing. Reproduced on Kibana 9.5.3 |
+| Time to Resolve: normal axes from **0 h**; P1 and P2 on the left axis, P3 on its own right axis | The log axis could not show values under 1 h. On a single 0-based axis, P3's day-plus values would flatten P1 and P2 |
+
+**Now tested on Kibana / Elasticsearch 9.5.3** (images pulled from Docker Hub): all eight tests pass and every link
+column is a real field on 9.5.3. The Incident control was checked too: it lists incidents not updated in the last 24 h,
+so 9.5's time handling does not affect the controls.
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second, fourth, fifth and sixth rounds changed it)
+### 1. Import the dashboard (needed again: the second, fourth, fifth, sixth and seventh rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept

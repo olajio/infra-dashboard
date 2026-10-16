@@ -1,5 +1,8 @@
 # MIM V3 — P3 target, Time to Resolve fix and donut fix (16 Oct 2026)
 
+> **Update, later 16 Oct:** parts 2 and 4 were not the whole story. The real cause of the donut problem and the
+> new axis design are in **part 5**.
+
 Pushed to main. To see the changes on the cluster: import `MIM V3.ndjson` (overwrite), then **More → Reset
 changes** and reload.
 
@@ -22,7 +25,7 @@ day's average. Each incident now counts once, and canceled incidents are left ou
 The chart is now **"P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)"**, with a blue dashed 24 h
 line.
 
-The time axis is now **logarithmic**. I rendered it both ways: on a normal axis, P3 values of a day or more flatten the
+*(Replaced in part 5: the log axis cut off values under 1 h; the chart now has two axes from 0 h.)* The time axis was made **logarithmic**. I rendered it both ways: on a normal axis, P3 values of a day or more flatten the
 P1 and P2 lines against the bottom, so you cannot read them. If you prefer the normal axis, it is a one-word change
 (`linear` as the third argument of `tools/mim_v3_patch_2026-10-16e.py`).
 
@@ -71,6 +74,49 @@ FROM servicenow-incidents-*
 | SORT pri
 ```
 
+## 5. Second look (later 16 Oct): the real donut cause, and axes from 0 h
+
+Reported with `bad_donut.png`:
+- the donut read **P2 0**, while the Active Incidents table listed active P2s (all On Hold);
+- the Time to Resolve log axis started at 1.0 h and cut off lines that went below it.
+
+### The donut: Kibana 9.5 applies the dashboard's time range to Vega
+
+Part 4's hidden-slice fix was real, but it was not what your screenshot showed. The legend itself said P2 0, so the
+query was returning no P2s.
+
+**Cause.** In **Kibana 9.5**, a Vega panel's ES|QL query gets the dashboard's time range applied automatically, on the
+`@timestamp` field Kibana finds for it. Kibana 9.4, which I had been testing on, does not do this; I found it by
+reading 9.5.3's Vega code. Your dashboard was on **Last 24 hours**, so the donut only counted incidents whose record
+was updated in the last 24 hours. The P2s had been On Hold for days without updates. The table has its own fixed
+range, **Last 1 month**, so it still listed them.
+
+**Reproduced on Kibana 9.5.3** (pulled from Docker Hub) with three On Hold P2s last updated 3–10 days ago and four P3s
+updated in the last hour, dashboard on Last 24 hours:
+
+![Before, on 9.5.3: the donut reads P2 0 while the table lists three P2s](mim-v3-953-before.png)
+
+**Fix.** The donut now has the same fixed panel time range as the table, **Last 1 month** (the badge shows next to its
+title). Both panels count the same incidents, whatever the time picker says.
+
+![After, on 9.5.3: the donut reads P1 1, P2 3, P3 4, matching the table; Time to Resolve from 0 h](mim-v3-953-after.png)
+
+I also checked the **Incident control** on 9.5.3: it lists incidents not updated in the last 24 hours, so the controls
+are not affected.
+
+> **Still to know:** both panels only count incidents whose record was updated in the last month. An incident left On
+> Hold with no update for over a month is missing from both. If that happens at CNA, the range can be widened.
+
+### Time to Resolve: both axes start at 0 h
+
+- The log axis could not show values under 1 h, so lines dipping below it were cut off. It is replaced by normal axes
+  that **start at 0 h**.
+- **P1 and P2 use the left axis**, with their 4 h and 8 h targets. **P3 has its own right axis**, also from 0 h, with
+  its 24 h target. On a single axis, P3 values of a day or more would flatten the P1 and P2 lines again.
+- The axis titles say which side is which, and the legend reads "P3 (right axis)".
+- **Trade-off:** a P2 left open for many days still stretches the left axis while it is open, because open incidents
+  count with their age so far.
+
 ## Checks
 
 - All seven tests in `tools/` pass, in any order. Two are new:
@@ -78,7 +124,8 @@ FROM servicenow-incidents-*
     canceled and P4 incidents are left out.
   - `test_mim_v3_2026-10-16f.py`: the donut and the table give the same counts, and duplicates, a resolved P2, a P4
     and a non-incident number are left out.
-- Checked in Kibana 9.4 with test data, not yet on the 9.5.3 cluster.
+- Parts 1–4 were checked in Kibana 9.4. Part 5 was checked on **Kibana / Elasticsearch 9.5.3**, the cluster's
+  version: all eight tests pass, and every link column is a real field on 9.5.3.
 - Running the patch scripts on the colleague's export rebuilds `MIM V3.ndjson` byte for byte.
 - Updated: the guide, the walkthrough, the SLA rules (*MIM-V3-SLA-CALCULATION.md*), the 16 Oct summary and
   `tools/README.md`.
