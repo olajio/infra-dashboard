@@ -11,7 +11,7 @@
 | 5 | Investigate the CI (Escalate) columns | Eleven columns: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id. Assigned MIM is gone. |
 | 6 | Remove CMDB status | Removed from *Applications that depend on this CI*. |
 | 7 | Remove What this CI runs on | Removed; *Applications that depend on this CI* is widened to fill the row. |
-| 8 | First two panels black | *Active P1 / P2* (donut) and *Users impacted* both have a black background. |
+| 8 | First two panels black | *Active P1 / P2* (donut) and *Users impacted* both have a black background. **Replaced in the second round: now transparent.** |
 
 Section 3 keeps the four views (Middleware, Database, Server, Application), as agreed.
 
@@ -34,9 +34,22 @@ The cluster still has this version, and `MIM V3.ndjson` in the repo is byte-for-
 
 So nothing in the dashboard file needs changing. What is left is on the cluster side, below.
 
+## Second round (16 Oct, later)
+
+| # | Request | What changed |
+|---|---|---|
+| 1 | Remove the "CMDB status" column | Removed from the four section 3 tables: **Middleware View, Database View, Server View, Application View**. The hidden sort that put non-operational CIs first went with it; rows are now sorted by type, then name. *Relationship* takes the freed width. (*Applications that depend on this CI* lost its CMDB status in the first round.) |
+| 2 | First two panels transparent, not black | *Active P1 / P2* and *Users impacted* have no background. Their text takes Kibana's theme colours, so it reads in both light and dark mode. The donut now uses the same red / amber as the priority badges in *Active Incidents*; the old yellow could not be read on a white page. Preview: `mim-v3-first-row-transparent-preview.png` |
+| 3 | Test walkthrough | **`MIM-V3-TEST-WALKTHROUGH.md`**: eight steps from picking an incident to finding the likely cause and escalating to the assignee or the group manager, each with what you should see, plus a test record to fill in |
+| — | Found while checking | Three panel descriptions still named removed panels (*Active P1 / P2 at a Glance*, *What this CI runs on*) or the old section number of the Infra Dashboard card; corrected |
+
+Checks: all four tests pass (`tools/test_mim_v3_2026-10-14.py`, `-16.py`, `-15.py`, new `-16b.py`). The first row was
+checked in Kibana's light and dark themes. Running the three patch scripts on the colleague's export rebuilds
+`MIM V3.ndjson` byte for byte.
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (already done if the cluster has the 16 Oct version)
+### 1. Import the dashboard (needed again: the second round changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept
@@ -64,7 +77,8 @@ A role that grants `metrics-*` or `logs-*` does not by itself cover the `.ds-…
 grant those patterns too.
 
 ### 4. Check on 9.5.3 after the import
-- *Active P1 / P2* and *Users impacted* render on black (both are Vega panels).
+- *Active P1 / P2* and *Users impacted* have a transparent background and readable text (both are Vega panels).
+- The four section 3 views have four columns: Related CI, Type, Relationship, Env.
 - Picking an incident fills sections 2 and 3 with its CI.
 - The four views in section 3 fill for a CI that has CMDB relationships.
 - The Application control filters *Application Health* and *Services of the Application*.

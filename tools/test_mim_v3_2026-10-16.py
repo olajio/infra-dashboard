@@ -130,11 +130,10 @@ check('Applications that depend on this CI: no CMDB status', cols,
       ['parent_ci.name.keyword', 'app_kind', 'app_how', 'app_env', 'app_number'])
 check('Open Alerts window', P['Open Alerts with No Incident']['embeddableConfig']['time_range']['from'], 'now-24h')
 spec = json.loads(P['Active P1 / P2']['embeddableConfig']['savedVis']['params']['spec'])
-check('donut background', spec['background'], '#000000')
 check('donut query', [(r['label'], r['incidents']) for r in esql(spec['data'][0]['url']['query'])[0]], [('P1', 1), ('P2', 1)])
 spec = json.loads(P['Users impacted']['embeddableConfig']['savedVis']['params']['spec'])
-check('Users impacted text and background', (spec['data'][0]['values'][0]['detail'], spec['background']),
-      ('Real count to be incorporated|from ServiceNow and RUM', '#000000'))
+check('Users impacted text', spec['data'][0]['values'][0]['detail'],
+      'Real count to be incorporated|from ServiceNow and RUM')
 check('removed panels', [t for t in ('Applications impacted', 'What this CI runs on') if t in P], [])
 check('no MIM left', [t for t, p in P.items() if 'promoted_by' in json.dumps(p) or 'Assigned MIM' in json.dumps(p)], [])
 print('\n' + ('ALL CHECKS PASSED' if not fails else f'FAILED: {fails}'))

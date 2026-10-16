@@ -39,9 +39,9 @@ The dashboard has five sections and four controls:
 
 The MIM lead opens MIM V3 and reads the top row from left to right.
 
-- **Active P1 / P2** — a donut on a black background: P1 (red) and P2 (amber) incidents active now, with the total in
+- **Active P1 / P2** — a donut (transparent background): P1 (red) and P2 (amber) incidents active now, with the total in
   the middle and each count beside it.
-- **Users impacted** — a placeholder number on black (2,500, demo only): *"Real count to be incorporated from
+- **Users impacted** — a placeholder number (2,500, demo only): *"Real count to be incorporated from
   ServiceNow and RUM"*.
 - **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** — are we resolving within target? The average time to
   resolve the P1 and P2 incidents opened each day, against the dashed target lines (red P1 4 h, amber P2 8 h). A
@@ -133,9 +133,9 @@ The lead now:
 **Related CIs by Type** lists what the selected CI is related to in the CMDB, in four views: **Middleware** (Tomcat,
 JBoss, WebLogic, WebSphere …), **Database** (Oracle, MS SQL, DB2, MySQL, PostgreSQL …), **Server** (Windows, Linux,
 AIX, mainframe LPAR, ESX …) and **Application** (business applications). Both directions are shown: "this CI runs on
-it" (the CI uses it) and "it runs on this CI" (it uses the CI), with the CMDB status, non-operational first. *For the
+it" (the CI uses it) and "it runs on this CI" (it uses the CI), sorted by type, then name. *For the
 application service Automated Claim Transaction PROD: Tomcat on vslrau1p276, an Oracle instance, two Linux servers
-(one non-operational) and the mainframe LPAR.* These are CMDB records, not live health: pick a server in the CI
+and the mainframe LPAR.* These are CMDB records, not live health: pick a server in the CI
 control to see its health in section 2.
 
 ### Step 6c — Which application to look at (section 4, top row)
@@ -289,8 +289,8 @@ so MIM V3 stays open on the bridge.
 |---|---|---|---|---|
 | Control | **Incident** (first) | ✅ | The incident to work on; sections 2 to 4 follow its affected CI | Lists every active P1 / P2 as "number · affected CI", plus *(all incidents)*. A query variable (`?incident`); every section 2 and 3 query takes the CI from the part after " · " (and the number from the part before, for *Escalate*), so no extra lookup is needed. |
 | Control | **CI** (second) | ✅ | The CI to investigate when no incident is picked | Lists every CI with a P1 / P2 opened in the last 31 days, plus *(no CI selected)*. A query variable (`?ci`), used by sections 2 to 4 only while the Incident control is on *(all incidents)*. |
-| 1 | **Active P1 / P2** | ✅ | Donut on black: active P1 (red) and P2 (amber), total in the middle | Vega chart (Kibana's standard charts cannot take a background colour). `servicenow-incidents-*`, active P1 / P2, one count per incident, last month. |
-| 1 | **Users impacted** | ⚠️ | Placeholder number on black (2,500, demo only), "Real count to be incorporated from ServiceNow and RUM" | No user-count data in Elastic yet. |
+| 1 | **Active P1 / P2** | ✅ | Donut: active P1 (red) and P2 (amber), total in the middle | Vega chart, transparent, text in Kibana's theme colours (reads in light and dark mode); P1 / P2 colours match the priority badges in Active Incidents. `servicenow-incidents-*`, active P1 / P2, one count per incident, last month. |
+| 1 | **Users impacted** | ⚠️ | Placeholder number (2,500, demo only), "Real count to be incorporated from ServiceNow and RUM" | No user-count data in Elastic yet. |
 | 1 | **P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)** | ✅ | Average time to resolve per opened day, P1 (red) and P2 (amber), with dashed target lines | Resolved P1 / P2 opened in the last 30 days; `resolution_time` (ServiceNow's opened → resolved seconds), or resolved_at − opened_at. Target lines are a reference-line layer. |
 | 1 | **Open Alerts with No Incident** | ⚠️ | Netcool alerts still open on CIs with no open incident: CI, severity, alert, open for, last seen, count, ack, node, class, support group | `.ds-bridge-alerts-netcool-*` (CMDB-enriched `ci.name`) + `servicenow-incidents-*` (any priority, not closed). Open = the alert's latest record is not severity 0 or a resolution. Last 24 hours (alerts and open incidents seen in that window). CI links to the CMDB. **Limit:** alerts carry no incident number, so "no incident" means no open incident on the same CI; an alert whose node is not in the CMDB shows an empty CI and is listed. |
 | 1 | **Active Incidents (P1 / P2)** | ✅ | Every active P1 / P2: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
@@ -307,7 +307,7 @@ so MIM V3 stays open on the bridge.
 | 2 | **Errors from the Logs** | ✅ | Warning-and-worse log lines from the CI, grouped by message | Syslog (server, WebSphere, JBoss, Red Hat, AIX, system), generic file logs, APM error and application logs, matched on `ci.name`; syslog severity code ≤ 4 or log level warning or worse; numbers replaced by # so repeats group together |
 | 2 | **Process Health** | ✅ | Stopped / not-seen processes and services first, then healthy middleware | Windows services (Stopped = Automatic service not running) and Paladin-labelled middleware processes; Not seen = silent > 10 min |
 | 2 | **Changes in the Last 7 Days on this CI** | ⚠️ | Changes active in the last 7 days on the CI, and on CMDB-linked CIs when the link was recorded in the same 7 days; the CI column shows which | `servicenow-change-requests` + `cmdb-ci-relations`. The selected CI's own changes first. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
-| 3 | **Middleware View / Database View / Server View / Application View** | ⚠️ | The CIs related to the selected CI in the CMDB, by class: related CI, type, relationship (both directions), CMDB status, env | `cmdb_app_dependencies_v2`, exact ServiceNow classes from round 10 (AU / AV) for the lists in `relationships1.png` / `relatiosnhips2.png`; retired CIs left out. Follows the Incident / CI controls. **Limit:** CMDB status only, no live health (the index has no timestamp); the name is not a link (it comes from either side of the relationship, which Kibana 9.5 counts as created by the query). Built by a colleague, fixed 15 Oct (*MIM-V3-REVIEW-UPDATED-DASHBOARD.md*). |
+| 3 | **Middleware View / Database View / Server View / Application View** | ⚠️ | The CIs related to the selected CI in the CMDB, by class: related CI, type, relationship (both directions), env (CMDB status removed 16 Oct) | `cmdb_app_dependencies_v2`, exact ServiceNow classes from round 10 (AU / AV) for the lists in `relationships1.png` / `relatiosnhips2.png`; retired CIs left out. Follows the Incident / CI controls. **Limit:** CMDB data only, no live health (the index has no timestamp); the name is not a link (it comes from either side of the relationship, which Kibana 9.5 counts as created by the query). Built by a colleague, fixed 15 Oct (*MIM-V3-REVIEW-UPDATED-DASHBOARD.md*). |
 | 4 | **Application Health** | ✅ | Every production business application: health from its services (Failing / Degraded / Healthy), failing and degraded service counts, worst service error rate, application error rate, transactions, APM number, support group | `metrics-apm.service_transaction.1m-*`, business application from the APM CMDB enrichment (`ci.name`, on 398 of 400 production services, round 10). Last hour. Application links to the CMDB. |
 | 4 | **Services of the Application** | ✅ | The services of the application in the Application control (all when none is picked), worst first, with error rate, latency, throughput | Same data; click a service for its APM Service Map. Last hour. |
 | 4 | **⬅ Upstream — what they depend on** | ✅ | Horizontal bars: calls per dependency, coloured Failing / Degraded / Healthy, label with % failed; top 15 | `metrics-apm.service_destination.1m-*`, production only. Failing ≥ 10 % failed calls, Degraded ≥ 1 %. Other services appear by host:port, as APM records them. |
