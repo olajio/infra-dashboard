@@ -911,3 +911,114 @@ the cost for a large application.
 | BH2 | Whether APM finds a business application's servers |
 | BJ–BL | Whether phase 1's panels are fast enough on real data, especially logs at 7 days (1.1 billion log lines a day) |
 | BM | Optional, no longer needed: the cost of option E |
+
+### Round 11b results (18 Oct)
+
+| Query | 24 hours | 7 days | Consequence |
+|---|---|---|---|
+| BH2 | No rows: no APM service reported *Claim Center* as its application in the last hour | — | No longer needed (no automatic mode) |
+| BJ Server Health | **0.7 s** (21 k documents) | **0.7 s** (83 k) | Fast. Shows vslrau1p276: Reporting, CPU 5.2 %, memory 24.9 %, disk 74 % |
+| BK Process Health | **2.3 s** | **2.9 s** (1.3 M documents) | Fine |
+| BL Errors from the Logs | **6.0 s** (20 k documents, 20 CPU-seconds) | **failed: 502 Bad Gateway** | 7 days is too slow, or at least slower than Dev Tools waits. Measured properly in Round 11c |
+| BM (optional) | 0.27 s | — | Option E would have been cheap; kept on file |
+
+- **BL's cost is not the number of log lines.** It read only about 20,000 documents but used 20 CPU-seconds. The
+  likely cost is the number of log shards it has to open (3,039 in all), which grows with the window.
+- **Why Discover said "Unknown query parameter".** `?incident`, `?ci`, `?server` and `?health_window` exist only on
+  the dashboard, where the controls fill them in. Dev Tools fills them from `params`. Discover has neither, so it
+  can't run these queries as written.
+- **The 502 is Dev Tools, not Elasticsearch.** Dev Tools waits for the full answer in one request, and the gateway in
+  front of Kibana gives up first. The dashboard runs queries asynchronously and waits longer, so the panel may still
+  load, just slowly. Round 11c uses the asynchronous API, which avoids the 502.
+
+## Round 11c — the logs panel at 7 days (18 Oct 2026)
+
+All in **Dev Tools Console**. Copy the responses into `round11c.txt`.
+
+**How the asynchronous queries (BN, BO) work:**
+1. Run the `POST /_query/async` block. It waits up to 30 seconds.
+2. If the answer ends with `"is_running": false`, it's finished: note `took`.
+3. If it shows `"is_running": true`, copy its `"id"` and run the `GET` line below with that id. Repeat every minute or
+   so until `"is_running": false`, then note `took`.
+4. Run the `DELETE` line to remove the stored result.
+
+**BN. The dashboard's Errors from the Logs, 7 days** (as BL, through the asynchronous API)
+```
+POST /_query/async?format=json
+{ "query": """
+FROM logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, logs-jboss-*, logs-aix-syslog-*, logs-system.syslog-*, logs-filestream.generic-*, logs-apm.error-*, logs-apm.app.*, .ds-metrics-system.cpu-default*, cmdb-ci-relations* METADATA _index
+| WHERE (@timestamp >= NOW() - TO_TIMEDURATION(CASE(?health_window == "3 days", "72 hours", ?health_window == "7 days", "168 hours", ?health_window)) AND (ci.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server))))) OR parent.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server))) OR child.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server)))
+| EVAL is_rel = _index LIKE "*relations*", is_cpu = _index LIKE "*metrics-system.cpu*"
+| EVAL inc_l = TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), ci_l = TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), srv_l = TO_LOWER(CASE(?server == "(no server selected)", "", ?server)),
+       p_l = TO_LOWER(TO_STRING(parent.name)), c_l = TO_LOWER(TO_STRING(child.name)),
+       p_srv = TO_STRING(parent.class) IN ("cmdb_ci_aix_server", "cmdb_ci_esx_server", "cmdb_ci_hpux_server", "cmdb_ci_hyper_v_server", "cmdb_ci_ibm_frame", "cmdb_ci_isam_server", "cmdb_ci_lb_bigip", "cmdb_ci_lb_netscaler", "cmdb_ci_linux_server", "cmdb_ci_mainframe", "cmdb_ci_mainframe_lpar", "cmdb_ci_net_app_server", "cmdb_ci_server", "cmdb_ci_solaris_server", "cmdb_ci_storage_server", "cmdb_ci_win_server"), c_srv = TO_STRING(child.class) IN ("cmdb_ci_aix_server", "cmdb_ci_esx_server", "cmdb_ci_hpux_server", "cmdb_ci_hyper_v_server", "cmdb_ci_ibm_frame", "cmdb_ci_isam_server", "cmdb_ci_lb_bigip", "cmdb_ci_lb_netscaler", "cmdb_ci_linux_server", "cmdb_ci_mainframe", "cmdb_ci_mainframe_lpar", "cmdb_ci_net_app_server", "cmdb_ci_server", "cmdb_ci_solaris_server", "cmdb_ci_storage_server", "cmdb_ci_win_server"),
+       cpu_l = CASE(is_cpu, TO_LOWER(TO_STRING(ci.name)))
+| EVAL inc_hit = CASE(inc_l == "", 0, is_rel AND ((p_l == inc_l AND p_srv) OR (c_l == inc_l AND c_srv)), 1, cpu_l == inc_l, 1, 0),
+       ci_hit = CASE(ci_l == "", 0, is_rel AND ((p_l == ci_l AND p_srv) OR (c_l == ci_l AND c_srv)), 1, cpu_l == ci_l, 1, 0)
+| INLINE STATS inc_is_server = MAX(inc_hit), ci_is_server = MAX(ci_hit)
+| EVAL target = CASE(inc_is_server == 1, inc_l, ci_is_server == 1, ci_l, srv_l != "", srv_l)
+| EVAL is_data = NOT is_rel AND (NOT is_cpu OR false)
+| WHERE is_data AND target IS NOT NULL AND TO_LOWER(TO_STRING(ci.name)) == target
+| EVAL lvl = TO_LOWER(TO_STRING(log.level))
+| EVAL sev_code = COALESCE(TO_INTEGER(syslog_severity_code),
+      CASE(lvl IN ("emergency", "emerg", "alert", "critical", "crit", "fatal"), 2, lvl IN ("error", "err", "severe"), 3,
+           lvl IN ("warning", "warn"), 4, 6))
+| WHERE sev_code <= 4
+| EVAL severity = CASE(sev_code <= 2, "critical", sev_code == 3, "error", "warning"), sev_rank = sev_code
+| EVAL msg = SUBSTRING(TO_STRING(message), 1, 400)
+| GROK msg "<%{INT}>%{NOTSPACE} %{NOTSPACE} %{GREEDYDATA:body}"
+| EVAL text = SUBSTRING(REPLACE(COALESCE(body, msg), "[0-9]+", "#"), 1, 160), source = TO_STRING(data_stream.dataset)
+| STATS occurrences = COUNT(*), first_seen = MIN(@timestamp), last_seen = MAX(@timestamp) BY sev_rank, severity, source, text
+| SORT sev_rank ASC, occurrences DESC
+| LIMIT 50
+| KEEP occurrences, severity, source, text, first_seen, last_seen
+""",
+  "params": [
+  {"ci": "(no CI selected)"},
+  {"health_window": "7 days"},
+  {"incident": "(all incidents)"},
+  {"server": "vslrau1p276"}
+  ],
+  "filter": { "range": { "@timestamp": { "gte": "now-5y" } } },
+  "wait_for_completion_timeout": "30s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=json
+
+DELETE /_query/async/<id>
+```
+
+**BO. The minimum any logs panel must do: one server's log lines over 7 days, by source** (no CMDB, no severity
+filter). Run it with `7 days`, then again with `24 hours`.
+```
+POST /_query/async?format=json
+{ "query": """
+FROM logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, logs-jboss-*, logs-aix-syslog-*, logs-system.syslog-*, logs-filestream.generic-*, logs-apm.error-*, logs-apm.app.*
+| WHERE @timestamp >= NOW() - 7 days AND ci.name IN ("vslrau1p276", "VSLRAU1P276")
+| STATS lines = COUNT(*), last_line = MAX(@timestamp) BY source = TO_STRING(data_stream.dataset)
+| SORT lines DESC
+""",
+  "wait_for_completion_timeout": "30s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=json
+
+DELETE /_query/async/<id>
+```
+
+**BP. The same with the classic search API** (shows how many shards the 7 days touch and how many are skipped)
+```
+GET logs-syslog-classic-*,logs-websphere-syslog-*,logs-redhat6x-syslog-*,logs-jboss-*,logs-aix-syslog-*,logs-system.syslog-*,logs-filestream.generic-*,logs-apm.error-*,logs-apm.app.*/_search
+{ "size": 0, "track_total_hits": true,
+  "query": { "bool": { "filter": [
+    { "range": { "@timestamp": { "gte": "now-7d" } } },
+    { "terms": { "ci.name": ["vslrau1p276", "VSLRAU1P276"] } } ] } },
+  "aggs": { "by_index": { "terms": { "field": "_index", "size": 50 } } } }
+```
+Note `took`, `_shards.total`, `_shards.skipped` and `hits.total.value`.
+
+| Query | Decides |
+|---|---|
+| BN | How long the panel really takes at 7 days on the dashboard |
+| BO | The cost of the logs themselves. If BO is also slow, no query change can fix it, and the panel's window should be capped (e.g. at 24 hours, said in its description) |
+| BP | Whether the time range skips old shards. If BO is slow but BP fast, the ES\|QL query can be reworked instead |

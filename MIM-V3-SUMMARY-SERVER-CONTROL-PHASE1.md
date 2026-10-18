@@ -91,3 +91,7 @@ cost (`took`).
 *Server View*) is in *MIM-V3-AUTOMATIC-SERVERS-DECISION.md*.
 
 **Decision (18 Oct): keep phase 1 only (option C).** Step 4 is not built.
+
+**Round 11b (panel timings on real data):** with a server picked, Server Health takes 0.7 s and Process Health 2–3 s,
+at 24 hours and at 7 days. *Errors from the Logs* takes 6 s at 24 hours and timed out in Dev Tools at 7 days.
+Round 11c in `queries_ro_run.md` measures it properly before anything is changed.
