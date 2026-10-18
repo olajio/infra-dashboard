@@ -1408,6 +1408,8 @@
     ]
   ]
 }
+
+Note: The next query is query BG. It returned Bad gateway error
 # 174: POST /_query?format=json [502 Bad Gateway]
 {
   "statusCode": 502,
