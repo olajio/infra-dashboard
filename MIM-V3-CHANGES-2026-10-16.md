@@ -162,7 +162,7 @@ Plan: *MIM-V3-BUILD-PLAN-SERVER-HEALTH-WINDOW.md*. Summary: *MIM-V3-SUMMARY-SERV
 | **Health window** | 15 min … 7 days, default 24 hours, applied inside the queries of Server, Middleware, Database, Process Health, Synthetics, Logs and Applications on this CI. The time picker no longer changes them |
 | **Server Health** | A table, one row per server: Status (Reporting / Silent / No data in window), minutes ago, CPU p90, memory peak, fullest disk |
 | **Alerts on this CI** | Also the chosen server's alerts; still a fixed 7 days |
-| **Not built yet** | Automatic servers for an application CI (step 4): waiting on a decision about query cost |
+| **Not built** | Automatic servers for an application CI (step 4): too heavy for this cluster (Round 11); you chose to keep phase 1 only. See *MIM-V3-AUTOMATIC-SERVERS-DECISION.md* |
 
 All twelve tests pass on 9.5.3, including the new `tools/test_mim_v3_2026-10-18k.py`.
 

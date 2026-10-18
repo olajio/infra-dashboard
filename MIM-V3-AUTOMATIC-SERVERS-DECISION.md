@@ -1,6 +1,9 @@
 # MIM V3 — automatic servers: what the Round 11 numbers say (18 Oct 2026)
 
-*Assessment and proposal only: nothing has been built.* The numbers come from `round11.txt`. The queries and a
+**Decision (18 Oct): keep phase 1 only (option C).** No automatic part is built. For a CI that is not a server,
+read a server name in *Server View* and pick it in the Server control. Option E stays on file if needed later.
+
+*Assessment and proposal written before the decision.* The numbers come from `round11.txt`. The queries and a
 results table are in `queries_ro_run.md` (Round 11).
 
 ## Short answer

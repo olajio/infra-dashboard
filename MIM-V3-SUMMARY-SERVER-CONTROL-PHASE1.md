@@ -89,3 +89,5 @@ cost (`took`).
 **Update (Round 11 results):** option A is not possible on this cluster. Logs time out even at 1 hour, processes at
 24 hours, and Server Health costs 582 CPU-seconds at 24 hours. The cheaper proposal (option E: live status in
 *Server View*) is in *MIM-V3-AUTOMATIC-SERVERS-DECISION.md*.
+
+**Decision (18 Oct): keep phase 1 only (option C).** Step 4 is not built.

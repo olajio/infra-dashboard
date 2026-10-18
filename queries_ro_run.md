@@ -883,7 +883,8 @@ FROM logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, log
   "filter": { "range": { "@timestamp": { "gte": "now-5y" } } } }
 ```
 
-**BM. The cheap automatic option: live status of the demo CI's linked servers, last 15 minutes** (CPU data only)
+**BM. The cheap automatic option: live status of the demo CI's linked servers, last 15 minutes** (CPU data only).
+*No longer needed: you chose to keep phase 1 only. Run it only if you want option E reconsidered.*
 ```
 POST /_query?format=json
 { "query": """
@@ -909,4 +910,4 @@ the cost for a large application.
 |---|---|
 | BH2 | Whether APM finds a business application's servers |
 | BJ–BL | Whether phase 1's panels are fast enough on real data, especially logs at 7 days (1.1 billion log lines a day) |
-| BM | Whether the cheap automatic option costs well under a second |
+| BM | Optional, no longer needed: the cost of option E |
