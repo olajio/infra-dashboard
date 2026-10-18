@@ -1488,3 +1488,647 @@ Note: The next query is query BG. It returned Bad gateway error
 1              |cmdb_ci_service_auto        |this CI → it   |Depends on::Used by                             |Urban Code Deploy PROD                                                                                                                                                                                               
 1              |cmdb_ci_ip_router           |this CI → it   |Runs on::Runs                                   |sch1h067                                                                                                                                                                                                             
 1              |cmdb_ci_ip_switch           |this CI → it   |Runs on::Runs                                   |sch1p001                                                                                                                                                                                                             
+
+# I ran query BE in Dev tools with 24 hours time window, and it returned the following
+
+{
+  "took": 8905,
+  "is_partial": false,
+  "completion_time_in_millis": 1792344949178,
+  "documents_found": 17792908,
+  "values_loaded": 53351104,
+  "rows_emitted": 92203895,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 582062031465,
+  "start_time_in_millis": 1792344940273,
+  "expiration_time_in_millis": 1792776949020,
+  "columns": [
+    {
+      "name": "linked",
+      "type": "integer"
+    },
+    {
+      "name": "data_docs",
+      "type": "long"
+    },
+    {
+      "name": "last_data",
+      "type": "date"
+    },
+    {
+      "name": "name",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      1,
+      407,
+      "2026-10-18T17:34:42.048Z",
+      "vslrau1p276"
+    ],
+    [
+      1,
+      300,
+      "2026-10-18T17:35:36.494Z",
+      "vslrau1p174"
+    ],
+    [
+      1,
+      168,
+      "2026-10-18T17:34:57.609Z",
+      "vcwau1p0132"
+    ],
+    [
+      1,
+      0,
+      null,
+      "automated claim transaction"
+    ],
+    [
+      1,
+      0,
+      null,
+      "c99dpol"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cadency prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cics prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim center prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim financial interface prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim information master source prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim manually rated lines prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim recovery system prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim tpa management"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim tpa management prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim wc edi prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cna-g-prd-proj-clmact"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "code library prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "commercial index prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "covers prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "endevor prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "enterprise claim hub prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "enterprise integration claims prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "federal information returns depository prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "financial interface - premium prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "g-prd-ns-prd1-clmact"
+    ],
+    [
+      1,
+      0,
+      null,
+      "global intranet prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "healthpro sir prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "idms claims (mainframe) prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inland marine information system prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insad"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insap"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insapx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insapx@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insba"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insbi"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscl"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscla"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclc@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscld"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscle"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclf"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclg"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclh"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscli"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclj"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclk"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insco"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscox"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insdi"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insdi@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insdia"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inseia"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inseix"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inseix@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insex"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insex@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insexx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfh"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfha"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfhx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfhx@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inshp"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insib"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insibx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insph"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspha"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspha@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insphb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspu"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspua"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspua@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspub"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspuc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspud"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspue"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inssp"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inssp@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insspa"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insspb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instb@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instr"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instra"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instrb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instrc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instrd"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mainframe acf2 authentication prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mainframe check print (micr) prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mainframe general print prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "manual endpoint"
+    ],
+    [
+      1,
+      0,
+      null,
+      "merlin management view warehouse and datamarts prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mobius view prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "netmap prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "p02900d2"
+    ],
+    [
+      1,
+      0,
+      null,
+      "p02902d2"
+    ],
+    [
+      1,
+      0,
+      null,
+      "p32349cb"
+    ]
+  ]
+}
+
+
+I ran queries BF and BG on Dev tools and it returned for  "NOW() - 24 hour" and it returned Bad Gateway.
+
+
+Then I tried to run is in Discover and I see a red line under "NOT is_rel" in the STATS clause. And Discover states that there 1 error with the query stating that: "Function NOT not allowed in STATS". See the STATS clause I was referring to:
+
+STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(NOT is_rel, @timestamp)) BY name
