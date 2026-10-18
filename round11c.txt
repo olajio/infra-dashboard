@@ -1,4 +1,4 @@
-Query BN returned the following.
+Query BN returned the following for now() - 7days.
 {
   "statusCode": 502,
   "error": "Bad Gateway",
@@ -6,11 +6,246 @@ Query BN returned the following.
 }
 
 
-Since BN returned returned the above error, I didn't bother running the following commands:
+So, I ran it for now() - 24 hours and it gave the following:
 
-GET /_query/async/<id from the answer above>?format=json
+{
+  "id": "FjZ1NGE3UWYxUXRXUE5ZM2UzOE4yREEhdFFfOEtVVWtSYXV5Q0R2MzFxQkRqZzo2Njk2MjA1NTI4",
+  "is_running": false,
+  "took": 2459,
+  "is_partial": false,
+  "completion_time_in_millis": 1792351315706,
+  "documents_found": 19522,
+  "values_loaded": 35008,
+  "rows_emitted": 148933,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 3418101788,
+  "start_time_in_millis": 1792351313247,
+  "expiration_time_in_millis": 1792783313247,
+  "columns": [
+    {
+      "name": "occurrences",
+      "type": "long"
+    },
+    {
+      "name": "severity",
+      "type": "keyword"
+    },
+    {
+      "name": "source",
+      "type": "keyword"
+    },
+    {
+      "name": "text",
+      "type": "keyword"
+    },
+    {
+      "name": "first_seen",
+      "type": "date"
+    },
+    {
+      "name": "last_seen",
+      "type": "date"
+    }
+  ],
+  "values": [
+    [
+      6,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: fatal: userauth_finish: send failure packet: Connection reset by peer [preauth]",
+      "2026-10-18T18:11:13.856Z",
+      "2026-10-18T18:11:21.646Z"
+    ],
+    [
+      1497,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such fi",
+      "2026-10-17T19:22:01.775Z",
+      "2026-10-18T19:21:01.350Z"
+    ],
+    [
+      1497,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-17T19:22:01.775Z",
+      "2026-10-18T19:21:01.350Z"
+    ],
+    [
+      6,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: Protocol major versions differ: # vs. #",
+      "2026-10-18T18:11:07.729Z",
+      "2026-10-18T18:11:14.853Z"
+    ],
+    [
+      3,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_exchange_identification: read: Connection reset by peer",
+      "2026-10-18T18:09:23.830Z",
+      "2026-10-18T18:09:44.532Z"
+    ],
+    [
+      1,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_protocol_error: type # seq # [preauth]",
+      "2026-10-18T18:11:21.246Z",
+      "2026-10-18T18:11:21.246Z"
+    ],
+    [
+      4,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_getpwnam: name 'root@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-18T00:57:11.138Z",
+      "2026-10-18T16:33:25.602Z"
+    ],
+    [
+      4,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_name_to_gid: name 'system@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-18T00:57:11.140Z",
+      "2026-10-18T16:33:25.609Z"
+    ],
+    [
+      3,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rpcbind[#]: connect from #.#.#.# to set(nfs): indirect call not allowed",
+      "2026-10-18T18:12:00.166Z",
+      "2026-10-18T18:13:15.912Z"
+    ]
+  ]
+}
 
-DELETE /_query/async/<id>
+
+
+# 42: GET /_query/async/FjZ1NGE3UWYxUXRXUE5ZM2UzOE4yREEhdFFfOEtVVWtSYXV5Q0R2MzFxQkRqZzo2Njk2MjA1NTI4?format=json [200 OK]
+{
+  "id": "FjZ1NGE3UWYxUXRXUE5ZM2UzOE4yREEhdFFfOEtVVWtSYXV5Q0R2MzFxQkRqZzo2Njk2MjA1NTI4",
+  "is_running": false,
+  "took": 2459,
+  "is_partial": false,
+  "completion_time_in_millis": 1792351315706,
+  "documents_found": 19522,
+  "values_loaded": 35008,
+  "rows_emitted": 148933,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 3418101788,
+  "start_time_in_millis": 1792351313247,
+  "expiration_time_in_millis": 1792783313247,
+  "columns": [
+    {
+      "name": "occurrences",
+      "type": "long"
+    },
+    {
+      "name": "severity",
+      "type": "keyword"
+    },
+    {
+      "name": "source",
+      "type": "keyword"
+    },
+    {
+      "name": "text",
+      "type": "keyword"
+    },
+    {
+      "name": "first_seen",
+      "type": "date"
+    },
+    {
+      "name": "last_seen",
+      "type": "date"
+    }
+  ],
+  "values": [
+    [
+      6,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: fatal: userauth_finish: send failure packet: Connection reset by peer [preauth]",
+      "2026-10-18T18:11:13.856Z",
+      "2026-10-18T18:11:21.646Z"
+    ],
+    [
+      1497,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such fi",
+      "2026-10-17T19:22:01.775Z",
+      "2026-10-18T19:21:01.350Z"
+    ],
+    [
+      1497,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-17T19:22:01.775Z",
+      "2026-10-18T19:21:01.350Z"
+    ],
+    [
+      6,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: Protocol major versions differ: # vs. #",
+      "2026-10-18T18:11:07.729Z",
+      "2026-10-18T18:11:14.853Z"
+    ],
+    [
+      3,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_exchange_identification: read: Connection reset by peer",
+      "2026-10-18T18:09:23.830Z",
+      "2026-10-18T18:09:44.532Z"
+    ],
+    [
+      1,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_protocol_error: type # seq # [preauth]",
+      "2026-10-18T18:11:21.246Z",
+      "2026-10-18T18:11:21.246Z"
+    ],
+    [
+      4,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_getpwnam: name 'root@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-18T00:57:11.138Z",
+      "2026-10-18T16:33:25.602Z"
+    ],
+    [
+      4,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_name_to_gid: name 'system@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-18T00:57:11.140Z",
+      "2026-10-18T16:33:25.609Z"
+    ],
+    [
+      3,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rpcbind[#]: connect from #.#.#.# to set(nfs): indirect call not allowed",
+      "2026-10-18T18:12:00.166Z",
+      "2026-10-18T18:13:15.912Z"
+    ]
+  ]
+}
+# 44: DELETE /_query/async/FjZ1NGE3UWYxUXRXUE5ZM2UzOE4yREEhdFFfOEtVVWtSYXV5Q0R2MzFxQkRqZzo2Njk2MjA1NTI4 [200 OK]
+{
+  "acknowledged": true
+}
 
 
 Query BO returned the following:
