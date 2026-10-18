@@ -1,0 +1,110 @@
+Query BN returned the following.
+{
+  "statusCode": 502,
+  "error": "Bad Gateway",
+  "message": "An internal server error occurred. Check Kibana server logs for details."
+}
+
+
+Since BN returned returned the above error, I didn't bother running the following commands:
+
+GET /_query/async/<id from the answer above>?format=json
+
+DELETE /_query/async/<id>
+
+
+Query BO returned the following:
+
+#! No limit defined, adding default limit of [1000]
+{
+  "id": "FnpCSldWUl9tVEVDWHNWX1hwQ0VGT1EhRXFUUU4yOFlSNDZJWmVRZnNENFRoQTo2NzQyNzA2NTgz",
+  "is_running": false,
+  "took": 3050,
+  "is_partial": false,
+  "completion_time_in_millis": 1792351072681,
+  "documents_found": 57124,
+  "values_loaded": 114248,
+  "rows_emitted": 114388,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 5269401890,
+  "start_time_in_millis": 1792351069631,
+  "expiration_time_in_millis": 1792783069631,
+  "columns": [
+    {
+      "name": "lines",
+      "type": "long"
+    },
+    {
+      "name": "last_line",
+      "type": "date"
+    },
+    {
+      "name": "source",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      57003,
+      "2026-10-18T19:17:46.408Z",
+      "redhat6x-syslog"
+    ],
+    [
+      121,
+      "2026-10-18T18:13:15.000Z",
+      "system.syslog"
+    ]
+  ]
+}
+
+
+
+
+#! No limit defined, adding default limit of [1000]
+{
+  "id": "FnpCSldWUl9tVEVDWHNWX1hwQ0VGT1EhRXFUUU4yOFlSNDZJWmVRZnNENFRoQTo2NzQyNzA2NTgz",
+  "is_running": false,
+  "took": 3050,
+  "is_partial": false,
+  "completion_time_in_millis": 1792351072681,
+  "documents_found": 57124,
+  "values_loaded": 114248,
+  "rows_emitted": 114388,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 5269401890,
+  "start_time_in_millis": 1792351069631,
+  "expiration_time_in_millis": 1792783069631,
+  "columns": [
+    {
+      "name": "lines",
+      "type": "long"
+    },
+    {
+      "name": "last_line",
+      "type": "date"
+    },
+    {
+      "name": "source",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      57003,
+      "2026-10-18T19:17:46.408Z",
+      "redhat6x-syslog"
+    ],
+    [
+      121,
+      "2026-10-18T18:13:15.000Z",
+      "system.syslog"
+    ]
+  ]
+}
+
+
+{
+  "acknowledged": true
+}
