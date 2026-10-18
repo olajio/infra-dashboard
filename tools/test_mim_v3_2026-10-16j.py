@@ -108,7 +108,8 @@ def check(name, got, want):
 def run(t, ci='(no CI selected)', incident='(all incidents)'):
     ec = P[t]['embeddableConfig']
     q = ec['attributes']['state']['query']['esql']
-    params = [x for x in ({'ci': ci}, {'incident': incident}) if '?' + list(x)[0] in q]
+    params = [x for x in ({'ci': ci}, {'incident': incident}, {'server': '(no server selected)'}, {'health_window': '24 hours'})
+              if '?' + list(x)[0] in q]
     rng = ec.get('time_range', {}).get('from', 'now-24h')
     r = call('POST', '/_query?format=json', {'query': q, 'params': params,
                                               'filter': {'range': {'@timestamp': {'gte': rng, 'lte': 'now'}}}})

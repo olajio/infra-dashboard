@@ -155,7 +155,7 @@ check('Application control options', [r['application'] for r in esql(ctrl['confi
       [ALL_APPS, 'Automated Claim Transaction', 'Juno', 'Old App', 'Payment Hub', 'Quiet App'])
 check('controls in order', [c['config']['title'] for c in sorted(A['pinned_panels']['panels'].values(),
                                                                  key=lambda c: c['order'])],
-      ['Incident', 'CI', 'Service', 'Application'])
+      ['Incident', 'CI', 'Server', 'Health window', 'Service', 'Application'])   # 18 Oct
 check('sections', [(s['title'], s['collapsed']) for s in A['sections']], [
     ('1 · Major Incident Overview', False), ('2 · Investigate the CI', False),   # views moved into 2 in round h
     ('3 · Application & Service Health, Dependencies', False), ('4 · Related dashboards', False)])

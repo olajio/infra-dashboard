@@ -87,8 +87,9 @@ def run(t, ci='(no CI selected)', incident='(all incidents)'):
 ctl = {c['config']['title']: c['config']['esql_query'] for c in A['pinned_panels']['panels'].values()}
 check('Incident control lists P1-P3, not P4 or resolved', [r['incident'] for r in esql(ctl['Incident'])],
       ['(all incidents)', 'INC4 · p3other', 'INC3 · p3host', 'INC2 · p2host', 'INC1 · p1host'])
-check('CI control lists P1-P3 CIs (resolved too), not P4', [r['ci'] for r in esql(ctl['CI'])],
-      ['(no CI selected)', 'p1host', 'p2host', 'p3done', 'p3host', 'p3other'])
+cis = [r['ci'] for r in esql(ctl['CI'])]   # since 18 Oct the list also holds monitored servers
+check('CI control lists P1-P3 CIs (resolved too), not P4',
+      (cis[0], {'p1host', 'p2host', 'p3done', 'p3host', 'p3other'} <= set(cis), 'p4host' in cis), ('(no CI selected)', True, False))
 spec = json.loads(P['Active P1 / P2 / P3']['embeddableConfig']['savedVis']['params']['spec'])
 check('donut counts', [(r['label'], r['incidents']) for r in esql(spec['data'][0]['url']['query'])],
       [('P1', 1), ('P2', 1), ('P3', 2)])

@@ -47,11 +47,13 @@ Leave the controls at their defaults: Incident **(all incidents)**, CI **(no CI 
 | # | Do | You should see | ✓ |
 |---|---|---|---|
 | 2.1 | In the **Incident** control, pick `<number> · <CI>` | Sections 2 and 3 now show the incident's Affected CI. The CI control can stay at "(no CI selected)": while an incident is picked, its CI wins | ☐ |
-| 2.2 | Set the time picker to start **at least 2 hours before the incident was opened** (e.g. *Last 7 days* for an older incident) | Panels that follow the time picker (Server, Middleware, Database, Process, Synthetics, Logs) now cover the start of the problem. Panels marked with a fixed range (e.g. *Last 7 days*) do not change | ☐ |
+| 2.2 | Set the **Health window** control to cover the start of the problem: at least 2 hours before the incident was opened (e.g. *3 days* or *7 days* for an older incident); *15 minutes* to see the state now | The health panels (Server, Middleware, Database, Process, Synthetics, Logs, Applications on this CI) follow it. The time picker does not change section 2 | ☐ |
+| 2.3 | If the incident's CI is **not a server** (e.g. an application service), read a server name in **Server View** and pick it in the **Server** control | The health panels fill for that server. A server in the incident or the CI control always wins over the Server control | ☐ |
 
 If the incident has **no CI** (`<number> · (no CI)`), sections 2 and 3 stay empty. Ask the assignment group which CI is
 affected, then set the Incident control back to **(all incidents)** and pick the CI in the **CI** control. The CI
-control lists only CIs that had a P1 / P2 / P3 in the last 31 days.
+control lists the CIs that had a P1 / P2 / P3 in the last 31 days and every production server that sent metrics
+in the last day.
 
 ---
 
@@ -63,13 +65,13 @@ Work down the panels in this order. The first ones answer "what happened just be
 |---|---|---|---|---|
 | 3.1 | **Alerts on this CI** | Rows marked **Likely trigger**: Netcool alerts first seen up to 2 h before the incident opened. They are listed first | Alerts on the incident's CI from the last 7 days; *Now* says Open or Cleared; *vs incident* is Likely trigger / Earlier / After | ☐ |
 | 3.2 | **Changes in the Last 7 Days on this CI** | A change that ended shortly before the incident opened, on this CI or a CI linked to it. **Emergency** changes are red. Click the change to open it in ServiceNow | Changes on the CI itself first, then on linked CIs; the CI column says which | ☐ |
-| 3.3 | **Server Health** | Red tiles: no data for more than 10 minutes (server down or agent stopped), CPU, memory or disk at 90 % or more | Four tiles named after the server. **No tiles** = the CI is not a monitored server (normal for an application CI) | ☐ |
+| 3.3 | **Server Health** | Status **Silent** (no data for 10 minutes: server down or agent stopped) or **No data in window**, and red percentages (CPU, memory or disk at 90 % or more) | One row per chosen server. **No rows** = no server chosen: the CI is not a server and the Server control is empty (see 2.3) | ☐ |
 | 3.4 | **Middleware Health** and **Database Health** | Anything **Down** (stopped, or silent for 10 minutes). Down rows come first | Components on this CI with status and minutes since last seen. Click the Server to open it in ServiceNow. Empty = nothing of that kind monitored here | ☐ |
 | 3.5 | **Process Health** | Windows services that are **Stopped** (set to Automatic but not running), processes **Not seen** | Problems first, healthy middleware below | ☐ |
 | 3.6 | **Errors from the Logs** | Critical / error messages whose **First seen** is close to the incident's opened time | Warning-and-worse lines grouped by message, critical and error first | ☐ |
-| 3.7 | **Synthetics Health** | Monitors **Down** now, or with down checks in the time range | Ping / HTTP monitors that target this CI. Empty is normal for many CIs | ☐ |
+| 3.7 | **Synthetics Health** | Monitors **Down** now, or with down checks in the Health window | Ping / HTTP monitors that target this CI. Empty is normal for many CIs | ☐ |
 | 3.8 | **SLO Error Burn Rate** | ★ rows (this CI's own SLOs) burning at **14.4× or more** ("page now") | This CI's SLOs first, then every SLO burning 1× or more | ☐ |
-| 3.9 | **Applications on this CI** | Which APM services run on this server, and whether they still send data (*Last data*) | APM services seen on the CI in the last 7 days | ☐ |
+| 3.9 | **Applications on this CI** | Which APM services run on this server, and whether they still send data (*Last data*) | APM services seen on the chosen server in the Health window | ☐ |
 
 **Write down the evidence** in the test record: the alert, change, component or log message that best explains the
 incident, and the time it started.
@@ -141,7 +143,8 @@ Write the decision in the test record.
 
 ## Step 8 — Reset
 
-Set the Incident control back to **(all incidents)** and the time picker to **Last 24 hours**, so the next person
+Set the Incident control back to **(all incidents)**, the Server control to **(no server selected)**, the Health
+window to **24 hours** and the time picker to **Last 24 hours**, so the next person
 starts from the overview.
 
 ---

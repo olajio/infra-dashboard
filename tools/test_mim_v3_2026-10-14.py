@@ -88,11 +88,12 @@ P = {(p['embeddableConfig'].get('title') or ''): p for p in panels}
 fails = []
 
 
-def run(t, ci=CI, incident=ALL, frm=None):
+def run(t, ci=CI, incident=ALL, frm=None, window='24 hours'):
     ec = P[t]['embeddableConfig']
     q = next(iter(ec['attributes']['state']['datasourceStates']['textBased']['layers'].values()))['query']['esql']
     assert q == ec['attributes']['state']['query']['esql'], t
-    params = [x for x in ({'ci': ci}, {'incident': incident}) if '?' + list(x)[0] in q]
+    params = [x for x in ({'ci': ci}, {'incident': incident}, {'server': '(no server selected)'}, {'health_window': window})
+              if '?' + list(x)[0] in q]   # Server / Health window controls since 18 Oct
     rng = (ec.get('time_range') or {}).get('from', frm or 'now-24h')
     r = call('POST', '/_query?format=json', {'query': q, 'params': params,
                                              'filter': {'range': {'@timestamp': {'gte': rng, 'lte': 'now'}}}})
@@ -128,20 +129,19 @@ check('Database follows the incident', run('Database Health', ci='(no CI selecte
 check('Middleware with no CI', run('Middleware Health', ci='(no CI selected)')[0], [])
 
 R, cols = run('Server Health')
-check('Server Health tiles name the server', [(r['label'], r['value'], r['detail']) for r in R], [
-    ('Minutes since last data', 1.0, f'server {CI}'), ('CPU p90 %', 50.0, f'server {CI}'),
-    ('Memory peak %', 70.0, f'server {CI}'), ('Fullest disk %', 85.0, f'server {CI}')])
+check('Server Health: one row per server (since 18 Oct)', [(r['server'], r['status'], r['cpu_p90'], r['mem_peak'], r['disk_max']) for r in R],
+      [(CI, 'Reporting', 50.0, 70.0, 85.0)])
 
-R, cols = run('Applications on this CI')
+R, cols = run('Applications on this CI', window='7 days')   # Health window since 18 Oct
 check('Applications: APM on this server, last 7 days', [(r['application'], r['health'], r['type']) for r in R], [
     ('policy-admin', '3 min ago', 'prd1'), ('nightly-batch', '3 d ago', 'prd1')])
 
 check('banner removed', 'How to use this section' in P, False)
 ctrls = sorted(dash['attributes']['pinned_panels']['panels'].values(), key=lambda c: c['order'])
-check('controls: Incident, CI, Service first', [c['config']['title'] for c in ctrls][:3], ['Incident', 'CI', 'Service'])
+check('controls: Incident, CI first', [c['config']['title'] for c in ctrls][:2], ['Incident', 'CI'])
 check('time windows', {t: P[t]['embeddableConfig'].get('time_range', {}).get('from') for t in
                        ('Applications on this CI', 'Changes in the Last 7 Days on this CI')},
-      {'Applications on this CI': 'now-7d', 'Changes in the Last 7 Days on this CI': 'now-7d'})
+      {'Applications on this CI': 'now-5y', 'Changes in the Last 7 Days on this CI': 'now-7d'})   # Health window in the query since 18 Oct
 check('link cards are links only', [P[t]['embeddableConfig']['content'] for t in ('SRE dashboard', 'Infra dashboard')], [
     '## 🛡️ [Applications Operations Dashboard ›](https://kibana-prod.gcp.cna.com/app/r/s/b4Jas)',
     '## 🖥️ [Infra Dashboard ›](https://kibana-prod.gcp.cna.com/app/r/s/3A7f1)'])

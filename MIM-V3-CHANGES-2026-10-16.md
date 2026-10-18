@@ -150,9 +150,25 @@ Details: *MIM-V3-APP-HEALTH-BY-CI-AND-PROD-ONLY.md*.
 
 All eleven tests pass on 9.5.3, including the new `tools/test_mim_v3_2026-10-16j.py`.
 
+## Eleventh round: Server control and Health window (18 Oct)
+
+Plan: *MIM-V3-BUILD-PLAN-SERVER-HEALTH-WINDOW.md*. Summary: *MIM-V3-SUMMARY-SERVER-CONTROL-PHASE1.md*.
+
+| What changed | Detail |
+|---|---|
+| **Controls** | Incident · CI · **Server** (new) · **Health window** (new) · Service · Application |
+| **CI control** | Also lists every production server that sent CPU metrics in the last day |
+| **Which server** | Incident's CI if a server, else the CI control's value if a server, else the Server control's value |
+| **Health window** | 15 min … 7 days, default 24 hours, applied inside the queries of Server, Middleware, Database, Process Health, Synthetics, Logs and Applications on this CI. The time picker no longer changes them |
+| **Server Health** | A table, one row per server: Status (Reporting / Silent / No data in window), minutes ago, CPU p90, memory peak, fullest disk |
+| **Alerts on this CI** | Also the chosen server's alerts; still a fixed 7 days |
+| **Not built yet** | Automatic servers for an application CI (step 4): waiting on a decision about query cost |
+
+All twelve tests pass on 9.5.3, including the new `tools/test_mim_v3_2026-10-18k.py`.
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second and fourth to tenth rounds changed it)
+### 1. Import the dashboard (needed again: the second and fourth to eleventh rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept
@@ -186,6 +202,8 @@ grant those patterns too.
 - The four views in section 3 fill for a CI that has CMDB relationships.
 - The Application control filters *Application Health* and *Services of the Application*.
 - Click-through links work in view mode (Active Incidents, Escalate, the CMDB links).
+- The Server and Health window controls appear after the CI control; picking a server fills *Server Health* with one
+  row, and switching the Health window to 15 minutes changes the health panels.
 
 ## Not dashboard changes (need other teams)
 - **Live health in the CMDB views:** needs a lookup copy of `cmdb-ci-relations*` (option (b) in *MIM-V3-CI-VS-CMDB-RELATIONSHIPS.md*).
