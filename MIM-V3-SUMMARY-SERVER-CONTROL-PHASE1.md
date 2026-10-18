@@ -99,3 +99,7 @@ Round 11c in `queries_ro_run.md` measures it properly before anything is changed
 **Round 11d:** *Errors from the Logs* at 7 days takes **4 s** once the data is warm. The earlier 502s were first
 runs on data not yet read from disk, which can pass Dev Tools' 30-second limit. Its `INLINE STATS` step (the server
 precedence) reads the data twice; that could be removed, at the cost of a more complex query.
+
+**Decision (18 Oct): note only, no query change.** *Errors from the Logs*' description and the guide now say that
+at 3 or 7 days its first load can take up to a minute; later loads take a few seconds
+(`tools/mim_v3_patch_2026-10-18l.py`).

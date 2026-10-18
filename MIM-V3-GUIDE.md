@@ -231,6 +231,9 @@ so MIM V3 stays open on the bridge.
   *Server Health* shows CPU p90 and peak memory over the whole window, so 24 hours can show yesterday's peak. Use a
   window starting before the incident opened (3 days or 7 days for an older incident) to see the first errors in
   the logs.
+- **Long Health windows load slowly the first time.** At 3 or 7 days, *Errors from the Logs* can take up to a
+  minute on its first load, while older logs are read from disk; later loads take a few seconds (Round 11d: 4 s at
+  7 days).
 - **The dashboard refreshes every 5 minutes.** Click **Refresh** for an immediate update.
 
 ### Reading the numbers

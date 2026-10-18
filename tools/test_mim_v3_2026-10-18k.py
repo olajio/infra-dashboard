@@ -181,6 +181,8 @@ try:
         (P[t]['embeddableConfig']['time_range']['from'], '?health_window' in P[t]['embeddableConfig']['attributes']['state']['query']['esql'])
         for t in ('Server Health', 'Middleware Health', 'Database Health', 'Process Health', 'Synthetics Health',
                   'Errors from the Logs', 'Applications on this CI')}), [('now-5y', True)])
+    check('Errors from the Logs warns that long windows load slowly the first time (18l)',
+          'first load can take up to a minute' in P['Errors from the Logs']['embeddableConfig']['description'], True)
 finally:
     cleanup()
 print('\n' + ('ALL CHECKS PASSED' if not fails else f'FAILED: {fails}'))
