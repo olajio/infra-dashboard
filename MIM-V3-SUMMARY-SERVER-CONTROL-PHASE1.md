@@ -82,18 +82,6 @@ query shape is needed even when a server is picked.
 | **C. Keep phase 1 only** (recommended until the numbers are known) | Fast, as now | Pick a server from *Server View* in the Server control |
 | **D. A lookup index** of application → server links (excluded for now) | Fast; the time picker could return | Two CMDB steps too |
 
-**Numbers that would decide it.** Run this in Discover (ES|QL), once per index pattern:
-- `.ds-metrics-system.cpu-default*`
-- `metrics-system.process-*`
-- `metrics-windows.service-*`
-- `logs-syslog-classic-*`
-- `metrics-apm.internal-*`
-
-```
-FROM .ds-metrics-system.cpu-default*
-| WHERE @timestamp >= NOW() - 1 day
-| STATS docs = COUNT(*), servers = COUNT_DISTINCT(ci.name)
-```
-
-**How to read them:** a few million documents a day per index means option A is probably fine for windows up to 24
-hours. Hundreds of millions would make it too slow. The `servers` count also checks the 10,000-value control limit.
+**Numbers that would decide it:** *Round 11* in `queries_ro_run.md` (BA–BH). They all run in Dev Tools Console.
+They measure the daily data volume, the size of the CI and Server lists, and what each automatic panel would actually
+cost (`took`).

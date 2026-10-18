@@ -493,3 +493,217 @@ What the answers decide:
 
 **Built:** the fixed related-CI views (section 3) and *Application Health* / *Services of the Application* (section 4).
 
+
+## Round 11 — Server control, Health window and automatic servers (18 Oct 2026)
+
+**Where to run:** all of these run in **Dev Tools Console**; none needs Discover. Paste a block, put the cursor in it
+and press the ▶ button (or Ctrl/Cmd + Enter). Then copy the response into `round11.txt`, with the query letter
+above each one.
+
+**Why these:** BA–BD size and time what phase 1 already does: the CI and Server lists, and the share of incident CIs
+that are servers. BE–BH measure what automatic servers (step 4) would cost, so you can decide between options A–D in
+*MIM-V3-SUMMARY-SERVER-CONTROL-PHASE1.md*. BI is an optional spot-check of the related-CI tables.
+
+**Note `took` for each `POST /_query`.** It is the first line of the JSON response, in milliseconds. That is the
+number that decides automatic mode.
+
+**Go easy on the cluster.** BE–BG read every server's data in the window, which is the expensive part of automatic
+mode. Run each one with `1 hour` first. Run the `24 hours` version only if `took` stayed under about 10 seconds.
+Run them outside the busiest hours if you can.
+
+The demo names are *Automated Claim Transaction PROD* (an application service) and *Claim Center* (a business
+application). Replace them with any CI you prefer.
+
+### Phase 1: list sizes and costs
+
+**BA. Documents per day in each index the health panels read** (the `_count` API, cheap)
+```
+GET .ds-metrics-system.cpu-default*,.ds-metrics-system.memory-default*,.ds-metrics-system.filesystem-default*/_count
+{ "query": { "range": { "@timestamp": { "gte": "now-1d" } } } }
+
+GET metrics-system.process-*/_count
+{ "query": { "range": { "@timestamp": { "gte": "now-1d" } } } }
+
+GET metrics-windows.service-*/_count
+{ "query": { "range": { "@timestamp": { "gte": "now-1d" } } } }
+
+GET metricbeat-*/_count
+{ "query": { "range": { "@timestamp": { "gte": "now-1d" } } } }
+
+GET logs-syslog-classic-*,logs-websphere-syslog-*,logs-redhat6x-syslog-*,logs-jboss-*,logs-aix-syslog-*,logs-system.syslog-*,logs-filestream.generic-*,logs-apm.error-*,logs-apm.app.*/_count
+{ "query": { "range": { "@timestamp": { "gte": "now-1d" } } } }
+
+GET metrics-apm.internal-*/_count
+{ "query": { "range": { "@timestamp": { "gte": "now-1d" } } } }
+
+GET synthetics-*/_count
+{ "query": { "range": { "@timestamp": { "gte": "now-1d" } } } }
+```
+
+**BB. Servers by environment** (which ones the CI and Server lists include: `in_list` = production, or blank)
+```
+POST /_query?format=txt
+{ "query": """
+FROM .ds-metrics-system.cpu-default*
+| WHERE @timestamp >= NOW() - 1 day AND ci.name IS NOT NULL
+| EVAL env = COALESCE(TO_LOWER(TO_STRING(ci.environment)), "(blank)")
+| EVAL in_list = CASE(env IN ("(blank)", "", "null") OR env LIKE "prod*" OR env LIKE "prd*", "yes", "no")
+| STATS servers = COUNT_DISTINCT(ci.name) BY in_list, env
+| SORT in_list DESC, servers DESC
+| LIMIT 100
+""" }
+```
+
+**BC. The Server and CI lists as the dashboard builds them: how many options, and how long it takes** (the same
+work as the two controls, ending in a count instead of the list)
+```
+POST /_query?format=json
+{ "query": """
+FROM .ds-metrics-system.cpu-default*
+| WHERE @timestamp >= NOW() - 1 day AND ci.name IS NOT NULL
+    AND (TO_STRING(ci.environment) IS NULL OR TO_STRING(ci.environment) IN ("", "null")
+         OR TO_LOWER(TO_STRING(ci.environment)) LIKE "prod*" OR TO_LOWER(TO_STRING(ci.environment)) LIKE "prd*")
+| STATS servers = VALUES(TO_STRING(ci.name))
+| MV_EXPAND servers
+| STATS server_list_options = COUNT(*)
+""" }
+
+POST /_query?format=json
+{ "query": """
+FROM servicenow-incidents-*, .ds-metrics-system.cpu-default* METADATA _index
+| WHERE (priority IN (1, 2, 3) AND opened_at >= NOW() - 31 days) OR @timestamp >= NOW() - 1 day
+| EVAL from_inc = _index LIKE "*servicenow*"
+| WHERE ci.name IS NOT NULL AND ((from_inc AND priority IN (1, 2, 3) AND opened_at >= NOW() - 31 days)
+    OR (NOT from_inc AND (TO_STRING(ci.environment) IS NULL OR TO_STRING(ci.environment) IN ("", "null")
+        OR TO_LOWER(TO_STRING(ci.environment)) LIKE "prod*" OR TO_LOWER(TO_STRING(ci.environment)) LIKE "prd*")))
+| STATS cis = VALUES(TO_STRING(ci.name))
+| MV_EXPAND cis
+| STATS ci_list_options = COUNT(*)
+""" }
+```
+
+**BD. How many incident CIs are servers** (P1–P3 in the last 31 days; a server = sent CPU metrics in the last day).
+The ones that are not servers are the incidents where you would pick a server in the Server control, or where
+automatic mode would help.
+```
+POST /_query?format=txt
+{ "query": """
+FROM servicenow-incidents-*, .ds-metrics-system.cpu-default* METADATA _index
+| WHERE (priority IN (1, 2, 3) AND opened_at >= NOW() - 31 days) OR @timestamp >= NOW() - 1 day
+| EVAL from_inc = _index LIKE "*servicenow*", name = TO_LOWER(TO_STRING(ci.name))
+| WHERE name IS NOT NULL
+| STATS on_incident = MAX(CASE(from_inc AND priority IN (1, 2, 3) AND opened_at >= NOW() - 31 days, 1, 0)),
+        is_server = MAX(CASE(from_inc, 0, 1)) BY name
+| WHERE on_incident == 1
+| STATS incident_cis = COUNT(*), servers = SUM(is_server)
+| EVAL not_servers = incident_cis - servers
+""" }
+```
+
+### Phase 2: what automatic servers would cost
+
+Each query below does what one automatic panel would do: it finds the CI's linked CIs in the CMDB and reads
+**every** server's data in the window, keeping only the linked ones at the end. The rows show which linked CIs send
+data. Run each with `1 hour` as written, then change both `1 hour`s to `24 hours` and run it again.
+
+**BE. Server Health** (CPU, memory, disk: the lightest data)
+```
+POST /_query?format=json
+{ "query": """
+FROM .ds-metrics-system.cpu-default*, .ds-metrics-system.memory-default*, .ds-metrics-system.filesystem-default*, cmdb-ci-relations* METADATA _index
+| WHERE @timestamp >= NOW() - 1 hour
+    OR parent.name == "Automated Claim Transaction PROD" OR child.name == "Automated Claim Transaction PROD"
+| EVAL is_rel = _index LIKE "*relations*", app = "automated claim transaction prod",
+       p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
+| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, NOT is_rel, TO_LOWER(TO_STRING(ci.name)))
+| WHERE name IS NOT NULL AND (is_rel OR @timestamp >= NOW() - 1 hour)
+| STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(NOT is_rel, @timestamp)) BY name
+| WHERE linked == 1
+| SORT data_docs DESC, name ASC
+| LIMIT 100
+""" }
+```
+
+**BF. Process and Windows services** (Middleware, Database and Process Health)
+```
+POST /_query?format=json
+{ "query": """
+FROM metrics-system.process-*, metrics-windows.service-*, cmdb-ci-relations* METADATA _index
+| WHERE @timestamp >= NOW() - 1 hour
+    OR parent.name == "Automated Claim Transaction PROD" OR child.name == "Automated Claim Transaction PROD"
+| EVAL is_rel = _index LIKE "*relations*", app = "automated claim transaction prod",
+       p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
+| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, NOT is_rel, TO_LOWER(TO_STRING(ci.name)))
+| WHERE name IS NOT NULL AND (is_rel OR @timestamp >= NOW() - 1 hour)
+| STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(NOT is_rel, @timestamp)) BY name
+| WHERE linked == 1
+| SORT data_docs DESC, name ASC
+| LIMIT 100
+""" }
+```
+
+**BG. Logs** (Errors from the Logs; every log line, so this is the upper bound: the panel itself also filters on
+severity)
+```
+POST /_query?format=json
+{ "query": """
+FROM logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, logs-jboss-*, logs-aix-syslog-*, logs-system.syslog-*, logs-filestream.generic-*, logs-apm.error-*, logs-apm.app.*, cmdb-ci-relations* METADATA _index
+| WHERE @timestamp >= NOW() - 1 hour
+    OR parent.name == "Automated Claim Transaction PROD" OR child.name == "Automated Claim Transaction PROD"
+| EVAL is_rel = _index LIKE "*relations*", app = "automated claim transaction prod",
+       p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
+| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, NOT is_rel, TO_LOWER(TO_STRING(ci.name)))
+| WHERE name IS NOT NULL AND (is_rel OR @timestamp >= NOW() - 1 hour)
+| STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(NOT is_rel, @timestamp)) BY name
+| WHERE linked == 1
+| SORT data_docs DESC, name ASC
+| LIMIT 100
+""" }
+```
+
+**BH. A business application's servers through APM** (the hosts its services run on). Shows what automatic mode
+would find for a business application, which has no servers linked directly in the CMDB.
+```
+POST /_query?format=json
+{ "query": """
+FROM metrics-apm.service_transaction.1m-*, metrics-apm.internal-* METADATA _index
+| WHERE @timestamp >= NOW() - 1 hour
+| EVAL is_tx = _index LIKE "*service_transaction*"
+| STATS apps = VALUES(CASE(is_tx, TO_STRING(ci.name))), hosts = VALUES(CASE(NOT is_tx, TO_LOWER(TO_STRING(host.name)))) BY service.name
+| WHERE apps == "Claim Center"
+| MV_EXPAND hosts
+| STATS services = VALUES(service.name) BY host = hosts
+| SORT host
+| LIMIT 100
+""" }
+```
+
+### Optional
+
+**BI. Everything the CMDB links to one CI** (compare with the dashboard's related-CI tables, or with ServiceNow; no
+time range needed in Dev Tools)
+```
+POST /_query?format=txt
+{ "query": """
+FROM cmdb-ci-relations*
+| WHERE parent.name == "Claim Center PROD" OR child.name == "Claim Center PROD"
+| EVAL down = parent.name == "Claim Center PROD"
+| EVAL related = CASE(down, child.name, parent.name), class = CASE(down, child.class, parent.class),
+       direction = CASE(down, "this CI → it", "it → this CI")
+| STATS links = COUNT(*), examples = VALUES(related) BY class, direction, type.name
+| EVAL examples = MV_SLICE(examples, 0, 4)
+| SORT links DESC
+| LIMIT 200
+""" }
+```
+
+### What the answers decide
+
+| Query | Decides |
+|---|---|
+| BA | How much data automatic mode would scan per day, per panel. A few million documents a day: fine up to 24 hours. Hundreds of millions: too slow |
+| BB, BC | Whether the CI and Server lists stay under Kibana's 10,000-option limit, whether the "production or blank" rule keeps the right servers, and how long the two lists take to build (they run every time the dashboard loads) |
+| BD | How often an incident's CI is not a server, i.e. how often the Server control or automatic mode is needed at all |
+| BE–BG | The real cost of automatic mode per panel (`took`, 1 hour and 24 hours), and whether the demo CI's linked servers send data. Over about 10 s at 24 hours means option A is too slow for that panel |
+| BH | Whether APM finds the servers of a business application (the second way automatic mode finds servers) |
+| BI | Optional check that the related-CI tables show every CMDB link of a CI |
