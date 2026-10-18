@@ -95,3 +95,7 @@ cost (`took`).
 **Round 11b (panel timings on real data):** with a server picked, Server Health takes 0.7 s and Process Health 2–3 s,
 at 24 hours and at 7 days. *Errors from the Logs* takes 6 s at 24 hours and timed out in Dev Tools at 7 days.
 Round 11c in `queries_ro_run.md` measures it properly before anything is changed.
+
+**Round 11d:** *Errors from the Logs* at 7 days takes **4 s** once the data is warm. The earlier 502s were first
+runs on data not yet read from disk, which can pass Dev Tools' 30-second limit. Its `INLINE STATS` step (the server
+precedence) reads the data twice; that could be removed, at the cost of a more complex query.

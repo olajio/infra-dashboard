@@ -1173,3 +1173,19 @@ DELETE /_query/async/<id>
 | BT fast, BN2 slow | `INLINE STATS` is the cost: I'd restructure it |
 | BT slow too | Mixing the CMDB and CPU indices into the logs query is the cost: I'd split it differently |
 | BS slow too | The log processing itself (GROK and number replacement) is the cost |
+
+### Round 11d results (18 Oct)
+
+| Query | 7 days | Documents read | CPU | Rows |
+|---|---|---|---|---|
+| BN2: the dashboard's logs query, as it is | **4.0 s** | 128 k | 20.6 CPU-s | 26 (22,599 log lines) |
+| BS: logs only, server fixed | 2.7 s | 57 k | 8.6 CPU-s | the same 26 |
+| BT: without `INLINE STATS` | 2.8 s | 64 k | 7.5 CPU-s | the same 26 |
+
+- **The panel works at 7 days: 4 seconds.** The three versions return the same groups and counts.
+- **`INLINE STATS` reads the data twice.** It doubles the documents read (128 k against 64 k) and nearly triples the
+  CPU. The other phase 1 panels use it too, and they were all fast in Round 11b.
+- **The earlier 502s were most likely first runs on cold data.** The first time a query reads 7 days of logs,
+  Elasticsearch loads older data from disk. Repeat runs are faster: BL at 24 hours took 6.0 s the first time and 2.5 s
+  later. So BL and BN at 7 days were each a first run, and passed Kibana's 30-second limit in Dev Tools. The dashboard
+  waits longer, so on a first load the panel would be slow (possibly over 30 s), not broken.
