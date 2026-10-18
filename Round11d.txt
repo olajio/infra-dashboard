@@ -1,0 +1,824 @@
+Query BN2
+{
+  "id": "FnRjMm5zVVk1U1hDOFBsQXZXa0xSVEEhRXFUUU4yOFlSNDZJWmVRZnNENFRoQTo2NzQ1MzA2ODYx",
+  "is_running": true,
+  "documents_found": 0,
+  "values_loaded": 0,
+  "rows_emitted": 0,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 0,
+  "start_time_in_millis": 1792352420851,
+  "expiration_time_in_millis": 1792784420851,
+  "columns": [],
+  "values": []
+}
+
+# 42: GET /_query/async/FnRjMm5zVVk1U1hDOFBsQXZXa0xSVEEhRXFUUU4yOFlSNDZJWmVRZnNENFRoQTo2NzQ1MzA2ODYx?format=json [200 OK]
+{
+  "id": "FnRjMm5zVVk1U1hDOFBsQXZXa0xSVEEhRXFUUU4yOFlSNDZJWmVRZnNENFRoQTo2NzQ1MzA2ODYx",
+  "is_running": false,
+  "took": 4038,
+  "is_partial": false,
+  "completion_time_in_millis": 1792352424889,
+  "documents_found": 128062,
+  "values_loaded": 251604,
+  "rows_emitted": 1027992,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 20553510882,
+  "start_time_in_millis": 1792352420851,
+  "expiration_time_in_millis": 1792784420851,
+  "columns": [
+    {
+      "name": "occurrences",
+      "type": "long"
+    },
+    {
+      "name": "severity",
+      "type": "keyword"
+    },
+    {
+      "name": "source",
+      "type": "keyword"
+    },
+    {
+      "name": "text",
+      "type": "keyword"
+    },
+    {
+      "name": "first_seen",
+      "type": "date"
+    },
+    {
+      "name": "last_seen",
+      "type": "date"
+    }
+  ],
+  "values": [
+    [
+      449,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: nh#sndsc : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-17T12:50:20.786Z",
+      "2026-10-17T13:24:09.522Z"
+    ],
+    [
+      4,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: cae#a : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-12T14:10:53.998Z",
+      "2026-10-12T17:24:19.483Z"
+    ],
+    [
+      3,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo:   spunix : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-14T05:32:37.814Z",
+      "2026-10-14T05:32:37.928Z"
+    ],
+    [
+      1,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: caf#a : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-13T05:04:37.010Z",
+      "2026-10-13T05:04:37.010Z"
+    ],
+    [
+      1,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: pxdlog# : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-14T13:00:03.861Z",
+      "2026-10-14T13:00:03.861Z"
+    ],
+    [
+      38,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: fatal: userauth_finish: send failure packet: Connection reset by peer [preauth]",
+      "2026-10-12T18:06:36.262Z",
+      "2026-10-18T18:11:21.646Z"
+    ],
+    [
+      10474,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such fi",
+      "2026-10-11T19:41:01.954Z",
+      "2026-10-18T19:40:01.269Z"
+    ],
+    [
+      10474,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-11T19:41:01.954Z",
+      "2026-10-18T19:40:01.269Z"
+    ],
+    [
+      458,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such file o",
+      "2026-10-12T14:10:54.517Z",
+      "2026-10-17T13:24:09.559Z"
+    ],
+    [
+      458,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-12T14:10:54.518Z",
+      "2026-10-17T13:24:09.559Z"
+    ],
+    [
+      42,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: Protocol major versions differ: # vs. #",
+      "2026-10-12T18:06:33.859Z",
+      "2026-10-18T18:11:14.853Z"
+    ],
+    [
+      40,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_exchange_identification: read: Connection reset by peer",
+      "2026-10-12T18:04:55.358Z",
+      "2026-10-18T18:09:44.532Z"
+    ],
+    [
+      26,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# su: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-12T14:10:58.303Z",
+      "2026-10-17T04:12:23.958Z"
+    ],
+    [
+      26,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# su: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such file or ",
+      "2026-10-12T14:10:58.303Z",
+      "2026-10-17T04:12:23.958Z"
+    ],
+    [
+      10,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_protocol_error: type # seq # [preauth]",
+      "2026-10-12T18:06:36.117Z",
+      "2026-10-18T18:11:21.246Z"
+    ],
+    [
+      1,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: omfwd: [wrkr #/#] we had a generic or IO error with the remote server. The actual error message should already have been provided.  Se",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ],
+    [
+      1,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: Received disconnect from #.#.#.# port #:#: The host key signature is invalid [preauth]",
+      "2026-10-17T10:02:37.351Z",
+      "2026-10-17T10:02:37.351Z"
+    ],
+    [
+      28,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_name_to_gid: name 'system@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-12T03:00:01.808Z",
+      "2026-10-18T16:33:25.609Z"
+    ],
+    [
+      28,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_getpwnam: name 'root@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-12T03:00:01.800Z",
+      "2026-10-18T16:33:25.602Z"
+    ],
+    [
+      21,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rpcbind[#]: connect from #.#.#.# to set(nfs): indirect call not allowed",
+      "2026-10-12T18:07:31.684Z",
+      "2026-10-18T18:13:15.912Z"
+    ],
+    [
+      6,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# kernel: IPv#: martian source #.#.#.# from #.#.#.#, on dev ens#",
+      "2026-10-12T18:05:36.013Z",
+      "2026-10-16T18:13:46.769Z"
+    ],
+    [
+      6,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# kernel: ll header: #: # # # a# #b b# c# #d # #d fd ff # #",
+      "2026-10-12T18:05:36.013Z",
+      "2026-10-16T18:13:46.769Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# kernel: process 'libexec/platform/linux-x#/parted' started with executable stack",
+      "2026-10-13T20:04:49.442Z",
+      "2026-10-13T20:04:49.442Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: omfwd: [wrkr #] target logstash-relay-aurora.cna.com:# became unavailable during buffer flush. Remaining messages will be sent when it",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: action 'action-#-builtin:omfwd' suspended (module 'builtin:omfwd'), retry #. There should be messages before this one giving the reaso",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: omfwd: [wrkr #/#] no working target servers in pool available, suspending action [v#.#.#-#.el#_#.# try https://www.rsyslog.com/e/# ]",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ]
+  ]
+}
+# 44: DELETE /_query/async/FnRjMm5zVVk1U1hDOFBsQXZXa0xSVEEhRXFUUU4yOFlSNDZJWmVRZnNENFRoQTo2NzQ1MzA2ODYx [200 OK]
+{
+  "acknowledged": true
+}
+
+
+Query BS
+
+{
+  "id": "FnZjeFhFR0tMUTMyRFRDXzU1a2J2emchNDZ4bGJnOENRX09lRnFLaEFpam50dzo2NjExMTAzMjAx",
+  "is_running": true,
+  "documents_found": 0,
+  "values_loaded": 0,
+  "rows_emitted": 0,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 0,
+  "start_time_in_millis": 1792352554115,
+  "expiration_time_in_millis": 1792784554115,
+  "columns": [],
+  "values": []
+}
+
+
+# 69: GET /_query/async/FnZjeFhFR0tMUTMyRFRDXzU1a2J2emchNDZ4bGJnOENRX09lRnFLaEFpam50dzo2NjExMTAzMjAx?format=json [200 OK]
+{
+  "id": "FnZjeFhFR0tMUTMyRFRDXzU1a2J2emchNDZ4bGJnOENRX09lRnFLaEFpam50dzo2NjExMTAzMjAx",
+  "is_running": false,
+  "took": 2695,
+  "is_partial": false,
+  "completion_time_in_millis": 1792352556810,
+  "documents_found": 57113,
+  "values_loaded": 124800,
+  "rows_emitted": 387131,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 8625827019,
+  "start_time_in_millis": 1792352554115,
+  "expiration_time_in_millis": 1792784554115,
+  "columns": [
+    {
+      "name": "occurrences",
+      "type": "long"
+    },
+    {
+      "name": "severity",
+      "type": "keyword"
+    },
+    {
+      "name": "source",
+      "type": "keyword"
+    },
+    {
+      "name": "text",
+      "type": "keyword"
+    },
+    {
+      "name": "first_seen",
+      "type": "date"
+    },
+    {
+      "name": "last_seen",
+      "type": "date"
+    }
+  ],
+  "values": [
+    [
+      449,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: nh#sndsc : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-17T12:50:20.786Z",
+      "2026-10-17T13:24:09.522Z"
+    ],
+    [
+      4,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: cae#a : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-12T14:10:53.998Z",
+      "2026-10-12T17:24:19.483Z"
+    ],
+    [
+      3,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo:   spunix : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-14T05:32:37.814Z",
+      "2026-10-14T05:32:37.928Z"
+    ],
+    [
+      1,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: pxdlog# : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-14T13:00:03.861Z",
+      "2026-10-14T13:00:03.861Z"
+    ],
+    [
+      1,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: caf#a : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-13T05:04:37.010Z",
+      "2026-10-13T05:04:37.010Z"
+    ],
+    [
+      38,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: fatal: userauth_finish: send failure packet: Connection reset by peer [preauth]",
+      "2026-10-12T18:06:36.262Z",
+      "2026-10-18T18:11:21.646Z"
+    ],
+    [
+      10474,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-11T19:43:01.568Z",
+      "2026-10-18T19:42:01.894Z"
+    ],
+    [
+      10474,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such fi",
+      "2026-10-11T19:43:01.568Z",
+      "2026-10-18T19:42:01.894Z"
+    ],
+    [
+      458,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such file o",
+      "2026-10-12T14:10:54.517Z",
+      "2026-10-17T13:24:09.559Z"
+    ],
+    [
+      458,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-12T14:10:54.518Z",
+      "2026-10-17T13:24:09.559Z"
+    ],
+    [
+      42,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: Protocol major versions differ: # vs. #",
+      "2026-10-12T18:06:33.859Z",
+      "2026-10-18T18:11:14.853Z"
+    ],
+    [
+      40,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_exchange_identification: read: Connection reset by peer",
+      "2026-10-12T18:04:55.358Z",
+      "2026-10-18T18:09:44.532Z"
+    ],
+    [
+      26,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# su: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-12T14:10:58.303Z",
+      "2026-10-17T04:12:23.958Z"
+    ],
+    [
+      26,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# su: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such file or ",
+      "2026-10-12T14:10:58.303Z",
+      "2026-10-17T04:12:23.958Z"
+    ],
+    [
+      10,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_protocol_error: type # seq # [preauth]",
+      "2026-10-12T18:06:36.117Z",
+      "2026-10-18T18:11:21.246Z"
+    ],
+    [
+      1,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: Received disconnect from #.#.#.# port #:#: The host key signature is invalid [preauth]",
+      "2026-10-17T10:02:37.351Z",
+      "2026-10-17T10:02:37.351Z"
+    ],
+    [
+      1,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: omfwd: [wrkr #/#] we had a generic or IO error with the remote server. The actual error message should already have been provided.  Se",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ],
+    [
+      28,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_name_to_gid: name 'system@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-12T03:00:01.808Z",
+      "2026-10-18T16:33:25.609Z"
+    ],
+    [
+      28,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_getpwnam: name 'root@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-12T03:00:01.800Z",
+      "2026-10-18T16:33:25.602Z"
+    ],
+    [
+      21,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rpcbind[#]: connect from #.#.#.# to set(nfs): indirect call not allowed",
+      "2026-10-12T18:07:31.684Z",
+      "2026-10-18T18:13:15.912Z"
+    ],
+    [
+      6,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# kernel: IPv#: martian source #.#.#.# from #.#.#.#, on dev ens#",
+      "2026-10-12T18:05:36.013Z",
+      "2026-10-16T18:13:46.769Z"
+    ],
+    [
+      6,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# kernel: ll header: #: # # # a# #b b# c# #d # #d fd ff # #",
+      "2026-10-12T18:05:36.013Z",
+      "2026-10-16T18:13:46.769Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# kernel: process 'libexec/platform/linux-x#/parted' started with executable stack",
+      "2026-10-13T20:04:49.442Z",
+      "2026-10-13T20:04:49.442Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: omfwd: [wrkr #] target logstash-relay-aurora.cna.com:# became unavailable during buffer flush. Remaining messages will be sent when it",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: action 'action-#-builtin:omfwd' suspended (module 'builtin:omfwd'), retry #. There should be messages before this one giving the reaso",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: omfwd: [wrkr #/#] no working target servers in pool available, suspending action [v#.#.#-#.el#_#.# try https://www.rsyslog.com/e/# ]",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ]
+  ]
+}
+# 71: DELETE /_query/async/FnZjeFhFR0tMUTMyRFRDXzU1a2J2emchNDZ4bGJnOENRX09lRnFLaEFpam50dzo2NjExMTAzMjAx [200 OK]
+{
+  "acknowledged": true
+}
+
+
+Query BT
+
+{
+  "id": "Fjd2Q3pjLUZCUkdTLUJHR3Y4bHdqeEEhdFFfOEtVVWtSYXV5Q0R2MzFxQkRqZzo2Njk5MTMwOTkw",
+  "is_running": true,
+  "documents_found": 0,
+  "values_loaded": 0,
+  "rows_emitted": 0,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 0,
+  "start_time_in_millis": 1792352627352,
+  "expiration_time_in_millis": 1792784627352,
+  "columns": [],
+  "values": []
+}
+
+
+# 112: GET /_query/async/Fjd2Q3pjLUZCUkdTLUJHR3Y4bHdqeEEhdFFfOEtVVWtSYXV5Q0R2MzFxQkRqZzo2Njk5MTMwOTkw?format=json [200 OK]
+{
+  "id": "Fjd2Q3pjLUZCUkdTLUJHR3Y4bHdqeEEhdFFfOEtVVWtSYXV5Q0R2MzFxQkRqZzo2Njk5MTMwOTkw",
+  "is_running": false,
+  "took": 2836,
+  "is_partial": false,
+  "completion_time_in_millis": 1792352630188,
+  "documents_found": 64033,
+  "values_loaded": 251607,
+  "rows_emitted": 832331,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 7481640315,
+  "start_time_in_millis": 1792352627352,
+  "expiration_time_in_millis": 1792784627352,
+  "columns": [
+    {
+      "name": "occurrences",
+      "type": "long"
+    },
+    {
+      "name": "severity",
+      "type": "keyword"
+    },
+    {
+      "name": "source",
+      "type": "keyword"
+    },
+    {
+      "name": "text",
+      "type": "keyword"
+    },
+    {
+      "name": "first_seen",
+      "type": "date"
+    },
+    {
+      "name": "last_seen",
+      "type": "date"
+    }
+  ],
+  "values": [
+    [
+      449,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: nh#sndsc : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-17T12:50:20.786Z",
+      "2026-10-17T13:24:09.522Z"
+    ],
+    [
+      4,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: cae#a : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-12T14:10:53.998Z",
+      "2026-10-12T17:24:19.483Z"
+    ],
+    [
+      3,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo:   spunix : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-14T05:32:37.814Z",
+      "2026-10-14T05:32:37.928Z"
+    ],
+    [
+      1,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: pxdlog# : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-14T13:00:03.861Z",
+      "2026-10-14T13:00:03.861Z"
+    ],
+    [
+      1,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: caf#a : /etc/sudoers.d//logfile:#:#: syntax error",
+      "2026-10-13T05:04:37.010Z",
+      "2026-10-13T05:04:37.010Z"
+    ],
+    [
+      38,
+      "critical",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: fatal: userauth_finish: send failure packet: Connection reset by peer [preauth]",
+      "2026-10-12T18:06:36.262Z",
+      "2026-10-18T18:11:21.646Z"
+    ],
+    [
+      10474,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such fi",
+      "2026-10-11T19:44:01.873Z",
+      "2026-10-18T19:43:01.212Z"
+    ],
+    [
+      10474,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# crond[#]: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-11T19:44:01.873Z",
+      "2026-10-18T19:43:01.212Z"
+    ],
+    [
+      458,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such file o",
+      "2026-10-12T14:10:54.517Z",
+      "2026-10-17T13:24:09.559Z"
+    ],
+    [
+      458,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sudo: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-12T14:10:54.518Z",
+      "2026-10-17T13:24:09.559Z"
+    ],
+    [
+      42,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: Protocol major versions differ: # vs. #",
+      "2026-10-12T18:06:33.859Z",
+      "2026-10-18T18:11:14.853Z"
+    ],
+    [
+      40,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_exchange_identification: read: Connection reset by peer",
+      "2026-10-12T18:04:55.358Z",
+      "2026-10-18T18:09:44.532Z"
+    ],
+    [
+      26,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# su: PAM adding faulty module: /usr/lib#/security/pam_fprintd.so",
+      "2026-10-12T14:10:58.303Z",
+      "2026-10-17T04:12:23.958Z"
+    ],
+    [
+      26,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# su: PAM unable to dlopen(/usr/lib#/security/pam_fprintd.so): /usr/lib#/security/pam_fprintd.so: cannot open shared object file: No such file or ",
+      "2026-10-12T14:10:58.303Z",
+      "2026-10-17T04:12:23.958Z"
+    ],
+    [
+      10,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: kex_protocol_error: type # seq # [preauth]",
+      "2026-10-12T18:06:36.117Z",
+      "2026-10-18T18:11:21.246Z"
+    ],
+    [
+      1,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# sshd-session[#]: error: Received disconnect from #.#.#.# port #:#: The host key signature is invalid [preauth]",
+      "2026-10-17T10:02:37.351Z",
+      "2026-10-17T10:02:37.351Z"
+    ],
+    [
+      1,
+      "error",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: omfwd: [wrkr #/#] we had a generic or IO error with the remote server. The actual error message should already have been provided.  Se",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ],
+    [
+      28,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_getpwnam: name 'root@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-12T03:00:01.800Z",
+      "2026-10-18T16:33:25.602Z"
+    ],
+    [
+      28,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# nfsidmap[#]: nss_name_to_gid: name 'system@defaultv#iddomain.com' does not map into domain 'cna.com'",
+      "2026-10-12T03:00:01.808Z",
+      "2026-10-18T16:33:25.609Z"
+    ],
+    [
+      21,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rpcbind[#]: connect from #.#.#.# to set(nfs): indirect call not allowed",
+      "2026-10-12T18:07:31.684Z",
+      "2026-10-18T18:13:15.912Z"
+    ],
+    [
+      6,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# kernel: ll header: #: # # # a# #b b# c# #d # #d fd ff # #",
+      "2026-10-12T18:05:36.013Z",
+      "2026-10-16T18:13:46.769Z"
+    ],
+    [
+      6,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# kernel: IPv#: martian source #.#.#.# from #.#.#.#, on dev ens#",
+      "2026-10-12T18:05:36.013Z",
+      "2026-10-16T18:13:46.769Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# kernel: process 'libexec/platform/linux-x#/parted' started with executable stack",
+      "2026-10-13T20:04:49.442Z",
+      "2026-10-13T20:04:49.442Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: omfwd: [wrkr #] target logstash-relay-aurora.cna.com:# became unavailable during buffer flush. Remaining messages will be sent when it",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: action 'action-#-builtin:omfwd' suspended (module 'builtin:omfwd'), retry #. There should be messages before this one giving the reaso",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ],
+    [
+      1,
+      "warning",
+      "redhat6x-syslog",
+      "#:#:# vslrau#p# rsyslogd: omfwd: [wrkr #/#] no working target servers in pool available, suspending action [v#.#.#-#.el#_#.# try https://www.rsyslog.com/e/# ]",
+      "2026-10-15T05:13:01.685Z",
+      "2026-10-15T05:13:01.685Z"
+    ]
+  ]
+}
+# 114: DELETE /_query/async/Fjd2Q3pjLUZCUkdTLUJHR3Y4bHdqeEEhdFFfOEtVVWtSYXV5Q0R2MzFxQkRqZzo2Njk5MTMwOTkw [200 OK]
+{
+  "acknowledged": true
+}
