@@ -178,9 +178,20 @@ All thirteen tests pass on 9.5.3, including the new `tools/test_mim_v3_2026-10-1
 
 ![Servers column: query output on 9.5.3 with demo data](mim-v3-servers-column-preview.png)
 
+## Thirteenth round: health panels in section 3, "APM Services Health" (18 Oct)
+
+| What changed | Detail |
+|---|---|
+| **Moved to section 3** | Right after Upstream / Service health / Downstream, three per row: Middleware, Database, Server Health · APM Services, Process, Synthetics Health · Errors from the Logs (full width). Business applications impacted follows them |
+| **Renamed** | *Applications on this CI* → **APM Services Health** (the APM services running on the chosen server and when each last sent data). Not "Applications Health": too close to *Application Health* at the top of the same section |
+| **SLO Error Burn Rate** | Now ends section 2 at full width (it shared a row with the moved panels) |
+| **Unchanged** | The panels' queries: still the chosen server and the Health window |
+
+All fourteen tests pass, including the new `tools/test_mim_v3_2026-10-18n.py` (layout).
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second and fourth to twelfth rounds changed it)
+### 1. Import the dashboard (needed again: the second and fourth to thirteenth rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept

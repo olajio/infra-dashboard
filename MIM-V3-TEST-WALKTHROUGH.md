@@ -47,7 +47,7 @@ Leave the controls at their defaults: Incident **(all incidents)**, CI **(no CI 
 | # | Do | You should see | ✓ |
 |---|---|---|---|
 | 2.1 | In the **Incident** control, pick `<number> · <CI>` | Sections 2 and 3 now show the incident's Affected CI. The CI control can stay at "(no CI selected)": while an incident is picked, its CI wins | ☐ |
-| 2.2 | Set the **Health window** control to cover the start of the problem: at least 2 hours before the incident was opened (e.g. *3 days* or *7 days* for an older incident); *15 minutes* to see the state now | The health panels (Server, Middleware, Database, Process, Synthetics, Logs, Applications on this CI) follow it. The time picker does not change section 2 | ☐ |
+| 2.2 | Set the **Health window** control to cover the start of the problem: at least 2 hours before the incident was opened (e.g. *3 days* or *7 days* for an older incident); *15 minutes* to see the state now | The health panels (Server, Middleware, Database, Process, Synthetics, Logs, APM Services Health) follow it. The time picker does not change section 2 | ☐ |
 | 2.3 | If the incident's CI is **not a server** (e.g. an application service), read a server name in **Server View** and pick it in the **Server** control | The health panels fill for that server. A server in the incident or the CI control always wins over the Server control | ☐ |
 
 If the incident has **no CI** (`<number> · (no CI)`), sections 2 and 3 stay empty. Ask the assignment group which CI is
@@ -57,9 +57,10 @@ in the last day.
 
 ---
 
-## Step 3 — Find the likely cause (section 2, *Investigate the CI*)
+## Step 3 — Find the likely cause (section 2, then the health panels in section 3)
 
-Work down the panels in this order. The first ones answer "what happened just before the incident?"
+Work down the panels in this order. The first ones answer "what happened just before the incident?" Rows 3.3–3.7
+and 3.9 are the health panels, in section 3 after the Upstream / Service health / Downstream row.
 
 | # | Panel | What to look for | You should see | ✓ |
 |---|---|---|---|---|
@@ -71,7 +72,7 @@ Work down the panels in this order. The first ones answer "what happened just be
 | 3.6 | **Errors from the Logs** | Critical / error messages whose **First seen** is close to the incident's opened time | Warning-and-worse lines grouped by message, critical and error first | ☐ |
 | 3.7 | **Synthetics Health** | Monitors **Down** now, or with down checks in the Health window | Ping / HTTP monitors that target this CI. Empty is normal for many CIs | ☐ |
 | 3.8 | **SLO Error Burn Rate** | ★ rows (this CI's own SLOs) burning at **14.4× or more** ("page now") | This CI's SLOs first, then every SLO burning 1× or more | ☐ |
-| 3.9 | **Applications on this CI** | Which APM services run on this server, and whether they still send data (*Last data*) | APM services seen on the chosen server in the Health window | ☐ |
+| 3.9 | **APM Services Health** | Which APM services run on this server, and whether they still send data (*Last data*) | APM services seen on the chosen server in the Health window | ☐ |
 
 **Write down the evidence** in the test record: the alert, change, component or log message that best explains the
 incident, and the time it started.
@@ -92,7 +93,7 @@ problem.
 These four views come from the CMDB and show **no live health**. To check a related CI's health:
 
 - If it had a P1 / P2 / P3 in the last 31 days, set the Incident control to **(all incidents)** and pick it in the **CI**
-  control. Section 2 then shows its alerts, changes, health and logs.
+  control. Section 2 then shows its alerts and changes, and the health panels in section 3 its health and logs.
 - Otherwise open the **Infra Dashboard** (section 4) for servers, or look it up in ServiceNow.
 
 ---

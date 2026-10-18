@@ -161,7 +161,7 @@ try:
     check('Middleware Health for another server', [r['component'] for r in run('Middleware Health', server='srvB')], ['jboss'])
     check('Process Health: the stopped Windows service', [(r['name'], r['status']) for r in run('Process Health', server='srvA')
                                                           if r['kind'] == 'Windows service'], [('SQL (MSSQLSERVER)', 'Stopped')])
-    check('Applications on this CI: APM services on the server', [r['application'] for r in run('Applications on this CI', server='srvA')], ['app-api'])
+    check('Applications on this CI: APM services on the server', [r['application'] for r in run('APM Services Health', server='srvA')], ['app-api'])
     check('Synthetics: monitor on <server>.cna.com', [(r['monitor.name'], r['status']) for r in run('Synthetics Health', server='srvA')],
           [('srvA ping', 'Down')])
     check('Errors from the Logs: the server\'s errors', [r['text'] for r in run('Errors from the Logs', server='srvA')], ['disk error #'])
@@ -180,7 +180,7 @@ try:
     check('server panels show "Last 5 years" (CMDB) and read the Health window', sorted({
         (P[t]['embeddableConfig']['time_range']['from'], '?health_window' in P[t]['embeddableConfig']['attributes']['state']['query']['esql'])
         for t in ('Server Health', 'Middleware Health', 'Database Health', 'Process Health', 'Synthetics Health',
-                  'Errors from the Logs', 'Applications on this CI')}), [('now-5y', True)])
+                  'Errors from the Logs', 'APM Services Health')}), [('now-5y', True)])
     check('Errors from the Logs warns that long windows load slowly the first time (18l)',
           'first load can take up to a minute' in P['Errors from the Logs']['embeddableConfig']['description'], True)
 finally:

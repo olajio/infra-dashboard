@@ -22,12 +22,12 @@ The dashboard has five sections and six controls:
 | **Incident control** (top, first) | Picks the incident to work on. Each option is "number · affected CI" (e.g. *INC100 · kau1s054*); sections 2 and 3 then show that CI, and *Escalate* shows that incident. Lists the active P1 / P2 / P3; type to search. *(all incidents)* clears it. | — |
 | **CI control** (top, second) | Picks a CI directly, when no incident is picked (an incident overrides it). Lists the CIs with P1 / P2 / P3 incidents in the last month, plus every production server that sent server metrics in the last day; type to search. *(no CI selected)* clears it. | — |
 | **Server control** (top, third) | Picks the server the health panels show when neither the incident's CI nor the CI control holds a server (e.g. the CI is an application: read a server name in *Server View* and pick it here). Lists every production server that sent server metrics in the last day; type to search. *(no server selected)* clears it. | — |
-| **Health window** (top, fourth) | The data window of the health panels in section 2: 15 minutes · 30 minutes · 1 hour · 6 hours · 8 hours · **24 hours** (default) · 3 days · 7 days. | — |
+| **Health window** (top, fourth) | The data window of the health panels in section 3: 15 minutes · 30 minutes · 1 hour · 6 hours · 8 hours · **24 hours** (default) · 3 days · 7 days. | — |
 | **Service control** (top) | Picks the service section 3 shows. *(services on this CI)* (the default) uses the production APM services running on the selected CI (the incident's affected CI, else the CI control); or type to pick any production service. | — |
 | **1 · Major Incident Overview** | All active P1 / P2 / P3 incidents, all CIs | Fixed last month |
-| **2 · Investigate the CI** | The picked incident's affected CI (or the CI picked in the CI control) only, including every CI and application related to it in the CMDB (*Applications related to this CI* and the four related-CI views) | Health panels (Server, Middleware, Database, Process, Synthetics, Logs, Applications on this CI): the **Health window** control. Others are fixed (shown on the panel); the CMDB panels read the last 5 years |
+| **2 · Investigate the CI** | The picked incident's affected CI (or the CI picked in the CI control) only, including every CI and application related to it in the CMDB (*Applications related to this CI* and the four related-CI views) | Fixed per panel (shown on the panel); the CMDB panels read the last 5 years |
 | **Application control** (top, sixth) | Picks the business application whose services *Services of the Application* lists. *(all applications)* (the default) lists every service, worst first. | — |
-| **3 · Application & Service Health, Dependencies** | Every application's health from its services; the services of the picked application; the service(s) from the Service control with their dependencies | Fixed last hour |
+| **3 · Application & Service Health, Dependencies** | Every application's health from its services; the services of the picked application; the service(s) from the Service control with their dependencies; then the chosen server's health panels (Middleware, Database, Server, APM Services, Process, Synthetics, Logs) | Fixed last hour; the health panels follow the **Health window** control |
 | **4 · Related dashboards** | Links to the Applications Operations and Infra dashboards | — |
 
 ---
@@ -79,7 +79,7 @@ Section 2 now shows `kau1s054` only.
   to the CI in the CMDB, in both directions: business applications, application services and application instances,
   with the relationship spelled out (*Claim Center — it consumes this CI*; *this CI depends on it* for the ones the CI
   itself uses) and their environment.
-- **Applications on this CI** — the APM services that sent data from the chosen server in the Health window, most
+- **APM Services Health** (section 3) — the APM services that sent data from the chosen server in the Health window, most
   recent first. *policy-admin reported 3 minutes ago.* (The CMDB applications are in the dependency panels
   above.)
 - **SLO Error Burn Rate** — are customers feeling it? The CI's own SLOs (marked ★) first, then every SLO burning its
@@ -88,7 +88,7 @@ Section 2 now shows `kau1s054` only.
 
 At this point the lead knows the incident is real, customer-facing and tied to one server.
 
-### Step 4 — Confirm it is this CI (section 2)
+### Step 4 — Confirm it is this CI (section 2, then the health panels in section 3)
 
 - **Alerts on this CI** — the Netcool alerts on the CI, open ones and cleared ones, with when each started compared
   with the picked incident. **Likely trigger** = first seen up to 2 h before the incident opened (listed first);
@@ -109,7 +109,7 @@ At this point the lead knows the incident is real, customer-facing and tied to o
   is a server, else the server picked in the **Server** control. For an application CI, pick one of its servers
   (from *Server View*) in the Server control.
 
-### Step 5 — Find the cause (section 2)
+### Step 5 — Find the cause (health panels, section 3)
 
 - **Process Health** — which process or service actually stopped. *The SQL Server Windows service is Stopped and an
   IBM HTTP Server instance has not been seen for 25 minutes.*
@@ -146,7 +146,7 @@ directions are shown: "this CI runs on it" (the CI uses it) and "it runs on this
 then name; retired CIs last, marked "· retired". *For the
 application service Automated Claim Transaction PROD: Tomcat on vslrau1p276, an Oracle instance, two Linux servers
 and the mainframe LPAR.* These are CMDB records, not live health: pick a server in the CI
-control to see its health in section 2.
+control to see its health in the health panels (section 3).
 
 ### Step 6c — Which application to look at (section 3, top row)
 
@@ -157,7 +157,7 @@ application. Each is rated by the health of its services in the last hour, worst
 many services are failing or degraded, and the **Servers** its services run on. Pick an application in the
 **Application control**: **Services of the Application** then lists its services, worst first, with the servers each
 runs on, error rate, latency and throughput; click a service to open its APM Service Map. Type a server from either
-table into the **Server** control to see its health in section 2.
+table into the **Server** control to see its health in the health panels below.
 
 - **Servers** are the hosts the services' APM agents reported from in the last 15 minutes, lower case, sorted. Up
   to 3 are shown, then "+N more"; "—" means no APM agent host data (e.g. a service measured only from outside).
@@ -225,17 +225,17 @@ so MIM V3 stays open on the bridge.
 ### Time windows
 
 - **A badge on a panel means a fixed window.** "Last 1 month", "Last 7 days", "Last 30 days" and "Last 1 hour"
-  panels ignore the time picker. The section 2 health panels show "Last 5 years" only because they also read the CMDB
+  panels ignore the time picker. The health panels (section 3) show "Last 5 years" only because they also read the CMDB
   links; their data window is the **Health window** control.
-- **Section 1** is fixed to the last month (*Open Alerts with No Incident*: last 24 hours). **Section 3** is fixed to
-  the last hour. **Section 2**: the health panels (Server, Middleware, Database, Process, Synthetics, Logs, Applications on
-  this CI) follow the **Health window** control (24 hours by default); *Escalate* is last month, *Alerts on this CI*
-  and *Changes* last 7 days. The time picker no longer changes section 2.
+- **Section 1** is fixed to the last month (*Open Alerts with No Incident*: last 24 hours). **Section 2**: *Escalate*
+  is last month, *Alerts on this CI* and *Changes* last 7 days. **Section 3** is fixed to the last hour, except its
+  health panels (Middleware, Database, Server, APM Services, Process, Synthetics, Logs), which follow the **Health
+  window** control (24 hours by default). The time picker changes neither section.
 - **Changes shows few linked CIs.** ServiceNow stores a CMDB relationship record only when the relationship changes
   (129k of 34M in a week, round 7 AN), so within 7 days *Changes* mostly finds changes on the CI itself. The CMDB panels (*Blast radius*,
   *Applications related to this CI* and the four related-CI views) read the same relationship graph with a fixed range of the last 5 years
   (records go back to 2023), so they show every relationship.
-- **Set the Health window to suit the question in section 2.** Use 15 minutes to see the server's state *now*:
+- **Set the Health window to suit the question.** Use 15 minutes to see the server's state *now*:
   *Server Health* shows CPU p90 and peak memory over the whole window, so 24 hours can show yesterday's peak. Use a
   window starting before the incident opened (3 days or 7 days for an older incident) to see the first errors in
   the logs.
@@ -273,12 +273,12 @@ so MIM V3 stays open on the bridge.
   panels.
 - **No user counts or criticality.** Neither APM nor the CMDB data has them, so *Business applications impacted*
   ranks by the errors the callers see.
-- **Empty panels in section 2 usually mean "no data for this CI", not "healthy".** *Server Health*, *Middleware
+- **Empty health panels usually mean "no data for this CI", not "healthy".** *Server Health*, *Middleware
   Health*, *Database Health* and *Process Health* are empty when no server is chosen: the CI is not a server (e.g. a
   network device or an application service) and the Server control is empty. A chosen server with no data at all in
   the Health window still gets a *Server Health* row, "No data in window".
 - **The SLO panel is not filtered to the CI's services.** It shows the CI's own per-CI SLOs (★) first, then every
-  SLO burning ≥ 1×. Compare the names with *Applications on this CI*.
+  SLO burning ≥ 1×. Compare the names with *APM Services Health*.
 - **Changes show the planned start.** The data has no actual start or maintenance windows; an unsuccessful or
   emergency change shortly before the incident opened is the strongest lead.
 
@@ -318,7 +318,7 @@ so MIM V3 stays open on the bridge.
 | Control | **Incident** (first) | ✅ | The incident to work on; sections 2 and 3 follow its affected CI | Lists every active P1 / P2 / P3 as "number · affected CI", plus *(all incidents)*. A query variable (`?incident`); every section 2 and 3 query takes the CI from the part after " · " (and the number from the part before, for *Escalate*), so no extra lookup is needed. |
 | Control | **CI** (second) | ✅ | The CI to investigate when no incident is picked | Lists every CI with a P1 / P2 / P3 opened in the last 31 days and every production (or blank-environment) server that sent CPU metrics in the last day (at most 10,000), plus *(no CI selected)*. A query variable (`?ci`), used by section 2 and 3 only while the Incident control is on *(all incidents)*. |
 | Control | **Server** (third, new 18 Oct) | ✅ | The server for the health panels when neither the incident's CI nor the CI control is a server | Every production (or blank-environment) server that sent CPU metrics in the last day, plus *(no server selected)*. A query variable (`?server`). "Is a server" = a server class in the CMDB (the *Server View* classes) or CPU metrics in the Health window. |
-| Control | **Health window** (fourth, new 18 Oct) | ✅ | The data window of the section 2 health panels | Fixed list 15 minutes … 7 days, default 24 hours. A query variable (`?health_window`) applied inside each health query (`@timestamp >= NOW() - window`), so Elasticsearch filters on it. |
+| Control | **Health window** (fourth, new 18 Oct) | ✅ | The data window of the health panels (section 3) | Fixed list 15 minutes … 7 days, default 24 hours. A query variable (`?health_window`) applied inside each health query (`@timestamp >= NOW() - window`), so Elasticsearch filters on it. |
 | 1 | **Active P1 / P2 / P3** | ✅ | Donut: active P1 (red), P2 (amber) and P3 (blue), total in the middle | Vega chart, transparent, text in Kibana's theme colours (reads in light and dark mode); P1 / P2 / P3 colours match the priority badges in Active Incidents. `servicenow-incidents-*`, active P1 / P2 / P3, one count per incident, same active rule and same fixed panel range (Last 1 month) as Active Incidents. Kibana 9.5 applies a Vega panel's time range to its ES|QL query by itself, so without the fixed range the donut followed the dashboard's time picker. Every non-zero priority gets at least 6 % of the ring (a smaller slice was hidden by the gap between slices). |
 | 1 | **Users impacted** | ⚠️ | Placeholder number (2,500, demo only), "Real count to be incorporated from ServiceNow and RUM" | No user-count data in Elastic yet. |
 | 1 | **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** | ✅ | Average time to resolve per opened day, P1 (red), P2 (amber) and P3 (blue), with dashed target lines; P1 / P2 on the left axis, P3 on the right, both from 0 h | P1 / P2 / P3 opened in the last 30 days, one value per incident: `resolution_time` (ServiceNow's opened → resolved seconds) or resolved_at − opened_at; still open → age so far; canceled left out. Points always drawn. Target lines are a reference-line layer. |
@@ -328,14 +328,14 @@ so MIM V3 stays open on the bridge.
 | 2 | **Escalate** | ✅ | One row per active P1 / P2 / P3 on the CI: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id | Incidents on the CI (or the one in the Incident control) plus the CMDB enrichment on its server metrics; last month. CI and Active Incident link to ServiceNow; no other column is clickable. A CI with no active P1 / P2 / P3 still shows one row with its owners. If an incident is picked whose CI is not the one in the CI control, Class / Env / support group come from the incident record and may show "—". |
 | 2 | **Blast radius** | ✅ | Count of applications that depend on the CI, split into business applications, application services and (when any) application instances | `cmdb-ci-relations*` (the full ServiceNow relationship graph): links whose child is the CI and whose parent is an application class, not retired, not marked for deletion. Amber from 1, red from 5. Last 5 years (fixed). |
 | 2 | **Applications related to this CI** | ✅ | Every application related to the CI, both directions: Application, Kind (business application / application service / application), How ("it consumes this CI", "this CI depends on it" …), Env | `cmdb-ci-relations*`; relationship from `type.name`. Merged from *Applications that depend on this CI* and *Application View* on 16 Oct. Business applications first, retired last. CI name matched exactly, in upper or in lower case. Last 5 years (fixed). The Application column no longer opens ServiceNow: the name comes from either side of the link, which Kibana 9.5 counts as created by the query. |
-| 2 | **Server Health** | ✅ | One row per chosen server: Server, Status (Reporting / Silent / No data in window), Min. ago, CPU p90, Mem peak, Disk max — percentages green / amber / red | System CPU / memory / filesystem metrics matched on `ci.name` (equal to the host name), in the Health window. Amber ≥ 80 %, red ≥ 90 %; Silent = no data for 10 minutes. A chosen server with no data in the window gets a "No data in window" row (anchored by its CMDB links). Panel range Last 5 years for the CMDB links. Empty when no server is chosen. |
-| 2 | **Middleware Health** | ✅ | Table: each middleware component on the CI, Down / Healthy badge (Down first), minutes since seen, server (links to the CMDB) | Middleware processes labelled by the Paladin monitoring enrichment (IBM MQ, IHS, JBoss, WebSphere) and Windows middleware services (IIS, MQ, Tomcat …). Down = stopped or silent > 10 min. The chosen server (see the Server control), in the Health window. |
-| 2 | **Database Health** | ✅ | Table: each database on the CI, Down / Healthy badge (Down first), minutes since seen, server (links to the CMDB) | SQL Server metrics (`metricbeat-*` sql / mssql), plus processes and Windows services whose name is a database engine (SQL Server, Oracle, Db2, PostgreSQL, MySQL, MongoDB, Sybase, Informix). Down = stopped or silent > 10 min. Split from the former *Middleware / DB Health* (12 Oct). The chosen server (see the Server control), in the Health window. |
-| 2 | **Applications on this CI** | ✅ | APM services that sent data from the chosen server in the Health window: last data, environment | `metrics-apm.internal-*` matched on the APM host name (the server, upper or lower case). Health window (was a fixed 7 days). Production only. |
-| 2 | **SLO Error Burn Rate** | ⚠️ | 1-hour burn rate per SLO: page now (≥ 14.4×), burning (≥ 1×), on track | `.slo-observability.summary-*` (173 Kibana SLOs). The CI's own per-CI SLOs (★) first, then every SLO burning ≥ 1×. **Limit:** Kibana cannot combine SLO summaries with timestamped data in one panel, so for service SLOs it cannot filter to "services on this CI" — compare names with *Applications on this CI*. Viewers need read access to the hidden `.slo-observability.*` indices. |
-| 2 | **Synthetics Health** | ✅ | Monitors that target the CI: status now, down checks | `synthetics-*`, ping monitors enriched with the CI, or monitors whose URL is the CI's host name. Browser journeys are tagged with the application, so they do not appear here. The chosen server (see the Server control), in the Health window. |
-| 2 | **Errors from the Logs** | ✅ | Warning-and-worse log lines from the CI, grouped by message | Syslog (server, WebSphere, JBoss, Red Hat, AIX, system), generic file logs, APM error and application logs, matched on `ci.name`; syslog severity code ≤ 4 or log level warning or worse; numbers replaced by # so repeats group together The chosen server (see the Server control), in the Health window. |
-| 2 | **Process Health** | ✅ | Stopped / not-seen processes and services first, then healthy middleware | Windows services (Stopped = Automatic service not running) and Paladin-labelled middleware processes; Not seen = silent > 10 min The chosen server (see the Server control), in the Health window. |
+| 3 | **Server Health** | ✅ | One row per chosen server: Server, Status (Reporting / Silent / No data in window), Min. ago, CPU p90, Mem peak, Disk max — percentages green / amber / red | System CPU / memory / filesystem metrics matched on `ci.name` (equal to the host name), in the Health window. Amber ≥ 80 %, red ≥ 90 %; Silent = no data for 10 minutes. A chosen server with no data in the window gets a "No data in window" row (anchored by its CMDB links). Panel range Last 5 years for the CMDB links. Empty when no server is chosen. |
+| 3 | **Middleware Health** | ✅ | Table: each middleware component on the CI, Down / Healthy badge (Down first), minutes since seen, server (links to the CMDB) | Middleware processes labelled by the Paladin monitoring enrichment (IBM MQ, IHS, JBoss, WebSphere) and Windows middleware services (IIS, MQ, Tomcat …). Down = stopped or silent > 10 min. The chosen server (see the Server control), in the Health window. |
+| 3 | **Database Health** | ✅ | Table: each database on the CI, Down / Healthy badge (Down first), minutes since seen, server (links to the CMDB) | SQL Server metrics (`metricbeat-*` sql / mssql), plus processes and Windows services whose name is a database engine (SQL Server, Oracle, Db2, PostgreSQL, MySQL, MongoDB, Sybase, Informix). Down = stopped or silent > 10 min. Split from the former *Middleware / DB Health* (12 Oct). The chosen server (see the Server control), in the Health window. |
+| 3 | **APM Services Health** | ✅ | APM services that sent data from the chosen server in the Health window: last data, environment | `metrics-apm.internal-*` matched on the APM host name (the server, upper or lower case). Health window (was a fixed 7 days). Production only. |
+| 2 | **SLO Error Burn Rate** | ⚠️ | 1-hour burn rate per SLO: page now (≥ 14.4×), burning (≥ 1×), on track | `.slo-observability.summary-*` (173 Kibana SLOs). The CI's own per-CI SLOs (★) first, then every SLO burning ≥ 1×. **Limit:** Kibana cannot combine SLO summaries with timestamped data in one panel, so for service SLOs it cannot filter to "services on this CI" — compare names with *APM Services Health*. Viewers need read access to the hidden `.slo-observability.*` indices. |
+| 3 | **Synthetics Health** | ✅ | Monitors that target the CI: status now, down checks | `synthetics-*`, ping monitors enriched with the CI, or monitors whose URL is the CI's host name. Browser journeys are tagged with the application, so they do not appear here. The chosen server (see the Server control), in the Health window. |
+| 3 | **Errors from the Logs** | ✅ | Warning-and-worse log lines from the CI, grouped by message | Syslog (server, WebSphere, JBoss, Red Hat, AIX, system), generic file logs, APM error and application logs, matched on `ci.name`; syslog severity code ≤ 4 or log level warning or worse; numbers replaced by # so repeats group together The chosen server (see the Server control), in the Health window. |
+| 3 | **Process Health** | ✅ | Stopped / not-seen processes and services first, then healthy middleware | Windows services (Stopped = Automatic service not running) and Paladin-labelled middleware processes; Not seen = silent > 10 min The chosen server (see the Server control), in the Health window. |
 | 2 | **Changes in the Last 7 Days on this CI** | ⚠️ | Changes active in the last 7 days on the CI, and on CMDB-linked CIs when the link was recorded in the same 7 days; the CI column shows which | `servicenow-change-requests` + `cmdb-ci-relations`. The selected CI's own changes first. Type (Emergency in red), category, state, outcome (close code), planned start, end, group. **Limit:** no actual start and no maintenance windows in the data; "application" category is the nearest thing to a release. Change and CI link to ServiceNow. |
 | 2 | **Middleware View / Database View / Server View / Other related CIs** | ⚠️ | The CIs related to the selected CI in the CMDB, by class: related CI, type, relationship (both directions), env | `cmdb-ci-relations*` (the full relationship graph, since 16 Oct; before that `cmdb_app_dependencies_v2`, which missed many relationships). Exact ServiceNow classes from round 10 for Middleware / Database / Server; *Other related CIs* takes every remaining class. Retired CIs last, marked "· retired"; links marked for deletion left out. Last 5 years (fixed). **Limit:** CMDB data only, no live health; the name is not a link (it comes from either side of the relationship). |
 | 3 | **Application Health** | ✅ | The production business applications related to the selected CI (all of them when no CI is selected): health from its services (Failing / Degraded / Healthy), servers (APM agent hosts of its services, last 15 minutes), failing and degraded service counts, worst service error rate, application error rate, transactions, APM number, support group | `metrics-apm.service_transaction.1m-*`, business application from the APM CMDB enrichment (`ci.name`, on 398 of 400 production services, round 10), matched to the CI through `cmdb-ci-relations*` (business applications linked to it) and `metrics-apm.internal-*` (services running on it). Health over the last hour, servers over the last 15 minutes (both in the query); panel range Last 5 years only for the CMDB links. Application links to the CMDB. |

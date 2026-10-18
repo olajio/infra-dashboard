@@ -133,7 +133,7 @@ try:
     check('Server View: production only', rows('Server View'), ['vslrau1p276'])
     check('Other related CIs: blank environment kept', rows('Other related CIs'), ['lbpool-claim'])
     check('Blast radius: production applications', [r['value'] for r in run('Blast radius', ci=CI)], [1.0])
-    check('Applications on this CI: production services only', [r['application'] for r in run('Applications on this CI', ci='vslrau1p276')],
+    check('Applications on this CI: production services only', [r['application'] for r in run('APM Services Health', ci='vslrau1p276')],
           ['server-svc'])
     check('Open Alerts with No Incident: production CIs and unmatched nodes', sorted(str(r['ci.name']) for r in run('Open Alerts with No Incident')),
           ['None', 'prodhost'])

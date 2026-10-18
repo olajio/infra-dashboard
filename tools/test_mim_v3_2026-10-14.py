@@ -132,7 +132,7 @@ R, cols = run('Server Health')
 check('Server Health: one row per server (since 18 Oct)', [(r['server'], r['status'], r['cpu_p90'], r['mem_peak'], r['disk_max']) for r in R],
       [(CI, 'Reporting', 50.0, 70.0, 85.0)])
 
-R, cols = run('Applications on this CI', window='7 days')   # Health window since 18 Oct
+R, cols = run('APM Services Health', window='7 days')   # Health window since 18 Oct
 check('Applications: APM on this server, last 7 days', [(r['application'], r['health'], r['type']) for r in R], [
     ('policy-admin', '3 min ago', 'prd1'), ('nightly-batch', '3 d ago', 'prd1')])
 
@@ -140,8 +140,8 @@ check('banner removed', 'How to use this section' in P, False)
 ctrls = sorted(dash['attributes']['pinned_panels']['panels'].values(), key=lambda c: c['order'])
 check('controls: Incident, CI first', [c['config']['title'] for c in ctrls][:2], ['Incident', 'CI'])
 check('time windows', {t: P[t]['embeddableConfig'].get('time_range', {}).get('from') for t in
-                       ('Applications on this CI', 'Changes in the Last 7 Days on this CI')},
-      {'Applications on this CI': 'now-5y', 'Changes in the Last 7 Days on this CI': 'now-7d'})   # Health window in the query since 18 Oct
+                       ('APM Services Health', 'Changes in the Last 7 Days on this CI')},
+      {'APM Services Health': 'now-5y', 'Changes in the Last 7 Days on this CI': 'now-7d'})   # Health window in the query since 18 Oct
 check('link cards are links only', [P[t]['embeddableConfig']['content'] for t in ('SRE dashboard', 'Infra dashboard')], [
     '## 🛡️ [Applications Operations Dashboard ›](https://kibana-prod.gcp.cna.com/app/r/s/b4Jas)',
     '## 🖥️ [Infra Dashboard ›](https://kibana-prod.gcp.cna.com/app/r/s/3A7f1)'])
