@@ -166,9 +166,21 @@ Plan: *MIM-V3-BUILD-PLAN-SERVER-HEALTH-WINDOW.md*. Summary: *MIM-V3-SUMMARY-SERV
 
 All twelve tests pass on 9.5.3, including the new `tools/test_mim_v3_2026-10-18k.py`.
 
+## Twelfth round: Servers column in section 3 (18 Oct)
+
+| What changed | Detail |
+|---|---|
+| **Application Health** | New *Servers* column after Health: the hosts its services' APM agents reported from in the last 15 minutes. Its description now explains the "Last 5 years" badge (CMDB links only; APM data is read for the last hour) |
+| **Services of the Application** | New *Servers* column after Application, per service. One row per service (a service with two applications shows both names) |
+| **Also** | *Errors from the Logs* notes that a 3- or 7-day Health window can load slowly the first time (Round 11d) |
+
+All thirteen tests pass on 9.5.3, including the new `tools/test_mim_v3_2026-10-18m.py`.
+
+![Servers column: query output on 9.5.3 with demo data](mim-v3-servers-column-preview.png)
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second and fourth to eleventh rounds changed it)
+### 1. Import the dashboard (needed again: the second and fourth to twelfth rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept
