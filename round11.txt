@@ -1,0 +1,1488 @@
+# 1: GET .ds-metrics-system.cpu-default*,.ds-metrics-system.memory-default*,.ds-metrics-system.filesystem-default*/_count [200 OK]
+{
+  "count": 17724844,
+  "_shards": {
+    "total": 7,
+    "successful": 7,
+    "skipped": 0,
+    "failed": 0
+  }
+}
+# 12: GET metrics-system.process-*/_count [200 OK]
+{
+  "count": 202431576,
+  "_shards": {
+    "total": 72,
+    "successful": 72,
+    "skipped": 0,
+    "failed": 0
+  }
+}
+# 23: GET metrics-windows.service-*/_count [200 OK]
+{
+  "count": 42597700,
+  "_shards": {
+    "total": 3,
+    "successful": 3,
+    "skipped": 0,
+    "failed": 0
+  }
+}
+# 34: GET metricbeat-*/_count [200 OK]
+{
+  "count": 18024026,
+  "_shards": {
+    "total": 25,
+    "successful": 25,
+    "skipped": 0,
+    "failed": 0
+  }
+}
+# 45: GET logs-syslog-classic-*,logs-websphere-syslog-*,logs-redhat6x-syslog-*,logs-jboss-*,logs-aix-syslog-*,logs-system.syslog-*,logs-filestream.generic-*,logs-apm.error-*,logs-apm.app.*/_count [200 OK]
+{
+  "count": 1101413235,
+  "_shards": {
+    "total": 3039,
+    "successful": 3039,
+    "skipped": 0,
+    "failed": 0
+  }
+}
+# 56: GET metrics-apm.internal-*/_count [200 OK]
+{
+  "count": 19883523,
+  "_shards": {
+    "total": 21,
+    "successful": 21,
+    "skipped": 0,
+    "failed": 0
+  }
+}
+# 67: GET synthetics-*/_count [200 OK]
+{
+  "count": 4596061,
+  "_shards": {
+    "total": 167,
+    "successful": 167,
+    "skipped": 0,
+    "failed": 0
+  }
+}
+# 79: POST /_query?format=txt [200 OK]
+    servers    |    in_list    |      env      
+---------------+---------------+---------------
+1224           |yes            |prod           
+2              |yes            |(blank)        
+449            |no             |drt            
+410            |no             |cut            
+303            |no             |ete            
+130            |no             |dre            
+97             |no             |dev            
+68             |no             |sandbox        
+46             |no             |test           
+3              |no             |eit            
+
+# 93: POST /_query?format=json [200 OK]
+#! No limit defined, adding default limit of [1000]
+{
+  "took": 318,
+  "is_partial": false,
+  "completion_time_in_millis": 1792343177078,
+  "documents_found": 4133663,
+  "values_loaded": 6024506,
+  "rows_emitted": 12053658,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 2679297617,
+  "start_time_in_millis": 1792343176760,
+  "expiration_time_in_millis": 1792775176947,
+  "columns": [
+    {
+      "name": "server_list_options",
+      "type": "long"
+    }
+  ],
+  "values": [
+    [
+      1225
+    ]
+  ]
+}
+# 106: POST /_query?format=json [200 OK]
+#! No limit defined, adding default limit of [1000]
+{
+  "took": 507,
+  "is_partial": false,
+  "completion_time_in_millis": 1792343177673,
+  "documents_found": 4145748,
+  "values_loaded": 7976990,
+  "rows_emitted": 17804989,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 3447615801,
+  "start_time_in_millis": 1792343177166,
+  "expiration_time_in_millis": 1792775177549,
+  "columns": [
+    {
+      "name": "ci_list_options",
+      "type": "long"
+    }
+  ],
+  "values": [
+    [
+      2541
+    ]
+  ]
+}
+# 122: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+ incident_cis  |    servers    |  not_servers  
+---------------+---------------+---------------
+1725           |858            |867            
+
+# 138: POST /_query?format=json [200 OK]
+{
+  "took": 1426,
+  "is_partial": false,
+  "completion_time_in_millis": 1792343179906,
+  "documents_found": 800812,
+  "values_loaded": 2456860,
+  "rows_emitted": 7201437,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 10025559406,
+  "start_time_in_millis": 1792343178480,
+  "expiration_time_in_millis": 1792775179752,
+  "columns": [
+    {
+      "name": "linked",
+      "type": "integer"
+    },
+    {
+      "name": "data_docs",
+      "type": "long"
+    },
+    {
+      "name": "last_data",
+      "type": "date"
+    },
+    {
+      "name": "name",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      1,
+      408,
+      "2026-10-18T17:05:42.047Z",
+      "vslrau1p276"
+    ],
+    [
+      1,
+      300,
+      "2026-10-18T17:05:36.494Z",
+      "vslrau1p174"
+    ],
+    [
+      1,
+      168,
+      "2026-10-18T17:05:58.144Z",
+      "vcwau1p0132"
+    ],
+    [
+      1,
+      0,
+      null,
+      "automated claim transaction"
+    ],
+    [
+      1,
+      0,
+      null,
+      "c99dpol"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cadency prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cics prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim center prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim financial interface prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim information master source prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim manually rated lines prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim recovery system prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim tpa management"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim tpa management prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim wc edi prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cna-g-prd-proj-clmact"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "code library prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "commercial index prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "covers prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "endevor prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "enterprise claim hub prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "enterprise integration claims prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "federal information returns depository prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "financial interface - premium prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "g-prd-ns-prd1-clmact"
+    ],
+    [
+      1,
+      0,
+      null,
+      "global intranet prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "healthpro sir prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "idms claims (mainframe) prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inland marine information system prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insad"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insap"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insapx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insapx@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insba"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insbi"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscl"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscla"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclc@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscld"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscle"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclf"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclg"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclh"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscli"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclj"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclk"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insco"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscox"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insdi"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insdi@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insdia"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inseia"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inseix"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inseix@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insex"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insex@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insexx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfh"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfha"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfhx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfhx@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inshp"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insib"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insibx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insph"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspha"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspha@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insphb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspu"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspua"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspua@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspub"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspuc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspud"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspue"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inssp"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inssp@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insspa"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insspb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instb@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instr"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instra"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instrb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instrc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instrd"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mainframe acf2 authentication prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mainframe check print (micr) prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mainframe general print prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "manual endpoint"
+    ],
+    [
+      1,
+      0,
+      null,
+      "merlin management view warehouse and datamarts prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mobius view prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "netmap prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "p02900d2"
+    ],
+    [
+      1,
+      0,
+      null,
+      "p02902d2"
+    ],
+    [
+      1,
+      0,
+      null,
+      "p32349cb"
+    ]
+  ]
+}
+# 156: POST /_query?format=json [200 OK]
+{
+  "took": 4190,
+  "is_partial": false,
+  "completion_time_in_millis": 1792343184183,
+  "documents_found": 10245378,
+  "values_loaded": 30779643,
+  "rows_emitted": 92446105,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 166444786341,
+  "start_time_in_millis": 1792343179993,
+  "expiration_time_in_millis": 1792775184159,
+  "columns": [
+    {
+      "name": "linked",
+      "type": "integer"
+    },
+    {
+      "name": "data_docs",
+      "type": "long"
+    },
+    {
+      "name": "last_data",
+      "type": "date"
+    },
+    {
+      "name": "name",
+      "type": "keyword"
+    }
+  ],
+  "values": [
+    [
+      1,
+      3834,
+      "2026-10-18T17:03:42.927Z",
+      "vslrau1p276"
+    ],
+    [
+      1,
+      3060,
+      "2026-10-18T17:01:29.562Z",
+      "vslrau1p174"
+    ],
+    [
+      1,
+      1061,
+      "2026-10-18T17:05:13.000Z",
+      "sch1h020"
+    ],
+    [
+      1,
+      1020,
+      "2026-10-18T17:05:59.224Z",
+      "vcwau1p0132"
+    ],
+    [
+      1,
+      0,
+      null,
+      "automated claim transaction"
+    ],
+    [
+      1,
+      0,
+      null,
+      "c99dpol"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cadency prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cics prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim center prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim financial interface prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim information master source prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim manually rated lines prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim recovery system prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim tpa management"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim tpa management prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "claim wc edi prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cna-g-prd-proj-clmact"
+    ],
+    [
+      1,
+      0,
+      null,
+      "cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "code library prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "commercial index prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "covers prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "endevor prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "enterprise claim hub prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "enterprise integration claims prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "federal information returns depository prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "financial interface - premium prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "g-prd-ns-prd1-clmact"
+    ],
+    [
+      1,
+      0,
+      null,
+      "global intranet prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "healthpro sir prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "idms claims (mainframe) prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inland marine information system prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insad"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insap"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insapx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insapx@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insba"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insbi"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscl"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscla"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclc@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscld"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscle"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclf"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclg"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclh"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscli"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclj"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insclk"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insco"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inscox"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insdi"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insdi@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insdia"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inseia"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inseix"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inseix@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insex"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insex@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insexx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfh"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfha"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfhx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insfhx@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inshp"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insib"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insibx"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insph"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspha"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspha@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insphb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspu"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspua"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspua@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspub"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspuc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspud"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inspue"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inssp"
+    ],
+    [
+      1,
+      0,
+      null,
+      "inssp@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insspa"
+    ],
+    [
+      1,
+      0,
+      null,
+      "insspb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instb@cna1bsys"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instr"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instra"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instrb"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instrc"
+    ],
+    [
+      1,
+      0,
+      null,
+      "instrd"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mainframe acf2 authentication prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mainframe check print (micr) prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mainframe general print prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "manual endpoint"
+    ],
+    [
+      1,
+      0,
+      null,
+      "merlin management view warehouse and datamarts prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "mobius view prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "netmap prod"
+    ],
+    [
+      1,
+      0,
+      null,
+      "p02900d2"
+    ],
+    [
+      1,
+      0,
+      null,
+      "p02902d2"
+    ]
+  ]
+}
+# 174: POST /_query?format=json [502 Bad Gateway]
+{
+  "statusCode": 502,
+  "error": "Bad Gateway",
+  "message": "An internal server error occurred. Check Kibana server logs for details."
+}
+# 192: POST /_query?format=json [200 OK]
+#! Line 6:9: evaluation of [apps == "Claim Center"] failed, treating result as null. Only first 20 failures recorded.
+#! Line 6:9: java.lang.IllegalArgumentException: single-value function encountered multi-value
+{
+  "took": 5876,
+  "is_partial": false,
+  "completion_time_in_millis": 1792343220237,
+  "documents_found": 936722,
+  "values_loaded": 3623081,
+  "rows_emitted": 5627068,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 10345662000,
+  "start_time_in_millis": 1792343214361,
+  "expiration_time_in_millis": 1792775220050,
+  "columns": [
+    {
+      "name": "services",
+      "type": "keyword"
+    },
+    {
+      "name": "host",
+      "type": "keyword"
+    }
+  ],
+  "values": []
+}
+# 208: POST /_query?format=txt [200 OK]
+     links     |           class            |   direction   |                   type.name                    |                                                                                                      examples                                                                                                       
+---------------+----------------------------+---------------+------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+181            |cmdb_ci_batch_job           |this CI → it   |Uses::Used by                                   |[P10013WCEDI_CC8, P13230DOCQRYM_CC8, P13221DOCQRYM_CC8, P13223DOCCMPM_CC8, P18002RADC_cc8]                                                                                                                           
+88             |cmdb_ci_linux_server        |this CI → it   |Runs on::Runs                                   |[vclau1p0236, lrch1d35, vclau1p0234, vclau1p0237, lrch1d43]                                                                                                                                                          
+87             |cmdb_ci_app_server_websphere|this CI → it   |Depends on::Used by                             |[clms-ccecmapp1-app-node4-server2, clms-esight1-app-node2-server1, clms-ccecmapp1-app-node2-server1, prd1-node2-claim-cceinbound1, prd1-node1-claim-ccbatchapp1]                                                     
+54             |cmdb_ci_app_server          |this CI → it   |Runs on::Runs                                   |[Jboss-VCLAU1P0234-Jboss prd1.node1.aemforms AEM, Jboss-VCLAU1P0021-/csapps/apache/httpd-2.4.23/bin/httpd, WAS-vclau1p0161-prd1-node1-claim-ccbatchapp1, WAS-vclau1p0189-prd-node2-claim-cce3, MQ-VSLRAU1P066-PRDQ16]
+48             |cmdb_ci_aix_server          |this CI → it   |Runs on::Runs                                   |[sau1h630, sau1h634, sau1h644, sau1h675, sau1h038]                                                                                                                                                                   
+35             |cmdb_ci_infra_service       |this CI → it   |Depends on::Used by                             |[Nexus, MQ Series - AIX, Jenkins, Mainframe CA 7 - 11 Scheduler, Filenet - P8 Content Manager]                                                                                                                       
+26             |cmdb_ci_db_ora_instance     |this CI → it   |Depends on::Used by                             |[clmcc2e, ULSN4E, INMP, clmccp1@lrau1p17, clmcc3e]                                                                                                                                                                   
+21             |cmdb_ci_vmware_instance     |this CI → it   |Runs on::Runs                                   |[VSKAU1P171, VSLRAU1P069, KCH1P346, VSLRAU1P075, VSLRAU1P074]                                                                                                                                                        
+14             |cmdb_ci_service_discovered  |this CI → it   |Depends on::Used by                             |[Bridje Framework PROD, Enterprise Document Management Service PROD, Enterprise Security Token Service PROD, Enterprise Service Bus PROD, ECM IMAGING PROD]                                                          
+12             |cmdb_ci_service_calculated  |this CI → it   |Depends on::Used by                             |[Change Data Capture PROD, Enterprise Template Manager 2.0 PROD, Public Interface PROD, Subversion PROD, Jenkins PROD]                                                                                               
+10             |cmdb_ci_win_server          |this CI → it   |Runs on::Runs                                   |[kch1p711, vcwau1p0367, kch1p315, vskau1p171, KCH1P346]                                                                                                                                                              
+10             |null                        |this CI → it   |Consumes::Consumed by                           |null                                                                                                                                                                                                                 
+10             |cmdb_ci_win_server          |it → this CI   |Runs on::Runs                                   |[vskblyd0046, vskblyd0041, vskblyd0047, vskblyd0044, vskblyd0049]                                                                                                                                                    
+9              |cmdb_ci_app_server_jboss    |this CI → it   |Depends on::Used by                             |[JBoss@vclau1p0236, JBoss@vclau1p0237, JBoss@vclau1p0235, JBoss Server@vclau1p0234, JBoss@vclau1p0234]                                                                                                               
+9              |cmdb_ci_service_discovered  |it → this CI   |Depends on::Used by                             |[Data Orchestrator Controller PROD, Enterprise Client File PROD, Enterprise Service Bus PROD, Merlin Management view Warehouse and Datamarts PROD, Claim WC EDI PROD]                                                
+7              |cmdb_ci_service_calculated  |it → this CI   |Depends on::Used by                             |[Change Data Capture DB2 Mainframe PROD, Coventry PROD, Claim Assignment Engine PROD, RPABOT Activity Triage prod, RPABOT_WCAutoAssignment prod]                                                                     
+7              |cmdb_ci_service_by_tags     |this CI → it   |Depends on::Used by                             |[Enterprise Client File PROD, Enterprise Forms Management Service PROD, Automated Claim Transaction PROD, Data Orchestrator Controller PROD, Enterprise Content Service 2.0 PROD]                                    
+7              |cmdb_ci_endpoint_manual     |it → this CI   |Implement End Point To::Implement End Point From|Manual Endpoint                                                                                                                                                                                                      
+5              |cmdb_ci_service_by_tags     |it → this CI   |Depends on::Used by                             |[Data Lake prod, Claim Predictive Models PROD, Automated Claim Transaction PROD, Claim Recovery System PROD, Notice of Loss PROD]                                                                                    
+4              |cmdb_ci_infra_service       |this CI → it   |Uses::Used by                                   |[Other Print, Filenet - Email Manager, Citrix Xenapp, SSL/VPN]                                                                                                                                                       
+3              |cmdb_ci_spkg                |this CI → it   |References::Refrenced by                        |[subversion, undefined, Claims Automation]                                                                                                                                                                           
+3              |cmdb_ci_service_auto        |it → this CI   |Depends on::Used by                             |[Claim Center, Enterprise Integration Corporate Functions PROD, Urban Code Deploy PROD]                                                                                                                              
+2              |cmdb_ci_service_auto        |it → this CI   |Used by::Uses                                   |Notice of Loss                                                                                                                                                                                                       
+2              |cmdb_ci_mainframe_lpar      |this CI → it   |Runs on::Runs                                   |CNA1BSYS                                                                                                                                                                                                             
+2              |cmdb_ci_service_calculated  |this CI → it   |Uses::Used by                                   |[Informatica Shared 9.6 PROD, Citrix PROD]                                                                                                                                                                           
+2              |cmdb_ci_db_mssql_instance   |this CI → it   |Depends on::Used by                             |[MSSQLSERVER@vkau1pdb0018, MSSQLSERVER@vkau1pdb0017]                                                                                                                                                                 
+2              |cmdb_ci_hpux_server         |this CI → it   |Runs on::Runs                                   |[sdrst_sch1p001, sch1p245]                                                                                                                                                                                           
+2              |cmdb_ci_app_server_websphere|this CI → it   |Runs on::Runs                                   |server1                                                                                                                                                                                                              
+2              |cmdb_ci_service_auto        |it → this CI   |Applicative Flow To::Applicative Flow From      |[Urban Code Deploy PROD, Enterprise Integration Corporate Functions PROD]                                                                                                                                            
+1              |cmdb_ci_appl                |this CI → it   |Depends on::Used by                             |Claim Center                                                                                                                                                                                                         
+1              |cmdb_ci_service_auto        |this CI → it   |Applicative Flow To::Applicative Flow From      |Urban Code Deploy PROD                                                                                                                                                                                               
+1              |cmdb_ci_db_syb_instance     |this CI → it   |Depends on::Used by                             |c99tpact                                                                                                                                                                                                             
+1              |cmdb_ci_spkg                |it → this CI   |Applicative Flow To::Applicative Flow From      |Claims Automation                                                                                                                                                                                                    
+1              |cmdb_ci_service_discovered  |this CI → it   |Applicative Flow To::Applicative Flow From      |Enterprise Template Manager PROD                                                                                                                                                                                     
+1              |cmdb_ci_db_ora_instance     |this CI → it   |Runs on::Runs                                   |aemp1@lrau1p17                                                                                                                                                                                                       
+1              |cmdb_ci_business_app        |it → this CI   |Consumes::Consumed by                           |Claim Center                                                                                                                                                                                                         
+1              |cmdb_ci_endpoint_http       |this CI → it   |Connects to::Connected by                       |https://claimcenter.cna.com/cc/ClaimCenter.do                                                                                                                                                                        
+1              |cmdb_ci_service_discovered  |it → this CI   |Applicative Flow To::Applicative Flow From      |CNA Service Gateway PROD                                                                                                                                                                                             
+1              |cmdb_ci_esx_resource_pool   |this CI → it   |Consumes::Consumed by                           |Citrix                                                                                                                                                                                                               
+1              |cmdb_ci_service_auto        |this CI → it   |Depends on::Used by                             |Urban Code Deploy PROD                                                                                                                                                                                               
+1              |cmdb_ci_ip_router           |this CI → it   |Runs on::Runs                                   |sch1h067                                                                                                                                                                                                             
+1              |cmdb_ci_ip_switch           |this CI → it   |Runs on::Runs                                   |sch1p001                                                                                                                                                                                                             
