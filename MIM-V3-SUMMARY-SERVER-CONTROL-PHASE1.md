@@ -85,3 +85,7 @@ query shape is needed even when a server is picked.
 **Numbers that would decide it:** *Round 11* in `queries_ro_run.md` (BA–BH). They all run in Dev Tools Console.
 They measure the daily data volume, the size of the CI and Server lists, and what each automatic panel would actually
 cost (`took`).
+
+**Update (Round 11 results):** option A is not possible on this cluster. Logs time out even at 1 hour, processes at
+24 hours, and Server Health costs 582 CPU-seconds at 24 hours. The cheaper proposal (option E: live status in
+*Server View*) is in *MIM-V3-AUTOMATIC-SERVERS-DECISION.md*.

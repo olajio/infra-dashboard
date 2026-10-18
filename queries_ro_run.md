@@ -615,9 +615,9 @@ FROM .ds-metrics-system.cpu-default*, .ds-metrics-system.memory-default*, .ds-me
     OR parent.name == "Automated Claim Transaction PROD" OR child.name == "Automated Claim Transaction PROD"
 | EVAL is_rel = _index LIKE "*relations*", app = "automated claim transaction prod",
        p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
-| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, NOT is_rel, TO_LOWER(TO_STRING(ci.name)))
+| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, is_rel, NULL, TO_LOWER(TO_STRING(ci.name)))
 | WHERE name IS NOT NULL AND (is_rel OR @timestamp >= NOW() - 1 hour)
-| STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(NOT is_rel, @timestamp)) BY name
+| STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(is_rel, NULL, @timestamp)) BY name
 | WHERE linked == 1
 | SORT data_docs DESC, name ASC
 | LIMIT 100
@@ -633,9 +633,9 @@ FROM metrics-system.process-*, metrics-windows.service-*, cmdb-ci-relations* MET
     OR parent.name == "Automated Claim Transaction PROD" OR child.name == "Automated Claim Transaction PROD"
 | EVAL is_rel = _index LIKE "*relations*", app = "automated claim transaction prod",
        p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
-| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, NOT is_rel, TO_LOWER(TO_STRING(ci.name)))
+| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, is_rel, NULL, TO_LOWER(TO_STRING(ci.name)))
 | WHERE name IS NOT NULL AND (is_rel OR @timestamp >= NOW() - 1 hour)
-| STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(NOT is_rel, @timestamp)) BY name
+| STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(is_rel, NULL, @timestamp)) BY name
 | WHERE linked == 1
 | SORT data_docs DESC, name ASC
 | LIMIT 100
@@ -652,9 +652,9 @@ FROM logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, log
     OR parent.name == "Automated Claim Transaction PROD" OR child.name == "Automated Claim Transaction PROD"
 | EVAL is_rel = _index LIKE "*relations*", app = "automated claim transaction prod",
        p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
-| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, NOT is_rel, TO_LOWER(TO_STRING(ci.name)))
+| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, is_rel, NULL, TO_LOWER(TO_STRING(ci.name)))
 | WHERE name IS NOT NULL AND (is_rel OR @timestamp >= NOW() - 1 hour)
-| STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(NOT is_rel, @timestamp)) BY name
+| STATS linked = MAX(CASE(is_rel, 1, 0)), data_docs = SUM(CASE(is_rel, 0, 1)), last_data = MAX(CASE(is_rel, NULL, @timestamp)) BY name
 | WHERE linked == 1
 | SORT data_docs DESC, name ASC
 | LIMIT 100
@@ -707,3 +707,206 @@ FROM cmdb-ci-relations*
 | BE–BG | The real cost of automatic mode per panel (`took`, 1 hour and 24 hours), and whether the demo CI's linked servers send data. Over about 10 s at 24 hours means option A is too slow for that panel |
 | BH | Whether APM finds the servers of a business application (the second way automatic mode finds servers) |
 | BI | Optional check that the related-CI tables show every CMDB link of a CI |
+
+### Round 11 results (18 Oct)
+
+| Query | Result | Consequence |
+|---|---|---|
+| BA | Documents per day: CPU / memory / disk 17.7 M; processes 202 M; Windows services 42.6 M; `metricbeat-*` 18 M; logs **1.1 billion** (3,039 shards); APM internal 19.9 M; synthetics 4.6 M | Logs and processes are far too big to scan in full |
+| BB | 1,224 production servers and 2 with a blank environment are in the lists. 1,506 others are left out (drt 449, cut 410, ete 303, dre 130, dev 97, sandbox 68, test 46, eit 3) | As intended. Say if the DR servers (drt / dre) should be listed too |
+| BC | Server list 1,225 options in 0.3 s; CI list 2,541 options in 0.5 s | Well under the 10,000 limit, and fast |
+| BD | 1,725 CIs had a P1–P3 in 31 days: 858 are servers, **867 are not** | Half of the incidents need a server picked (Server control) or found automatically |
+| BE | Server Health, automatic: 1 hour 1.4 s (0.8 M documents, 10 CPU-seconds); 24 hours **8.9 s** (17.8 M documents, **582 CPU-seconds**). The demo CI's servers with data: vslrau1p276, vslrau1p174, vcwau1p0132 | Too heavy at 24 hours: about 10 CPU-minutes of cluster work per viewer every 5-minute refresh. 7 days would be about 4× more |
+| BF | Processes, automatic: 1 hour 4.2 s (10 M documents, 166 CPU-seconds); 24 hours **failed (502 Bad Gateway: timed out)** | Not usable beyond very short windows |
+| BG | Logs, automatic: **failed at 1 hour** (502) | Not usable at all |
+| BH | Error: `apps` holds several values for some services, which `==` rejects | Fixed below (BH2) |
+| BI | *Claim Center PROD* has about 160 linked servers (88 Linux, 48 AIX, 20 Windows, 2 HP-UX …), batch jobs, WebSphere / JBoss, Oracle … | The related-CI tables show these. 10 links have no name or class in the CMDB (empty records) and cannot be shown. An automatic mode on every panel would list ~160 servers' processes and logs for one application |
+
+**Discover's "Function NOT not allowed in STATS".** Kibana's query editor rejects `NOT` inside `STATS`. Elasticsearch
+accepts it (BE ran in Dev Tools). No dashboard query uses it. BE–BG and BM below now use `CASE(is_rel, NULL, …)`
+instead, so they also run in Discover.
+
+**Decision this supports:** automatic mode on all health panels (option A) is not possible on this cluster. Even
+Server Health alone is too heavy at 24 hours. See *MIM-V3-AUTOMATIC-SERVERS-DECISION.md* for the cheaper proposal
+(BM measures it).
+
+## Round 11b — phase 1 panel cost, BH fixed, and the cheap automatic option (18 Oct 2026)
+
+**Where to run:** all in **Dev Tools Console**, as before. Copy the responses into `round11b.txt` and note `took`
+for each one.
+
+**BJ–BL time the dashboard's own phase 1 queries.** They are copied from the dashboard, with the Server control set
+to `vslrau1p276` (one of the demo CI's servers), as if you had picked it. Run each with `"24 hours"`, then change
+`"health_window"` to `"7 days"` and run again. For BL (logs), run `"7 days"` only if 24 hours took under 10 seconds.
+
+**BH2. A business application's servers through APM** (fixed)
+```
+POST /_query?format=txt
+{ "query": """
+FROM metrics-apm.service_transaction.1m-*, metrics-apm.internal-* METADATA _index
+| WHERE @timestamp >= NOW() - 1 hour
+| EVAL is_tx = _index LIKE "*service_transaction*"
+| WHERE NOT is_tx OR ci.name == "Claim Center"
+| STATS in_app = MAX(CASE(is_tx, 1, 0)), hosts = VALUES(CASE(is_tx, NULL, TO_LOWER(TO_STRING(host.name)))) BY service.name
+| WHERE in_app == 1
+| MV_EXPAND hosts
+| STATS services = VALUES(service.name) BY host = hosts
+| SORT host
+| LIMIT 100
+""" }
+```
+
+**BJ. Server Health, phase 1** (24 hours, then 7 days)
+```
+POST /_query?format=json
+{ "query": """
+FROM .ds-metrics-system.cpu-default*, .ds-metrics-system.memory-default*, .ds-metrics-system.filesystem-default*, cmdb-ci-relations* METADATA _index
+| WHERE (@timestamp >= NOW() - TO_TIMEDURATION(CASE(?health_window == "3 days", "72 hours", ?health_window == "7 days", "168 hours", ?health_window)) AND (ci.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server))))) OR parent.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server))) OR child.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server)))
+| EVAL is_rel = _index LIKE "*relations*", is_cpu = _index LIKE "*metrics-system.cpu*"
+| EVAL inc_l = TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), ci_l = TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), srv_l = TO_LOWER(CASE(?server == "(no server selected)", "", ?server)),
+       p_l = TO_LOWER(TO_STRING(parent.name)), c_l = TO_LOWER(TO_STRING(child.name)),
+       p_srv = TO_STRING(parent.class) IN ("cmdb_ci_aix_server", "cmdb_ci_esx_server", "cmdb_ci_hpux_server", "cmdb_ci_hyper_v_server", "cmdb_ci_ibm_frame", "cmdb_ci_isam_server", "cmdb_ci_lb_bigip", "cmdb_ci_lb_netscaler", "cmdb_ci_linux_server", "cmdb_ci_mainframe", "cmdb_ci_mainframe_lpar", "cmdb_ci_net_app_server", "cmdb_ci_server", "cmdb_ci_solaris_server", "cmdb_ci_storage_server", "cmdb_ci_win_server"), c_srv = TO_STRING(child.class) IN ("cmdb_ci_aix_server", "cmdb_ci_esx_server", "cmdb_ci_hpux_server", "cmdb_ci_hyper_v_server", "cmdb_ci_ibm_frame", "cmdb_ci_isam_server", "cmdb_ci_lb_bigip", "cmdb_ci_lb_netscaler", "cmdb_ci_linux_server", "cmdb_ci_mainframe", "cmdb_ci_mainframe_lpar", "cmdb_ci_net_app_server", "cmdb_ci_server", "cmdb_ci_solaris_server", "cmdb_ci_storage_server", "cmdb_ci_win_server"),
+       cpu_l = CASE(is_cpu, TO_LOWER(TO_STRING(ci.name)))
+| EVAL inc_hit = CASE(inc_l == "", 0, is_rel AND ((p_l == inc_l AND p_srv) OR (c_l == inc_l AND c_srv)), 1, cpu_l == inc_l, 1, 0),
+       ci_hit = CASE(ci_l == "", 0, is_rel AND ((p_l == ci_l AND p_srv) OR (c_l == ci_l AND c_srv)), 1, cpu_l == ci_l, 1, 0)
+| INLINE STATS inc_is_server = MAX(inc_hit), ci_is_server = MAX(ci_hit)
+| EVAL target = CASE(inc_is_server == 1, inc_l, ci_is_server == 1, ci_l, srv_l != "", srv_l)
+| EVAL is_data = NOT is_rel AND (true)
+| WHERE target IS NOT NULL AND ((is_data AND TO_LOWER(TO_STRING(ci.name)) == target)
+     OR (is_rel AND (p_l == target OR c_l == target)))
+| EVAL srv = CASE(is_data, TO_STRING(ci.name), p_l == target, TO_STRING(parent.name), TO_STRING(child.name))
+| STATS cpu = PERCENTILE(system.cpu.total.norm.pct, 90), mem = MAX(system.memory.actual.used.pct),
+        disk = MAX(system.filesystem.used.pct), last_seen = MAX(CASE(is_data, @timestamp)), names = VALUES(srv)
+  BY server_key = TO_LOWER(srv)
+| EVAL server = MV_FIRST(names), silent_min = DATE_DIFF("minutes", last_seen, NOW())
+| EVAL status = CASE(last_seen IS NULL, "No data in window", silent_min > 10, "Silent", "Reporting"),
+       cpu_p90 = ROUND(cpu * 100, 1), mem_peak = ROUND(mem * 100, 1), disk_max = ROUND(disk * 100, 1),
+       rank = CASE(last_seen IS NULL, 1, silent_min > 10, 2, 3)
+| SORT rank ASC, server ASC
+| KEEP server, status, silent_min, cpu_p90, mem_peak, disk_max
+""",
+  "params": [
+  {"ci": "(no CI selected)"},
+  {"health_window": "24 hours"},
+  {"incident": "(all incidents)"},
+  {"server": "vslrau1p276"}
+  ],
+  "filter": { "range": { "@timestamp": { "gte": "now-5y" } } } }
+```
+
+**BK. Process Health, phase 1** (24 hours, then 7 days)
+```
+POST /_query?format=json
+{ "query": """
+FROM metrics-windows.service-*, metrics-system.process-*, .ds-metrics-system.cpu-default*, cmdb-ci-relations* METADATA _index
+| WHERE (@timestamp >= NOW() - TO_TIMEDURATION(CASE(?health_window == "3 days", "72 hours", ?health_window == "7 days", "168 hours", ?health_window)) AND (ci.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server))))) OR parent.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server))) OR child.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server)))
+| EVAL is_rel = _index LIKE "*relations*", is_cpu = _index LIKE "*metrics-system.cpu*"
+| EVAL inc_l = TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), ci_l = TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), srv_l = TO_LOWER(CASE(?server == "(no server selected)", "", ?server)),
+       p_l = TO_LOWER(TO_STRING(parent.name)), c_l = TO_LOWER(TO_STRING(child.name)),
+       p_srv = TO_STRING(parent.class) IN ("cmdb_ci_aix_server", "cmdb_ci_esx_server", "cmdb_ci_hpux_server", "cmdb_ci_hyper_v_server", "cmdb_ci_ibm_frame", "cmdb_ci_isam_server", "cmdb_ci_lb_bigip", "cmdb_ci_lb_netscaler", "cmdb_ci_linux_server", "cmdb_ci_mainframe", "cmdb_ci_mainframe_lpar", "cmdb_ci_net_app_server", "cmdb_ci_server", "cmdb_ci_solaris_server", "cmdb_ci_storage_server", "cmdb_ci_win_server"), c_srv = TO_STRING(child.class) IN ("cmdb_ci_aix_server", "cmdb_ci_esx_server", "cmdb_ci_hpux_server", "cmdb_ci_hyper_v_server", "cmdb_ci_ibm_frame", "cmdb_ci_isam_server", "cmdb_ci_lb_bigip", "cmdb_ci_lb_netscaler", "cmdb_ci_linux_server", "cmdb_ci_mainframe", "cmdb_ci_mainframe_lpar", "cmdb_ci_net_app_server", "cmdb_ci_server", "cmdb_ci_solaris_server", "cmdb_ci_storage_server", "cmdb_ci_win_server"),
+       cpu_l = CASE(is_cpu, TO_LOWER(TO_STRING(ci.name)))
+| EVAL inc_hit = CASE(inc_l == "", 0, is_rel AND ((p_l == inc_l AND p_srv) OR (c_l == inc_l AND c_srv)), 1, cpu_l == inc_l, 1, 0),
+       ci_hit = CASE(ci_l == "", 0, is_rel AND ((p_l == ci_l AND p_srv) OR (c_l == ci_l AND c_srv)), 1, cpu_l == ci_l, 1, 0)
+| INLINE STATS inc_is_server = MAX(inc_hit), ci_is_server = MAX(ci_hit)
+| EVAL target = CASE(inc_is_server == 1, inc_l, ci_is_server == 1, ci_l, srv_l != "", srv_l)
+| EVAL is_data = NOT is_rel AND (NOT is_cpu OR false)
+| WHERE is_data AND target IS NOT NULL AND TO_LOWER(TO_STRING(ci.name)) == target AND (windows.service.name IS NOT NULL OR paladin.enrichment.computed.proc_type IS NOT NULL)
+| EVAL kind = CASE(windows.service.name IS NOT NULL, "Windows service", "Middleware process")
+| EVAL ptype = TO_STRING(paladin.enrichment.computed.proc_type), pinst = TO_STRING(paladin.enrichment.computed.proc_instance)
+| EVAL name = CASE(kind == "Windows service",
+      CONCAT(COALESCE(TO_STRING(windows.service.display_name), TO_STRING(windows.service.name)), " (", TO_STRING(windows.service.name), ")"),
+      CASE(pinst IS NULL OR pinst == "n/a", ptype, CONCAT(ptype, " · ", pinst)))
+| EVAL st = CASE(kind == "Windows service", TO_STRING(windows.service.state), "Running")
+| STATS last_ts = MAX(@timestamp), latest = MAX(CONCAT(TO_STRING(TO_LONG(@timestamp)), "~", st)),
+        starts = VALUES(TO_STRING(windows.service.start_type)),
+        owners = VALUES(TO_STRING(`enrich_policy.cmdb-cis.proc_assignment`))
+  BY kind, name
+| DISSECT latest "%{ts}~%{state_now}"
+| EVAL start_type = MV_FIRST(starts), minutes_since = DATE_DIFF("minutes", last_ts, NOW())
+| EVAL status = CASE(
+      minutes_since > 10, "Not seen",
+      kind == "Windows service" AND state_now != "Running" AND start_type LIKE "Automatic*", "Stopped",
+      kind == "Windows service" AND state_now != "Running", CONCAT("Not running (", COALESCE(start_type, "?"), ")"),
+      "Running")
+| WHERE status IN ("Stopped", "Not seen") OR kind == "Middleware process" OR TO_LOWER(name) RLIKE ".*(sql|w3svc|iis|mq|websphere|jboss|tomcat|oracle|httpd|ihs|weblogic).*"
+| EVAL owner = MV_FIRST(owners), rank = CASE(status IN ("Stopped", "Not seen"), 1, 2)
+| SORT rank ASC, kind ASC, name ASC
+| LIMIT 100
+| KEEP name, status, kind, minutes_since, owner
+""",
+  "params": [
+  {"ci": "(no CI selected)"},
+  {"health_window": "24 hours"},
+  {"incident": "(all incidents)"},
+  {"server": "vslrau1p276"}
+  ],
+  "filter": { "range": { "@timestamp": { "gte": "now-5y" } } } }
+```
+
+**BL. Errors from the Logs, phase 1** (24 hours; 7 days only if 24 hours took under 10 s)
+```
+POST /_query?format=json
+{ "query": """
+FROM logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, logs-jboss-*, logs-aix-syslog-*, logs-system.syslog-*, logs-filestream.generic-*, logs-apm.error-*, logs-apm.app.*, .ds-metrics-system.cpu-default*, cmdb-ci-relations* METADATA _index
+| WHERE (@timestamp >= NOW() - TO_TIMEDURATION(CASE(?health_window == "3 days", "72 hours", ?health_window == "7 days", "168 hours", ?health_window)) AND (ci.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server))))) OR parent.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server))) OR child.name IN (CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)), TO_UPPER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), CASE(?ci == "(no CI selected)", "", ?ci), TO_UPPER(CASE(?ci == "(no CI selected)", "", ?ci)), TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), CASE(?server == "(no server selected)", "", ?server), TO_UPPER(CASE(?server == "(no server selected)", "", ?server)), TO_LOWER(CASE(?server == "(no server selected)", "", ?server)))
+| EVAL is_rel = _index LIKE "*relations*", is_cpu = _index LIKE "*metrics-system.cpu*"
+| EVAL inc_l = TO_LOWER(CASE(?incident == "(all incidents)", "", SUBSTRING(?incident, LOCATE(?incident, " · ") + 3))), ci_l = TO_LOWER(CASE(?ci == "(no CI selected)", "", ?ci)), srv_l = TO_LOWER(CASE(?server == "(no server selected)", "", ?server)),
+       p_l = TO_LOWER(TO_STRING(parent.name)), c_l = TO_LOWER(TO_STRING(child.name)),
+       p_srv = TO_STRING(parent.class) IN ("cmdb_ci_aix_server", "cmdb_ci_esx_server", "cmdb_ci_hpux_server", "cmdb_ci_hyper_v_server", "cmdb_ci_ibm_frame", "cmdb_ci_isam_server", "cmdb_ci_lb_bigip", "cmdb_ci_lb_netscaler", "cmdb_ci_linux_server", "cmdb_ci_mainframe", "cmdb_ci_mainframe_lpar", "cmdb_ci_net_app_server", "cmdb_ci_server", "cmdb_ci_solaris_server", "cmdb_ci_storage_server", "cmdb_ci_win_server"), c_srv = TO_STRING(child.class) IN ("cmdb_ci_aix_server", "cmdb_ci_esx_server", "cmdb_ci_hpux_server", "cmdb_ci_hyper_v_server", "cmdb_ci_ibm_frame", "cmdb_ci_isam_server", "cmdb_ci_lb_bigip", "cmdb_ci_lb_netscaler", "cmdb_ci_linux_server", "cmdb_ci_mainframe", "cmdb_ci_mainframe_lpar", "cmdb_ci_net_app_server", "cmdb_ci_server", "cmdb_ci_solaris_server", "cmdb_ci_storage_server", "cmdb_ci_win_server"),
+       cpu_l = CASE(is_cpu, TO_LOWER(TO_STRING(ci.name)))
+| EVAL inc_hit = CASE(inc_l == "", 0, is_rel AND ((p_l == inc_l AND p_srv) OR (c_l == inc_l AND c_srv)), 1, cpu_l == inc_l, 1, 0),
+       ci_hit = CASE(ci_l == "", 0, is_rel AND ((p_l == ci_l AND p_srv) OR (c_l == ci_l AND c_srv)), 1, cpu_l == ci_l, 1, 0)
+| INLINE STATS inc_is_server = MAX(inc_hit), ci_is_server = MAX(ci_hit)
+| EVAL target = CASE(inc_is_server == 1, inc_l, ci_is_server == 1, ci_l, srv_l != "", srv_l)
+| EVAL is_data = NOT is_rel AND (NOT is_cpu OR false)
+| WHERE is_data AND target IS NOT NULL AND TO_LOWER(TO_STRING(ci.name)) == target
+| EVAL lvl = TO_LOWER(TO_STRING(log.level))
+| EVAL sev_code = COALESCE(TO_INTEGER(syslog_severity_code),
+      CASE(lvl IN ("emergency", "emerg", "alert", "critical", "crit", "fatal"), 2, lvl IN ("error", "err", "severe"), 3,
+           lvl IN ("warning", "warn"), 4, 6))
+| WHERE sev_code <= 4
+| EVAL severity = CASE(sev_code <= 2, "critical", sev_code == 3, "error", "warning"), sev_rank = sev_code
+| EVAL msg = SUBSTRING(TO_STRING(message), 1, 400)
+| GROK msg "<%{INT}>%{NOTSPACE} %{NOTSPACE} %{GREEDYDATA:body}"
+| EVAL text = SUBSTRING(REPLACE(COALESCE(body, msg), "[0-9]+", "#"), 1, 160), source = TO_STRING(data_stream.dataset)
+| STATS occurrences = COUNT(*), first_seen = MIN(@timestamp), last_seen = MAX(@timestamp) BY sev_rank, severity, source, text
+| SORT sev_rank ASC, occurrences DESC
+| LIMIT 50
+| KEEP occurrences, severity, source, text, first_seen, last_seen
+""",
+  "params": [
+  {"ci": "(no CI selected)"},
+  {"health_window": "24 hours"},
+  {"incident": "(all incidents)"},
+  {"server": "vslrau1p276"}
+  ],
+  "filter": { "range": { "@timestamp": { "gte": "now-5y" } } } }
+```
+
+**BM. The cheap automatic option: live status of the demo CI's linked servers, last 15 minutes** (CPU data only)
+```
+POST /_query?format=json
+{ "query": """
+FROM .ds-metrics-system.cpu-default*, cmdb-ci-relations* METADATA _index
+| WHERE @timestamp >= NOW() - 15 minutes
+    OR parent.name == "Automated Claim Transaction PROD" OR child.name == "Automated Claim Transaction PROD"
+| EVAL is_rel = _index LIKE "*relations*", app = "automated claim transaction prod",
+       p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
+| EVAL name = CASE(is_rel AND p == app, c, is_rel AND c == app, p, is_rel, NULL, TO_LOWER(TO_STRING(ci.name)))
+| WHERE name IS NOT NULL AND (is_rel OR @timestamp >= NOW() - 15 minutes)
+| STATS linked = MAX(CASE(is_rel, 1, 0)), last_data = MAX(CASE(is_rel, NULL, @timestamp)),
+        cpu_max = MAX(system.cpu.total.norm.pct) BY name
+| WHERE linked == 1 AND last_data IS NOT NULL
+| EVAL min_ago = DATE_DIFF("minutes", last_data, NOW()), cpu_max = ROUND(cpu_max * 100, 1)
+| SORT name
+| LIMIT 100
+""" }
+```
+Then do the same with *Claim Center PROD* (about 160 linked servers) in place of the demo CI, in both places, to see
+the cost for a large application.
+
+| Query | Decides |
+|---|---|
+| BH2 | Whether APM finds a business application's servers |
+| BJ–BL | Whether phase 1's panels are fast enough on real data, especially logs at 7 days (1.1 billion log lines a day) |
+| BM | Whether the cheap automatic option costs well under a second |
