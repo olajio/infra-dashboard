@@ -1,5 +1,10 @@
 # MIM V3 — finding demo values for the CI, Incident and Service controls
 
+> **Superseded on 19 Oct 2026.** These queries predate P3 incidents and the Server / Health window controls, and
+> they need Discover. Use **Round 12** in `queries_ro_run.md` instead: two Dev Tools queries (BU, BW) and a table
+> of what to pick in each control.
+
+
 Sections 2 and 3 only fill when the controls point at something Elastic has data for. Most P1 / P2 CIs are servers
 without APM, network devices or application services, so a CI picked at random often leaves panels empty. These
 three queries find the combinations that fill the most panels **in your data, right now**.

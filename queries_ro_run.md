@@ -1189,3 +1189,142 @@ DELETE /_query/async/<id>
   Elasticsearch loads older data from disk. Repeat runs are faster: BL at 24 hours took 6.0 s the first time and 2.5 s
   later. So BL and BN at 7 days were each a first run, and passed Kibana's 30-second limit in Dev Tools. The dashboard
   waits longer, so on a first load the panel would be slow (possibly over 30 s), not broken.
+
+## Round 12 — the best values for a full test of the dashboard (19 Oct 2026)
+
+All in **Dev Tools Console**, through the asynchronous API (no 502). Paste the responses into `round12.txt`.
+
+**How to run each one:**
+1. Run the `POST` block. It answers within 5 seconds with an `"id"`.
+2. Run the `GET` line with that id. It shows the result as a table once the query has finished; until then it
+   shows `"is_running": true`, so run it again a little later.
+3. Run the `DELETE` line.
+
+### BU. Rank the active incidents by how many panels their CI fills
+
+**What it covers:** every active P1–P3 incident opened in the last 31 days. For each incident's CI it checks what
+the CI has right now:
+- server metrics (*Server Health*), in the last 15 minutes;
+- production APM services, in the last 15 minutes. These fill seven panels: *APM Services Health*, *Application
+  Health*, *Services of the Application*, *Upstream*, *Service health*, *Downstream* and *Business applications
+  impacted*;
+- middleware processes (*Middleware Health*), in the last 15 minutes;
+- database services (*Database Health*), in the last 15 minutes;
+- Windows services (*Process Health*), in the last 15 minutes;
+- Netcool alerts (*Alerts on this CI*), in the last 24 hours;
+- changes (*Changes*), in the last 7 days.
+
+`panels` is how many of those 13 panels it fills.
+
+```
+POST /_query/async?format=json
+{ "query": """
+FROM servicenow-incidents-*, .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.process-*, metrics-windows.service-*, metricbeat-*, .ds-bridge-alerts-netcool-default-*, servicenow-change-requests-* METADATA _index
+| WHERE (_index LIKE "*servicenow-incidents*" AND opened_at >= NOW() - 31 days)
+     OR (_index LIKE "*change-request*" AND (end_at >= NOW() - 7 days OR start_date >= NOW() - 7 days))
+     OR (_index LIKE "*netcool*" AND @timestamp >= NOW() - 24 hours)
+     OR (@timestamp >= NOW() - 15 minutes AND (_index LIKE "*system.cpu*" OR _index LIKE "*apm.internal*"
+         OR _index LIKE "*system.process*" OR _index LIKE "*windows.service*" OR _index LIKE "*metricbeat*"))
+| EVAL src = CASE(_index LIKE "*servicenow-incidents*", "inc", _index LIKE "*change-request*", "chg", _index LIKE "*netcool*", "alert",
+                  _index LIKE "*system.cpu*", "cpu", _index LIKE "*apm.internal*", "apm", _index LIKE "*system.process*", "proc",
+                  _index LIKE "*windows.service*", "win", "sql")
+| EVAL key = TO_LOWER(CASE(src == "apm", TO_STRING(host.name), TO_STRING(ci.name)))
+| WHERE LENGTH(key) > 0
+| EVAL pri = CASE(src == "inc", TO_INTEGER(priority)), wname = TO_LOWER(TO_STRING(windows.service.name))
+| EVAL incident = CASE(src == "inc" AND pri IN (1, 2, 3) AND NOT TO_STRING(state_name) IN ("Resolved", "Closed", "Canceled", "Cancelled"),
+                       CONCAT(TO_STRING(number), " · P", TO_STRING(pri))),
+       inc_ci = CASE(src == "inc", TO_STRING(ci.name)),
+       service = CASE(src == "apm" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"),
+                      TO_STRING(service.name)),
+       mw = CASE(src == "proc", TO_STRING(paladin.enrichment.computed.proc_type)),
+       db = CASE(src == "sql", 1, src == "win" AND (wname LIKE "*sql*" OR wname LIKE "*oracle*" OR wname LIKE "*db2*"
+                 OR wname LIKE "*postgres*" OR wname LIKE "*mysql*" OR wname LIKE "*mongo*" OR wname LIKE "*sybase*"), 1, 0),
+       alert = CASE(src == "alert", TO_STRING(netcool.identifier)), chg = CASE(src == "chg", TO_STRING(number))
+| STATS incidents = VALUES(incident), names = VALUES(inc_ci), cpu = MAX(CASE(src == "cpu", 1, 0)), services = VALUES(service),
+        middleware = VALUES(mw), db = MAX(db), win = MAX(CASE(src == "win", 1, 0)),
+        alerts = COUNT_DISTINCT(alert), changes = COUNT_DISTINCT(chg)
+  BY key
+| WHERE incidents IS NOT NULL
+| EVAL n_services = COALESCE(MV_COUNT(services), 0),
+       panels = cpu + CASE(n_services > 0, 7, 0) + CASE(middleware IS NOT NULL, 1, 0) + db
+              + CASE(win == 1 OR middleware IS NOT NULL, 1, 0) + CASE(alerts > 0, 1, 0) + CASE(changes > 0, 1, 0)
+| EVAL incident_ci = MV_FIRST(names), incidents = MV_SLICE(MV_SORT(incidents), 0, 2), services = MV_SLICE(MV_SORT(services), 0, 2),
+       middleware = MV_SLICE(MV_SORT(middleware), 0, 2)
+| SORT panels DESC, n_services DESC, alerts DESC, incident_ci ASC
+| KEEP incident_ci, incidents, panels, cpu, n_services, services, middleware, db, win, alerts, changes
+| LIMIT 25
+""",
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
+
+### BW. For the top 3 candidates: logs, synthetics and CMDB relationships
+
+Run it once per candidate, putting the `incident_ci` value from BU in `"ci"` (as written there, same case). It lists
+which of these panels the CI fills:
+- *Errors from the Logs* (last 24 hours);
+- *Synthetics Health* (last 24 hours);
+- *Applications related to this CI*, *Blast radius* and the four related-CI views (Middleware, Database, Server,
+  Other).
+
+For an application CI, the *Server View* row also names its servers.
+
+```
+POST /_query/async?format=json
+{ "query": """
+FROM cmdb-ci-relations*, logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, logs-jboss-*, logs-aix-syslog-*, logs-system.syslog-*, logs-filestream.generic-*, logs-apm.error-*, logs-apm.app.*, synthetics-* METADATA _index
+| WHERE parent.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci)) OR child.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci))
+     OR (@timestamp >= NOW() - 24 hours AND (ci.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci))
+         OR url.domain IN (?ci, TO_LOWER(?ci), CONCAT(?ci, ".cna.com"), CONCAT(TO_LOWER(?ci), ".cna.com"))))
+| EVAL src = CASE(_index LIKE "*relations*", "rel", _index LIKE "*synthetics*", "syn", "log")
+| EVAL down = src == "rel" AND TO_LOWER(TO_STRING(parent.name)) == TO_LOWER(?ci)
+| EVAL other = CASE(src == "rel" AND down, TO_STRING(child.name), src == "rel", TO_STRING(parent.name)),
+       cls = TO_LOWER(CASE(src == "rel" AND down, TO_STRING(child.class), src == "rel", TO_STRING(parent.class)))
+| EVAL lvl = TO_LOWER(TO_STRING(log.level))
+| EVAL sev = COALESCE(TO_INTEGER(syslog_severity_code), CASE(lvl IN ("emergency", "emerg", "alert", "critical", "crit", "fatal", "error", "err", "severe"), 3,
+                                                               lvl IN ("warning", "warn"), 4, 6))
+| WHERE src != "log" OR sev <= 4
+| EVAL panel = CASE(src == "log", "Errors from the Logs", src == "syn", "Synthetics Health",
+                    cls == "cmdb_ci_business_app", "Applications related / Application Health (business applications)",
+                    cls LIKE "*app_server*", "Middleware View",
+                    cls LIKE "cmdb_ci_db_*" OR cls LIKE "*database*" OR cls LIKE "*cassandra*", "Database View",
+                    cls LIKE "*server*" OR cls LIKE "*lpar*" OR cls LIKE "*frame*", "Server View",
+                    cls LIKE "*service*" OR cls LIKE "*appl*", "Applications related (services, applications)",
+                    "Other related CIs"),
+       item = CASE(src == "rel", other, src == "syn", TO_STRING(monitor.name))
+| STATS rows = COUNT(*), items = COUNT_DISTINCT(item), examples = VALUES(item) BY panel
+| EVAL examples = MV_SLICE(MV_SORT(examples), 0, 2)
+| SORT panel
+""",
+  "params": [{"ci": "<incident_ci from BU>"}],
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
+
+### Then pick the values
+
+| Control | Pick |
+|---|---|
+| **Incident** | The candidate with the most panels in BU plus BW. Prefer one with `cpu` = 1 (a server) and `n_services` > 0 (APM services): together they fill most of section 3 |
+| **CI** | Leave *(no CI selected)*: the incident's CI wins |
+| **Server** | Leave *(no server selected)* if the CI is a server (`cpu` = 1). Otherwise pick one of the servers BW lists under *Server View* |
+| **Health window** | *24 hours*. Use *7 days* if *Errors from the Logs* stays empty |
+| **Service** | Leave *(services on this CI)* |
+| **Application** | After picking the incident, the worst application in *Application Health*. *Services of the Application* then lists its services |
+
+**Panels that can stay empty whatever you pick:**
+- *Users impacted* is a fixed demo number.
+- *SLO Error Burn Rate* only shows a ★ row when the CI has its own SLO. It still lists every burning SLO.
+- *Downstream* and *Business applications impacted* need callers over HTTP on a CNA host name.
+- *Synthetics Health* needs a monitor that targets the CI.
+- *Database Health* needs a database on the server.
+
+Section 1 (*Active P1 / P2 / P3*, *Time to Resolve*, *Open Alerts*, *Active Incidents*) and *Escalate* always fill.
