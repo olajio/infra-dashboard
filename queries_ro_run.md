@@ -1328,3 +1328,18 @@ DELETE /_query/async/<id>
 - *Database Health* needs a database on the server.
 
 Section 1 (*Active P1 / P2 / P3*, *Time to Resolve*, *Open Alerts*, *Active Incidents*) and *Escalate* always fill.
+
+### Round 12 results (19 Oct)
+
+| Candidate | BU panels (of 13) | BW | Verdict |
+|---|---|---|---|
+| **vslrau1p220** · INC2676403 (P3) | **10**: server metrics, 2 APM services (agencyfeedfoundation, gslrating), JBoss | 39 log errors, 3 synthetic monitors, business app *Agency Feed Foundation*, 3 application services, 4 middleware, 1 database, 21 servers, 74 other CIs | **Best: fills about 24 of the 28 panels** |
+| lrch1d54 · INC2676782 (P3) | 4: server, 2 changes | 697 log errors, 1 monitor, 46 databases; its 21 related applications are DRT (not production, so hidden) | No APM services, so most of section 3 stays empty |
+| sau1h670 · INC2675141 (P3) | 4: MQ processes, database, 1 change (no server metrics) | 1 monitor, 5 applications, 8 middleware | No APM services and no server metrics |
+
+**Pick:** Incident *INC2676403 · vslrau1p220*; CI, Server and Service left as they are; Health window 24 hours;
+Application *Agency Feed Foundation* (or the worst one Application Health shows).
+
+**Expected empty:** *Changes* (none in 7 days), *Database Health* (no database on the server), probably *Alerts on
+this CI* (no Netcool alert in the last 24 hours), *Users impacted* (demo number). *Downstream* / *Business
+applications impacted* fill only if other services call agencyfeedfoundation or gslrating over HTTP.
