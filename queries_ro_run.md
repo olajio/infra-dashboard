@@ -1343,3 +1343,54 @@ Application *Agency Feed Foundation* (or the worst one Application Health shows)
 **Expected empty:** *Changes* (none in 7 days), *Database Health* (no database on the server), probably *Alerts on
 this CI* (no Netcool alert in the last 24 hours), *Users impacted* (demo number). *Downstream* / *Business
 applications impacted* fill only if other services call agencyfeedfoundation or gslrating over HTTP.
+
+## Round 13 — candidates for each kind of CI (20 Oct 2026)
+
+For the test cases in *MIM-V3-TEST-CASES.md*. Run it in **Dev Tools Console**, the same way as Round 12: run the
+`POST`, run the `GET` with the returned id until the table shows, then the `DELETE`. Paste the result into
+`round13.txt` if you want me to pick the values.
+
+### BZ. Active incidents by CI class, with examples
+
+Covers the active P1–P3 incidents opened in the last 31 days, grouped by the CI class recorded on the incident. For
+each class:
+- how many incidents and CIs;
+- how many CIs send server metrics, and how many run production APM services (both in the last 15 minutes);
+- how many CIs are non-production;
+- up to 3 examples, `<incident> · P<n> · <CI>`, tagged `[metrics]`, `[APM]` or with their environment.
+
+```
+POST /_query/async?format=json
+{ "query": """
+FROM servicenow-incidents-*, .ds-metrics-system.cpu-default*, metrics-apm.internal-* METADATA _index
+| WHERE (_index LIKE "*servicenow-incidents*" AND opened_at >= NOW() - 31 days)
+     OR (@timestamp >= NOW() - 15 minutes AND (_index LIKE "*system.cpu*" OR _index LIKE "*apm.internal*"))
+| EVAL src = CASE(_index LIKE "*servicenow-incidents*", "inc", _index LIKE "*system.cpu*", "cpu", "apm")
+| EVAL key = COALESCE(TO_LOWER(CASE(src == "apm", TO_STRING(host.name), TO_STRING(ci.name))), CONCAT("(no CI) ", TO_STRING(number)))
+| EVAL pri = CASE(src == "inc", TO_INTEGER(priority))
+| EVAL incident = CASE(src == "inc" AND pri IN (1, 2, 3) AND NOT TO_STRING(state_name) IN ("Resolved", "Closed", "Canceled", "Cancelled"),
+                       CONCAT(TO_STRING(number), " · P", TO_STRING(pri))),
+       cls = CASE(src == "inc", TO_STRING(ci.class_name)), env = CASE(src == "inc", TO_LOWER(TO_STRING(ci.environment))),
+       ci_name = CASE(src == "inc", TO_STRING(ci.name)),
+       prod_apm = CASE(src == "apm" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"), 1, 0)
+| STATS incidents = VALUES(incident), classes = VALUES(cls), envs = VALUES(env), names = VALUES(ci_name),
+        cpu = MAX(CASE(src == "cpu", 1, 0)), apm = MAX(prod_apm)
+  BY key
+| WHERE incidents IS NOT NULL
+| EVAL class = COALESCE(MV_FIRST(classes), CASE(names IS NULL, "(no CI)", "(no class)")),
+       non_prod = CASE(envs IS NULL OR MV_FIRST(envs) LIKE "prod*" OR MV_FIRST(envs) LIKE "prd*", 0, 1),
+       example = CONCAT(MV_FIRST(MV_SORT(incidents)), " · ", COALESCE(MV_FIRST(names), "(no CI)"),
+                        CASE(cpu == 1, " [metrics]", ""), CASE(apm == 1, " [APM]", ""),
+                        CASE(envs IS NULL OR MV_FIRST(envs) LIKE "prod*" OR MV_FIRST(envs) LIKE "prd*", "", CONCAT(" [", MV_FIRST(envs), "]")))
+| STATS active_incidents = SUM(MV_COUNT(incidents)), cis = COUNT(*), with_metrics = SUM(cpu), with_apm = SUM(apm),
+        non_prod = SUM(non_prod), best_examples = TOP(example, 3, "asc") BY class
+| SORT active_incidents DESC
+| LIMIT 60
+""",
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
