@@ -1,0 +1,42 @@
+{
+  "id": "FnFYMExmYlpzUkh1SVB6MzVSTUJqOHchbzBKcFdXRW1RVHVUS20zMzBoczV5dzo3Mzc5MDU1MzIx",
+  "is_running": true,
+  "documents_found": 0,
+  "values_loaded": 0,
+  "rows_emitted": 0,
+  "bytes_read": 0,
+  "read_nanos": 0,
+  "cpu_nanos": 0,
+  "start_time_in_millis": 1792495825957,
+  "expiration_time_in_millis": 1792927825957,
+  "columns": [],
+  "values": []
+}
+
+
+active_incidents|      cis      | with_metrics  |   with_apm    |   non_prod    |                                                                    best_examples                                                                     |            class             
+----------------+---------------+---------------+---------------+---------------+------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------
+174             |32             |0              |0              |0              |[INC2658097 · P3 · Claim Center PROD, INC2662050 · P3 · Enterprise PolicyCenter PROD, INC2665443 · P3 · Tailored Account Processing PROD]             |Mapped Application Service    
+154             |154            |0              |0              |0              |[INC2657347 · P3 · (no CI), INC2658384 · P3 · (no CI), INC2659121 · P3 · (no CI)]                                                                     |(no CI)                       
+46              |18             |0              |0              |4              |[INC2657828 · P3 · tymetrix 360 PROD, INC2667298 · P3 · CNA Canada Insurance System DRE [dre], INC2667575 · P3 · Office 365 Messaging - Exchange PROD]|Application Service           
+40              |12             |0              |0              |0              |[INC2665108 · P3 · TANDEM - Hardy (CNAHardy) PROD, INC2667765 · P3 · OpenText Extended ECM PROD, INC2670110 · P3 · CyberArk PROD]                     |Calculated Application Service
+25              |4              |0              |0              |0              |[INC2667118 · P3 · Looker PROD, INC2667678 · P3 · Data Lake PROD, INC2675215 · P3 · Risk Support Tool PROD]                                           |Tag-Based Application Service 
+23              |3              |0              |0              |0              |[INC2661916 · P3 · Claim Financial Interface PROD, INC2670091 · P3 · CNACargo PROD, INC2676723 · P3 · Underwriting Web PROD]                          |Service Instance              
+16              |14             |8              |0              |3              |[INC2665383 · P3 · vskau1p945 [metrics], INC2669864 · P3 · vskau1p1299, INC2670363 · P3 · vkau1rdb0003 [metrics] [dre]]                               |Windows Server                
+15              |10             |0              |0              |4              |[INC2665397 · P3 · RightFax, INC2666491 · P3 · Application Support Software, INC2670043 · P3 · Sharepoint [cut]]                                      |Infrastructure Service        
+7               |6              |0              |0              |2              |[INC2670699 · P3 · MSSQLSERVER@kau1p522, INC2674059 · P3 · MSFT SQL Instance@gdevweu2a-rdm [dev], INC2674582 · P3 · MSSQLSERVER@vskau1p1405]          |MSFT SQL Instance             
+5               |5              |5              |0              |2              |[INC2675453 · P3 · vslrch1d459 [metrics] [drt], INC2676621 · P3 · vslrau1p264 [metrics], INC2676782 · P3 · lrch1d54 [metrics] [drt]]                  |Linux Server                  
+3               |2              |0              |0              |1              |[INC2673853 · P3 · HARDY TandemAcumen Rec Report [dev], INC2674755 · P3 · PRINT OPEN SYSTEMS DAILY JOB LOG]                                           |Batch Job                     
+3               |1              |0              |0              |0              |INC2673785 · P3 · CNA Central                                                                                                                         |Business Application          
+1               |1              |0              |0              |0              |INC2675141 · P3 · sau1h670                                                                                                                            |AIX Server                    
+1               |1              |0              |0              |0              |INC2676340 · P3 · agenp@sau1h688                                                                                                                      |Oracle Instance               
+1               |1              |0              |0              |0              |INC2668705 · P3 · pubsub_data_view                                                                                                                    |Cloud DataBase                
+1               |1              |0              |0              |0              |INC2676941 · P3 · conjur-port-@vslrau1p254                                                                                                            |PostgreSQL Instance           
+1               |1              |0              |0              |0              |INC2676850 · P3 · CNA1BSYS                                                                                                                            |Mainframe LPAR                
+
+
+
+{
+  "acknowledged": true
+}
+
