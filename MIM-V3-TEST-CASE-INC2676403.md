@@ -18,6 +18,49 @@ The dashboard is read top to bottom, like an investigation:
 The controls at the top decide what sections 2 and 3 show. Picking an incident is enough: its CI drives
 everything.
 
+## Test flow
+
+The path followed in this test, with what each step showed.
+- **Green:** the step and its result.
+- **Amber:** a decision.
+- **Grey, dashed:** the branch this test did not need.
+
+![Test flow for INC2676403](mim-v3-test-case-flow.png)
+
+<details><summary>Flowchart source (Mermaid)</summary>
+
+```mermaid
+flowchart TD
+    A([Open MIM V3]) --> B["<b>1 · Overview</b><br/>529 active · 0 P1 · 3 P2 · 526 P3"]
+    B --> C["Pick Incident<br/><b>INC2676403 · vslrau1p220</b>"]
+    C --> D{Is the CI<br/>a server?}
+    D -- "Yes (Linux server)" --> E["Health panels use<br/>vslrau1p220"]
+    D -. "No" .-> D2["Pick a server from<br/>Server View in the<br/>Server control"]
+    D2 -.-> E
+    E --> F["<b>2 · Escalate</b><br/>Assignee Shivam Sinha<br/>Manager Shashikant Rai"]
+    F --> G{"Recent change<br/>or alert on the CI?"}
+    G -- "None: Changes and<br/>Alerts empty" --> H["<b>2 · Relationships</b><br/>Blast radius 3 · Agency Feed Foundation<br/>Tomcat ×4 · Oracle · ESX hosts"]
+    H --> I["<b>3 · Application Health</b><br/>Agency Feed Foundation: Healthy<br/>pick it in the Application control"]
+    I --> J["<b>3 · Services → Upstream → Downstream</b><br/>gslrating 0 % failed · mssql Healthy<br/>no callers"]
+    J --> K["<b>3 · Server health panels</b><br/>Server Reporting · CPU 1.7 %<br/>JBoss Healthy · Synthetics Up"]
+    K --> L{"Errors in<br/>the logs?"}
+    L -- "Yes" --> M["<b>Errors from the Logs</b><br/>sshd resets · CIS compliance errors"]
+    L -. "No" .-> N["Widen Health window<br/>or open Infra / Applications<br/>dashboards"]
+    M --> O(["Escalate to Shivam Sinha,<br/>then Shashikant Rai"])
+    N -.-> O
+
+    classDef ok fill:#e3f5ec,stroke:#1f9e6b,color:#12382a
+    classDef dec fill:#fff4dc,stroke:#c98a0b,color:#4a3405
+    classDef alt fill:#f1f3f7,stroke:#8a96a8,color:#4a5568,stroke-dasharray: 4 3
+    classDef end1 fill:#dbe8fb,stroke:#0b64dd,color:#0b2f66
+    class B,C,E,F,H,I,J,K,M ok
+    class D,G,L dec
+    class D2,N alt
+    class A,O end1
+```
+
+</details>
+
 ## Inputs
 
 | Control | Value | Why |
