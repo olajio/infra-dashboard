@@ -12,6 +12,39 @@ class, with up to 3 examples per class. Each example is tagged:
 **Defaults unless a case says otherwise:** Health window *24 hours*, Service *(services on this CI)*, Application
 *(all applications)*, CI and Server controls empty. Use **More → Reset changes** between cases.
 
+## Values to use (Round 13, 20 Oct)
+
+Incidents change: if one is no longer listed in the Incident control, take another example from `round13.txt` for
+the same class.
+
+| Case | Pick | Why this one |
+|---|---|---|
+| TC-02 | Incident **INC2665383 · vskau1p945** | Windows server with metrics; Round 12 also found a database, Windows services and a change on it, so *Database Health*, *Process Health* and *Changes* fill too |
+| TC-03 | Incident **INC2675141 · sau1h670** | AIX server, no server metrics; has MQ processes, a change and a ping monitor |
+| TC-04 | Incident **INC2658097 · Claim Center PROD** | Mapped application service with a large CMDB footprint (about 160 linked servers) |
+| TC-05 | TC-04, then Server = a server from *Server View* that is also in the Server control's list (e.g. `vclau1p0236`) | Only servers that send metrics are in the Server list; type to check |
+| TC-06 | Incident **INC2673785 · CNA Central** | The only business application with an active incident. *Application Health* shows it only if its APM services carry that exact name |
+| TC-07 | Incident **INC2670699 · MSSQLSERVER@kau1p522**, then Server = `kau1p522` | SQL Server instance; its server's name is in the CI name. Also: *agenp@sau1h688* (Oracle), *conjur-port-@vslrau1p254* (PostgreSQL) |
+| TC-08 | **No candidate today**: no network device has an active incident | Re-run BZ later. The CI control can't help: it only lists CIs with an incident in the last 31 days, plus servers |
+| TC-09 | Incident **INC2657347 · (no CI)** | One of 154 active incidents without a CI |
+| TC-10 | Incident **INC2667298 · CNA Canada Insurance System DRE**; then **INC2670363 · vkau1rdb0003** | A DR application service; then a DR Windows server with metrics. The server's health still shows, although the Server list leaves out non-production servers |
+| TC-11 | CI = `vslrau1p220` | TC-01's server. Its incident INC2676403 is no longer active, so this is now the way to repeat TC-01 |
+| TC-12 | CI = `vslrau1p276` (or any server with no open incident) | *Escalate* should still show its owners |
+| TC-13 | Incident INC2665383; CI = `Claim Center PROD` | The incident's server (vskau1p945) must win |
+| TC-14 | (a) CI = `vskau1p945`, Server = `vslrau1p276` → health panels show vskau1p945. (b) CI = `Claim Center PROD`, Server = `vslrau1p276` → they show vslrau1p276 | |
+| TC-15 | Server = `vslrau1p220` | Health panels without any incident or CI |
+| TC-17 | Service = `fmrsmartapp` (busiest service in TC-01) or any high-traffic API service | |
+| TC-24 | Optional, other CI classes: **INC2676850 · CNA1BSYS** (mainframe LPAR), **INC2665397 · RightFax** (infrastructure service), **INC2674755 · PRINT OPEN SYSTEMS DAILY JOB LOG** (batch job), **INC2668705 · pubsub_data_view** (cloud database) | Expect the CMDB panels and *Escalate* only; no health data |
+
+**What Round 13 shows about today's incidents:**
+- **No active incident's CI runs APM services** (`with_apm` = 0 everywhere). So, picked through an incident,
+  *Upstream*, *Service health*, *Downstream* and *Business applications impacted* stay empty. Use TC-11
+  (vslrau1p220) or TC-17 to demo them.
+- **Most incidents are on application services** (Mapped, Calculated, Tag-based, Service Instance: about 300 of 529).
+  So TC-04 / TC-05 is the everyday case.
+- **154 active incidents (29 %) have no CI.** The dashboard can't investigate those until the CI is filled in
+  ServiceNow, a data-quality point for the team.
+
 ## A. The incident's CI is not a server with APM
 
 | ID | Scenario | Pick | Expected |
@@ -48,6 +81,7 @@ class, with up to 3 examples per class. Each example is tagged:
 | **TC-21** | Time picker has no effect | Change the time picker from 24 hours to 7 days | Nothing changes: every panel has a fixed range or uses the Health window. *SLO Error Burn Rate* is the one to watch: it has no fixed range |
 | **TC-22** | Selections are not saved | Pick an incident, reload the page without saving | The dashboard opens on the saved defaults. **More → Reset changes** also clears the selection |
 | **TC-23** | Auto-refresh | Leave TC-01 open for 5 minutes | Panels refresh by themselves (*Min. ago* and *Last data* values change) |
+| **TC-24** | Other CI classes (mainframe LPAR, infrastructure service, batch job, cloud database) | Open an incident on such a CI (see the values table) | *Escalate* and the CMDB panels fill; the health panels stay empty, as these CIs send no server data |
 
 ## Suggested order for the team demo
 

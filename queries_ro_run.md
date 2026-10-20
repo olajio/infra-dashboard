@@ -1394,3 +1394,14 @@ GET /_query/async/<id from the answer above>?format=txt
 
 DELETE /_query/async/<id>
 ```
+
+### Round 13 results (20 Oct)
+
+| Finding | Detail |
+|---|---|
+| Classes with active incidents | Mapped Application Service 174 incidents (32 CIs), no CI 154, Application Service 46, Calculated Application Service 40, Tag-Based Application Service 25, Service Instance 23, Windows Server 16 (8 with metrics), Infrastructure Service 15, MSFT SQL Instance 7, Linux Server 5 (all with metrics), Batch Job 3, Business Application 3, and one each of AIX Server, Oracle Instance, Cloud DataBase, PostgreSQL Instance, Mainframe LPAR |
+| APM | No active incident's CI runs production APM services |
+| Network devices | None with an active incident (TC-08 has no candidate today) |
+| TC-01 | INC2676403 is no longer active; repeat TC-01 through the CI control (`vslrau1p220`) |
+
+The picks for each test case are in *MIM-V3-TEST-CASES.md*, "Values to use".
