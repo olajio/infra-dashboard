@@ -48,6 +48,10 @@ vals = [json.loads(p['embeddableConfig']['savedVis']['params']['spec'])['data'][
 check('both say In progress, no demo number', ([v['value'] for v in vals], '2,500' in json.dumps(vals)),
       (['In progress', 'In progress'], False))
 check('distinct panel ids', len({p['panelIndex'] for p in panels}), len(panels))
+S3_VARS = ('?server', '?health_window', '?service', '?application')
+check('no panel outside section 3 uses a section 3 control (they load only when section 3 comes into view)',
+      [title(p) for p in panels if p['type'] != 'esql_control' and not sec[p['gridData']['sectionId']].startswith('3 ·')
+       and any(v in json.dumps(p['embeddableConfig']) for v in S3_VARS)], [])
 
 print('\n' + ('ALL CHECKS PASSED' if not fails else f'FAILED: {fails}'))
 sys.exit(1 if fails else 0)

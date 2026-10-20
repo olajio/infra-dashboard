@@ -204,6 +204,19 @@ Checked on Kibana 9.5.3: a control in section 3 still drives every panel (with A
 
 ![User base and RUM tiles on Kibana 9.5.3](mim-v3-user-tiles-953.png)
 
+## Fifteenth round: Alerts on this CI fixed (20 Oct)
+
+**The problem.** After the fourteenth round, *Alerts on this CI* failed with "Unknown query parameter [server]".
+Kibana creates section 3's panels, its controls included, only when they come into view. So a section 2 panel that
+read the Server control ran before that control existed.
+
+**The fix (your choice).** *Alerts on this CI* follows the Incident / CI controls only, as before 18 Oct:
+- It shows the Netcool alerts on the selected CI, matched on its name as written, in upper case or in lower case,
+  or on its node `<CI>.cna.com`. Alerts cover the last 7 days.
+- Its panel range is now *Last 1 month*, like *Escalate*, because it no longer reads the CMDB.
+- A new test fails if any panel outside section 3 uses a section 3 control (Server, Health window, Service,
+  Application).
+
 ## What is left to do on the cluster
 
 ### 1. Import the dashboard (needed again: the second and fourth to fourteenth rounds changed it)

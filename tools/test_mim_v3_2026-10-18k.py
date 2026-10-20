@@ -166,8 +166,10 @@ try:
     check('Synthetics: monitor on <server>.cna.com', [(r['monitor.name'], r['status']) for r in run('Synthetics Health', server='srvA')],
           [('srvA ping', 'Down')])
     check('Errors from the Logs: the server\'s errors', [r['text'] for r in run('Errors from the Logs', server='srvA')], ['disk error #'])
-    check('Alerts on this CI: the CI\'s own alerts and the chosen server\'s', sorted(r['summary'] for r in run('Alerts on this CI', incident='INC7 · App PROD', server='srvA')),
-          ['problem a-app', 'problem a-srvA'])
+    check('Alerts on this CI: the CI\'s own alerts only, the Server control does not apply (20 Oct)',
+          sorted(r['summary'] for r in run('Alerts on this CI', incident='INC7 · App PROD', server='srvA')), ['problem a-app'])
+    check('Alerts on this CI: a server CI\'s own alerts through the CI control', sorted(r['summary'] for r in run('Alerts on this CI', ci='srvA')),
+          ['problem a-srvA'])
     check('controls in order', [c['title'] for c in CONTROLS],
           ['Incident', 'CI', 'Server', 'Health window', 'Service', 'Application'])
     check('Health window options and default', ([r['health_window'] for r in esql(CTL['Health window']['esql_query'], [])],
