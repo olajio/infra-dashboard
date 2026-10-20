@@ -130,9 +130,9 @@ check('Applications related to this CI (merged in round i): no CMDB status', lab
 check('Open Alerts window', P['Open Alerts with No Incident']['embeddableConfig']['time_range']['from'], 'now-24h')
 spec = json.loads(P['Active P1 / P2 / P3']['embeddableConfig']['savedVis']['params']['spec'])
 check('donut query', [(r['label'], r['incidents']) for r in esql(spec['data'][0]['url']['query'])[0]], [('P1', 1), ('P2', 1)])
-spec = json.loads(P['Users impacted']['embeddableConfig']['savedVis']['params']['spec'])
+spec = json.loads(P['User base · ServiceNow']['embeddableConfig']['savedVis']['params']['spec'])   # split on 20 Oct
 check('Users impacted text', spec['data'][0]['values'][0]['detail'],
-      'Real count to be incorporated|from ServiceNow and RUM')
+      'Users affected, from|the ServiceNow user base')
 check('removed panels', [t for t in ('Applications impacted', 'What this CI runs on') if t in P], [])
 check('no MIM left', [t for t, p in P.items() if 'promoted_by' in json.dumps(p) or 'Assigned MIM' in json.dumps(p)], [])
 print('\n' + ('ALL CHECKS PASSED' if not fails else f'FAILED: {fails}'))

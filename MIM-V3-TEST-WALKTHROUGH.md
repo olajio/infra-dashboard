@@ -31,7 +31,7 @@ Leave the controls at their defaults: Incident **(all incidents)**, CI **(no CI 
 | # | Do | You should see | ✓ |
 |---|---|---|---|
 | 1.1 | Look at **Active P1 / P2 / P3** | A donut with the total in the middle and the P1 (red), P2 (amber) and P3 (blue) counts beside it. The counts match the active P1 / P2 / P3 list in ServiceNow | ☐ |
-| 1.2 | Look at **Users impacted** | The demo number **2,500** and "Real count to be incorporated from ServiceNow and RUM". This tile is a placeholder; do not use the number | ☐ |
+| 1.2 | Look at **User base · ServiceNow** and **Real users · RUM** | Both show *In progress*: user counts are not available yet | ☐ |
 | 1.3 | Look at **Active Incidents (P1 / P2 / P3)** | One row per active incident, P1 first, oldest first: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id, Short description | ☐ |
 | 1.4 | Choose the incident to work on: a **P1** before a P2 before a P3, then **SLA** Breached → Breaching → Within SLA | Note its **number**, **Affected CI**, **Assignee** and **Group Manager** in the test record | ☐ |
 | 1.5 | Click the incident number → *Open incident in ServiceNow* | The ticket opens in ServiceNow. Assignee and assignment group match the row | ☐ |
@@ -152,7 +152,7 @@ starts from the overview.
 
 ## Known limits to keep in mind
 
-- **Users impacted** is a demo number until user counts come from ServiceNow and RUM.
+- **User base · ServiceNow** and **Real users · RUM** show *In progress* until those integrations are ready.
 - **Alerts and incidents** are linked by CI and time only; Netcool alerts carry no incident number.
 - **Open Alerts with No Incident** looks at the last 24 hours; an open incident not updated in that time is missed,
   so its alerts can show as "no incident".

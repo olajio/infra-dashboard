@@ -145,8 +145,8 @@ check('time windows', {t: P[t]['embeddableConfig'].get('time_range', {}).get('fr
 check('link cards are links only', [P[t]['embeddableConfig']['content'] for t in ('SRE dashboard', 'Infra dashboard')], [
     '## 🛡️ [Applications Operations Dashboard ›](https://kibana-prod.gcp.cna.com/app/r/s/b4Jas)',
     '## 🖥️ [Infra Dashboard ›](https://kibana-prod.gcp.cna.com/app/r/s/3A7f1)'])
-spec = json.loads(P['Users impacted']['embeddableConfig']['savedVis']['params']['spec'])
-check('Users impacted demo number', spec['data'][0]['values'][0]['value'], '2,500')
+spec = json.loads(P['User base · ServiceNow']['embeddableConfig']['savedVis']['params']['spec'])   # split on 20 Oct
+check('Users impacted: in progress, no demo number', spec['data'][0]['values'][0]['value'], 'In progress')
 
 print('\n' + ('ALL CHECKS PASSED' if not fails else f'FAILED: {fails}'))
 sys.exit(1 if fails else 0)

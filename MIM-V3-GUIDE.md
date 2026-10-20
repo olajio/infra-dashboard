@@ -15,18 +15,19 @@ MIM V3 answers four questions, in order:
 4. **What else is hit?** The services behind the CI, what they depend on, which services call them and which
    business applications those belong to.
 
-The dashboard has five sections and six controls:
+The dashboard has five sections and six controls. Incident and CI are pinned at the top; Server, Health window,
+Service and Application are the first row of section 3, the only section they affect:
 
 | | What it covers | Time window |
 |---|---|---|
 | **Incident control** (top, first) | Picks the incident to work on. Each option is "number · affected CI" (e.g. *INC100 · kau1s054*); sections 2 and 3 then show that CI, and *Escalate* shows that incident. Lists the active P1 / P2 / P3; type to search. *(all incidents)* clears it. | — |
 | **CI control** (top, second) | Picks a CI directly, when no incident is picked (an incident overrides it). Lists the CIs with P1 / P2 / P3 incidents in the last month, plus every production server that sent server metrics in the last day; type to search. *(no CI selected)* clears it. | — |
-| **Server control** (top, third) | Picks the server the health panels show when neither the incident's CI nor the CI control holds a server (e.g. the CI is an application: read a server name in *Server View* and pick it here). Lists every production server that sent server metrics in the last day; type to search. *(no server selected)* clears it. | — |
-| **Health window** (top, fourth) | The data window of the health panels in section 3: 15 minutes · 30 minutes · 1 hour · 6 hours · 8 hours · **24 hours** (default) · 3 days · 7 days. | — |
-| **Service control** (top) | Picks the service section 3 shows. *(services on this CI)* (the default) uses the production APM services running on the selected CI (the incident's affected CI, else the CI control); or type to pick any production service. | — |
+| **Server control** (section 3, first) | Picks the server the health panels show when neither the incident's CI nor the CI control holds a server (e.g. the CI is an application: read a server name in *Server View* and pick it here). Lists every production server that sent server metrics in the last day; type to search. *(no server selected)* clears it. | — |
+| **Health window** (section 3, second) | The data window of the health panels in section 3: 15 minutes · 30 minutes · 1 hour · 6 hours · 8 hours · **24 hours** (default) · 3 days · 7 days. | — |
+| **Service control** (section 3, third) | Picks the service section 3 shows. *(services on this CI)* (the default) uses the production APM services running on the selected CI (the incident's affected CI, else the CI control); or type to pick any production service. | — |
 | **1 · Major Incident Overview** | All active P1 / P2 / P3 incidents, all CIs | Fixed last month |
 | **2 · Investigate the CI** | The picked incident's affected CI (or the CI picked in the CI control) only, including every CI and application related to it in the CMDB (*Applications related to this CI* and the four related-CI views) | Fixed per panel (shown on the panel); the CMDB panels read the last 5 years |
-| **Application control** (top, sixth) | Picks the business application whose services *Services of the Application* lists. *(all applications)* (the default) lists every service, worst first. | — |
+| **Application control** (section 3, fourth) | Picks the business application whose services *Services of the Application* lists. *(all applications)* (the default) lists every service, worst first. | — |
 | **3 · Application & Service Health, Dependencies** | Every application's health from its services; the services of the picked application; the service(s) from the Service control with their dependencies; then the chosen server's health panels (Middleware, Database, Server, APM Services, Process, Synthetics, Logs) | Fixed last hour; the health panels follow the **Health window** control |
 | **4 · Related dashboards** | Links to the Applications Operations and Infra dashboards | — |
 
@@ -43,8 +44,8 @@ The MIM lead opens MIM V3 and reads the top row from left to right.
 - **Active P1 / P2 / P3** — a donut (transparent background): P1 (red), P2 (amber) and P3 (blue) incidents active now, with the total in
   the middle and each count beside it. P1, P2 and P3 are always listed (0 shown faded), and every priority with an
   active incident gets a visible slice, even one P2 next to hundreds of P3s; the numbers are the real counts.
-- **Users impacted** — a placeholder number (2,500, demo only): *"Real count to be incorporated from
-  ServiceNow and RUM"*.
+- **User base · ServiceNow** and **Real users · RUM** — how many users are affected, from the ServiceNow user base and
+  from real-user monitoring. Both integrations are in progress, so both tiles show *In progress*.
 - **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** — are we resolving within target? The
   average time to resolve the P1, P2 and P3 incidents opened each day, against the dashed target lines (red P1 4 h,
   amber P2 8 h, blue P3 24 h). Incidents still open count with their age so far, so a live P1 shows up on the day it
@@ -320,7 +321,7 @@ so MIM V3 stays open on the bridge.
 | Control | **Server** (third, new 18 Oct) | ✅ | The server for the health panels when neither the incident's CI nor the CI control is a server | Every production (or blank-environment) server that sent CPU metrics in the last day, plus *(no server selected)*. A query variable (`?server`). "Is a server" = a server class in the CMDB (the *Server View* classes) or CPU metrics in the Health window. |
 | Control | **Health window** (fourth, new 18 Oct) | ✅ | The data window of the health panels (section 3) | Fixed list 15 minutes … 7 days, default 24 hours. A query variable (`?health_window`) applied inside each health query (`@timestamp >= NOW() - window`), so Elasticsearch filters on it. |
 | 1 | **Active P1 / P2 / P3** | ✅ | Donut: active P1 (red), P2 (amber) and P3 (blue), total in the middle | Vega chart, transparent, text in Kibana's theme colours (reads in light and dark mode); P1 / P2 / P3 colours match the priority badges in Active Incidents. `servicenow-incidents-*`, active P1 / P2 / P3, one count per incident, same active rule and same fixed panel range (Last 1 month) as Active Incidents. Kibana 9.5 applies a Vega panel's time range to its ES|QL query by itself, so without the fixed range the donut followed the dashboard's time picker. Every non-zero priority gets at least 6 % of the ring (a smaller slice was hidden by the gap between slices). |
-| 1 | **Users impacted** | ⚠️ | Placeholder number (2,500, demo only), "Real count to be incorporated from ServiceNow and RUM" | No user-count data in Elastic yet. |
+| 1 | **User base · ServiceNow** / **Real users · RUM** | ⚠️ | Two tiles, both "In progress" (replaced *Users impacted* and its demo number on 20 Oct) | The ServiceNow user base and RUM integrations are in progress; no user-count data in Elastic yet. |
 | 1 | **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** | ✅ | Average time to resolve per opened day, P1 (red), P2 (amber) and P3 (blue), with dashed target lines; P1 / P2 on the left axis, P3 on the right, both from 0 h | P1 / P2 / P3 opened in the last 30 days, one value per incident: `resolution_time` (ServiceNow's opened → resolved seconds) or resolved_at − opened_at; still open → age so far; canceled left out. Points always drawn. Target lines are a reference-line layer. |
 | 1 | **Open Alerts with No Incident** | ⚠️ | Netcool alerts still open on CIs with no open incident: CI, severity, alert, open for, last seen, times fired, ack, node, class, support group | `.ds-bridge-alerts-netcool-*` (CMDB-enriched `ci.name`) + `servicenow-incidents-*` (any priority, not closed). Open = the alert's latest record is not severity 0 or a resolution. Last 24 hours (alerts and open incidents seen in that window). CI links to the CMDB. **Limit:** alerts carry no incident number, so "no incident" means no open incident on the same CI; an alert whose node is not in the CMDB shows an empty CI and is listed. |
 | 1 | **Active Incidents (P1 / P2 / P3)** | ✅ | Every active P1 / P2 / P3: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id, Short description | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h, P3 24 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |

@@ -110,7 +110,8 @@ A = dash['attributes']
 panels = json.loads(A['panelsJSON'])
 title = lambda p: p['embeddableConfig'].get('title') or (p['embeddableConfig'].get('savedVis') or {}).get('title')
 P = {title(p): p for p in panels}
-CTL = {c['config']['title']: c['config'] for c in A['pinned_panels']['panels'].values()}
+CONTROLS = [c['config'] for c in sorted(A['pinned_panels']['panels'].values(), key=lambda c: c['order'])] + [p['embeddableConfig'] for p in sorted(json.loads(A['panelsJSON']), key=lambda p: (p['gridData']['y'], p['gridData']['x'])) if p['type'] == 'esql_control']   # pinned, then the section 3 row (20 Oct)
+CTL = {c['title']: c for c in CONTROLS}
 fails = []
 
 
@@ -167,7 +168,7 @@ try:
     check('Errors from the Logs: the server\'s errors', [r['text'] for r in run('Errors from the Logs', server='srvA')], ['disk error #'])
     check('Alerts on this CI: the CI\'s own alerts and the chosen server\'s', sorted(r['summary'] for r in run('Alerts on this CI', incident='INC7 · App PROD', server='srvA')),
           ['problem a-app', 'problem a-srvA'])
-    check('controls in order', [c['title'] for c in sorted(CTL.values(), key=lambda c: next(x['order'] for x in A['pinned_panels']['panels'].values() if x['config'] is c))],
+    check('controls in order', [c['title'] for c in CONTROLS],
           ['Incident', 'CI', 'Server', 'Health window', 'Service', 'Application'])
     check('Health window options and default', ([r['health_window'] for r in esql(CTL['Health window']['esql_query'], [])],
                                                CTL['Health window']['selected_options']),

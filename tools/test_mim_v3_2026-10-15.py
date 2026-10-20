@@ -150,11 +150,11 @@ check('low-traffic services are listed, not rated', [(r['service.name'], r['heal
       run('Services of the Application', application='Juno')[0]], [('juno-api', 'Degraded', 2.0),
                                                                     ('juno-tiny-batch', 'Low traffic', 50.0)])
 
-ctrl = next(c for c in A['pinned_panels']['panels'].values() if c['config']['variable_name'] == 'application')
-check('Application control options', [r['application'] for r in esql(ctrl['config']['esql_query'], [])[0]],
+CONTROLS = [c['config'] for c in sorted(A['pinned_panels']['panels'].values(), key=lambda c: c['order'])] + [p['embeddableConfig'] for p in sorted(json.loads(A['panelsJSON']), key=lambda p: (p['gridData']['y'], p['gridData']['x'])) if p['type'] == 'esql_control']   # Server, Health window, Service, Application in section 3 since 20 Oct
+ctrl = next(c for c in CONTROLS if c['variable_name'] == 'application')
+check('Application control options', [r['application'] for r in esql(ctrl['esql_query'], [])[0]],
       [ALL_APPS, 'Automated Claim Transaction', 'Juno', 'Old App', 'Payment Hub', 'Quiet App'])
-check('controls in order', [c['config']['title'] for c in sorted(A['pinned_panels']['panels'].values(),
-                                                                 key=lambda c: c['order'])],
+check('controls in order', [c['title'] for c in CONTROLS],
       ['Incident', 'CI', 'Server', 'Health window', 'Service', 'Application'])   # 18 Oct
 check('sections', [(s['title'], s['collapsed']) for s in A['sections']], [
     ('1 · Major Incident Overview', False), ('2 · Investigate the CI', False),   # views moved into 2 in round h

@@ -189,9 +189,24 @@ All thirteen tests pass on 9.5.3, including the new `tools/test_mim_v3_2026-10-1
 
 All fourteen tests pass, including the new `tools/test_mim_v3_2026-10-18n.py` (layout).
 
+## Fourteenth round: section 3 controls, user-count tiles (20 Oct)
+
+| What changed | Detail |
+|---|---|
+| **Controls** | Server, Health window, Service and Application are now the first row of section 3, the only section they drive. Incident and CI stay pinned at the top. Defaults unchanged |
+| **Users impacted** | Split into **User base · ServiceNow** and **Real users · RUM**, stacked in the same place, both *In progress*. The 2,500 demo number is gone |
+
+Checked on Kibana 9.5.3: a control in section 3 still drives every panel (with Application = *Claim Center*,
+*Services of the Application* listed only its services). All fifteen tests pass, including the new
+`tools/test_mim_v3_2026-10-20o.py`.
+
+![Section 3 controls on Kibana 9.5.3 (local test data; the Server warning is only because it has no CPU data)](mim-v3-section3-controls-953.png)
+
+![User base and RUM tiles on Kibana 9.5.3](mim-v3-user-tiles-953.png)
+
 ## What is left to do on the cluster
 
-### 1. Import the dashboard (needed again: the second and fourth to thirteenth rounds changed it)
+### 1. Import the dashboard (needed again: the second and fourth to fourteenth rounds changed it)
 1. Stack Management → Saved objects → Import `MIM V3.ndjson`, choosing **overwrite**. It replaces the colleague's
    version (same dashboard id) and adds the new **Application** control.
 2. Open the dashboard, then **More → Reset changes** and reload the page, so Kibana drops any unsaved layout it kept

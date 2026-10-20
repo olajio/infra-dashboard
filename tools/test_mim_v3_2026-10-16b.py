@@ -40,7 +40,7 @@ for t in ('Middleware View', 'Database View', 'Server View', 'Other related CIs'
     check(f'{t}: no status anywhere', 'CMDB status' in json.dumps(P[t]) or 'operational status' in ec['description'],
           False)
 
-for t in ('Active P1 / P2 / P3', 'Users impacted'):
+for t in ('Active P1 / P2 / P3', 'User base · ServiceNow', 'Real users · RUM'):   # Users impacted split on 20 Oct
     spec = json.loads(P[t]['embeddableConfig']['savedVis']['params']['spec'])
     marks = spec['marks'] if t == 'Active P1 / P2 / P3' else spec['marks'][0]['marks']
     texts = [m for m in marks if m['type'] == 'text']
@@ -51,7 +51,7 @@ for t in ('Active P1 / P2 / P3', 'Users impacted'):
           ['guide-label', 'guide-label', 'guide-label', 'guide-title'])
 spec = json.loads(P['Active P1 / P2 / P3']['embeddableConfig']['savedVis']['params']['spec'])
 check('donut colours match the priority badges', spec['scales'][0]['range'], ['#d6453d', '#c98a0b', '#3f6fb5'])  # P3 blue added in round d
-check('Users impacted group not filled', 'fill' in json.loads(P['Users impacted']['embeddableConfig']['savedVis']['params']
+check('Users impacted group not filled', 'fill' in json.loads(P['User base · ServiceNow']['embeddableConfig']['savedVis']['params']
                                                                ['spec'])['marks'][0]['encode']['update'], False)
 print('\n' + ('ALL CHECKS PASSED' if not fails else f'FAILED: {fails}'))
 sys.exit(1 if fails else 0)

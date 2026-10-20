@@ -25,7 +25,8 @@ def check(name, got, want):
 
 def section(n):
     return [(title(p), p['gridData']['x'], p['gridData']['w']) for p in
-            sorted(panels, key=lambda p: (p['gridData']['y'], p['gridData']['x'])) if sec[p['gridData']['sectionId']].startswith(n)]
+            sorted(panels, key=lambda p: (p['gridData']['y'], p['gridData']['x'])) if sec[p['gridData']['sectionId']].startswith(n)
+            and p['type'] != 'esql_control']   # the section 3 control row (20 Oct) is checked by -20o
 
 
 check('section 3 order and widths', section('3 ·'), [
