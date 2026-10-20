@@ -34,12 +34,13 @@ check('section 3 order and widths', section('3 ·'), [
     ('⬅ Upstream — what they depend on', 0, 16), ('Service health', 16, 14), ('Downstream — who is impacted ➡', 30, 18),
     ('Middleware Health', 0, 16), ('Database Health', 16, 16), ('Server Health', 32, 16),
     ('APM Services Health', 0, 16), ('Process Health', 16, 16), ('Synthetics Health', 32, 16),
-    ('Errors from the Logs', 0, 48), ('Business applications impacted', 0, 48)])
+    ('Errors from the Logs', 0, 48)])   # Business applications impacted removed on 20 Oct
 s2 = section('2 ·')
 check('section 2 keeps none of the moved panels', [t for t, *_ in s2 if t in (
     'Middleware Health', 'Database Health', 'Server Health', 'APM Services Health', 'Process Health', 'Synthetics Health',
     'Errors from the Logs')], [])
-check('SLO Error Burn Rate ends section 2, full width', s2[-1], ('SLO Error Burn Rate', 0, 48))
+check('section 2 ends with the related-CI views (SLO Error Burn Rate removed on 20 Oct)', [t for t, *_ in s2[-2:]],
+      ['Server View', 'Other related CIs'])
 check('old name gone everywhere', 'Applications on this CI' in json.dumps(panels), False)
 check('no two panels overlap', [
     (title(a), title(b)) for i, a in enumerate(panels) for b in panels[i + 1:]

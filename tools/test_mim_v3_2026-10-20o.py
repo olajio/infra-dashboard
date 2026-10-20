@@ -53,5 +53,8 @@ check('no panel outside section 3 uses a section 3 control (they load only when 
       [title(p) for p in panels if p['type'] != 'esql_control' and not sec[p['gridData']['sectionId']].startswith('3 ·')
        and any(v in json.dumps(p['embeddableConfig']) for v in S3_VARS)], [])
 
+check('SLO Error Burn Rate and Business applications impacted removed (20q)',
+      [t for t in ('SLO Error Burn Rate', 'Business applications impacted') if t in [title(p) for p in panels]], [])
+
 print('\n' + ('ALL CHECKS PASSED' if not fails else f'FAILED: {fails}'))
 sys.exit(1 if fails else 0)

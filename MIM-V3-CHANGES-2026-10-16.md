@@ -217,6 +217,15 @@ read the Server control ran before that control existed.
 - A new test fails if any panel outside section 3 uses a section 3 control (Server, Health window, Service,
   Application).
 
+## Sixteenth round: two panels removed (20 Oct)
+
+| Panel | Why |
+|---|---|
+| **SLO Error Burn Rate** (end of section 2) | Removed at your request |
+| **Business applications impacted** (end of section 3) | Empty for almost every incident: it needs APM services on the CI that other instrumented services call over HTTP in the last hour. *Downstream* already shows each calling service with its business application and support group |
+
+All fifteen tests pass.
+
 ## What is left to do on the cluster
 
 ### 1. Import the dashboard (needed again: the second and fourth to fourteenth rounds changed it)

@@ -38,7 +38,7 @@ the same class.
 
 **What Round 13 shows about today's incidents:**
 - **No active incident's CI runs APM services** (`with_apm` = 0 everywhere). So, picked through an incident,
-  *Upstream*, *Service health*, *Downstream* and *Business applications impacted* stay empty. Use TC-11
+  *Upstream*, *Service health* and *Downstream* stay empty. Use TC-11
   (vslrau1p220) or TC-17 to demo them.
 - **Most incidents are on application services** (Mapped, Calculated, Tag-based, Service Instance: about 300 of 529).
   So TC-04 / TC-05 is the everyday case.
@@ -67,18 +67,18 @@ the same class.
 | **TC-12** | CI with no active incident | CI control = a production server with no open incident (type any server name) | *Escalate* still shows **one row with the CI's owners**; health panels fill for the server |
 | **TC-13** | The incident wins over the CI control | Incident = TC-01; CI = any other CI | Every panel follows the incident's CI, not the CI control |
 | **TC-14** | Server precedence | (a) CI = a server X, Server = server Y. (b) CI = an application service, Server = server Y | (a) The health panels show **X**: a server in the CI control wins. (b) They show **Y** |
-| **TC-15** | Server control alone | Incident and CI empty; Server = any server | The health panels show the server. Section 2 is empty (no CI), except *SLO Error Burn Rate*. *Application Health* lists every production application |
+| **TC-15** | Server control alone | Incident and CI empty; Server = any server | The health panels show the server. Section 2 is empty (no CI). *Application Health* lists every production application |
 | **TC-16** | Health window | TC-01, then *15 minutes*, then *7 days* | 15 minutes: CPU and memory reflect *now*; fewer log errors. 7 days: more log groups and older first-seen times; **the first load can take up to a minute** |
-| **TC-17** | One service, with callers | Service control = a busy API service (high *Per minute* in *Services of the Application*) | *Upstream*, *Service health* and *Downstream* follow that service. If other services call it over HTTP, *Downstream* and *Business applications impacted* fill |
+| **TC-17** | One service, with callers | Service control = a busy API service (high *Per minute* in *Services of the Application*) | *Upstream*, *Service health* and *Downstream* follow that service. If other services call it over HTTP, *Downstream* fills |
 | **TC-18** | Application control | *(all applications)*, then one application | *Services of the Application* lists every production service, then only that application's services, worst first |
-| **TC-19** | Nothing selected | Reset changes | Section 1 fills; section 2 is empty except *SLO Error Burn Rate*; *Application Health* lists every production application; the health panels stay empty |
+| **TC-19** | Nothing selected | Reset changes | Section 1 fills; section 2 is empty; *Application Health* lists every production application; the health panels stay empty |
 
 ## C. Behaviour and navigation
 
 | ID | Scenario | Do | Expected |
 |---|---|---|---|
 | **TC-20** | Links | Click: an incident and a CI in *Active Incidents* / *Escalate*; an application in *Application Health*; a service in *Services of the Application*; the related dashboards | ServiceNow (incident, CI), ServiceNow CMDB (application), APM Service Map (service), and the Applications Operations / Infra dashboards open in a new tab |
-| **TC-21** | Time picker has no effect | Change the time picker from 24 hours to 7 days | Nothing changes: every panel has a fixed range or uses the Health window. *SLO Error Burn Rate* is the one to watch: it has no fixed range |
+| **TC-21** | Time picker has no effect | Change the time picker from 24 hours to 7 days | Nothing changes: every panel has a fixed range or uses the Health window |
 | **TC-22** | Selections are not saved | Pick an incident, reload the page without saving | The dashboard opens on the saved defaults. **More → Reset changes** also clears the selection |
 | **TC-23** | Auto-refresh | Leave TC-01 open for 5 minutes | Panels refresh by themselves (*Min. ago* and *Last data* values change) |
 | **TC-24** | Other CI classes (mainframe LPAR, infrastructure service, batch job, cloud database) | Open an incident on such a CI (see the values table) | *Escalate* and the CMDB panels fill; the health panels stay empty, as these CIs send no server data |

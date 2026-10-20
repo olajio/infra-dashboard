@@ -71,7 +71,6 @@ and 3.9 are the health panels, in section 3 after the Upstream / Service health 
 | 3.5 | **Process Health** | Windows services that are **Stopped** (set to Automatic but not running), processes **Not seen** | Problems first, healthy middleware below | ☐ |
 | 3.6 | **Errors from the Logs** | Critical / error messages whose **First seen** is close to the incident's opened time | Warning-and-worse lines grouped by message, critical and error first | ☐ |
 | 3.7 | **Synthetics Health** | Monitors **Down** now, or with down checks in the Health window | Ping / HTTP monitors that target this CI. Empty is normal for many CIs | ☐ |
-| 3.8 | **SLO Error Burn Rate** | ★ rows (this CI's own SLOs) burning at **14.4× or more** ("page now") | This CI's SLOs first, then every SLO burning 1× or more | ☐ |
 | 3.9 | **APM Services Health** | Which APM services run on this server, and whether they still send data (*Last data*) | APM services seen on the chosen server in the Health window | ☐ |
 
 **Write down the evidence** in the test record: the alert, change, component or log message that best explains the
@@ -106,8 +105,7 @@ Most useful when the CI runs APM-instrumented services. Leave the Service contro
 |---|---|---|---|---|
 | 5.1 | **Service health** | Red tiles: 10 % or more failed transactions in the last hour. Amber from 1 % | One tile per production service on this CI. Click a tile to open its APM Service Map | ☐ |
 | 5.2 | **⬅ Upstream — what they depend on** | A **red bar**: calls to a database, queue or other service that are failing. This points at the cause | Top 15 dependencies, failing first | ☐ |
-| 5.3 | **Downstream — who is impacted ➡** | Calling services with failing calls: the impacted side | Top 15 callers, failing first. Click one to open its Service Map | ☐ |
-| 5.4 | **Business applications impacted** | The business applications of those callers, worst first, with their support group | Click one to open it in ServiceNow | ☐ |
+| 5.3 | **Downstream — who is impacted ➡** | Calling services with failing calls: the impacted side, with each caller's business application and support group | Top 15 callers, failing first. Click one to open its Service Map | ☐ |
 | 5.5 | **Application Health**, then pick the worst application in the **Application** control | Which of the applications related to the incident's CI are Failing / Degraded right now (last hour); all of production when no CI is selected. **Services of the Application** then lists that application's services, worst first. The **Servers** column (in both tables) names the servers they run on: type one into the **Server** control to check its health in section 2 | "Low traffic" services (under 20 transactions in the hour) are listed but not rated | ☐ |
 
 To follow one service, pick it in the **Service** control. The four panels above then show that service instead of
