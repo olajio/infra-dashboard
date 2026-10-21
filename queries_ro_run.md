@@ -1706,3 +1706,16 @@ GET /_query/async/<id from the answer above>?format=txt
 
 DELETE /_query/async/<id>
 ```
+
+### Round 14 results (21 Oct)
+
+| Query | Result |
+|---|---|
+| CA | 154 incidents without a CI; no incident CI with APM services; candidates for every case except a network device (a UPS, cumtri1, is the nearest) |
+| CB-1 Automated Claim Transaction PROD | In the Server list: vslrau1p276 (1 APM service), vslrau1p174, vcwau1p0132. Not in it: CNA1BSYS, AIX / HP-UX servers, Tomcat instances |
+| CB-2 MSSQLSERVER@kau1p522 | Runs on kau1p522, which sends no metrics: not in the Server list |
+| CB-3 Enterprise PolicyCenter PROD | 18 servers in the Server list; vrau1pap0041 / 0042 run 2 APM services each |
+| CC | 20 production servers with APM and no incident, e.g. vslrau1p219 (agencyfeedfoundation, gslrating), vslrau1p229 (fmrsmartapp, smartapp), vslrau1p457 (dmf) |
+| CD | Busiest services: RAPID 10.4 k/min, rst-data 8.5 k, identityiq 6.4 k, abp-web 4.4 k, juno-data-api 4.3 k, dmf 3.7 k |
+
+The picks for each test case are in *MIM-V3-TEST-CASES.md*, "Values to use (Round 14, 21 Oct)".

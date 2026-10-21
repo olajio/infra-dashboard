@@ -12,41 +12,42 @@ class, with up to 3 examples per class. Each example is tagged:
 **Defaults unless a case says otherwise:** Health window *24 hours*, Service *(services on this CI)*, Application
 *(all applications)*, CI and Server controls empty. Use **More → Reset changes** between cases.
 
-> **Refreshing the values:** run **Round 14** in `queries_ro_run.md` (CA, CB, CC, CD) and share `round14.txt`;
-> the table below is then updated with today's picks.
+> **Refreshing the values:** incidents close quickly. Re-run **Round 14** in `queries_ro_run.md` (CA, then CB for
+> the CIs it suggests, CC, CD) before a test session if these no longer appear in the controls.
 
-## Values to use (Round 13, 20 Oct)
+## Values to use (Round 14, 21 Oct)
 
-Incidents change: if one is no longer listed in the Incident control, take another example from `round13.txt` for
-the same class.
-
-| Case | Pick | Why this one |
+| Case | Incident / CI / controls | What to expect from this pick |
 |---|---|---|
-| TC-02 | Incident **INC2665383 · vskau1p945** | Windows server with metrics; Round 12 also found a database, Windows services and a change on it, so *Database Health*, *Process Health* and *Changes* fill too |
-| TC-03 | Incident **INC2675141 · sau1h670** | AIX server, no server metrics; has MQ processes, a change and a ping monitor |
-| TC-04 | Incident **INC2658097 · Claim Center PROD** | Mapped application service with a large CMDB footprint (about 160 linked servers) |
-| TC-05 | TC-04, then Server = a server from *Server View* that is also in the Server control's list (e.g. `vclau1p0236`) | Only servers that send metrics are in the Server list; type to check |
-| TC-06 | Incident **INC2673785 · CNA Central** | The only business application with an active incident. *Application Health* shows it only if its APM services carry that exact name |
-| TC-07 | Incident **INC2670699 · MSSQLSERVER@kau1p522**, then Server = `kau1p522` | SQL Server instance; its server's name is in the CI name. Also: *agenp@sau1h688* (Oracle), *conjur-port-@vslrau1p254* (PostgreSQL) |
-| TC-08 | **No candidate today**: no network device has an active incident | Re-run BZ later. The CI control can't help: it only lists CIs with an incident in the last 31 days, plus servers |
-| TC-09 | Incident **INC2657347 · (no CI)** | One of 154 active incidents without a CI |
-| TC-10 | Incident **INC2667298 · CNA Canada Insurance System DRE**; then **INC2670363 · vkau1rdb0003** | A DR application service; then a DR Windows server with metrics. The server's health still shows, although the Server list leaves out non-production servers |
-| TC-11 | CI = `vslrau1p220` | TC-01's server. Its incident INC2676403 is no longer active, so this is now the way to repeat TC-01 |
-| TC-12 | CI = `vslrau1p276` (or any server with no open incident) | *Escalate* should still show its owners |
-| TC-13 | Incident INC2665383; CI = `Claim Center PROD` | The incident's server (vskau1p945) must win |
-| TC-14 | (a) CI = `vskau1p945`, Server = `vslrau1p276` → health panels show vskau1p945. (b) CI = `Claim Center PROD`, Server = `vslrau1p276` → they show vslrau1p276 | |
-| TC-15 | Server = `vslrau1p220` | Health panels without any incident or CI |
-| TC-17 | Service = `fmrsmartapp` (busiest service in TC-01) or any high-traffic API service | |
-| TC-24 | Optional, other CI classes: **INC2676850 · CNA1BSYS** (mainframe LPAR), **INC2665397 · RightFax** (infrastructure service), **INC2674755 · PRINT OPEN SYSTEMS DAILY JOB LOG** (batch job), **INC2668705 · pubsub_data_view** (cloud database) | Expect the CMDB panels and *Escalate* only; no health data |
+| **TC-02** | Incident **INC2675314 · vkau1pdb0016** (Windows) | *Server*, *Database* and *Process Health* fill (metrics, database, Windows services). Variant: **INC2677387 · vslrau1p061**, a Linux server on a **P2**, running IBM HTTP Server (*Middleware Health*) |
+| **TC-03** | Incident **INC2675141 · sau1h670** (AIX) | *Server Health*: one row, "No data in window". MQ processes, a database and a change on it |
+| **TC-04** | Incident **INC2667546 · Automated Claim Transaction PROD** | Section 2 fills from the CMDB (19 incidents on this CI, 1 change). Health panels empty |
+| **TC-05** | TC-04, then Server = **vslrau1p276** | The health panels show vslrau1p276, including its APM service in *APM Services Health*. Also in the list: vslrau1p174, vcwau1p0132 (Windows). Backup: **INC2670700 · Enterprise PolicyCenter PROD** with Server = **vrau1pap0041** (2 APM services) |
+| **TC-06** | Incident **INC2673785 · CNA Central** | The only business application with an incident. Pick it in the Application control |
+| **TC-07** | Incident **INC2670699 · MSSQLSERVER@kau1p522** | *Server View* names **kau1p522**, but it sends no server metrics, so it is **not in the Server list**: the health panels stay empty. That's a documented limit worth showing. Variant: **INC2676747 · MSSQLSERVER@vkau1pdb0015**; type `vkau1pdb0015` in the Server control to see if it is listed |
+| **TC-08** | No network device has an incident. Nearest: **INC2677522 · cumtri1** (a UPS) | *Alerts on this CI* shows its Netcool alert; health panels empty |
+| **TC-09** | Incident **INC2677314** (P2, no CI) | Only *Escalate* fills |
+| **TC-10** | Incident **INC2667298 · CNA Canada Insurance System DRE** (5 changes); then **INC2676782 · lrch1d54** (DR server with metrics) | The CI's panels show; its non-production relationships are hidden. lrch1d54's health panels still fill |
+| **TC-11** | CI = **vslrau1p220** (TC-01's server) | Repeats TC-01 through the CI control |
+| **TC-12** | CI = **vslrau1p219** (APM: agencyfeedfoundation, gslrating; no incident in 31 days) | *Escalate* shows one row with the owners. Section 3 fills, as in TC-01 |
+| **TC-13** | Incident **INC2675314 · vkau1pdb0016**, CI = **Automated Claim Transaction PROD** | Every panel follows vkau1pdb0016, the incident's CI |
+| **TC-14** | (a) CI = **vkau1pdb0016**, Server = **vslrau1p229**. (b) CI = **Automated Claim Transaction PROD**, Server = **vslrau1p229** | (a) The health panels show vkau1pdb0016: a server in the CI control wins. (b) They show vslrau1p229 |
+| **TC-15** | Server = **vslrau1p229** (APM: fmrsmartapp, smartapp) | The health panels fill without an incident or CI |
+| **TC-16** | TC-12, then Health window 15 minutes, then 7 days | 7 days: more log groups; the first load can take up to a minute |
+| **TC-17** | Service = **juno-data-api** (4,300 calls / min) or **eds-data-api** | *Upstream*, *Service health* and *Downstream* follow it. A shared data API is the most likely to have callers. For pure volume: **RAPID** (10,400 / min) |
+| **TC-18** | Application = **Juno**, then **Agency Bill Pay** | *Services of the Application* lists only that application's services |
+| **TC-24** | **INC2677246 · CNA1ASYS** (mainframe LPAR, 4 changes), **INC2677297 · Citrix** (infrastructure service), **INC2674755 · PRINT OPEN SYSTEMS DAILY JOB LOG** (batch job), **INC2677435 · m10w3l2gm0a30bm** ("Computer") | *Escalate* and the CMDB panels only |
 
-**What Round 13 shows about today's incidents:**
-- **No active incident's CI runs APM services** (`with_apm` = 0 everywhere). So, picked through an incident,
-  *Upstream*, *Service health* and *Downstream* stay empty. Use TC-11
-  (vslrau1p220) or TC-17 to demo them.
-- **Most incidents are on application services** (Mapped, Calculated, Tag-based, Service Instance: about 300 of 529).
-  So TC-04 / TC-05 is the everyday case.
-- **154 active incidents (29 %) have no CI.** The dashboard can't investigate those until the CI is filled in
-  ServiceNow, a data-quality point for the team.
+**What Round 14 shows (21 Oct):**
+- **No active incident's CI runs APM services** (CA). The section 3 dependency panels are shown through TC-11,
+  TC-12, TC-15 and TC-17.
+- **An application service's servers are found through the CMDB:**
+  - Automated Claim Transaction PROD runs on 3 servers in the Server list;
+  - Enterprise PolicyCenter PROD runs on 18.
+- **Some servers send no metrics** (e.g. kau1p522 and the AIX servers), so they can't be picked in the Server
+  control.
+- **Database metrics are recorded against the SQL instance's name** (MSSQLSERVER@…), not the server's, so
+  *Database Health* for a picked server may show only its SQL Server Windows service.
 
 ## A. The incident's CI is not a server with APM
 
