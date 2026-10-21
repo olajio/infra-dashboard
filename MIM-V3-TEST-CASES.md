@@ -12,6 +12,9 @@ class, with up to 3 examples per class. Each example is tagged:
 **Defaults unless a case says otherwise:** Health window *24 hours*, Service *(services on this CI)*, Application
 *(all applications)*, CI and Server controls empty. Use **More → Reset changes** between cases.
 
+> **Refreshing the values:** run **Round 14** in `queries_ro_run.md` (CA, CB, CC, CD) and share `round14.txt`;
+> the table below is then updated with today's picks.
+
 ## Values to use (Round 13, 20 Oct)
 
 Incidents change: if one is no longer listed in the Incident control, take another example from `round13.txt` for

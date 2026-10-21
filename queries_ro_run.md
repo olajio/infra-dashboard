@@ -1405,3 +1405,184 @@ DELETE /_query/async/<id>
 | TC-01 | INC2676403 is no longer active; repeat TC-01 through the CI control (`vslrau1p220`) |
 
 The picks for each test case are in *MIM-V3-TEST-CASES.md*, "Values to use".
+
+## Round 14 — current state, to pick the values for TC-02 to TC-24 (21 Oct 2026)
+
+All in **Dev Tools Console**. For each one:
+1. Run the `POST` block. It answers with an `"id"`.
+2. Run the `GET` line with that id until the table appears.
+3. Run the `DELETE` line.
+
+Paste every table into `round14.txt`, with the query name (CA, CB …) above each one.
+
+| Query | Run | Feeds |
+|---|---|---|
+| **CA** | Once (**the main one**) | Every case that starts from an incident: TC-02 to TC-10, TC-13, TC-24 |
+| **CB** | Twice: for the application service and the database instance CA suggests (see below) | TC-05, TC-07, TC-14: which of its linked servers are in the Server control's list |
+| **CC** | Once | TC-12 and TC-15: production servers with metrics and no incident in the last 31 days |
+| **CD** | Once | TC-17: the busiest production services, for the Service control |
+
+### CA. Every active incident's CI and what data it has now
+
+One row per CI with an active P1–P3 incident opened in the last 31 days, grouped by CI class:
+
+| Column | What it means |
+|---|---|
+| `incident` | The incident to pick (`n_incidents` if the CI has several) |
+| `env` | Its environment |
+| `metrics` | It sends server metrics (last 15 min) |
+| `apm` / `services` | How many production APM services run on it, and their names |
+| `middleware` | Middleware processes on it |
+| `db` | Database metrics or database services on it |
+| `win` | Windows services on it |
+| `alerts` | Netcool alerts on it, last 7 days |
+| `changes` | Changes on it, last 7 days |
+| `score` | How much of the dashboard it should fill |
+
+The table can be long (one row per CI); paste all of it.
+
+```
+POST /_query/async?format=json
+{ "query": """
+FROM servicenow-incidents-*, .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.process-*, metrics-windows.service-*, metricbeat-*, .ds-bridge-alerts-netcool-default-*, servicenow-change-requests-* METADATA _index
+| WHERE (_index LIKE "*servicenow-incidents*" AND opened_at >= NOW() - 31 days)
+     OR (_index LIKE "*change-request*" AND (end_at >= NOW() - 7 days OR start_date >= NOW() - 7 days))
+     OR (_index LIKE "*netcool*" AND @timestamp >= NOW() - 7 days)
+     OR (@timestamp >= NOW() - 15 minutes AND (_index LIKE "*system.cpu*" OR _index LIKE "*apm.internal*"
+         OR _index LIKE "*system.process*" OR _index LIKE "*windows.service*" OR _index LIKE "*metricbeat*"))
+| EVAL src = CASE(_index LIKE "*servicenow-incidents*", "inc", _index LIKE "*change-request*", "chg", _index LIKE "*netcool*", "alert",
+                  _index LIKE "*system.cpu*", "cpu", _index LIKE "*apm.internal*", "apm", _index LIKE "*system.process*", "proc",
+                  _index LIKE "*windows.service*", "win", "sql")
+| EVAL key = COALESCE(TO_LOWER(CASE(src == "apm", TO_STRING(host.name), TO_STRING(ci.name))), CONCAT("(no CI) ", TO_STRING(number)))
+| WHERE LENGTH(key) > 0
+| EVAL pri = CASE(src == "inc", TO_INTEGER(priority)), wname = TO_LOWER(TO_STRING(windows.service.name))
+| EVAL incident = CASE(src == "inc" AND pri IN (1, 2, 3) AND NOT TO_STRING(state_name) IN ("Resolved", "Closed", "Canceled", "Cancelled"),
+                       CONCAT(TO_STRING(number), " · P", TO_STRING(pri))),
+       cls = CASE(src == "inc", TO_STRING(ci.class_name)), env = CASE(src == "inc", TO_LOWER(TO_STRING(ci.environment))),
+       inc_ci = CASE(src == "inc", TO_STRING(ci.name)),
+       service = CASE(src == "apm" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"),
+                      TO_STRING(service.name)),
+       mw = CASE(src == "proc", TO_STRING(paladin.enrichment.computed.proc_type)),
+       db = CASE(src == "sql", 1, src == "win" AND (wname LIKE "*sql*" OR wname LIKE "*oracle*" OR wname LIKE "*db2*"
+                 OR wname LIKE "*postgres*" OR wname LIKE "*mysql*" OR wname LIKE "*mongo*" OR wname LIKE "*sybase*"), 1, 0),
+       alert = CASE(src == "alert", TO_STRING(netcool.identifier)), chg = CASE(src == "chg", TO_STRING(number))
+| STATS incidents = VALUES(incident), classes = VALUES(cls), envs = VALUES(env), names = VALUES(inc_ci),
+        metrics = MAX(CASE(src == "cpu", 1, 0)), services = VALUES(service), middleware = VALUES(mw), db = MAX(db),
+        win = MAX(CASE(src == "win", 1, 0)), alerts = COUNT_DISTINCT(alert), changes = COUNT_DISTINCT(chg)
+  BY key
+| WHERE incidents IS NOT NULL
+| EVAL class = COALESCE(MV_FIRST(classes), CASE(names IS NULL, "(no CI)", "(no class)")),
+       env = COALESCE(MV_FIRST(envs), "—"), ci = COALESCE(MV_FIRST(names), "(no CI)"),
+       n_incidents = MV_COUNT(incidents), incident = MV_FIRST(MV_SORT(incidents)),
+       apm = COALESCE(MV_COUNT(services), 0), services = MV_CONCAT(MV_SLICE(MV_SORT(services), 0, 1), ", "),
+       middleware = MV_CONCAT(MV_SLICE(MV_SORT(middleware), 0, 1), ", ")
+| EVAL score = metrics + CASE(apm > 0, 5, 0) + CASE(middleware IS NOT NULL, 1, 0) + db + CASE(win == 1 OR middleware IS NOT NULL, 1, 0)
+             + CASE(alerts > 0, 1, 0) + CASE(changes > 0, 1, 0)
+| SORT class ASC, score DESC, ci ASC
+| KEEP class, ci, incident, n_incidents, env, score, metrics, apm, services, middleware, db, win, alerts, changes
+| LIMIT 1000
+""",
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
+
+### CB. The servers linked to one CI in the CMDB, and which are in the Server list
+
+Run it for the best *application service* in CA (TC-05, TC-14), then for the best *database instance* (TC-07). Put
+the CI exactly as CA shows it in `"ci"`. `in_server_list` = yes means the server sends metrics and is production,
+so you can pick it in the Server control.
+
+```
+POST /_query/async?format=json
+{ "query": """
+FROM cmdb-ci-relations*, .ds-metrics-system.cpu-default*, metrics-apm.internal-* METADATA _index
+| WHERE parent.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci)) OR child.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci))
+     OR (@timestamp >= NOW() - 15 minutes AND NOT _index LIKE "*relations*")
+| EVAL src = CASE(_index LIKE "*relations*", "rel", _index LIKE "*apm.internal*", "apm", "cpu"),
+       me = TO_LOWER(?ci), p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
+| EVAL other = CASE(src == "rel" AND p == me, TO_STRING(child.name), src == "rel" AND c == me, TO_STRING(parent.name)),
+       cls = CASE(src == "rel" AND p == me, TO_STRING(child.class), src == "rel" AND c == me, TO_STRING(parent.class)),
+       rel = CASE(src == "rel", TO_STRING(type.name))
+| EVAL key = TO_LOWER(CASE(src == "rel", other, src == "apm", TO_STRING(host.name), TO_STRING(ci.name)))
+| WHERE LENGTH(key) > 0
+| STATS linked = MAX(CASE(src == "rel", 1, 0)), names = VALUES(other), classes = VALUES(cls), rels = VALUES(rel),
+        metrics = MAX(CASE(src == "cpu", 1, 0)), envs = VALUES(CASE(src == "cpu", TO_LOWER(TO_STRING(ci.environment)))),
+        apm = COUNT_DISTINCT(CASE(src == "apm", TO_STRING(service.name)))
+  BY key
+| WHERE linked == 1
+| EVAL class = MV_FIRST(classes), env = MV_FIRST(envs)
+| WHERE metrics == 1 OR TO_LOWER(class) LIKE "*server*" OR TO_LOWER(class) LIKE "*lpar*"
+| EVAL in_server_list = CASE(metrics == 1 AND (env IS NULL OR env IN ("", "null") OR env LIKE "prod*" OR env LIKE "prd*"), "yes", "no"),
+       server = MV_FIRST(names), relationship = MV_CONCAT(MV_SLICE(rels, 0, 1), ", ")
+| SORT in_server_list DESC, apm DESC, server ASC
+| KEEP server, class, relationship, in_server_list, metrics, apm, env
+| LIMIT 100
+""",
+  "params": [{"ci": "<CI from CA>"}],
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
+
+### CC. Production servers with metrics and no recent incident
+
+For TC-12 (a CI with no active incident) and TC-15 (the Server control on its own). Servers with APM services are
+listed first: they fill more of section 3.
+
+```
+POST /_query/async?format=json
+{ "query": """
+FROM .ds-metrics-system.cpu-default*, metrics-apm.internal-*, servicenow-incidents-* METADATA _index
+| WHERE (@timestamp >= NOW() - 15 minutes AND NOT _index LIKE "*servicenow*")
+     OR (_index LIKE "*servicenow-incidents*" AND opened_at >= NOW() - 31 days)
+| EVAL src = CASE(_index LIKE "*servicenow*", "inc", _index LIKE "*apm.internal*", "apm", "cpu")
+| EVAL key = TO_LOWER(CASE(src == "apm", TO_STRING(host.name), TO_STRING(ci.name)))
+| WHERE LENGTH(key) > 0
+| STATS metrics = MAX(CASE(src == "cpu", 1, 0)), incidents = MAX(CASE(src == "inc", 1, 0)),
+        envs = VALUES(CASE(src == "cpu", TO_LOWER(TO_STRING(ci.environment)))),
+        services = VALUES(CASE(src == "apm" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"), TO_STRING(service.name)))
+  BY key
+| EVAL env = MV_FIRST(envs), apm = COALESCE(MV_COUNT(services), 0)
+| WHERE metrics == 1 AND incidents == 0 AND (env IS NULL OR env IN ("", "null") OR env LIKE "prod*" OR env LIKE "prd*")
+| EVAL services = MV_CONCAT(MV_SLICE(MV_SORT(services), 0, 2), ", ")
+| SORT apm DESC, key ASC
+| KEEP key, apm, services, env
+| LIMIT 20
+""",
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
+
+### CD. The busiest production services in the last hour
+
+For TC-17: the Service control on its own. A busy shared API is the most likely to have callers in *Downstream*.
+
+```
+POST /_query/async?format=json
+{ "query": """
+FROM metrics-apm.service_transaction.1m-*
+| WHERE @timestamp >= NOW() - 1 hour AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production")
+| STATS calls = COUNT(transaction.duration.summary), apps = VALUES(TO_STRING(ci.name)) BY service.name
+| EVAL per_min = ROUND(calls / 60.0, 1), app = MV_FIRST(apps)
+| SORT calls DESC
+| KEEP service.name, app, per_min, calls
+| LIMIT 20
+""",
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
