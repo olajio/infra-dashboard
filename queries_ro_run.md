@@ -1586,3 +1586,123 @@ GET /_query/async/<id from the answer above>?format=txt
 
 DELETE /_query/async/<id>
 ```
+
+### Round 14 — CA results and the CB runs to do next (21 Oct)
+
+**From CA:**
+- **No active incident's CI runs APM services**, the same as on 20 Oct.
+- **Linux and Windows servers with metrics** cover TC-02.
+- **Application services** (Mapped, Calculated, Tag-based) cover TC-04 / TC-05.
+- **MSSQLSERVER@kau1p522** covers TC-07.
+- **There is still no network device;** the UPS *cumtri1*, with a Netcool alert, is the nearest thing for TC-08.
+
+Run these three CB queries, then **CC** and **CD** as written above (they need no values). Paste everything into
+`round14.txt` under `#CB-1`, `#CB-2`, `#CB-3`, `#CC` and `#CD`.
+
+**CB-1. Automated Claim Transaction PROD** (TC-04, TC-05, TC-14b: its servers in the Server list)
+```
+POST /_query/async?format=json
+{ "query": """
+FROM cmdb-ci-relations*, .ds-metrics-system.cpu-default*, metrics-apm.internal-* METADATA _index
+| WHERE parent.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci)) OR child.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci))
+     OR (@timestamp >= NOW() - 15 minutes AND NOT _index LIKE "*relations*")
+| EVAL src = CASE(_index LIKE "*relations*", "rel", _index LIKE "*apm.internal*", "apm", "cpu"),
+       me = TO_LOWER(?ci), p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
+| EVAL other = CASE(src == "rel" AND p == me, TO_STRING(child.name), src == "rel" AND c == me, TO_STRING(parent.name)),
+       cls = CASE(src == "rel" AND p == me, TO_STRING(child.class), src == "rel" AND c == me, TO_STRING(parent.class)),
+       rel = CASE(src == "rel", TO_STRING(type.name))
+| EVAL key = TO_LOWER(CASE(src == "rel", other, src == "apm", TO_STRING(host.name), TO_STRING(ci.name)))
+| WHERE LENGTH(key) > 0
+| STATS linked = MAX(CASE(src == "rel", 1, 0)), names = VALUES(other), classes = VALUES(cls), rels = VALUES(rel),
+        metrics = MAX(CASE(src == "cpu", 1, 0)), envs = VALUES(CASE(src == "cpu", TO_LOWER(TO_STRING(ci.environment)))),
+        apm = COUNT_DISTINCT(CASE(src == "apm", TO_STRING(service.name)))
+  BY key
+| WHERE linked == 1
+| EVAL class = MV_FIRST(classes), env = MV_FIRST(envs)
+| WHERE metrics == 1 OR TO_LOWER(class) LIKE "*server*" OR TO_LOWER(class) LIKE "*lpar*"
+| EVAL in_server_list = CASE(metrics == 1 AND (env IS NULL OR env IN ("", "null") OR env LIKE "prod*" OR env LIKE "prd*"), "yes", "no"),
+       server = MV_FIRST(names), relationship = MV_CONCAT(MV_SLICE(rels, 0, 1), ", ")
+| SORT in_server_list DESC, apm DESC, server ASC
+| KEEP server, class, relationship, in_server_list, metrics, apm, env
+| LIMIT 100
+""",
+  "params": [{"ci": "Automated Claim Transaction PROD"}],
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
+
+**CB-2. MSSQLSERVER@kau1p522** (TC-07: the server the SQL instance runs on)
+```
+POST /_query/async?format=json
+{ "query": """
+FROM cmdb-ci-relations*, .ds-metrics-system.cpu-default*, metrics-apm.internal-* METADATA _index
+| WHERE parent.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci)) OR child.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci))
+     OR (@timestamp >= NOW() - 15 minutes AND NOT _index LIKE "*relations*")
+| EVAL src = CASE(_index LIKE "*relations*", "rel", _index LIKE "*apm.internal*", "apm", "cpu"),
+       me = TO_LOWER(?ci), p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
+| EVAL other = CASE(src == "rel" AND p == me, TO_STRING(child.name), src == "rel" AND c == me, TO_STRING(parent.name)),
+       cls = CASE(src == "rel" AND p == me, TO_STRING(child.class), src == "rel" AND c == me, TO_STRING(parent.class)),
+       rel = CASE(src == "rel", TO_STRING(type.name))
+| EVAL key = TO_LOWER(CASE(src == "rel", other, src == "apm", TO_STRING(host.name), TO_STRING(ci.name)))
+| WHERE LENGTH(key) > 0
+| STATS linked = MAX(CASE(src == "rel", 1, 0)), names = VALUES(other), classes = VALUES(cls), rels = VALUES(rel),
+        metrics = MAX(CASE(src == "cpu", 1, 0)), envs = VALUES(CASE(src == "cpu", TO_LOWER(TO_STRING(ci.environment)))),
+        apm = COUNT_DISTINCT(CASE(src == "apm", TO_STRING(service.name)))
+  BY key
+| WHERE linked == 1
+| EVAL class = MV_FIRST(classes), env = MV_FIRST(envs)
+| WHERE metrics == 1 OR TO_LOWER(class) LIKE "*server*" OR TO_LOWER(class) LIKE "*lpar*"
+| EVAL in_server_list = CASE(metrics == 1 AND (env IS NULL OR env IN ("", "null") OR env LIKE "prod*" OR env LIKE "prd*"), "yes", "no"),
+       server = MV_FIRST(names), relationship = MV_CONCAT(MV_SLICE(rels, 0, 1), ", ")
+| SORT in_server_list DESC, apm DESC, server ASC
+| KEEP server, class, relationship, in_server_list, metrics, apm, env
+| LIMIT 100
+""",
+  "params": [{"ci": "MSSQLSERVER@kau1p522"}],
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
+
+**CB-3. Enterprise PolicyCenter PROD** (backup for TC-05, if CB-1 shows no server in the list)
+```
+POST /_query/async?format=json
+{ "query": """
+FROM cmdb-ci-relations*, .ds-metrics-system.cpu-default*, metrics-apm.internal-* METADATA _index
+| WHERE parent.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci)) OR child.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci))
+     OR (@timestamp >= NOW() - 15 minutes AND NOT _index LIKE "*relations*")
+| EVAL src = CASE(_index LIKE "*relations*", "rel", _index LIKE "*apm.internal*", "apm", "cpu"),
+       me = TO_LOWER(?ci), p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
+| EVAL other = CASE(src == "rel" AND p == me, TO_STRING(child.name), src == "rel" AND c == me, TO_STRING(parent.name)),
+       cls = CASE(src == "rel" AND p == me, TO_STRING(child.class), src == "rel" AND c == me, TO_STRING(parent.class)),
+       rel = CASE(src == "rel", TO_STRING(type.name))
+| EVAL key = TO_LOWER(CASE(src == "rel", other, src == "apm", TO_STRING(host.name), TO_STRING(ci.name)))
+| WHERE LENGTH(key) > 0
+| STATS linked = MAX(CASE(src == "rel", 1, 0)), names = VALUES(other), classes = VALUES(cls), rels = VALUES(rel),
+        metrics = MAX(CASE(src == "cpu", 1, 0)), envs = VALUES(CASE(src == "cpu", TO_LOWER(TO_STRING(ci.environment)))),
+        apm = COUNT_DISTINCT(CASE(src == "apm", TO_STRING(service.name)))
+  BY key
+| WHERE linked == 1
+| EVAL class = MV_FIRST(classes), env = MV_FIRST(envs)
+| WHERE metrics == 1 OR TO_LOWER(class) LIKE "*server*" OR TO_LOWER(class) LIKE "*lpar*"
+| EVAL in_server_list = CASE(metrics == 1 AND (env IS NULL OR env IN ("", "null") OR env LIKE "prod*" OR env LIKE "prd*"), "yes", "no"),
+       server = MV_FIRST(names), relationship = MV_CONCAT(MV_SLICE(rels, 0, 1), ", ")
+| SORT in_server_list DESC, apm DESC, server ASC
+| KEEP server, class, relationship, in_server_list, metrics, apm, env
+| LIMIT 100
+""",
+  "params": [{"ci": "Enterprise PolicyCenter PROD"}],
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
