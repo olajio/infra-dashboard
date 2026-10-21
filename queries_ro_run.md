@@ -1706,3 +1706,107 @@ GET /_query/async/<id from the answer above>?format=txt
 
 DELETE /_query/async/<id>
 ```
+
+# CB-1:
+        server         |          class          |           relationship           |in_server_list |    metrics    |      apm      |      env      
+-----------------------+-------------------------+----------------------------------+---------------+---------------+---------------+---------------
+vslrau1p276            |cmdb_ci_linux_server     |Runs on::Runs                     |yes            |1              |1              |prod           
+vcwau1p0132            |cmdb_ci_win_server       |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p174            |cmdb_ci_linux_server     |Runs on::Runs                     |yes            |1              |0              |prod           
+CNA1BSYS               |cmdb_ci_mainframe_lpar   |Runs on::Runs                     |no             |0              |0              |null           
+Tomcat@vslrau1p276:8009|cmdb_ci_app_server_tomcat|Runs on::Runs, Depends on::Used by|no             |0              |0              |null           
+Tomcat@vslrau1p276:8081|cmdb_ci_app_server_tomcat|Depends on::Used by               |no             |0              |0              |null           
+sch1h020               |cmdb_ci_aix_server       |Runs on::Runs                     |no             |0              |0              |null           
+sdrst_sch1p001         |cmdb_ci_hpux_server      |Runs on::Runs                     |no             |0              |0              |null           
+
+
+# CB-2:
+
+    server     |      class       | relationship  |in_server_list |    metrics    |      apm      |      env      
+---------------+------------------+---------------+---------------+---------------+---------------+---------------
+kau1p522       |cmdb_ci_win_server|Runs on::Runs  |no             |0              |0              |null           
+
+
+
+# CB-3:
+                       server                       |           class            |           relationship           |in_server_list |    metrics    |      apm      |      env      
+----------------------------------------------------+----------------------------+----------------------------------+---------------+---------------+---------------+---------------
+vrau1pap0041                                        |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |2              |prod           
+vrau1pap0042                                        |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |2              |prod           
+vrau1pap0039                                        |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |1              |prod           
+vrau1pap0040                                        |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |1              |prod           
+vrau1pap0043                                        |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |1              |prod           
+lrau1p21                                            |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vskau1p1247                                         |cmdb_ci_win_server          |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p050                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p051                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p132                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p133                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p134                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p135                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p136                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p137                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p145                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p347                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+vslrau1p348                                         |cmdb_ci_linux_server        |Runs on::Runs                     |yes            |1              |0              |prod           
+CNA1BSYS                                            |cmdb_ci_mainframe_lpar      |Depends on::Used by               |no             |0              |0              |null           
+MQ-SCH1H285-QGL19                                   |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+Tomcat@vrau1pap0041:5080                            |cmdb_ci_app_server_tomcat   |Depends on::Used by               |no             |0              |0              |null           
+Tomcat@vslrau1p347:6007                             |cmdb_ci_app_server_tomcat   |Depends on::Used by               |no             |0              |0              |null           
+Tomcat@vslrau1p347:6555                             |cmdb_ci_app_server_tomcat   |Depends on::Used by               |no             |0              |0              |null           
+Tomcat@vslrau1p348:6005                             |cmdb_ci_app_server_tomcat   |Depends on::Used by               |no             |0              |0              |null           
+Tomcat@vslrau1p348:6008                             |cmdb_ci_app_server_tomcat   |Depends on::Used by               |no             |0              |0              |null           
+Tomcat@vslrau1p348:6016                             |cmdb_ci_app_server_tomcat   |Depends on::Used by               |no             |0              |0              |null           
+Tomcat@vslrau1p348:6017                             |cmdb_ci_app_server_tomcat   |Depends on::Used by               |no             |0              |0              |null           
+Tomcat@vslrau1p348:6018                             |cmdb_ci_app_server_tomcat   |Depends on::Used by               |no             |0              |0              |null           
+Tomcat@vslrau1p348:6019                             |cmdb_ci_app_server_tomcat   |Depends on::Used by               |no             |0              |0              |null           
+WAS-vslrau1p132-prd1-node1-papc-papc1               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p132-prd1-node1-papc-papc2               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p132-prd1-node1-papc-papc3               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p132-prd1-node1-papc-papc4               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p132-prd1-node1-papc-papc5               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p132-prd1-node1-papc-papc6               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p132-prd1-node1-papc-papc7               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p132-prd1-node1-papc-papcintcons1        |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p132-server1                             |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p133-prd1-node2-papc-papc1               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p133-prd1-node2-papc-papc2               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p133-prd1-node2-papc-papc3               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p133-prd1-node2-papc-papc4               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p133-prd1-node2-papc-papc5               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p133-prd1-node2-papc-papc6               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p133-prd1-node2-papc-papc7               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p133-prd1-node2-papc-papcintcons1        |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p133-server1                             |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p134-prd1-node1-papc-docdistbatch1       |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p145-prd1-node3-papc-papc1               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p145-prd1-node3-papc-papc2               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p145-prd1-node3-papc-papc3               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p145-prd1-node3-papc-papc4               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p145-prd1-node3-papc-papc5               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p145-prd1-node3-papc-papc6               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p145-prd1-node3-papc-papc7               |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p145-prd1-node3-papc-papcintcons1        |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+WAS-vslrau1p145-server1                             |cmdb_ci_app_server          |Runs on::Runs                     |no             |0              |0              |null           
+ccda-test-client                                    |cmdb_ci_server              |Depends on::Used by               |no             |0              |0              |null           
+cna-com-g-prd-proj-epccda-main-dataproc-m           |cmdb_ci_linux_server        |Depends on::Used by, Runs on::Runs|no             |0              |0              |null           
+cna-com-g-prd-proj-spccda-main-dataproc-m           |cmdb_ci_server              |Depends on::Used by, Runs on::Runs|no             |0              |0              |null           
+prd1-node1-papc-docdistbatch1                       |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node1-papc-epcdms1                             |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node1-papc-papcbatch1                          |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node1-papc-papcintcons1                        |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node1-papc-papcservices1                       |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node1-papc-uwservices1                         |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node2-papc-docdistbatch1                       |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node2-papc-epcdms1                             |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node2-papc-papcintcons1                        |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node2-papc-papcservices1                       |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node2-papc-uwservices1                         |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+prd1-node3-papc-papcintcons1                        |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+sau1h137                                            |cmdb_ci_aix_server          |Runs on::Runs                     |no             |0              |0              |null           
+sau1h138                                            |cmdb_ci_aix_server          |Runs on::Runs                     |no             |0              |0              |null           
+sch1h234                                            |cmdb_ci_aix_server          |Runs on::Runs                     |no             |0              |0              |null           
+sch1h285                                            |cmdb_ci_aix_server          |Runs on::Runs                     |no             |0              |0              |null           
+server1                                             |cmdb_ci_app_server_websphere|Depends on::Used by               |no             |0              |0              |null           
+td-demo-bucket-user.c.cna-g-sbx-proj-prisma.internal|cmdb_ci_linux_server        |Depends on::Used by               |no             |0              |0              |null           
+vslrau1p023-dup                                     |cmdb_ci_linux_server        |Runs on::Runs                     |no             |0              |0              |null           
