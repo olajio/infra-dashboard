@@ -401,3 +401,55 @@ server1                                             |cmdb_ci_app_server_webspher
 td-demo-bucket-user.c.cna-g-sbx-proj-prisma.internal|cmdb_ci_linux_server        |Depends on::Used by               |no             |0              |0              |null           
 vslrau1p023-dup                                     |cmdb_ci_linux_server        |Runs on::Runs                     |no             |0              |0              |null           
 
+
+
+# CC:
+
+      key      |      apm      |               services               |      env      
+---------------+---------------+--------------------------------------+---------------
+vslrau1p217    |2              |lawyersinsurance, lifeagents          |prod           
+vslrau1p218    |2              |lawyersinsurance, lifeagents          |prod           
+vslrau1p219    |2              |agencyfeedfoundation, gslrating       |prod           
+vslrau1p229    |2              |fmrsmartapp, smartapp                 |prod           
+vslrau1p230    |2              |fmrsmartapp, smartapp                 |prod           
+vslrau1p457    |2              |dmf, document management facility prod|prod           
+vslrau1p459    |2              |dmf, document management facility prod|prod           
+vslrau1p226    |1              |clmecmbulk                            |prod           
+vslrau1p277    |1              |identityiq                            |prod           
+vslrau1p278    |1              |identityiq                            |prod           
+vslrau1p279    |1              |identityiq                            |prod           
+vslrau1p280    |1              |identityiq                            |prod           
+vslrau1p308    |1              |gler-tap-rest-data-api                |prod           
+vslrau1p309    |1              |gler-tap-rest-data-api                |prod           
+vslrau1p330    |1              |endorsements-portal                   |prod           
+vslrau1p331    |1              |endorsements-portal                   |prod           
+vslrau1p344    |1              |sold-program-database                 |prod           
+vslrau1p345    |1              |sold-program-database                 |prod           
+vslrau1p366    |1              |codetable                             |prod           
+vslrau1p367    |1              |codetable                             |prod           
+
+
+# CD: 
+
+    service.name     |              app              |    per_min    |     calls     
+---------------------+-------------------------------+---------------+---------------
+RAPID                |Unified Pricing System RAPID   |10429.9        |625796         
+rst-data             |Risk Support Tool              |8536.2         |512169         
+identityiq           |Sailpoint IdentityIQ           |6372.9         |382376         
+abp-web              |Agency Bill Pay                |4386.8         |263210         
+juno-data-api        |Juno                           |4324.4         |259464         
+dmf                  |Document Management Facility   |3713.0         |222779         
+abp-doc-api          |Agency Bill Pay                |1460.8         |87647          
+eds-data-api         |Enterprise Distribution Service|1395.5         |83732          
+eds-service-api      |Enterprise Distribution Service|1392.3         |83538          
+ecs-data-api         |Enterprise Content Service 2.0 |1300.7         |78039          
+suruwt-data-api      |Underwriting Tools             |945.6          |56735          
+ecs-retrieve-api     |Enterprise Content Service 2.0 |756.2          |45373          
+jupiter-orchestration|Jupiter                        |726.6          |43598          
+surclaim-cfe-data-api|Claims Front End               |645.4          |38721          
+ecs-search-api       |Enterprise Content Service 2.0 |574.1          |34444          
+ltc-grid-auth-api    |LTC GRID                       |462.8          |27767          
+jupiter-data         |Jupiter                        |433.1          |25985          
+RST-TAP-API          |null                           |387.6          |23253          
+rst-api              |Risk Support Tool              |316.5          |18988          
+oltp-data-api        |Underwriting Tools             |314.6          |18873          
