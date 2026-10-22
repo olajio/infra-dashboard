@@ -3,6 +3,12 @@
 The original build scripts lived outside the repo and were lost when the work environment was reset (14 Oct 2026).
 Since then `MIM V3.ndjson` is changed by patch scripts kept here, so the work can be repeated and reviewed.
 
+**`updated mim dashboard.ndjson`** (the colleague's export, the starting input of the rebuild chain below) and the
+other raw `.ndjson` / `.csv` exports and `.png` screenshots that had accumulated in the repo root were removed from
+the working tree on 22 Oct 2026 to keep the repo small. They are still recoverable from git history
+(`git show <commit>:"updated mim dashboard.ndjson"` from a commit before that date), so a full rebuild from scratch
+needs that file restored first. `MIM V3.ndjson` itself was kept.
+
 | File | What it does |
 |---|---|
 | `mim_v3_patch_2026-10-14.py` | The 14 Oct changes (suggestions2.txt): Active P1 / P2 donut, Users impacted demo number, banner removed, Middleware / Database tables, server named on Server Health, Applications on this CI and Changes on 7 days, link-only cards. `python3 mim_v3_patch_2026-10-14.py IN.ndjson OUT.ndjson` (run once, on the version before it) |
