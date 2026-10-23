@@ -12,41 +12,47 @@ class, with up to 3 examples per class. Each example is tagged:
 **Defaults unless a case says otherwise:** Health window *24 hours*, Service *(services on this CI)*, Application
 *(all applications)*, CI and Server controls empty. Use **More → Reset changes** between cases.
 
-> **Refreshing the values:** incidents close quickly. Re-run **Round 14** in `queries_ro_run.md` (CA, then CB for
-> the CIs it suggests, CC, CD) before a test session if these no longer appear in the controls.
+> **Refreshing the values:** incidents close quickly. Re-run **CA** in `queries_ro_run.md` (Round 14, re-run as
+> Round 15) before a test session if these no longer appear in the controls — the query itself doesn't change, just
+> paste a fresh result. Run CB too for any CI you need confirmed in the Server list.
 
-## Values to use (Round 14, 21 Oct)
+## Values to use (Round 15, 23 Oct)
+
+Only **CA** was re-run this round (no CB, CC or CD). Most Round 14 picks for cases that need CB/CC/CD still stand,
+since those depend on CMDB relationships or non-incident servers, which change far more slowly than incidents —
+they're carried forward below and marked *(unverified since 21 Oct)*. Re-run CB/CC/CD if you want those confirmed
+too.
 
 | Case | Incident / CI / controls | What to expect from this pick |
 |---|---|---|
-| **TC-02** | Incident **INC2675314 · vkau1pdb0016** (Windows) | *Server*, *Database* and *Process Health* fill (metrics, database, Windows services). Variant: **INC2677387 · vslrau1p061**, a Linux server on a **P2**, running IBM HTTP Server (*Middleware Health*) |
-| **TC-03** | Incident **INC2675141 · sau1h670** (AIX) | *Server Health*: one row, "No data in window". MQ processes, a database and a change on it |
-| **TC-04** | Incident **INC2667546 · Automated Claim Transaction PROD** | Section 2 fills from the CMDB (19 incidents on this CI, 1 change). Health panels empty |
-| **TC-05** | TC-04, then Server = **vslrau1p276** | The health panels show vslrau1p276, including its APM service in *APM Services Health*. Also in the list: vslrau1p174, vcwau1p0132 (Windows). Backup: **INC2670700 · Enterprise PolicyCenter PROD** with Server = **vrau1pap0041** (2 APM services) |
-| **TC-06** | Incident **INC2673785 · CNA Central** | The only business application with an incident. Pick it in the Application control |
-| **TC-07** | Incident **INC2670699 · MSSQLSERVER@kau1p522** | *Server View* names **kau1p522**, but it sends no server metrics, so it is **not in the Server list**: the health panels stay empty. That's a documented limit worth showing. Variant: **INC2676747 · MSSQLSERVER@vkau1pdb0015**; type `vkau1pdb0015` in the Server control to see if it is listed |
-| **TC-08** | No network device has an incident. Nearest: **INC2677522 · cumtri1** (a UPS) | *Alerts on this CI* shows its Netcool alert; health panels empty |
-| **TC-09** | Incident **INC2677314** (P2, no CI) | Only *Escalate* fills |
-| **TC-10** | Incident **INC2667298 · CNA Canada Insurance System DRE** (5 changes); then **INC2676782 · lrch1d54** (DR server with metrics) | The CI's panels show; its non-production relationships are hidden. lrch1d54's health panels still fill |
-| **TC-11** | CI = **vslrau1p220** (TC-01's server) | Repeats TC-01 through the CI control |
-| **TC-12** | CI = **vslrau1p219** (APM: agencyfeedfoundation, gslrating; no incident in 31 days) | *Escalate* shows one row with the owners. Section 3 fills, as in TC-01 |
-| **TC-13** | Incident **INC2675314 · vkau1pdb0016**, CI = **Automated Claim Transaction PROD** | Every panel follows vkau1pdb0016, the incident's CI |
-| **TC-14** | (a) CI = **vkau1pdb0016**, Server = **vslrau1p229**. (b) CI = **Automated Claim Transaction PROD**, Server = **vslrau1p229** | (a) The health panels show vkau1pdb0016: a server in the CI control wins. (b) They show vslrau1p229 |
-| **TC-15** | Server = **vslrau1p229** (APM: fmrsmartapp, smartapp) | The health panels fill without an incident or CI |
+| **TC-02** | Incident **INC2674667 · kau1p464** (Windows, score 3: metrics + database + Windows services) | *Server*, *Database* and *Process Health* fill. Variant: **INC2673019 · vkau1pwb0003** (same shape, also prod) |
+| **TC-03** | Incident **INC2676297 · sch1h020** (AIX, no metrics, database) | *Server Health*: one row, "No data in window". Variant with real middleware names instead of "unknown": **INC2678574 · sch1h628** (`ibm_mq_amqpcsea_positional`, `ibm_mq_amqrmppa_positional`; environment `cut`, doubles as a TC-10 pick) |
+| **TC-04** | Incident **INC2667546 · Automated Claim Transaction PROD** (still active since 21 Oct, now 14 open incidents) | Section 2 fills from the CMDB. Health panels empty |
+| **TC-05** | TC-04, then Server = **vslrau1p276** *(unverified since 21 Oct)* | The health panels show vslrau1p276, including its APM service. Also in the list: vslrau1p174, vcwau1p0132. Backup: **Enterprise PolicyCenter PROD** (now incident INC2670814) with Server = **vrau1pap0041** |
+| **TC-06** | Incident **INC2673785 · CNA Central** (still active, now 4 open incidents) | The only business application with an incident. Pick it in the Application control |
+| **TC-07** | Incident **INC2670699 · MSSQLSERVER@kau1p522** (still active) | *Server View* names **kau1p522**, which sends no server metrics, so it is **not in the Server list**: health panels stay empty — a documented limit worth showing. Variants: **INC2676747 · MSSQLSERVER@vkau1pdb0015** (still active), **INC2678417 · MSSQLSERVER@vskau1p945** (new) |
+| **TC-08** | Incident **INC2678287 · adc-wan-agg2** (an **IP Switch**, score 1, 3 Netcool alerts) | A real network device this time — *Alerts on this CI* shows its 3 alerts; health panels empty. Variant: **INC2678391 · cuprsp2** (a UPS, 4 alerts) |
+| **TC-09** | Incident **INC2677314** (P2, no CI — still active) | Only *Escalate* fills |
+| **TC-10** | Incident **INC2667298 · CNA Canada Insurance System DRE** (dre, still active, now 19 open incidents, 5 changes); then **INC2676782 · lrch1d54** (drt, server with metrics, still active) | The CI's panels show; its non-production relationships are hidden. lrch1d54's health panels still fill |
+| **TC-11** | CI = **vslrau1p220** (TC-01's server) | Repeats TC-01 through the CI control. Not incident-dependent |
+| **TC-12** | CI = **vslrau1p219** *(unverified since 21 Oct — not in today's CA table, so still has no active incident)* | *Escalate* shows one row with the owners. Section 3 fills, as in TC-01 |
+| **TC-13** | Incident **INC2674667 · kau1p464**, CI = **Automated Claim Transaction PROD** | Every panel follows kau1p464, the incident's CI, not the CI control |
+| **TC-14** | (a) CI = **kau1p464**, Server = **vslrau1p229** *(server unverified since 21 Oct)*. (b) CI = **Automated Claim Transaction PROD**, Server = **vslrau1p229** | (a) The health panels show kau1p464: a server in the CI control wins. (b) They show vslrau1p229 |
+| **TC-15** | Server = **vslrau1p229** *(unverified since 21 Oct)* | The health panels fill without an incident or CI |
 | **TC-16** | TC-12, then Health window 15 minutes, then 7 days | 7 days: more log groups; the first load can take up to a minute |
-| **TC-17** | Service = **juno-data-api** (4,300 calls / min) or **eds-data-api** | *Upstream*, *Service health* and *Downstream* follow it. A shared data API is the most likely to have callers. For pure volume: **RAPID** (10,400 / min) |
-| **TC-18** | Application = **Juno**, then **Agency Bill Pay** | *Services of the Application* lists only that application's services |
-| **TC-24** | **INC2677246 · CNA1ASYS** (mainframe LPAR, 4 changes), **INC2677297 · Citrix** (infrastructure service), **INC2674755 · PRINT OPEN SYSTEMS DAILY JOB LOG** (batch job), **INC2677435 · m10w3l2gm0a30bm** ("Computer") | *Escalate* and the CMDB panels only |
+| **TC-17** | Service = **juno-data-api** or **eds-data-api** *(traffic figures unverified since 21 Oct)* | *Upstream*, *Service health* and *Downstream* follow it, if it still has callers |
+| **TC-18** | Application = **Juno**, then **Agency Bill Pay** *(unverified since 21 Oct)* | *Services of the Application* lists only that application's services |
+| **TC-24** | **INC2678126 · CNA1BSYS** (mainframe LPAR, **prod**, 2 incidents, 3 changes — better than 21 Oct's dev pick); **INC2665397 · RightFax** (infrastructure service, still active); **INC2674755 · PRINT OPEN SYSTEMS DAILY JOB LOG** (batch job, still active); **INC2678582 · gnfcnacvtma-01** (Network Appliance Hardware, new, 1 change) | *Escalate* and the CMDB panels only |
 
-**What Round 14 shows (21 Oct):**
-- **No active incident's CI runs APM services** (CA). The section 3 dependency panels are shown through TC-11,
-  TC-12, TC-15 and TC-17.
-- **An application service's servers are found through the CMDB:**
-  - Automated Claim Transaction PROD runs on 3 servers in the Server list;
-  - Enterprise PolicyCenter PROD runs on 18.
-- **Some servers send no metrics** (e.g. kau1p522 and the AIX servers), so they can't be picked in the Server
-  control.
-- **Database metrics are recorded against the SQL instance's name** (MSSQLSERVER@…), not the server's, so
+**What changed since Round 14 (23 Oct):**
+- **TC-08 finally has a real network device:** `adc-wan-agg2`, an IP Switch, with 3 live Netcool alerts — a better
+  fit than the UPS workaround from 21 Oct.
+- **Most long-running picks held:** the same incidents are still open on *kau1p522* (TC-07), *CNA Central* (TC-06),
+  *Automated Claim Transaction PROD* (TC-04), the no-CI P2 (TC-09) and both TC-10 CIs — two days hasn't closed them.
+- **TC-02's and TC-24's 21 Oct picks closed** (vkau1pdb0016, m10w3l2gm0a30bm, the old UPS `cumtri1`); replaced above.
+- **Still no active incident's CI runs APM services** (CA's `apm` / `services` columns are empty throughout). The
+  section 3 dependency panels are only shown through TC-11, TC-12, TC-15 and TC-17.
+- **Database metrics are recorded against the SQL instance's name** (`MSSQLSERVER@…`), not the server's, so
   *Database Health* for a picked server may show only its SQL Server Windows service.
 
 ## A. The incident's CI is not a server with APM

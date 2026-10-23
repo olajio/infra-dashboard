@@ -1736,3 +1736,18 @@ dashboard's controls or panels has changed since Round 14 in a way that affects 
 Paste everything into `round15.txt`, with the query name above each table (`#CA`, `#CB-1`, `#CC`, `#CD` …), the same
 way as `round14.txt`. Send it over and I'll update the "Values to use" table in *MIM-V3-TEST-CASES.md* with today's
 incidents, then you can start documenting TC-02 the way you did TC-01.
+
+### Round 15 results (23 Oct)
+
+Only CA was run this round.
+
+| Finding | Detail |
+|---|---|
+| Still no APM | No active incident's CI runs production APM services — `apm` / `services` are empty for every row, same as 20/21 Oct |
+| TC-08 unblocked | First network-device candidate since tracking started: **IP Switch `adc-wan-agg2`** (INC2678287, 3 Netcool alerts). Also a UPS, `cuprsp2` (INC2678391, 4 alerts) |
+| Long-running incidents | Same incidents still open as 21 Oct on: `MSSQLSERVER@kau1p522` (TC-07), `CNA Central` (TC-06), `Automated Claim Transaction PROD` (TC-04), the no-CI P2 `INC2677314` (TC-09), `CNA Canada Insurance System DRE` and `lrch1d54` (TC-10) |
+| Closed since 21 Oct | `vkau1pdb0016` (TC-02's old pick), `m10w3l2gm0a30bm` (TC-24's old "Computer" pick), `cumtri1` (TC-08's old UPS workaround) |
+| New picks | `kau1p464` / `vkau1pwb0003` (Windows, TC-02), `sch1h020` / `sch1h628` (AIX, TC-03), `CNA1BSYS` now prod with 2 incidents (TC-24, mainframe), `gnfcnacvtma-01` (TC-24, Network Appliance Hardware) |
+
+The picks for each test case are in *MIM-V3-TEST-CASES.md*, "Values to use (Round 15, 23 Oct)". CB, CC and CD
+weren't re-run; the 21 Oct results for those are carried forward and marked unverified.
