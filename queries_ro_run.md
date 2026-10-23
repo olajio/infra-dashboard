@@ -1719,3 +1719,20 @@ DELETE /_query/async/<id>
 | CD | Busiest services: RAPID 10.4 k/min, rst-data 8.5 k, identityiq 6.4 k, abp-web 4.4 k, juno-data-api 4.3 k, dmf 3.7 k |
 
 The picks for each test case are in *MIM-V3-TEST-CASES.md*, "Values to use (Round 14, 21 Oct)".
+
+## Round 15 — refresh for TC-02 onward (23 Oct 2026)
+
+Incidents close quickly, so the 21 Oct picks in *MIM-V3-TEST-CASES.md* may no longer be active. The queries
+themselves don't need changes — CA, CB, CC and CD above are all relative to `NOW()`, and nothing about the
+dashboard's controls or panels has changed since Round 14 in a way that affects them.
+
+**Run again, same order as before:**
+1. **CA** (the main one) — run it once, paste the whole table.
+2. **CB** — once you have CA's results, run it for the best *application service* and the best *database instance*
+   it suggests (same as CB-1 / CB-2 / CB-3 in Round 14), putting that CI's name in `"ci"`.
+3. **CC** — once, no values needed.
+4. **CD** — once, no values needed.
+
+Paste everything into `round15.txt`, with the query name above each table (`#CA`, `#CB-1`, `#CC`, `#CD` …), the same
+way as `round14.txt`. Send it over and I'll update the "Values to use" table in *MIM-V3-TEST-CASES.md* with today's
+incidents, then you can start documenting TC-02 the way you did TC-01.
