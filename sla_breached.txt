@@ -1,0 +1,310 @@
+GET /servicenow-task-sla/_search?track_total_hits=true
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "exists": {
+          "field": "task_has_breached"
+        }
+      }
+    }
+  }
+}
+
+
+GET /servicenow-task-sla/_search?track_total_hits=true
+{
+  "query": {
+    "bool": {
+      "must_not": {
+        "exists": {
+          "field": "task_has_breached"
+        }
+      }
+    }
+  }
+}
+
+
+# 88: GET /servicenow-task-sla/_search?track_total_hits=true [200 OK]
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 200617,
+      "relation": "eq"
+    },
+    "max_score": 0,
+    "hits": [
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "fdc26def394c1710078f13204ea9c49c",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-26T13:33:45.000Z",
+          "updated_at": "2026-10-26T14:02:24.000Z",
+          "@timestamp": "2026-10-26T14:03:17.818Z",
+          "sys_id": "fdc26def394c1710078f13204ea9c49c",
+          "task_has_breached": false,
+          "planned_end_time": "2026-11-02T13:33:44.000Z",
+          "original_breach_time": "2026-11-02T13:33:44.000Z",
+          "business_duration": "1970-01-01T00:28:40.000Z",
+          "duration": "1970-01-01T00:28:40.000Z",
+          "task_sys_id": "4032252f394c1710078f13204ea9c4e1",
+          "task_number": "INC2679844",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "0.28",
+          "contract_name": "PAS Helpdesk Incident Closure",
+          "contract_type": "SLA"
+        }
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "8373e9c3fb7b87108b28f2277befdc20",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-12T14:04:11.000Z",
+          "updated_at": "2026-10-26T14:02:30.000Z",
+          "@timestamp": "2026-10-26T14:03:17.819Z",
+          "sys_id": "8373e9c3fb7b87108b28f2277befdc20",
+          "task_has_breached": false,
+          "planned_end_time": "2026-10-26T14:04:10.000Z",
+          "original_breach_time": "2026-10-26T14:04:10.000Z",
+          "business_duration": "1970-01-10T23:58:20.000Z",
+          "duration": "1970-01-14T23:58:20.000Z",
+          "task_sys_id": "b273a9c3fb7b87108b28f2277befdcec",
+          "task_number": "RITM1045584",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "99.99",
+          "contract_name": "ATOS.SRQ-01- 10 Day SLA - Priority fulfillment of Service Request within Committed Timeframes",
+          "contract_type": "SLA"
+        }
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "aac187d53b801b1087fb42d643e45a42",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-19T20:42:32.000Z",
+          "updated_at": "2026-10-26T14:02:31.000Z",
+          "@timestamp": "2026-10-26T14:03:17.819Z",
+          "sys_id": "aac187d53b801b1087fb42d643e45a42",
+          "task_has_breached": false,
+          "planned_end_time": "2026-12-01T21:42:32.000Z",
+          "original_breach_time": "2026-12-01T21:42:32.000Z",
+          "business_duration": "1970-01-05T17:19:59.000Z",
+          "duration": "1970-01-07T17:19:59.000Z",
+          "task_sys_id": "e2c187d53b801b1087fb42d643e45a21",
+          "task_number": "RITM1047542",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "15.62",
+          "contract_name": "ATOS.SRQ-01- 31 Day SLA - Priority fulfillment of Service Request within Committed Timeframe",
+          "contract_type": "SLA"
+        }
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "7e6d9ed23b0c5f10c36cb78c24e45af8",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-22T20:37:33.000Z",
+          "updated_at": "2026-10-26T14:02:35.000Z",
+          "@timestamp": "2026-10-26T14:03:17.819Z",
+          "sys_id": "7e6d9ed23b0c5f10c36cb78c24e45af8",
+          "task_has_breached": false,
+          "planned_end_time": "2026-11-21T20:27:36.000Z",
+          "original_breach_time": "2026-11-21T20:27:36.000Z",
+          "business_duration": "1970-01-04T17:34:59.000Z",
+          "duration": "1970-01-04T17:34:59.000Z",
+          "task_sys_id": "65d9561a3bc85f10c36cb78c24e45a5f",
+          "task_number": "INC2678312",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "12.44",
+          "contract_name": "P2-P4 Incident Resolution_Overarching_App Dev SLA",
+          "contract_type": "SLA"
+        }
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "ba6d9ed23b0c5f10c36cb78c24e45af0",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-22T20:37:32.000Z",
+          "updated_at": "2026-10-26T14:02:35.000Z",
+          "@timestamp": "2026-10-26T14:03:17.819Z",
+          "sys_id": "ba6d9ed23b0c5f10c36cb78c24e45af0",
+          "task_has_breached": false,
+          "planned_end_time": "2026-11-06T20:37:30.000Z",
+          "original_breach_time": "2026-11-06T20:37:30.000Z",
+          "business_duration": "1970-01-04T17:25:05.000Z",
+          "duration": "1970-01-04T17:25:05.000Z",
+          "task_sys_id": "65d9561a3bc85f10c36cb78c24e45a5f",
+          "task_number": "INC2678312",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "24.84",
+          "contract_name": "Accenture_P4 Incident Resolution_App Dev SLA",
+          "contract_type": "SLA"
+        }
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "f26569d22b089f50f841fb05ce91bf40",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-22T16:32:52.000Z",
+          "updated_at": "2026-10-26T14:02:37.000Z",
+          "@timestamp": "2026-10-26T14:03:17.819Z",
+          "sys_id": "f26569d22b089f50f841fb05ce91bf40",
+          "task_has_breached": false,
+          "planned_end_time": "2026-11-21T16:32:52.000Z",
+          "original_breach_time": "2026-11-21T16:32:52.000Z",
+          "business_duration": "1970-01-04T21:29:45.000Z",
+          "duration": "1970-01-04T21:29:45.000Z",
+          "task_sys_id": "dc4525522b089f50f841fb05ce91bf6a",
+          "task_number": "INC2678186",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "12.99",
+          "contract_name": "P2-P4 Incident Resolution_Overarching_App Dev SLA",
+          "contract_type": "SLA"
+        }
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "fac8b9aa2b40d390f841fb05ce91bfb0",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-23T12:36:00.000Z",
+          "updated_at": "2026-10-26T14:02:37.000Z",
+          "@timestamp": "2026-10-26T14:03:17.820Z",
+          "sys_id": "fac8b9aa2b40d390f841fb05ce91bfb0",
+          "task_has_breached": false,
+          "planned_end_time": "2026-11-22T12:35:56.000Z",
+          "original_breach_time": "2026-11-22T12:35:56.000Z",
+          "business_duration": "1970-01-04T01:26:41.000Z",
+          "duration": "1970-01-04T01:26:41.000Z",
+          "task_sys_id": "dc4525522b089f50f841fb05ce91bf6a",
+          "task_number": "INC2678186",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "10.2",
+          "contract_name": "TCS_P4 Incident Resolution_App Dev SLA",
+          "contract_type": "SLA"
+        }
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "8e68d7db41c49310ebdc98b5a8e1c965",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-26T03:29:12.000Z",
+          "updated_at": "2026-10-26T14:03:00.000Z",
+          "@timestamp": "2026-10-26T14:03:17.820Z",
+          "sys_id": "8e68d7db41c49310ebdc98b5a8e1c965",
+          "task_has_breached": false,
+          "planned_end_time": "2026-10-31T03:29:12.000Z",
+          "original_breach_time": "2026-10-31T03:29:12.000Z",
+          "business_duration": "1970-01-01T10:33:48.000Z",
+          "duration": "1970-01-01T10:33:48.000Z",
+          "task_sys_id": "ea971b5b41c49310ebdc98b5a8e1c923",
+          "task_number": "INC2679653",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "8.8",
+          "contract_name": "PwC_P3 Incident Resolution_App Dev SLA",
+          "contract_type": "SLA"
+        }
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "ca68d7db41c49310ebdc98b5a8e1c95d",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-26T03:29:12.000Z",
+          "updated_at": "2026-10-26T14:03:00.000Z",
+          "@timestamp": "2026-10-26T14:03:17.820Z",
+          "sys_id": "ca68d7db41c49310ebdc98b5a8e1c95d",
+          "task_has_breached": false,
+          "planned_end_time": "2026-11-25T03:29:12.000Z",
+          "original_breach_time": "2026-11-25T03:29:12.000Z",
+          "business_duration": "1970-01-01T10:33:48.000Z",
+          "duration": "1970-01-01T10:33:48.000Z",
+          "task_sys_id": "ea971b5b41c49310ebdc98b5a8e1c923",
+          "task_number": "INC2679653",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "1.47",
+          "contract_name": "P2-P4 Incident Resolution_Overarching_App Dev SLA",
+          "contract_type": "SLA"
+        }
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "14f031de0f845f5054d724e300d1b296",
+        "_score": 0,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-10-22T17:23:14.000Z",
+          "updated_at": "2026-10-26T14:03:13.000Z",
+          "@timestamp": "2026-10-26T14:03:17.820Z",
+          "sys_id": "14f031de0f845f5054d724e300d1b296",
+          "task_has_breached": false,
+          "planned_end_time": "2026-10-27T19:27:16.000Z",
+          "original_breach_time": "2026-10-27T17:23:14.000Z",
+          "business_duration": "1970-01-04T18:35:57.000Z",
+          "duration": "1970-01-04T18:35:57.000Z",
+          "business_pause_duration": "1970-01-01T02:04:02.000Z",
+          "task_sys_id": "7d103d9a0f845f5054d724e300d1b29f",
+          "task_number": "INC2678214",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "75.5",
+          "contract_name": "Accenture_P3 Incident Resolution_App Dev SLA",
+          "contract_type": "SLA"
+        }
+      }
+    ]
+  }
+}
+
+
+# 102: GET /servicenow-task-sla/_search?track_total_hits=true [200 OK]
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 0,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": []
+  }
+}
