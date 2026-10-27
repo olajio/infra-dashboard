@@ -53,6 +53,11 @@ Breached and another is Within SLA, the incident shows **Breached**.
 If an incident has no (non-cancelled) SLA record synced in the last 7 days, the column shows **No SLA record**. The
 incident's age is not used to guess a status.
 
+**Most incidents show it today.** On 27 Oct 2026 only 4 of the 200 active P3 incidents opened in the last 7 days had
+any record in `servicenow-task-sla` (Round 16 in `queries_ro_run.md`). There is no other SLA index, the incident
+record carries no SLA fields, and the missing records aren't stored under the incident's `sys_id` either: ServiceNow's
+SLA records for those incidents are not synced to Elastic. The column fills in by itself once the sync includes them.
+
 ## 5. Colours
 
 | Status | Colour |

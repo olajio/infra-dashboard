@@ -1843,3 +1843,26 @@ FROM servicenow-incidents-*, servicenow-task-sla-* METADATA _index
 | SL4 finds records by `sys_id` | Some SLA records lack `task_number`; the dashboard will join on `sys_id` as well |
 | SL3 shows SLA fields on the incident itself (`made_sla`, `sla.*`, `has_breached_sla`) | Those can fill the column for incidents without a separate SLA record |
 | None of the above | ServiceNow has no SLA attached to these incidents (or doesn't sync it to Elastic); SL6 says how many — a question for the ServiceNow team |
+
+### Round 16 results (27 Oct)
+
+| Query | Result | Meaning |
+|---|---|---|
+| SL1 | One SLA index, `servicenow-task-sla-000001` (200,636 records, created 9 Mar 2023), behind the alias `servicenow-task-sla` (write index) | There is no other SLA index. The dashboard's `servicenow-task-sla-*` reads exactly this one |
+| SL2 | `task_number` and `task_sys_id` are both `keyword` | The `terms` search in `no_sla.txt` was valid: no mapping issue |
+| SL3 | The three incidents are P3, opened 20 Oct, `sys_id` = `_id`; **no SLA fields on the incident** (`*sla*` returned nothing). `@timestamp` equals `opened_at` | No SLA data on the incident to fall back on. See the `@timestamp` note below |
+| SL4 | No SLA record for their `sys_id` either | Not a key mismatch: the records don't exist |
+| SL5 | 502 from Kibana (search of every index too large) | Not needed: SL1 shows there is no other SLA index |
+| SL6 | Active P3 opened in the last 7 days: **200, of which 4 have an SLA record** (no active P1 / P2 in that window) | Only 2 % of active incidents have an SLA record in Elastic |
+
+**Conclusion.** The SLA column reads the right index. *No SLA record* is accurate: ServiceNow's SLA records for
+almost all active incidents are not in Elastic. The index grows by about 20 records a day (200,617 on 26 Oct,
+200,636 on 27 Oct) and also holds request (RITM) SLAs, while hundreds of incidents are opened a day — so the
+sync to `servicenow-task-sla` brings only a small subset. Question for the ServiceNow / integration team: which SLA
+records does the sync select, and can it include every incident's SLA (`task_has_breached` on every `task_sla` row
+whose task is an incident)?
+
+**`@timestamp` on incidents is the opened time, not the last sync.** One document per incident (`_id` = `sys_id`),
+with `@timestamp` = `opened_at`. A panel's fixed time range filters `@timestamp`, so *Last 7 days* on *Active
+Incidents*, the three tiles and *Escalate* means **opened in the last 7 days**: an incident still open after 7 days
+drops out of them.
