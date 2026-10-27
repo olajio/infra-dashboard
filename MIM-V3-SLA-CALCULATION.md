@@ -55,8 +55,12 @@ incident's age is not used to guess a status.
 
 **Most incidents show it today.** On 27 Oct 2026 only 4 of the 200 active P3 incidents opened in the last 7 days had
 any record in `servicenow-task-sla` (Round 16 in `queries_ro_run.md`). There is no other SLA index, the incident
-record carries no SLA fields, and the missing records aren't stored under the incident's `sys_id` either: ServiceNow's
-SLA records for those incidents are not synced to Elastic. The column fills in by itself once the sync includes them.
+record carries no SLA fields, and the missing records aren't stored under the incident's `sys_id` either. An export
+of the SLA records synced 19–26 Oct (`servicenow_task_sla.csv`) has an SLA for 107 of the 3,224 incidents opened
+20–26 Oct (3.3 %), all under specific contracts (App Dev vendors, Atos, PAS Helpdesk, Security …). Either ServiceNow
+only attaches an SLA to incidents those contracts cover, or the sync leaves records out; the *Task SLAs* list on one
+of the incidents in ServiceNow (e.g. INC2677001) tells which. If records are there, the column fills in once the sync
+includes them.
 
 ## 5. Colours
 

@@ -1855,12 +1855,23 @@ FROM servicenow-incidents-*, servicenow-task-sla-* METADATA _index
 | SL5 | 502 from Kibana (search of every index too large) | Not needed: SL1 shows there is no other SLA index |
 | SL6 | Active P3 opened in the last 7 days: **200, of which 4 have an SLA record** (no active P1 / P2 in that window) | Only 2 % of active incidents have an SLA record in Elastic |
 
-**Conclusion.** The SLA column reads the right index. *No SLA record* is accurate: ServiceNow's SLA records for
-almost all active incidents are not in Elastic. The index grows by about 20 records a day (200,617 on 26 Oct,
-200,636 on 27 Oct) and also holds request (RITM) SLAs, while hundreds of incidents are opened a day — so the
-sync to `servicenow-task-sla` brings only a small subset. Question for the ServiceNow / integration team: which SLA
-records does the sync select, and can it include every incident's SLA (`task_has_breached` on every `task_sla` row
-whose task is an incident)?
+**Conclusion.** The SLA column reads the right index. *No SLA record* is accurate: almost no active incident has an
+SLA record in Elastic.
+
+**Checked again with `servicenow_task_sla.csv`** (298 SLA records synced 19–26 Oct, exported from Discover):
+- every record has `task_has_breached` (293 false, 5 true), so the flag itself is reliable;
+- 235 records are for 147 incidents, 63 for requests (RITM);
+- none of the six incidents in `no_sla_record.png` appear;
+- of the 3,224 incident numbers opened 20–26 Oct (INC2676945–INC2680168), **107 (3.3 %)** have an SLA record;
+- the incident SLAs belong to specific contracts: App Dev vendors (Accenture, PwC, TCS), Atos, PAS Helpdesk,
+  Security, Premium Processing.
+
+So "every incident has `task_has_breached`" holds for every SLA *record*, not for every *incident*. The
+contract names suggest ServiceNow only attaches an SLA when an incident falls under one of those contracts, in which
+case the other incidents have no SLA in ServiceNow either. It could instead be the sync to Elastic leaving records
+out. **Deciding check for the ServiceNow team:** open the *Task SLAs* related list of INC2677001 (or INC2676945,
+INC2677042) in ServiceNow. Empty → no SLA applies and the dashboard is right to show *No SLA record*; records there →
+the sync is missing them and needs fixing on the integration side.
 
 **`@timestamp` on incidents is the opened time, not the last sync.** One document per incident (`_id` = `sys_id`),
 with `@timestamp` = `opened_at`. A panel's fixed time range filters `@timestamp`, so *Last 7 days* on *Active
