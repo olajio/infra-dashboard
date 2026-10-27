@@ -1,0 +1,39 @@
+GET /servicenow-task-sla*/_search
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "terms": {
+            "task_number": [
+              "INC2677001",
+              "INC2676945",
+              "INC2677042"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+
+The above query give the following resut:
+
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 0,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": []
+  }
+}
