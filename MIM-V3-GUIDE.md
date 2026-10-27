@@ -47,21 +47,22 @@ The MIM lead opens MIM V3 and reads the top row from left to right.
   Last 7 days.
 - **User base · ServiceNow** and **Real users · RUM** — how many users are affected, from the ServiceNow user base and
   from real-user monitoring. Both integrations are in progress, so both tiles show *In progress*.
-- **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** — are we resolving within target? The
-  average time to resolve the P1, P2 and P3 incidents opened each day, against the dashed target lines (red P1 4 h,
-  amber P2 8 h, blue P3 24 h). Incidents still open count with their age so far, so a live P1 shows up on the day it
-  was opened and its point climbs until it is resolved. A run of points above a line means incidents are taking
-  longer than target. Both axes start at 0 h: P1 and P2 use the left axis, P3 its own right axis, so P3 values of a
-  day or more do not flatten the P1 and P2 lines. Incidents opened in the last 7 days.
+- **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** — are the open incidents already past
+  target? The average age so far of the still-open P1, P2 and P3 incidents opened each day, against the dashed target
+  lines (red P1 4 h, amber P2 8 h, blue P3 24 h). An incident leaves the chart once it is resolved, closed, canceled
+  or put On Hold; while it stays open its day's point climbs. A point above a line means that day's open incidents
+  are, on average, older than target. Both axes start at 0 h: P1 and P2 use the left axis, P3 its own right axis, so
+  P3 values of a day or more do not flatten the P1 and P2 lines. Incidents opened in the last 7 days.
 
 ### Step 2 — Pick the incident (section 1, table)
 
 **Active Incidents (P1 · P2 over 8 h · P3 over 24 h)** lists the incidents the three tiles count: every active P1,
-and the active P2s and P3s past their 8 h / 24 h target, P1 first and oldest first (last 7 days). Younger P2s and P3s
-are left out; they can still be picked in the Incident control. For each one the lead sees:
+and the active P2s and P3s past their 8 h / 24 h target, P1 first and oldest first (last 7 days). Younger P2s and P3s,
+and On Hold incidents, are left out; they can still be picked in the Incident control. For each one the lead sees:
 
-- the **SLA**: Breached, Breaching, Paused or Within SLA, taken from ServiceNow's SLA records. How this is worked
-  out is explained in *MIM-V3-SLA-CALCULATION.md*;
+- the **SLA**: Breached (ServiceNow's `task_has_breached` flag on one of its SLA records), Breaching, Paused, Within
+  SLA, Met, or *No SLA record*. It is never worked out from the incident's age. Full rules in
+  *MIM-V3-SLA-CALCULATION.md*;
 - the people: the **Assignment Group**, the **Assignee** and the **Group Manager**, each with an email address
   (`assigned_to.name` / `.email`, `assignment_group.manager.name` / `.email`).
 
@@ -202,7 +203,7 @@ so MIM V3 stays open on the bridge.
 
 - **Use the controls, not cell clicks, to choose what to look at.** Clicking a value and choosing *Apply filter*
   (or *Filter for*) adds a dashboard filter that applies to **every** panel. For example, a filter on an incident
-  number also hides the SLA records, so *Active Incidents* drops to the "(age)" estimate. Remove such filters with
+  number also hides the SLA records, so *Active Incidents* shows "No SLA record". Remove such filters with
   the **×** on the filter pill under the search bar.
 - **The CI control only lists CIs with a P1 / P2 / P3 opened in the last 31 days.** A CI outside that list cannot be
   picked. Type in the control to search the list.
@@ -246,12 +247,15 @@ so MIM V3 stays open on the bridge.
 
 ### Reading the numbers
 
-- **"(age)" in the SLA column is an estimate.** It appears when the incident has no ServiceNow SLA record: its age
-  is compared with P1 4 h / P2 8 h / P3 24 h. Full rules: *MIM-V3-SLA-CALCULATION.md*.
-- **Active** everywhere means priority 1, 2 or 3 and state not Resolved, Closed, Canceled or Cancelled.
-- **The trend's target lines** are P1 4 h, P2 8 h and P3 24 h, the same targets as the SLA age rule. Each incident
-  counts once, on the day it was opened: resolved ones by ServiceNow's `resolution_time`, open ones by their age so
-  far (a minimum that grows until they are resolved). Canceled incidents are left out.
+- **"Breached" in the SLA column is ServiceNow's own verdict** (`task_has_breached` on the incident's SLA records),
+  not the dashboard's. "No SLA record" means no SLA record for the incident was synced in the last 7 days. Full
+  rules: *MIM-V3-SLA-CALCULATION.md*.
+- **Active** means priority 1, 2 or 3 and state not Resolved, Closed, Canceled or Cancelled. In section 1 (the three
+  tiles, Active Incidents and the trend) On Hold incidents are left out too, judged on each incident's latest record;
+  Escalate and the Incident control still list them.
+- **The trend's target lines** are P1 4 h, P2 8 h and P3 24 h, the same targets as the P2 / P3 tiles. Each still-open
+  incident counts once, on the day it was opened, by its age so far (a minimum that grows until it is resolved or put
+  On Hold, when it leaves the chart).
 - **One slow incident moves a day's average.** On days with one or two P1s, a single long incident can put the point
   far above the line.
 - **Health thresholds.** Server Health: amber from 80 %, red from 90 %, red if the server has been silent more than
@@ -318,9 +322,9 @@ so MIM V3 stays open on the bridge.
 | Control | **Health window** (fourth, new 18 Oct) | ✅ | The data window of the health panels (section 3) | Fixed list 15 minutes … 7 days, default 24 hours. A query variable (`?health_window`) applied inside each health query (`@timestamp >= NOW() - window`), so Elasticsearch filters on it. |
 | 1 | **Active P1**, **P2 over 8 h**, **P3 over 24 h** | ✅ | Three count tiles: every active P1 (red); active P2s open longer than 8 h (amber); active P3s open longer than 24 h (blue) | Vega tiles, transparent, theme text colours. `servicenow-incidents-*`, same active rule and grouping as Active Incidents, so each tile equals that priority's rows in the table. Age = now − `opened_at`; 8 h / 24 h are the P2 / P3 targets of Time to Resolve vs Target. Fixed panel range Last 7 days (Kibana 9.5 applies a Vega panel's time range to its ES|QL query, so without it the tiles would follow the time picker). Replaced the Active P1 / P2 / P3 donut on 25 Oct. |
 | 1 | **User base · ServiceNow** / **Real users · RUM** | ⚠️ | Two tiles, both "In progress" (replaced *Users impacted* and its demo number on 20 Oct) | The ServiceNow user base and RUM integrations are in progress; no user-count data in Elastic yet. |
-| 1 | **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** | ✅ | Average time to resolve per opened day, P1 (red), P2 (amber) and P3 (blue), with dashed target lines; P1 / P2 on the left axis, P3 on the right, both from 0 h | P1 / P2 / P3 opened in the last 7 days (panel range Last 7 days), one value per incident: `resolution_time` (ServiceNow's opened → resolved seconds) or resolved_at − opened_at; still open → age so far; canceled left out. Points always drawn. Target lines are a reference-line layer. |
+| 1 | **P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)** | ✅ | Average age so far of the still-open incidents per opened day, P1 (red), P2 (amber) and P3 (blue), with dashed target lines; P1 / P2 on the left axis, P3 on the right, both from 0 h | P1 / P2 / P3 opened in the last 7 days (panel range Last 7 days) whose latest record is not On Hold, Resolved, Closed, Canceled or Cancelled; one value per incident, its age so far (now − `opened_at`). Points always drawn. Target lines are a reference-line layer. |
 | 1 | **Open Alerts with No Incident** | ⚠️ | Netcool alerts still open on CIs with no open incident: CI, severity, alert, open for, last seen, times fired, ack, node, class, support group | `.ds-bridge-alerts-netcool-*` (CMDB-enriched `ci.name`) + `servicenow-incidents-*` (any priority, not closed). Open = the alert's latest record is not severity 0 or a resolution. Last 24 hours (alerts and open incidents seen in that window). CI links to the CMDB. **Limit:** alerts carry no incident number, so "no incident" means no open incident on the same CI; an alert whose node is not in the CMDB shows an empty CI and is listed. |
-| 1 | **Active Incidents (P1 · P2 over 8 h · P3 over 24 h)** | ✅ | Every active P1, and the active P2s / P3s open longer than 8 h / 24 h (the rows the three tiles count), last 7 days: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id, Short description | Incidents joined to `servicenow-task-sla` (real SLA: breached, breaching ≥ 75 % or due in 30 min, paused). No SLA record → age rule (P1 4 h, P2 8 h, P3 24 h), marked "(age)". Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
+| 1 | **Active Incidents (P1 · P2 over 8 h · P3 over 24 h)** | ✅ | Every active P1, and the active P2s / P3s open longer than 8 h / 24 h (the rows the three tiles count), last 7 days: Incident, Pri, Affected CI, State, SLA, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id, Short description | Incidents joined to `servicenow-task-sla-*` on incident number. Breached = `task_has_breached` true on any non-cancelled SLA record; then breaching ≥ 75 % or due in 30 min, paused, within, met; none → "No SLA record". On Hold incidents left out (latest record). Full rules: *MIM-V3-SLA-CALCULATION.md*. Incident and CI link to ServiceNow. |
 | 2 | **Alerts on this CI** | ⚠️ | The CI's Netcool alerts: Open / Cleared, severity, text, timing against the picked incident, first / last seen, times fired, ack | `.ds-bridge-alerts-netcool-*` on `ci.name` (or node "<CI>.cna.com"), one row per `netcool.identifier`; the picked incident's `opened_at` for the timing. Likely trigger = first seen ≤ 2 h before the incident opened. Last 7 days (panel range Last 1 month, for the incident record). Follows the Incident / CI controls only: the Server control belongs to section 3. **Limit:** a match by CI and time, not a recorded link (round 7: no incident or ticket field on the alerts). |
 | 2 | **Escalate** | ✅ | One row per active P1 / P2 / P3 on the CI: CI, Active Incident, Priority, Class, Env, CI support group, Assignment Group, Assignee, Assignee Email, Group Manager Name, Manager Email Id | Incidents on the CI (or the one in the Incident control) plus the CMDB enrichment on its server metrics; last month. CI and Active Incident link to ServiceNow; no other column is clickable. A CI with no active P1 / P2 / P3 still shows one row with its owners. If an incident is picked whose CI is not the one in the CI control, Class / Env / support group come from the incident record and may show "—". |
 | 2 | **Blast radius** | ✅ | Count of applications that depend on the CI, split into business applications, application services and (when any) application instances | `cmdb-ci-relations*` (the full ServiceNow relationship graph): links whose child is the CI and whose parent is an application class, not retired, not marked for deletion. Amber from 1, red from 5. Last 5 years (fixed). |
