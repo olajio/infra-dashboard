@@ -1751,3 +1751,95 @@ Only CA was run this round.
 
 The picks for each test case are in *MIM-V3-TEST-CASES.md*, "Values to use (Round 15, 23 Oct)". CB, CC and CD
 weren't re-run; the 21 Oct results for those are carried forward and marked unverified.
+
+## Round 16 — where are the SLA records for incidents showing "No SLA record"? (27 Oct 2026)
+
+*Active Incidents* shows **No SLA record** for INC2676945, INC2677001, INC2677042 and others. A search of
+`servicenow-task-sla*` on `task_number` found none of the three (`no_sla.txt`), with no time limit, so the
+dashboard is reporting what that index holds. These queries check whether their SLA records exist somewhere else,
+under another key, or not at all. All are read-only and run directly in **Dev Tools Console** (no async step).
+Paste each answer into `round16.txt` with its name above it.
+
+### SL1. Which indices and aliases hold SLA data
+
+```
+GET _cat/indices/*sla*?v&s=index&h=index,docs.count,creation.date.string
+GET _cat/aliases/*sla*?v
+```
+
+### SL2. How `task_number` is mapped (a `text` field would not match a `terms` search for "INC…")
+
+```
+GET servicenow-task-sla/_mapping/field/task_number,task_sys_id,task_number.keyword
+```
+
+### SL3. The three incidents as the incident index stores them: their `sys_id` and any SLA fields
+
+```
+GET servicenow-incidents-*/_search
+{
+  "size": 10,
+  "query": { "bool": { "should": [
+    { "terms": { "number": ["INC2676945", "INC2677001", "INC2677042"] } },
+    { "terms": { "number.keyword": ["INC2676945", "INC2677001", "INC2677042"] } } ] } },
+  "sort": [ { "@timestamp": "desc" } ],
+  "_source": ["number", "sys_id", "priority", "state_name", "opened_at", "@timestamp", "assignment_group.name",
+              "contract*", "*sla*", "made_sla", "sla*"]
+}
+```
+
+### SL4. Their SLA records looked up by the incident's `sys_id` instead of its number
+
+Put the `sys_id` values from SL3 in place of the placeholders:
+
+```
+GET servicenow-task-sla*/_search
+{
+  "query": { "terms": { "task_sys_id": ["<sys_id of INC2676945>", "<sys_id of INC2677001>", "<sys_id of INC2677042>"] } },
+  "_source": ["task_number", "task_sys_id", "stage", "task_has_breached", "contract_name", "@timestamp"]
+}
+```
+
+### SL5. Any index that mentions the three numbers at all
+
+Searches every non-system index. Shard failures for indices with very many fields are fine; the `by_index` buckets
+are what matter.
+
+```
+GET *,-.*/_search
+{
+  "size": 0,
+  "query": { "query_string": { "query": "\"INC2676945\" OR \"INC2677001\" OR \"INC2677042\"" } },
+  "aggs": { "by_index": { "terms": { "field": "_index", "size": 50 } } }
+}
+```
+
+### SL6. How many active incidents have an SLA record (the size of the gap)
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incidents-*, servicenow-task-sla-* METADATA _index
+| EVAL src = CASE(_index LIKE "*task-sla*", "sla", "inc")
+| WHERE src == "sla" OR @timestamp >= NOW() - 7 days
+| EVAL inc = CASE(src == "sla", TO_STRING(task_number), TO_STRING(number))
+| WHERE inc LIKE "INC*"
+| EVAL active = CASE(src == "inc" AND TO_INTEGER(priority) IN (1, 2, 3) AND TO_STRING(state_name) NOT IN ("On Hold", "Resolved", "Closed", "Canceled", "Cancelled"), 1, 0)
+| STATS is_active = MAX(active), pri = MIN(CASE(src == "inc", TO_INTEGER(priority))),
+        slas = SUM(CASE(src == "sla", 1, 0)), slas_7d = SUM(CASE(src == "sla" AND @timestamp >= NOW() - 7 days, 1, 0))
+  BY inc
+| WHERE is_active == 1
+| STATS incidents = COUNT(*), with_sla = SUM(CASE(slas > 0, 1, 0)), with_sla_synced_7d = SUM(CASE(slas_7d > 0, 1, 0)) BY pri
+| SORT pri
+"""
+}
+```
+
+| If … | Then |
+|---|---|
+| SL1 lists another SLA index or alias, and SL5 finds the numbers there | The SLA column should read that index; send the result and it will be switched |
+| SL2 shows `task_number` as `text` | Re-run `no_sla.txt` on `task_number.keyword` (or with `match`): the records may exist after all |
+| SL4 finds records by `sys_id` | Some SLA records lack `task_number`; the dashboard will join on `sys_id` as well |
+| SL3 shows SLA fields on the incident itself (`made_sla`, `sla.*`, `has_breached_sla`) | Those can fill the column for incidents without a separate SLA record |
+| None of the above | ServiceNow has no SLA attached to these incidents (or doesn't sync it to Elastic); SL6 says how many — a question for the ServiceNow team |
