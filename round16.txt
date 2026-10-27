@@ -1,0 +1,138 @@
+# 2: GET _cat/indices/*sla*?v&s=index&h=index,docs.count,creation.date.string [200 OK]
+index                      docs.count creation.date.string
+servicenow-task-sla-000001     200636 2023-03-09T14:58:01.813Z
+
+# 3: GET _cat/aliases/*sla*?v [200 OK]
+alias               index                      filter routing.index routing.search is_write_index
+servicenow-task-sla servicenow-task-sla-000001 -      -             -              true
+
+# 6: GET servicenow-task-sla/_mapping/field/task_number,task_sys_id,task_number.keyword [200 OK]
+{
+  "servicenow-task-sla-000001": {
+    "mappings": {
+      "task_number": {
+        "full_name": "task_number",
+        "mapping": {
+          "task_number": {
+            "type": "keyword"
+          }
+        }
+      },
+      "task_sys_id": {
+        "full_name": "task_sys_id",
+        "mapping": {
+          "task_sys_id": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+# 9: GET servicenow-incidents-*/_search [200 OK]
+{
+  "took": 8,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 3,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": "servicenow-incidents-000001",
+        "_id": "1e253ee52b48df10f841fb05ce91bfd7",
+        "_score": null,
+        "_source": {
+          "assignment_group": {
+            "name": "IT.A.Claim_GCP_Support"
+          },
+          "sys_id": "1e253ee52b48df10f841fb05ce91bfd7",
+          "number": "INC2677042",
+          "state_name": "In Progress",
+          "priority": 3,
+          "opened_at": "2026-10-20T14:29:43.000Z",
+          "@timestamp": "2026-10-20T14:29:43.000Z"
+        },
+        "sort": [
+          1792506583000
+        ]
+      },
+      {
+        "_index": "servicenow-incidents-000001",
+        "_id": "a817622d3b481710c36cb78c24e45a67",
+        "_score": null,
+        "_source": {
+          "assignment_group": {
+            "name": "WWO.CNA.Agency_Help_Desk"
+          },
+          "sys_id": "a817622d3b481710c36cb78c24e45a67",
+          "number": "INC2677001",
+          "state_name": "New",
+          "priority": 3,
+          "opened_at": "2026-10-20T13:24:16.000Z",
+          "@timestamp": "2026-10-20T13:24:16.000Z"
+        },
+        "sort": [
+          1792502656000
+        ]
+      },
+      {
+        "_index": "servicenow-incidents-000001",
+        "_id": "aec242ad3b04db1087fb42d643e45a5d",
+        "_score": null,
+        "_source": {
+          "assignment_group": {
+            "name": "IT.CNA_Hardy.Rulebook_RTB"
+          },
+          "sys_id": "aec242ad3b04db1087fb42d643e45a5d",
+          "number": "INC2676945",
+          "state_name": "In Progress",
+          "priority": 3,
+          "opened_at": "2026-10-20T10:45:45.000Z",
+          "@timestamp": "2026-10-20T10:45:45.000Z"
+        },
+        "sort": [
+          1792493145000
+        ]
+      }
+    ]
+  }
+}
+# 23: GET servicenow-task-sla*/_search [200 OK]
+{
+  "took": 10,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 0,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": []
+  }
+}
+# 33: GET *,-.*/_search [502 Bad Gateway]
+{
+  "statusCode": 502,
+  "error": "Bad Gateway",
+  "message": "An internal server error occurred. Check Kibana server logs for details."
+}
+# 42: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+   incidents   |   with_sla    |with_sla_synced_7d|      pri      
+---------------+---------------+------------------+---------------
+200            |4              |4                 |3              
