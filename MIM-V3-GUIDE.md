@@ -370,7 +370,7 @@ The two links (link text only, 14 Oct) go to:
 
 | Link | Address |
 |---|---|
-| Applications Operations Dashboard | https://kibana-prod.gcp.cna.com/app/r/s/b4Jas |
+| Applications Operations Dashboard | https://kibana-prod.gcp.cna.com/app/r/s/uolFV |
 | Infra Dashboard | https://kibana-prod.gcp.cna.com/app/r/s/3A7f1 |
 
 The addresses come from `links.txt` and are stored in `MIM V3.ndjson`. To change one, update both (the link text in
