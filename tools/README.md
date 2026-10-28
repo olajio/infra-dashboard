@@ -40,3 +40,13 @@ needs that file restored first. `MIM V3.ndjson` itself was kept.
 To rebuild `MIM V3.ndjson` from the colleague's export, run the patches in order:
 `mim_v3_patch_2026-10-15.py "updated mim dashboard.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16b.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16d.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16e.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16f.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16g.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16h.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16i.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16j.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-18k.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-18l.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-18m.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-18n.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-20o.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-20p.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-20q.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-25r.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-27s.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-28t.py "MIM V3.ndjson" "MIM V3.ndjson"`.
 Tests: `test_mim_v3_2026-10-14.py`, `-16.py`, `-15.py`, `-16b.py`, `-16d.py`, `-16e.py`, `-16f.py`, `-16g.py`, `-16h.py`, `-16i.py`, `-16j.py`, `-18k.py`, `-18m.py`, `-18n.py`, `-20o.py`, `-25r.py`, `-27s.py`, each with `"MIM V3.ndjson"`, against a local Elasticsearch on port 9200 (since 16 Oct: Elasticsearch and Kibana 9.5.3 from Docker Hub, the cluster's version; set `cluster.routing.allocation.disk.threshold_enabled: false` if the disk is nearly full).
+
+## Infrastructure Dashboard (28 Oct 2026)
+
+`Infrastructure Dashboard.ndjson` is the CI-driven dashboard for the KPIs in `dashboard_kpis.txt`. It is **built
+from `MIM V3.ndjson`**, reusing MIM V3's tested panels, so rebuild it after MIM V3 changes:
+`python3 build_infra_dashboard.py "MIM V3.ndjson" "Infrastructure Dashboard.ndjson"` (dashboard id
+`0ed4078f-ae6c-5721-b852-20f0cf4d7a33`; import with overwrite). Test: `test_infra_dashboard_2026-10-28.py
+"Infrastructure Dashboard.ndjson"` against a local Elasticsearch (it loads the data of the `-15`, `-16j`, `-18k` and
+`-27s` tests plus its own, runs every panel query with and without a CI picked, and cleans up). KPI status:
+`INFRA-DASHBOARD-KPIS.xlsx`; queries for the placeholder KPIs: `dashboard_queries.md`.
