@@ -1,0 +1,26 @@
+Control Input: CI
+ 
+1. Incident, Changes and alerts
+  KPIs:
+  P1/P2 incident counts
+  User impact
+  Elastic Infra Alerts
+  Incidents table
+  Changes table
+ 
+2. High level infra overview (including cloud)
+  KPIs:
+  Server health
+  Database health
+  Middleware health
+  VMWare health
+  Cloud health
+  Custom Integration health
+  Process health
+ 
+  
+3. Applications Overview
+  KPIs:
+  Applications related to selected CI/Server
+  Application health (traffic light pattern showing Application health)
+  Service health for selected application
