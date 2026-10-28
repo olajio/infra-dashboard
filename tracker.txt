@@ -1,0 +1,12 @@
+27 Oct
+- Changed the SLA column in Active Incidents to show Breached only from ServiceNow's task_has_breached flag, no longer estimated from the incident's age. Incidents with no SLA record show "No SLA record".
+- Removed On Hold, Resolved, Closed and Canceled incidents from Active Incidents, the count panels and the Time to Resolve vs Target graph.
+- Investigated why incidents showed "No SLA record" (Round 16 queries and the SLA CSV export). The dashboard reads the correct SLA index, but only about 3% of incidents have an SLA record in it. Pending confirmation from the ServiceNow team on whether this is an integration gap.
+- Found that the incident index's @timestamp is the opened time, so the 7-day panels only show incidents opened in the last 7 days.
+
+28 Oct
+- Updated the MIM V3 "Applications Operations Dashboard" link to the new URL.
+- Reviewed the revised KPIs for the new Infrastructure dashboard: 9 achievable, 3 partly achievable, 4 not achievable yet. The old Consolidated dashboard achieved 4 of the 16 KPIs and partly another 4, all estate-wide rather than per CI.
+- Built the new CI-driven Infrastructure Dashboard in three sections: incidents, changes and alerts; infrastructure health; applications. KPIs not yet achievable (User impact, VMware, Cloud and Custom Integration health) are placeholders. Elastic Infra Alerts is partly covered by Netcool alerts on the CI, with a placeholder for Elastic's own alerts.
+- Created the KPI status spreadsheet (INFRA-DASHBOARD-KPIS.xlsx) with each KPI's status, extent, limits and data source.
+- Wrote dashboard_queries.md with queries to confirm the data for the VMware, Cloud, Elastic alerts and Custom Integration KPIs.
