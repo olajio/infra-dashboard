@@ -28,6 +28,7 @@ Service and Application are the first row of section 3, the only section they af
 | **1 · Major Incident Overview** | All active P1 / P2 / P3 incidents, all CIs | Fixed last month |
 | **2 · Investigate the CI** | The picked incident's affected CI (or the CI picked in the CI control) only, including every CI and application related to it in the CMDB (*Applications related to this CI* and the four related-CI views) | Fixed per panel (shown on the panel); the CMDB panels read the last 5 years |
 | **Application control** (section 3, fourth) | Picks the business application whose services *Services of the Application* lists. *(all applications)* (the default) lists every service, worst first. | — |
+| **Telemetry control** (section 3, fifth) | *(all applications)* (the default): *Application Health* as usual, plus — with no CI picked — the applications enrolled for Elastic telemetry onboarding that send no APM data yet. *Enrolled, no telemetry yet*: only those, whatever the CI (the onboarding worklist, from `cmdb_with_apm_flag`). | — |
 | **3 · Application & Service Health, Dependencies** | Every application's health from its services; the services of the picked application; the service(s) from the Service control with their dependencies; then the chosen server's health panels (Middleware, Database, Server, APM Services, Process, Synthetics, Logs) | Fixed last hour; the health panels follow the **Health window** control |
 | **4 · Related dashboards** | Links to the Applications Operations and Infra dashboards | — |
 
@@ -156,7 +157,9 @@ control to see its health in the health panels (section 3).
 **Application Health** follows the selected CI (the picked incident's CI, or the CI control): it lists the production
 business applications related to it — linked to it in the CMDB in either direction, running APM services on it (a
 server), or the CI itself when it is a business application. With no CI selected it lists every production business
-application. Each is rated by the health of its services in the last hour, worst first: Failing (a service with 10 % or more failed transactions), Degraded (1 % or more) or Healthy, with how
+application, then — marked *Enrolled — no telemetry yet* — the applications enrolled for Elastic telemetry onboarding
+(`cmdb_with_apm_flag`, `is_monitored`) that sent no APM data in the last hour; set the **Telemetry** control to
+*Enrolled, no telemetry yet* to list only those. Each is rated by the health of its services in the last hour, worst first: Failing (a service with 10 % or more failed transactions), Degraded (1 % or more) or Healthy, with how
 many services are failing or degraded, and the **Servers** its services run on. Pick an application in the
 **Application control**: **Services of the Application** then lists its services, worst first, with the servers each
 runs on, error rate, latency and throughput; click a service to open its APM Service Map. Type a server from either

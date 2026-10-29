@@ -177,8 +177,9 @@ panels += [
 ]
 # ---------------- 3 · Applications overview ----------------
 panels += [
-    copy_panel('Application', S3, 0, 0, 24, 3),
-    copy_panel('Service', S3, 24, 0, 24, 3),
+    copy_panel('Application', S3, 0, 0, 16, 3),
+    copy_panel('Service', S3, 16, 0, 16, 3),
+    copy_panel('Telemetry', S3, 32, 0, 16, 3),
     copy_panel('Applications related to this CI', S3, 0, 3, 22, 12),
     copy_panel('Application Health', S3, 22, 3, 26, 12),
     copy_panel('Services of the Application', S3, 0, 15, 26, 12),

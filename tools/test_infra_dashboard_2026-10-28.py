@@ -42,6 +42,7 @@ def cleanup():
             call('DELETE', f'/{i["index"]}')
     for t in ('apm-tx-test',):
         call('DELETE', f'/_index_template/{t}')
+    call('DELETE', '/cmdb_with_apm_flag')
 
 
 cleanup()
@@ -56,6 +57,10 @@ call('PUT', f'/{INC}', {'mappings': {'properties': {
 call('PUT', f'/{CHG}', {'mappings': {'properties': {
     '@timestamp': D, 'number': K, 'ci': obj(name=K), 'start_date': D, 'end_at': D, 'opened_at': D, 'close_code': K,
     'state_name': K, 'type': obj(normalized=K), 'category': obj(**{'1': K}), 'assignment_group': obj(name=K)}}})
+TXT = {'type': 'text', 'fields': {'keyword': {'type': 'keyword'}}}
+call('PUT', '/cmdb_with_apm_flag', {'mappings': {'properties': {   # telemetry onboarding list read by Application Health (29 Oct)
+    '@timestamp': D, 'name': TXT, 'number': TXT, 'install_status': TXT, 'is_monitored': {'type': 'boolean'},
+    'support_group': obj(l2=obj(name=TXT))}}})
 
 
 def inc(n, p, s, ci):
@@ -95,7 +100,7 @@ def check(name, got, want):
 
 
 DEFAULTS = {'ci': '(no CI selected)', 'server': '(no server selected)', 'health_window': '24 hours',
-            'service': '(services on this CI)', 'application': '(all applications)',
+            'service': '(services on this CI)', 'application': '(all applications)', 'telemetry': '(all applications)',
             '_tstart': ago(hours=1), '_tend': ago()}
 
 
