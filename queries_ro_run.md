@@ -1975,3 +1975,19 @@ FROM cmdb_with_apm_flag, cmdb-ci-relations* METADATA _index
 | OB3 poor, OB4 good | Matches on the **name**, case-insensitive |
 | OB5 low | The onboarding list names business applications, not the application services in the CMDB relations: the filter then applies to *Application Health*, *Services of the Application* and the *Application* control, not to *Applications related to this CI* |
 | `enrolled_not_sending_yet` > 0 | Those applications can be shown as **"Enrolled — no telemetry yet"** instead of being missing |
+
+### Round 18 results (29 Oct)
+
+| Query | Result | Meaning |
+|---|---|---|
+| OB1 | Built by a transform (`cmdb_apm_transform`). Business applications only (`class` = `cmdb_ci_business_app`), retired ones included (`install_status` / `operational_status`). Text fields with `.keyword` subfields, `number` included; `is_monitored` and `is_missing` booleans; also `apm_match.service.name` / `.id` (the APM services matched to the application) | Match on `number.keyword`. Retired applications have to be excluded explicitly |
+| OB2 | 2,341 records, 2,341 numbers, 2,340 names; 164 enrolled, 2,177 not. Dated 29 Oct 2025 – 29 Oct 2026 | One record per application (the number is unique, one name is shared by two) |
+| OB3 (number) | 137 applications send APM data; **all 137 are enrolled**; 27 enrolled applications send nothing yet; 0 send APM data without being listed | Numbers match perfectly |
+| OB4 (name) | Same as OB3 | Names match too, but numbers are the safer key |
+| OB5 (Discover, `round18.csv`) | Only **7 of 2,329** listed names appear in `cmdb-ci-relations` | CMDB relations name application *services* (e.g. "… PROD"), not these business applications: the list can't drive *Applications related to this CI* by name |
+
+**Conclusion.** Every application that sends APM data is already enrolled, so on the APM panels (*Application Health*,
+*Services of the Application*) an "enrolled only" filter would remove nothing today, and "not enrolled" would show
+nothing. What the list adds is the **27 enrolled applications with no telemetry yet** (and their onboarding status),
+and an accurate coverage number once retired applications are left out (Portfolio v3's *APM Coverage* = 164 / 2,341
+counts retired applications in the denominator).
