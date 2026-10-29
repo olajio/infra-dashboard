@@ -1,0 +1,558 @@
+# 1: GET cmdb_with_apm_flag/_mapping [200 OK]
+{
+  "cmdb_with_apm_flag": {
+    "mappings": {
+      "_meta": {
+        "created_by": "transform",
+        "_transform": {
+          "transform": "cmdb_apm_transform",
+          "version": {
+            "created": "10.0.0"
+          },
+          "creation_date_in_millis": 1780471841183
+        }
+      },
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "apm_match": {
+          "properties": {
+            "service": {
+              "properties": {
+                "id": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "assignment_group": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "category": {
+          "properties": {
+            "1": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "2": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "class": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "class_name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "created_at": {
+          "type": "date"
+        },
+        "customer_specific": {
+          "properties": {
+            "pm_portfolio": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "datasource": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "environment": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "extracted_at": {
+          "type": "date"
+        },
+        "fqdn": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "geo": {
+          "properties": {
+            "city": {
+              "properties": {
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "country": {
+              "properties": {
+                "iso_code": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "datasource": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "formatted_address": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "location": {
+              "properties": {
+                "lat": {
+                  "type": "float"
+                },
+                "lon": {
+                  "type": "float"
+                }
+              }
+            },
+            "name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "place_id": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "state": {
+              "properties": {
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "sys_id": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "updated_at": {
+              "type": "date"
+            }
+          }
+        },
+        "id": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "ingest_error": {
+          "properties": {
+            "bridge_enrichment": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "bridge_enrichment_items": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "ingested_at": {
+          "type": "date"
+        },
+        "install_status": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "is_missing": {
+          "type": "boolean"
+        },
+        "is_monitored": {
+          "type": "boolean"
+        },
+        "last_discovered": {
+          "type": "date"
+        },
+        "name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "name_normalized": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "number": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "operational_status": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "short_description": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "support_group": {
+          "properties": {
+            "l2": {
+              "properties": {
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "sys_id": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sync_metadata": {
+          "properties": {
+            "id": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "timestamp": {
+              "type": "date"
+            }
+          }
+        },
+        "sys_id": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "updated_at": {
+          "type": "date"
+        }
+      }
+    }
+  }
+}
+# 2: GET cmdb_with_apm_flag/_search?size=3 [200 OK]
+{
+  "took": 8,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 2341,
+      "relation": "eq"
+    },
+    "max_score": 1,
+    "hits": [
+      {
+        "_index": "cmdb_with_apm_flag",
+        "_id": "QZgBfT8u_8PF8TtUEj5Vkg0AAAAAAAAA",
+        "_score": 1,
+        "_source": {
+          "short_description": "A runtime engine for .Net created applications.",
+          "sync_metadata": {
+            "name": "default",
+            "id": "ea2911b0-b3c3-4008-a882-8cf4aaa2e202",
+            "timestamp": "2026-10-29T14:12:25.765Z"
+          },
+          "customer_specific": {
+            "pm_portfolio": "Commercial"
+          },
+          "operational_status": "Retired",
+          "extracted_at": "2026-10-29T14:12:30.876Z",
+          "created_at": "2022-11-17T05:19:10.000Z",
+          "name_normalized": ".net framework 4.0",
+          "number": "APM0002729",
+          "sys_id": "bec985d01b9fddd0314a98ac0a4bcb03",
+          "@timestamp": "2026-10-29T14:12:30.876Z",
+          "is_monitored": false,
+          "updated_at": "2026-05-21T22:17:32.000Z",
+          "install_status": "Retired",
+          "datasource": "cnaprod.service-now",
+          "ingested_at": "2026-10-29T14:12:31.122614903Z",
+          "name": ".NET Framework 4.0",
+          "is_missing": true,
+          "id": "bec985d01b9fddd0314a98ac0a4bcb03",
+          "class": "cmdb_ci_business_app",
+          "class_name": "Business Application"
+        }
+      },
+      {
+        "_index": "cmdb_with_apm_flag",
+        "_id": "QUwmgje1Dj5AqisnODDxgvcAAAAAAAAA",
+        "_score": 1,
+        "_ignored": [
+          "short_description.keyword"
+        ],
+        "_source": {
+          "short_description": """The 360 Multi-Rater Feedback application provides robust performance feedback to CNA executives by surveying the executive's supervisor, peers, direct reports, customers, and other personnel.  The surveys are tailored to CNA's competency model.
+---------------------------------
+Nolan S. Comment 4/15/22 - Retired per request from Mary Jacobs.""",
+          "sync_metadata": {
+            "name": "default",
+            "id": "ea2911b0-b3c3-4008-a882-8cf4aaa2e202",
+            "timestamp": "2026-10-29T14:12:25.765Z"
+          },
+          "operational_status": "Retired",
+          "extracted_at": "2026-10-29T14:12:30.857Z",
+          "created_at": "2022-11-17T05:19:12.000Z",
+          "name_normalized": "360 multi-rater feedback",
+          "number": "APM0002730",
+          "sys_id": "17c9c5d01b9fddd0314a98ac0a4bcb6c",
+          "@timestamp": "2026-10-29T14:12:30.857Z",
+          "is_monitored": false,
+          "updated_at": "2026-05-21T22:17:30.000Z",
+          "install_status": "Retired",
+          "datasource": "cnaprod.service-now",
+          "ingested_at": "2026-10-29T14:12:31.079167533Z",
+          "name": "360 Multi-Rater Feedback",
+          "is_missing": true,
+          "id": "17c9c5d01b9fddd0314a98ac0a4bcb6c",
+          "class": "cmdb_ci_business_app",
+          "class_name": "Business Application"
+        }
+      },
+      {
+        "_index": "cmdb_with_apm_flag",
+        "_id": "Qf0GujnJ3QD5-3ZR2cXMBjoAAAAAAAAA",
+        "_score": 1,
+        "_source": {
+          "sync_metadata": {
+            "name": "default",
+            "id": "ea2911b0-b3c3-4008-a882-8cf4aaa2e202",
+            "timestamp": "2026-10-29T14:12:25.765Z"
+          },
+          "customer_specific": {
+            "pm_portfolio": "Commercial"
+          },
+          "operational_status": "Retired",
+          "extracted_at": "2026-10-29T14:12:27.272Z",
+          "created_at": "2022-11-17T05:19:12.000Z",
+          "name_normalized": "3d static strength prediction program",
+          "number": "APM0002731",
+          "sys_id": "d7c9c5d01b9fddd0314a98ac0a4bcb8b",
+          "environment": "prod",
+          "@timestamp": "2026-10-29T14:12:27.272Z",
+          "is_monitored": false,
+          "updated_at": "2026-02-27T05:11:40.000Z",
+          "install_status": "Retired",
+          "datasource": "cnaprod.service-now",
+          "ingested_at": "2026-10-29T14:12:27.402413922Z",
+          "name": "3D Static Strength Prediction Program",
+          "is_missing": true,
+          "id": "d7c9c5d01b9fddd0314a98ac0a4bcb8b",
+          "class": "cmdb_ci_business_app",
+          "class_name": "Business Application"
+        }
+      }
+    ]
+  }
+}
+# 4: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+    records    |   app_names   |  app_numbers  |   enrolled    | not_enrolled  |        first_ts        |        last_ts         
+---------------+---------------+---------------+---------------+---------------+------------------------+------------------------
+2341           |2340           |2341           |164            |2177           |2025-10-29T16:26:55.644Z|2026-10-29T14:12:33.931Z
+
+# 14: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+    listed     |   enrolled    |   sends_apm   |enrolled_and_sending|enrolled_not_sending_yet|sending_but_not_listed
+---------------+---------------+---------------+--------------------+------------------------+----------------------
+2341           |164            |137            |137                 |27                      |0                     
+
+# 29: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+    listed     |   enrolled    |   sends_apm   |enrolled_and_sending|enrolled_not_sending_yet|sending_but_not_listed
+---------------+---------------+---------------+--------------------+------------------------+----------------------
+2341           |164            |137            |137                 |27                      |0                     
+
+# 44: POST /_query?format=txt [502 Bad Gateway]
+{
+  "statusCode": 502,
+  "error": "Bad Gateway",
+  "message": "An internal server error occurred. Check Kibana server logs for details."
+}
