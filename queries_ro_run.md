@@ -1877,3 +1877,101 @@ the sync is missing them and needs fixing on the integration side.
 with `@timestamp` = `opened_at`. A panel's fixed time range filters `@timestamp`, so *Last 7 days* on *Active
 Incidents*, the three tiles and *Escalate* means **opened in the last 7 days**: an incident still open after 7 days
 drops out of them.
+
+## Round 18 — telemetry onboarding list `cmdb_with_apm_flag` (29 Oct 2026)
+
+The Portfolio v3 dashboard (`portfolio_v3.ndjson`) reads `cmdb_with_apm_flag`: one record per CMDB application with
+`is_monitored` (true = enrolled for Elastic telemetry onboarding), `name`, `number` and
+`customer_specific.pm_portfolio` — without the `ci.` prefix our APM data uses (`monitored_ci.txt`). Its panels: *APM
+Coverage* = `count(is_monitored:true) / count()`, *Application Count* = distinct `name.keyword`, *Elastic Onboarding
+Status* table. Before MIM V3 can filter on it we need its exact fields, whether it holds one record per application,
+and how its names / numbers match the applications MIM V3 shows (APM `ci.name` / `ci.number`, CMDB relation names).
+
+All read-only, in **Dev Tools Console**. Paste each answer into `round18.txt` with its name above it. If one fails
+with `Unknown column [...]`, paste the error: OB1 shows the real field names.
+
+### OB1. Fields and three sample records
+
+```
+GET cmdb_with_apm_flag/_mapping
+GET cmdb_with_apm_flag/_search?size=3
+```
+
+### OB2. Size: records, distinct applications, enrolled, and how the records are dated
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM cmdb_with_apm_flag
+| STATS records = COUNT(*), app_names = COUNT_DISTINCT(`name.keyword`), app_numbers = COUNT_DISTINCT(number),
+        enrolled = SUM(CASE(is_monitored, 1, 0)), not_enrolled = SUM(CASE(is_monitored, 0, 1)),
+        first_ts = MIN(@timestamp), last_ts = MAX(@timestamp)
+"""
+}
+```
+
+### OB3. Enrolled applications vs the applications sending APM data (last hour), matched on the application number
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM cmdb_with_apm_flag, metrics-apm.service_transaction.1m-* METADATA _index
+| WHERE _index LIKE "*cmdb_with_apm_flag*" OR @timestamp >= NOW() - 1 hour
+| EVAL flag = _index LIKE "*cmdb_with_apm_flag*"
+| EVAL app = CASE(flag, TO_STRING(number), TO_STRING(ci.number))
+| WHERE app IS NOT NULL
+| STATS listed = MAX(CASE(flag, 1, 0)), enrolled = MAX(CASE(flag AND is_monitored, 1, 0)), sends_apm = MAX(CASE(flag, 0, 1)) BY app
+| STATS listed = SUM(listed), enrolled = SUM(enrolled), sends_apm = SUM(sends_apm),
+        enrolled_and_sending = SUM(enrolled * sends_apm), enrolled_not_sending_yet = SUM(CASE(enrolled == 1 AND sends_apm == 0, 1, 0)),
+        sending_but_not_listed = SUM(CASE(listed == 0 AND sends_apm == 1, 1, 0))
+"""
+}
+```
+
+### OB4. The same match on the application name
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM cmdb_with_apm_flag, metrics-apm.service_transaction.1m-* METADATA _index
+| WHERE _index LIKE "*cmdb_with_apm_flag*" OR @timestamp >= NOW() - 1 hour
+| EVAL flag = _index LIKE "*cmdb_with_apm_flag*"
+| WHERE (flag AND `name.keyword` IS NOT NULL) OR (NOT flag AND ci.name IS NOT NULL)
+| EVAL app = TO_LOWER(CASE(flag, TO_STRING(`name.keyword`), TO_STRING(ci.name)))
+| STATS listed = MAX(CASE(flag, 1, 0)), enrolled = MAX(CASE(flag AND is_monitored, 1, 0)), sends_apm = MAX(CASE(flag, 0, 1)) BY app
+| STATS listed = SUM(listed), enrolled = SUM(enrolled), sends_apm = SUM(sends_apm),
+        enrolled_and_sending = SUM(enrolled * sends_apm), enrolled_not_sending_yet = SUM(CASE(enrolled == 1 AND sends_apm == 0, 1, 0)),
+        sending_but_not_listed = SUM(CASE(listed == 0 AND sends_apm == 1, 1, 0))
+"""
+}
+```
+
+### OB5. Do the listed names appear in the CMDB relations MIM V3 uses (Applications related to this CI)?
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM cmdb_with_apm_flag, cmdb-ci-relations* METADATA _index
+| EVAL flag = _index LIKE "*cmdb_with_apm_flag*"
+| EVAL n1 = TO_LOWER(CASE(flag, TO_STRING(`name.keyword`), TO_STRING(parent.name))), n2 = CASE(flag, NULL, TO_LOWER(TO_STRING(child.name)))
+| EVAL app = CASE(flag, n1, MV_APPEND(n1, n2))
+| MV_EXPAND app
+| STATS listed = MAX(CASE(flag, 1, 0)), in_cmdb_relations = MAX(CASE(flag, 0, 1)) BY app
+| WHERE listed == 1 AND LENGTH(app) > 0
+| STATS listed = COUNT(*), also_in_relations = SUM(in_cmdb_relations)
+"""
+}
+```
+
+| If … | Then |
+|---|---|
+| OB2: `records` ≈ `app_names` | One record per application: a simple lookup |
+| OB2: many more records than names | Snapshots: MIM V3 takes each application's latest record |
+| OB3 matches well | MIM V3 matches on the application **number** (most reliable) |
+| OB3 poor, OB4 good | Matches on the **name**, case-insensitive |
+| OB5 low | The onboarding list names business applications, not the application services in the CMDB relations: the filter then applies to *Application Health*, *Services of the Application* and the *Application* control, not to *Applications related to this CI* |
+| `enrolled_not_sending_yet` > 0 | Those applications can be shown as **"Enrolled — no telemetry yet"** instead of being missing |
