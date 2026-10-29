@@ -1,0 +1,5 @@
+This dataview has the "is_monitored" flag for the elastic onboarding: cmdb_with_apm_flag
+ 
+ 
+One thing to note is that they have the portfolio as "customer_specific.pm_portfolio" (missing ci prefix) instead of "ci.customer_specific.pm_portfolio" like we do in apm/traces. Same with other fields like name and number instead of ci.name and ci.number
+ 
