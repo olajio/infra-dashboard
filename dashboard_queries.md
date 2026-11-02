@@ -393,7 +393,7 @@ GET metrics-gcp.*/_field_caps?fields=gcp.gke.*,gcp.compute.*,gcp.storage.*,gcp.c
 
 | Data set | Fields | Fields that can drive a health colour |
 |---|---|---|
-| Cloud SQL (46) | `database.up`-style state is in `database.instance_state`; also `cpu.utilization.pct`, `memory.utilization.pct`, `disk.utilization.pct`, `network.connections.count`, `replication.replica_lag.sec`, `auto_failover_request.count` | instance_state (down = red), CPU/memory/disk % (same 80/90 thresholds as Database Health), replica lag |
+| Cloud SQL (46) | `database.instance_state`, `cpu.utilization.pct`, `memory.utilization.pct`, `disk.utilization.pct`, `network.connections.count`, `replication.replica_lag.sec`, `auto_failover_request.count` | instance_state (down = red), CPU/memory/disk % (same 80/90 thresholds as Database Health), replica lag |
 | GKE (40) | `node.cpu.allocatable_utilization.pct`, `node.memory.allocatable_utilization.pct`, `container.restart.count`, `container.cpu/memory.limit_utilization.pct`, `pod.volume.utilization.pct`, `node.pid_used/pid_limit` | node CPU/memory %, container restarts, volumes near full |
 | Compute (19) | `instance.cpu.usage.pct`, `instance.uptime.sec`, disk/network bytes, `firewall.dropped_packets_count` | CPU %, uptime reset (reboot); no memory % without the Ops agent (only balloon fields) |
 | Storage (9) | `api.request.count`, `storage.object.count`, `storage.total.bytes`, network bytes | No health signal beyond request volume. Error ratio needs `api.request.count` split by response code, which is not in the field list. |
