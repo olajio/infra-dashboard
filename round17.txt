@@ -1,0 +1,2992 @@
+#IQ1a
+# 2: POST /_query?format=txt [400 Bad Request]
+#! No limit defined, adding default limit of [1000]
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "verification_exception",
+        "reason": """Found 1 problem
+line 4:76: Unknown column [ci.name]"""
+      }
+    ],
+    "type": "verification_exception",
+    "reason": """Found 1 problem
+line 4:76: Unknown column [ci.name]"""
+  },
+  "status": 400
+}
+
+#IQ1b
+# 14: GET metrics-vsphere.virtualmachine-*/_search?size=1&sort=@timestamp:desc [200 OK]
+{
+  "took": 14,
+  "timed_out": false,
+  "_shards": {
+    "total": 9,
+    "successful": 9,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".ds-metrics-vsphere.virtualmachine-default-2026.10.28-000656",
+        "_id": "IwDmEtIBlnsRuqwloYRfT3___l5j-8DJrs6yCA",
+        "_score": null,
+        "_source": {
+          "@timestamp": "2026-11-02T11:28:06.454Z",
+          "agent": {
+            "ephemeral_id": "3337c731-977f-47de-8e11-527c0fe4fbe0",
+            "id": "f43cf7c9-c6b8-4451-94c1-60cce70c4a8d",
+            "name": "vslrau1p302",
+            "type": "metricbeat",
+            "version": "9.3.5"
+          },
+          "data_stream": {
+            "dataset": "vsphere.virtualmachine",
+            "namespace": "default",
+            "type": "metrics"
+          },
+          "ecs": {
+            "version": "8.11.0"
+          },
+          "elastic_agent": {
+            "id": "f43cf7c9-c6b8-4451-94c1-60cce70c4a8d",
+            "snapshot": false,
+            "version": "9.3.5"
+          },
+          "event": {
+            "agent_id_status": "verified",
+            "dataset": "vsphere.virtualmachine",
+            "duration": 725808433,
+            "ingested": "2026-11-02T11:28:08Z",
+            "module": "vsphere"
+          },
+          "host": {
+            "architecture": "x86_64",
+            "containerized": false,
+            "hostname": "vslrau1p302",
+            "id": "618e40e569d546b6a5c5be215ca07b9a",
+            "ip": [
+              "10.12.11.80",
+              "fe80::250:56ff:feab:c3ee"
+            ],
+            "mac": "00-50-56-AB-C3-EE",
+            "name": "vslrau1p302",
+            "os": {
+              "codename": "Plow",
+              "family": "redhat",
+              "kernel": "5.14.0-687.49.1.el9_8.x86_64",
+              "name": "Red Hat Enterprise Linux",
+              "platform": "rhel",
+              "type": "linux",
+              "version": "9.8 (Plow)"
+            }
+          },
+          "metricset": {
+            "name": "virtualmachine",
+            "period": 20000
+          },
+          "service": {
+            "address": "https://vxbly1v001.cna.com:443/sdk",
+            "type": "vsphere"
+          },
+          "tags": "vsphere-virtualmachine",
+          "vsphere": {
+            "virtualmachine": {
+              "cpu": {
+                "free": {
+                  "mhz": 0
+                },
+                "total": {
+                  "mhz": 0
+                },
+                "used": {
+                  "mhz": 0
+                }
+              },
+              "datastore": {
+                "count": 1,
+                "names": "bly1-vcf-m1c1-vsan"
+              },
+              "host": {
+                "hostname": "vxbly1h001.cna.com",
+                "id": "host-18"
+              },
+              "id": "vm-1046",
+              "memory": {
+                "free": {
+                  "guest": {
+                    "bytes": 17179869184
+                  }
+                },
+                "total": {
+                  "guest": {
+                    "bytes": 17179869184
+                  }
+                },
+                "used": {
+                  "guest": {
+                    "bytes": 0
+                  },
+                  "host": {
+                    "bytes": 0
+                  }
+                }
+              },
+              "name": "vxauvcfwsa2",
+              "os": "Other 3.x Linux (64-bit)",
+              "status": "green",
+              "uptime": 0
+            }
+          }
+        },
+        "sort": [
+          1793618886454
+        ]
+      }
+    ]
+  }
+}
+# 15: GET metrics-vsphere.host-*/_search?size=1&sort=@timestamp:desc [200 OK]
+{
+  "took": 822,
+  "timed_out": false,
+  "_shards": {
+    "total": 9,
+    "successful": 9,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".ds-metrics-vsphere.host-default-2026.10.28-000656",
+        "_id": "WSE5mxp2HUp3r9Tdap1uIX___l5j-8oycYrTew",
+        "_score": null,
+        "_source": {
+          "@timestamp": "2026-11-02T11:28:04.045Z",
+          "agent": {
+            "ephemeral_id": "3337c731-977f-47de-8e11-527c0fe4fbe0",
+            "id": "f43cf7c9-c6b8-4451-94c1-60cce70c4a8d",
+            "name": "vslrau1p302",
+            "type": "metricbeat",
+            "version": "9.3.5"
+          },
+          "data_stream": {
+            "dataset": "vsphere.host",
+            "namespace": "default",
+            "type": "metrics"
+          },
+          "ecs": {
+            "version": "8.11.0"
+          },
+          "elastic_agent": {
+            "id": "f43cf7c9-c6b8-4451-94c1-60cce70c4a8d",
+            "snapshot": false,
+            "version": "9.3.5"
+          },
+          "event": {
+            "agent_id_status": "verified",
+            "dataset": "vsphere.host",
+            "duration": 356601862,
+            "ingested": "2026-11-02T11:28:08Z",
+            "module": "vsphere"
+          },
+          "host": {
+            "architecture": "x86_64",
+            "containerized": false,
+            "hostname": "vslrau1p302",
+            "id": "618e40e569d546b6a5c5be215ca07b9a",
+            "ip": [
+              "10.12.11.80",
+              "fe80::250:56ff:feab:c3ee"
+            ],
+            "mac": "00-50-56-AB-C3-EE",
+            "name": "vslrau1p302",
+            "os": {
+              "codename": "Plow",
+              "family": "redhat",
+              "kernel": "5.14.0-687.49.1.el9_8.x86_64",
+              "name": "Red Hat Enterprise Linux",
+              "platform": "rhel",
+              "type": "linux",
+              "version": "9.8 (Plow)"
+            }
+          },
+          "metricset": {
+            "name": "host",
+            "period": 20000
+          },
+          "service": {
+            "address": "https://vxbly1v001.cna.com:443/sdk",
+            "type": "vsphere"
+          },
+          "tags": "vsphere-host",
+          "vsphere": {
+            "host": {
+              "cpu": {
+                "free": {
+                  "mhz": 107815
+                },
+                "total": {
+                  "mhz": 127680
+                },
+                "used": {
+                  "mhz": 19865,
+                  "pct": 0.156
+                }
+              },
+              "datastore": {
+                "count": 2,
+                "names": [
+                  "DE300224520586-01-01-service-datastore1",
+                  "bly1-vcf-m1c1-vsan"
+                ]
+              },
+              "disk": {
+                "devicelatency": {
+                  "average": {
+                    "ms": 0
+                  }
+                },
+                "latency": {
+                  "total": {
+                    "ms": 0
+                  }
+                },
+                "read": {
+                  "bytes": 62464
+                },
+                "total": {
+                  "bytes": 53657600
+                },
+                "write": {
+                  "bytes": 0
+                }
+              },
+              "id": "host-29",
+              "memory": {
+                "free": {
+                  "bytes": 778799878144
+                },
+                "total": {
+                  "bytes": 1098936422400
+                },
+                "used": {
+                  "bytes": 320136544256,
+                  "pct": 0.291
+                }
+              },
+              "name": "vxbly1h003.cna.com",
+              "network": {
+                "bandwidth": {
+                  "received": {
+                    "bytes": 0
+                  },
+                  "total": {
+                    "bytes": 0
+                  },
+                  "transmitted": {
+                    "bytes": 12602368
+                  }
+                },
+                "count": 13,
+                "names": [
+                  "Management Network - Mgmt Workload",
+                  "VCF-edge_bly1-vcf-m1-ec1_PG-bly1-vcf-m1c1-nsxt-vds-External-1",
+                  "VCF-edge_bly1-vcf-m1-ec1_PG-bly1-vcf-m1c1-nsxt-vds-External-2",
+                  "VMware HCIA Dist-DVUplinks-11",
+                  "VSAN - Mgmt Workload",
+                  "VxRail Management - Mgmt Workload",
+                  "bly1-vcf-m1-seg01",
+                  "bly1-vcf-m1c1-ns-DVUplinks-46",
+                  "vCenter Server Network - Mgmt Workload",
+                  "vMotion - Mgmt Workload",
+                  "vSphere Replication - Mgmt Workload",
+                  "xreg-m1-seg01"
+                ],
+                "packets": {
+                  "dropped": {
+                    "received": {
+                      "count": 0
+                    },
+                    "total": {
+                      "count": 0
+                    },
+                    "transmitted": {
+                      "count": 0
+                    }
+                  },
+                  "errors": {
+                    "received": {
+                      "count": 0
+                    },
+                    "total": {
+                      "count": 0
+                    },
+                    "transmitted": {
+                      "count": 0
+                    }
+                  },
+                  "multicast": {
+                    "received": {
+                      "count": 1
+                    },
+                    "total": {
+                      "count": 1
+                    },
+                    "transmitted": {
+                      "count": 0
+                    }
+                  },
+                  "received": {
+                    "count": 28023353
+                  },
+                  "transmitted": {
+                    "count": 207791
+                  }
+                }
+              },
+              "network_names": [
+                "Management Network - Mgmt Workload",
+                "VCF-edge_bly1-vcf-m1-ec1_PG-bly1-vcf-m1c1-nsxt-vds-External-1",
+                "VCF-edge_bly1-vcf-m1-ec1_PG-bly1-vcf-m1c1-nsxt-vds-External-2",
+                "VMware HCIA Dist-DVUplinks-11",
+                "VSAN - Mgmt Workload",
+                "VxRail Management - Mgmt Workload",
+                "bly1-vcf-m1-seg01",
+                "bly1-vcf-m1c1-ns-DVUplinks-46",
+                "vCenter Server Network - Mgmt Workload",
+                "vMotion - Mgmt Workload",
+                "vSphere Replication - Mgmt Workload",
+                "xreg-m1-seg01"
+              ],
+              "status": "green",
+              "uptime": 4945695,
+              "vm": {
+                "count": 15,
+                "names": [
+                  "vxau1c001",
+                  "vxau1nip02",
+                  "vxauvcfwsa1",
+                  "vxbly1c001",
+                  "vxbly1e001",
+                  "vxbly1m001",
+                  "vxbly1n001",
+                  "vxbly1n202",
+                  "vxblym1sgmgr1",
+                  "vxblym1sgmgr2",
+                  "vxblynic02_old",
+                  "vxblysrm2",
+                  "vxblysrm3",
+                  "vxblyvcfopsbcp2",
+                  "vxblywlsgmgr2"
+                ]
+              }
+            }
+          }
+        },
+        "sort": [
+          1793618884045
+        ]
+      }
+    ]
+  }
+}
+# 16: GET metrics-vsphere.datastore-*/_search?size=1&sort=@timestamp:desc [200 OK]
+{
+  "took": 10,
+  "timed_out": false,
+  "_shards": {
+    "total": 9,
+    "successful": 9,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".ds-metrics-vsphere.datastore-default-2026.10.28-000656",
+        "_id": "YwT1w8tamBDH4nEIs0WL33___l5j-98JREmjPg",
+        "_score": null,
+        "_source": {
+          "@timestamp": "2026-11-02T11:27:58.710Z",
+          "agent": {
+            "ephemeral_id": "3337c731-977f-47de-8e11-527c0fe4fbe0",
+            "id": "f43cf7c9-c6b8-4451-94c1-60cce70c4a8d",
+            "name": "vslrau1p302",
+            "type": "metricbeat",
+            "version": "9.3.5"
+          },
+          "data_stream": {
+            "dataset": "vsphere.datastore",
+            "namespace": "default",
+            "type": "metrics"
+          },
+          "ecs": {
+            "version": "8.11.0"
+          },
+          "elastic_agent": {
+            "id": "f43cf7c9-c6b8-4451-94c1-60cce70c4a8d",
+            "snapshot": false,
+            "version": "9.3.5"
+          },
+          "event": {
+            "agent_id_status": "verified",
+            "dataset": "vsphere.datastore",
+            "duration": 128709877,
+            "ingested": "2026-11-02T11:28:08Z",
+            "module": "vsphere"
+          },
+          "host": {
+            "architecture": "x86_64",
+            "containerized": false,
+            "hostname": "vslrau1p302",
+            "id": "618e40e569d546b6a5c5be215ca07b9a",
+            "ip": [
+              "10.12.11.80",
+              "fe80::250:56ff:feab:c3ee"
+            ],
+            "mac": "00-50-56-AB-C3-EE",
+            "name": "vslrau1p302",
+            "os": {
+              "codename": "Plow",
+              "family": "redhat",
+              "kernel": "5.14.0-687.49.1.el9_8.x86_64",
+              "name": "Red Hat Enterprise Linux",
+              "platform": "rhel",
+              "type": "linux",
+              "version": "9.8 (Plow)"
+            }
+          },
+          "metricset": {
+            "name": "datastore",
+            "period": 20000
+          },
+          "service": {
+            "address": "https://vxbly1v001.cna.com:443/sdk",
+            "type": "vsphere"
+          },
+          "tags": "vsphere-datastore",
+          "vsphere": {
+            "datastore": {
+              "capacity": {
+                "free": {
+                  "bytes": 410735607808
+                },
+                "total": {
+                  "bytes": 443992244224
+                },
+                "used": {
+                  "bytes": 33256636416,
+                  "pct": 0.075
+                }
+              },
+              "fstype": "VMFS",
+              "host": {
+                "count": 1,
+                "names": "vxbly1h001_cna_com"
+              },
+              "id": "datastore-19",
+              "name": "DE300224520584-01-01-service-datastore1",
+              "status": "green",
+              "vm": {
+                "count": 0
+              }
+            }
+          }
+        },
+        "sort": [
+          1793618878710
+        ]
+      }
+    ]
+  }
+}
+
+#IQ1c
+# 20: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+      vms      |    servers    |     both      
+---------------+---------------+---------------
+46             |2740           |1              
+
+#IQ1d
+# 35: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+esx_hosts_in_cmdb|  in_vsphere   |     both      |servers_linked 
+-----------------+---------------+---------------+---------------
+549              |4              |0              |453138         
+
+#IQ2a
+# 53: POST /_query?format=txt [400 Bad Request]
+#! No limit defined, adding default limit of [1000]
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "verification_exception",
+        "reason": """Found 1 problem
+line 4:76: Unknown column [ci.name]"""
+      }
+    ],
+    "type": "verification_exception",
+    "reason": """Found 1 problem
+line 4:76: Unknown column [ci.name]"""
+  },
+  "status": 400
+}
+
+#IQ2b
+# 65: GET metrics-<dataset>-*/_search?size=1&sort=@timestamp:desc [200 OK]
+{
+  "took": 0,
+  "timed_out": false,
+  "_shards": {
+    "total": 0,
+    "successful": 0,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 0,
+      "relation": "eq"
+    },
+    "max_score": 0,
+    "hits": []
+  }
+}
+
+#IQ2c
+# 70: POST /_query?format=txt [502 Bad Gateway]
+{
+  "statusCode": 502,
+  "error": "Bad Gateway",
+  "message": "An internal server error occurred. Check Kibana server logs for details."
+}
+
+#IQ2d
+# 84: GET _cat/indices/*aws*,*azure*?v&h=index,docs.count&s=index&expand_wildcards=all [200 OK]
+index docs.count
+
+
+#IQ3a
+# 92: GET _cat/indices/.internal.alerts-*?v&h=index,docs.count&s=index&expand_wildcards=all [200 OK]
+index                                                              docs.count
+.internal.alerts-dataset.quality.alerts-default-000001                      0
+.internal.alerts-dataset.quality.alerts-default-000002                      0
+.internal.alerts-dataset.quality.alerts-default-000003                      0
+.internal.alerts-dataset.quality.alerts-default-000004                      0
+.internal.alerts-default.alerts-default-000001                              0
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000001          1
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000002          0
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000003          0
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000004          0
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000005          0
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000006          0
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000007          0
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000008          0
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000009          2
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000010          1
+.internal.alerts-ml.anomaly-detection-health.alerts-default-000011          0
+.internal.alerts-ml.anomaly-detection.alerts-default-000001                 0
+.internal.alerts-ml.anomaly-detection.alerts-default-000002                 0
+.internal.alerts-ml.anomaly-detection.alerts-default-000003                 0
+.internal.alerts-ml.anomaly-detection.alerts-default-000004                 0
+.internal.alerts-ml.anomaly-detection.alerts-default-000005                 0
+.internal.alerts-ml.anomaly-detection.alerts-default-000006                 1
+.internal.alerts-ml.anomaly-detection.alerts-default-000007                 9
+.internal.alerts-ml.anomaly-detection.alerts-default-000008                 4
+.internal.alerts-ml.anomaly-detection.alerts-default-000009                 0
+.internal.alerts-observability.apm.alerts-default-000001                    1
+.internal.alerts-observability.apm.alerts-default-000002                    6
+.internal.alerts-observability.apm.alerts-default-000003                   15
+.internal.alerts-observability.apm.alerts-default-000004                   14
+.internal.alerts-observability.apm.alerts-default-000005                   20
+.internal.alerts-observability.apm.alerts-default-000006                   12
+.internal.alerts-observability.apm.alerts-default-000007                    3
+.internal.alerts-observability.apm.alerts-default-000008                    2
+.internal.alerts-observability.apm.alerts-default-000009                 2323
+.internal.alerts-observability.apm.alerts-default-000010                 2802
+.internal.alerts-observability.apm.alerts-default-000011                 2996
+.internal.alerts-observability.apm.alerts-default-000012                 2975
+.internal.alerts-observability.apm.alerts-default-000013                 2517
+.internal.alerts-observability.apm.alerts-default-000014                 2988
+.internal.alerts-observability.apm.alerts-default-000015                 1751
+.internal.alerts-observability.apm.alerts-default-000016                 4192
+.internal.alerts-observability.apm.alerts-default-000017                 6721
+.internal.alerts-observability.apm.alerts-default-000018                 4004
+.internal.alerts-observability.logs.alerts-default-000001                  24
+.internal.alerts-observability.logs.alerts-default-000002                 852
+.internal.alerts-observability.logs.alerts-default-000003                   1
+.internal.alerts-observability.logs.alerts-default-000004                  27
+.internal.alerts-observability.logs.alerts-default-000005                  10
+.internal.alerts-observability.logs.alerts-default-000006                   0
+.internal.alerts-observability.logs.alerts-default-000007                  18
+.internal.alerts-observability.logs.alerts-default-000008                  37
+.internal.alerts-observability.logs.alerts-default-000009                   0
+.internal.alerts-observability.metrics.alerts-default-000001                0
+.internal.alerts-observability.metrics.alerts-default-000002                3
+.internal.alerts-observability.metrics.alerts-default-000003                0
+.internal.alerts-observability.metrics.alerts-default-000004                0
+.internal.alerts-observability.metrics.alerts-default-000005                3
+.internal.alerts-observability.metrics.alerts-default-000006                0
+.internal.alerts-observability.metrics.alerts-default-000007                0
+.internal.alerts-observability.metrics.alerts-default-000008                0
+.internal.alerts-observability.metrics.alerts-default-000009                0
+.internal.alerts-observability.metrics.alerts-default-000010                0
+.internal.alerts-observability.metrics.alerts-default-000011                4
+.internal.alerts-observability.metrics.alerts-default-000012                0
+.internal.alerts-observability.metrics.alerts-default-000013                6
+.internal.alerts-observability.metrics.alerts-default-000014              984
+.internal.alerts-observability.metrics.alerts-default-000015              855
+.internal.alerts-observability.metrics.alerts-default-000016             1174
+.internal.alerts-observability.metrics.alerts-default-000017             1449
+.internal.alerts-observability.metrics.alerts-default-000018             1115
+.internal.alerts-observability.metrics.alerts-default-000019              758
+.internal.alerts-observability.metrics.alerts-default-000020              730
+.internal.alerts-observability.metrics.alerts-default-000021              432
+.internal.alerts-observability.metrics.alerts-default-000022              400
+.internal.alerts-observability.metrics.alerts-default-000023              462
+.internal.alerts-observability.metrics.alerts-default-000024              368
+.internal.alerts-observability.metrics.alerts-default-000025             6795
+.internal.alerts-observability.metrics.alerts-default-000026             4081
+.internal.alerts-observability.metrics.alerts-default-000027             3726
+.internal.alerts-observability.metrics.alerts-default-000028             3745
+.internal.alerts-observability.metrics.alerts-default-000029             2494
+.internal.alerts-observability.slo.alerts-default-000001                    0
+.internal.alerts-observability.slo.alerts-default-000002                    0
+.internal.alerts-observability.slo.alerts-default-000003                    0
+.internal.alerts-observability.slo.alerts-default-000004                    0
+.internal.alerts-observability.slo.alerts-default-000005                    0
+.internal.alerts-observability.slo.alerts-default-000006                    0
+.internal.alerts-observability.slo.alerts-default-000007                   82
+.internal.alerts-observability.slo.alerts-default-000008                  107
+.internal.alerts-observability.slo.alerts-default-000009                  148
+.internal.alerts-observability.slo.alerts-default-000010                  181
+.internal.alerts-observability.slo.alerts-default-000011                  176
+.internal.alerts-observability.slo.alerts-default-000012                  190
+.internal.alerts-observability.slo.alerts-default-000013                  254
+.internal.alerts-observability.slo.alerts-default-000014                  237
+.internal.alerts-observability.slo.alerts-default-000015                  260
+.internal.alerts-observability.slo.alerts-default-000016                  225
+.internal.alerts-observability.slo.alerts-default-000017                  232
+.internal.alerts-observability.slo.alerts-default-000018                  257
+.internal.alerts-observability.slo.alerts-default-000019                  243
+.internal.alerts-observability.slo.alerts-default-000020                  526
+.internal.alerts-observability.slo.alerts-default-000021                  820
+.internal.alerts-observability.slo.alerts-default-000022                  586
+.internal.alerts-observability.slo.alerts-default-000023                  744
+.internal.alerts-observability.slo.alerts-default-000024                  943
+.internal.alerts-observability.slo.alerts-default-000025                  806
+.internal.alerts-observability.slo.alerts-default-000026                  819
+.internal.alerts-observability.slo.alerts-default-000027                  675
+.internal.alerts-observability.threshold.alerts-default-000001              0
+.internal.alerts-observability.threshold.alerts-default-000002              0
+.internal.alerts-observability.threshold.alerts-default-000003              0
+.internal.alerts-observability.threshold.alerts-default-000004              0
+.internal.alerts-observability.threshold.alerts-default-000005              0
+.internal.alerts-observability.threshold.alerts-default-000006              2
+.internal.alerts-observability.threshold.alerts-default-000007              1
+.internal.alerts-observability.threshold.alerts-default-000008              0
+.internal.alerts-observability.threshold.alerts-default-000009              4
+.internal.alerts-observability.threshold.alerts-default-000010              7
+.internal.alerts-observability.threshold.alerts-default-000011              1
+.internal.alerts-observability.threshold.alerts-default-000012           1613
+.internal.alerts-observability.threshold.alerts-default-000013           3161
+.internal.alerts-observability.threshold.alerts-default-000014           1270
+.internal.alerts-observability.threshold.alerts-default-000015           1190
+.internal.alerts-observability.threshold.alerts-default-000016           2470
+.internal.alerts-observability.threshold.alerts-default-000017           8735
+.internal.alerts-observability.threshold.alerts-default-000018          13802
+.internal.alerts-observability.threshold.alerts-default-000019          18049
+.internal.alerts-observability.threshold.alerts-default-000020           9640
+.internal.alerts-observability.threshold.alerts-default-000021           4149
+.internal.alerts-observability.threshold.alerts-default-000022            406
+.internal.alerts-observability.threshold.alerts-default-000023           9756
+.internal.alerts-observability.threshold.alerts-default-000024           9877
+.internal.alerts-observability.threshold.alerts-default-000025           9321
+.internal.alerts-observability.threshold.alerts-default-000026          15208
+.internal.alerts-observability.threshold.alerts-default-000027          12988
+.internal.alerts-observability.threshold.alerts-default-000028           2002
+.internal.alerts-observability.uptime.alerts-default-000001                 1
+.internal.alerts-observability.uptime.alerts-default-000002                 1
+.internal.alerts-observability.uptime.alerts-default-000003               704
+.internal.alerts-observability.uptime.alerts-default-000004               451
+.internal.alerts-observability.uptime.alerts-default-000005               243
+.internal.alerts-observability.uptime.alerts-default-000006               225
+.internal.alerts-observability.uptime.alerts-default-000007                47
+.internal.alerts-observability.uptime.alerts-default-000008                23
+.internal.alerts-observability.uptime.alerts-default-000009                79
+.internal.alerts-observability.uptime.alerts-default-000010               120
+.internal.alerts-observability.uptime.alerts-default-000011               133
+.internal.alerts-observability.uptime.alerts-default-000012                 5
+.internal.alerts-observability.uptime.alerts-default-000013                10
+.internal.alerts-observability.uptime.alerts-default-000014                 0
+.internal.alerts-observability.uptime.alerts-default-000015                 0
+.internal.alerts-observability.uptime.alerts-default-000016                 0
+.internal.alerts-observability.uptime.alerts-default-000017                 0
+.internal.alerts-observability.uptime.alerts-default-000018                 0
+.internal.alerts-observability.uptime.alerts-default-000019                 0
+.internal.alerts-observability.uptime.alerts-default-000020               154
+.internal.alerts-observability.uptime.alerts-default-000021               413
+.internal.alerts-observability.uptime.alerts-default-000022               756
+.internal.alerts-observability.uptime.alerts-default-000023               684
+.internal.alerts-observability.uptime.alerts-default-000024             13122
+.internal.alerts-observability.uptime.alerts-default-000025              6795
+.internal.alerts-observability.uptime.alerts-default-000026              5189
+.internal.alerts-observability.uptime.alerts-default-000027              2528
+.internal.alerts-observability.uptime.alerts-default-000028             59343
+.internal.alerts-observability.uptime.alerts-default-000029             17081
+.internal.alerts-observability.uptime.alerts-default-000030             22358
+.internal.alerts-observability.uptime.alerts-default-000031             40430
+.internal.alerts-observability.uptime.alerts-default-000032             21261
+.internal.alerts-observability.uptime.alerts-default-000033             17467
+.internal.alerts-observability.uptime.alerts-default-000034             78700
+.internal.alerts-observability.uptime.alerts-default-000035             17460
+.internal.alerts-observability.uptime.alerts-default-000036             12134
+.internal.alerts-observability.uptime.alerts-default-000037             10492
+.internal.alerts-observability.uptime.alerts-default-000038             24845
+.internal.alerts-observability.uptime.alerts-default-000039              9085
+.internal.alerts-observability.uptime.alerts-elastic-prod-000001            0
+.internal.alerts-security.alerts-default-000001                           112
+.internal.alerts-security.alerts-default-000002                            59
+.internal.alerts-security.alerts-default-000003                            81
+.internal.alerts-security.alerts-default-000004                             0
+.internal.alerts-security.alerts-default-000005                            83
+.internal.alerts-security.alerts-default-000006                            12
+.internal.alerts-security.alerts-default-000007                             0
+.internal.alerts-security.alerts-default-000008                             0
+.internal.alerts-security.alerts-default-000009                             0
+.internal.alerts-security.alerts-default-000010                            15
+.internal.alerts-security.alerts-default-000011                           914
+.internal.alerts-security.alerts-default-000012                           566
+.internal.alerts-security.alerts-default-000013                           600
+.internal.alerts-security.alerts-default-000014                           259
+.internal.alerts-security.attack.discovery.alerts-default-000001            0
+.internal.alerts-stack.alerts-default-000001                                1
+.internal.alerts-stack.alerts-default-000002                                0
+.internal.alerts-stack.alerts-default-000003                                0
+.internal.alerts-stack.alerts-default-000004                                0
+.internal.alerts-stack.alerts-default-000005                                0
+.internal.alerts-stack.alerts-default-000006                                0
+.internal.alerts-stack.alerts-default-000007                                1
+.internal.alerts-stack.alerts-default-000008                               24
+.internal.alerts-stack.alerts-default-000009                               20
+.internal.alerts-stack.alerts-default-000010                               37
+.internal.alerts-stack.alerts-default-000011                               27
+.internal.alerts-stack.alerts-default-000012                               55
+.internal.alerts-stack.alerts-default-000013                               61
+.internal.alerts-stack.alerts-default-000014                               12
+.internal.alerts-stack.alerts-default-000015                              115
+.internal.alerts-stack.alerts-default-000016                               74
+.internal.alerts-stack.alerts-default-000017                               18
+.internal.alerts-stack.alerts-default-000018                              873
+.internal.alerts-stack.alerts-default-000019                             1234
+.internal.alerts-stack.alerts-default-000020                              556
+.internal.alerts-stack.alerts-default-000021                              326
+.internal.alerts-stack.alerts-default-000022                             1129
+.internal.alerts-stack.alerts-default-000023                              624
+.internal.alerts-stack.alerts-default-000024                              972
+.internal.alerts-stack.alerts-default-000025                             1270
+.internal.alerts-stack.alerts-default-000026                             1468
+.internal.alerts-stack.alerts-default-000027                             1075
+.internal.alerts-streams.alerts-default-000001                              0
+.internal.alerts-transform.health.alerts-default-000001                     4
+.internal.alerts-transform.health.alerts-default-000002                     3
+.internal.alerts-transform.health.alerts-default-000003                     7
+.internal.alerts-transform.health.alerts-default-000004                    45
+.internal.alerts-transform.health.alerts-default-000005                    21
+.internal.alerts-transform.health.alerts-default-000006                    40
+.internal.alerts-transform.health.alerts-default-000007                     3
+.internal.alerts-transform.health.alerts-default-000008                     3
+.internal.alerts-transform.health.alerts-default-000009                     2
+.internal.alerts-transform.health.alerts-default-000010                    23
+.internal.alerts-transform.health.alerts-default-000011                    69
+.internal.alerts-transform.health.alerts-default-000012                    28
+.internal.alerts-transform.health.alerts-default-000013                    21
+.internal.alerts-transform.health.alerts-default-000014                    29
+.internal.alerts-transform.health.alerts-default-000015                     2
+.internal.alerts-transform.health.alerts-default-000016                    12
+.internal.alerts-transform.health.alerts-default-000017                     2
+.internal.alerts-transform.health.alerts-default-000018                     1
+.internal.alerts-transform.health.alerts-default-000019                     3
+.internal.alerts-transform.health.alerts-default-000020                     0
+.internal.alerts-transform.health.alerts-default-000021                    20
+.internal.alerts-transform.health.alerts-default-000022                    22
+.internal.alerts-transform.health.alerts-default-000023                     4
+.internal.alerts-transform.health.alerts-default-000024                    22
+.internal.alerts-transform.health.alerts-default-000025                    18
+.internal.alerts-transform.health.alerts-default-000026                    21
+.internal.alerts-transform.health.alerts-default-000027                    27
+.internal.alerts-transform.health.alerts-default-000028                     1
+.internal.alerts-transform.health.alerts-default-000029                     0
+
+#IQ3b
+# 96: GET kbn:/api/alerting/rules/_find?per_page=100&fields=name,rule_type_id,enabled,tags [200 ]
+{
+  "page": 1,
+  "per_page": 100,
+  "total": 883,
+  "data": [
+    {
+      "id": "ca1cce05-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1cf4f0-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1af933-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31a5-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31c0-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58b0-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58c8-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58d5-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c7fc1-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c7fd5-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0ab1-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0aaf-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c7fed-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6e2-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6e4-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6e7-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6ef-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6f0-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ccdea-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1cce04-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31a7-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be3ae-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31a3-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1cf4f6-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1cf4fd-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1cf501-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0a90-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1cf517-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0a9a-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c01-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31b1-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0aa8-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c0f-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be3a6-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c14-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c1a-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c2b-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0ab4-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be3a8-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c2d-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c2f-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be3aa-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be3af-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d6a23-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be3a4-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be3ac-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0aa2-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6de-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1b6e6f-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0a92-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be38d-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1bbc90-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6e6-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1b204c-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1bbc82-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58d0-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ccdf3-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1bbc97-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58d4-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0a98-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58bb-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31ab-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58b1-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1bbc7b-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0aa1-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1bbc9c-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0aa4-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1b9576-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6f6-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0aa7-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be388-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d6a25-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c7fd1-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d6a20-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c7fc5-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d6a28-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c7fc3-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1cf514-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0a9e-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58d3-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ccded-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1cf4f2-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0a94-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0aa5-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c1e-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31a1-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31b2-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be396-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58c2-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31c3-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c0ab3-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1be3a2-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1bbc9b-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c04-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6e9-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1cf51f-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c31b4-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1ca6d9-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1d1c29-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    },
+    {
+      "id": "ca1c58b4-d04c-11ec-987d-c3274dd543b3",
+      "actions": []
+    }
+  ]
+}
+
+#IQ3c
+# 100: GET .alerts-observability.*/_search [200 OK]
+{
+  "took": 128,
+  "timed_out": false,
+  "_shards": {
+    "total": 151,
+    "successful": 151,
+    "skipped": 108,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 9415,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": []
+  },
+  "aggregations": {
+    "rule_types": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "observability.rules.custom_threshold",
+          "doc_count": 4265
+        },
+        {
+          "key": "xpack.synthetics.alerts.monitorStatus",
+          "doc_count": 2726
+        },
+        {
+          "key": "apm.anomaly",
+          "doc_count": 1372
+        },
+        {
+          "key": "metrics.alert.threshold",
+          "doc_count": 647
+        },
+        {
+          "key": "slo.rules.burnRate",
+          "doc_count": 321
+        },
+        {
+          "key": "apm.transaction_error_rate",
+          "doc_count": 68
+        },
+        {
+          "key": "apm.transaction_duration",
+          "doc_count": 12
+        },
+        {
+          "key": "xpack.synthetics.alerts.tls",
+          "doc_count": 4
+        }
+      ]
+    },
+    "rules": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 332,
+      "buckets": [
+        {
+          "key": "Synthetics status internal rule",
+          "doc_count": 2725
+        },
+        {
+          "key": "paladin-log-win_eventids",
+          "doc_count": 1109
+        },
+        {
+          "key": "APM Anomaly test rule",
+          "doc_count": 976
+        },
+        {
+          "key": "APM Tx Errors and Latency - Major V3 (to test, with AI and workflow)",
+          "doc_count": 787
+        },
+        {
+          "key": "APM Tx Errors and Latency - Major V3 (to test)",
+          "doc_count": 509
+        },
+        {
+          "key": "paladin-host-uptime-c30",
+          "doc_count": 502
+        },
+        {
+          "key": "paladin-process-middleware-c0",
+          "doc_count": 351
+        },
+        {
+          "key": "paladin-filesystem-usage",
+          "doc_count": 316
+        },
+        {
+          "key": "APM Alerts cut1",
+          "doc_count": 303
+        },
+        {
+          "key": "paladin-url-availability-c0",
+          "doc_count": 300
+        },
+        {
+          "key": "paladin-windows-service-code0-c1",
+          "doc_count": 209
+        },
+        {
+          "key": "paladin-process-linux-nonprod_default-c0",
+          "doc_count": 129
+        },
+        {
+          "key": "APM Tx Transaction Errors  - Critical V4 (75%)",
+          "doc_count": 81
+        },
+        {
+          "key": "paladin-data_outages",
+          "doc_count": 78
+        },
+        {
+          "key": "paladin-memory-usage-high_prio-ml",
+          "doc_count": 71
+        },
+        {
+          "key": "[PROD] ClaimECM Service API - Failed transaction rate threshold",
+          "doc_count": 68
+        },
+        {
+          "key": "paladin-selfmonitoring-rule-execution",
+          "doc_count": 65
+        },
+        {
+          "key": "cnac service latency SLO Burn Rate rule",
+          "doc_count": 62
+        },
+        {
+          "key": "APM Alerts prd1",
+          "doc_count": 51
+        },
+        {
+          "key": "paladin-ibmmq-q-channel_status",
+          "doc_count": 49
+        },
+        {
+          "key": "paladin-memory-usage-low_prio-diff-ml",
+          "doc_count": 47
+        },
+        {
+          "key": "paladin-cpu-usage-low_prio-diff-ml",
+          "doc_count": 46
+        },
+        {
+          "key": "paladin-log-ibmcc_errors",
+          "doc_count": 43
+        },
+        {
+          "key": "[PROD] ClaimECM Service API - APM Anomaly rule",
+          "doc_count": 42
+        },
+        {
+          "key": "APM Tx Latency - Critical V5 (75%) ",
+          "doc_count": 38
+        },
+        {
+          "key": "paladin-process-linux-prod_default-c0",
+          "doc_count": 37
+        },
+        {
+          "key": "paladin-tenable-scanner",
+          "doc_count": 28
+        },
+        {
+          "key": "paladin-cpu-usage-high_prio-ml",
+          "doc_count": 21
+        },
+        {
+          "key": "cnac-service availability SLO Burn Rate rule",
+          "doc_count": 20
+        },
+        {
+          "key": "paladin-host-availability-c0",
+          "doc_count": 20
+        }
+      ]
+    },
+    "with_ci_name": {
+      "value": 0
+    },
+    "hosts": {
+      "value": 4
+    },
+    "status": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "recovered",
+          "doc_count": 8722
+        },
+        {
+          "key": "active",
+          "doc_count": 692
+        },
+        {
+          "key": "delayed",
+          "doc_count": 1
+        }
+      ]
+    }
+  }
+}
+
+#IQ3d
+# 115: GET .alerts-observability.*/_search?size=1&sort=@timestamp:desc [200 OK]
+{
+  "took": 235,
+  "timed_out": false,
+  "_shards": {
+    "total": 151,
+    "successful": 151,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".internal.alerts-observability.apm.alerts-default-000009",
+        "_id": "4b101b3e-ee71-4086-b47c-136da0f1da1c",
+        "_score": null,
+        "_source": {
+          "service.name": "rst-batch",
+          "service.environment": "prd1",
+          "transaction.type": "request",
+          "processor.event": "transaction",
+          "kibana.alert.severity": "critical",
+          "kibana.alert.evaluation.value": 90.60452275001217,
+          "kibana.alert.evaluation.threshold": 75,
+          "kibana.alert.reason": "critical latency anomaly with a score of 90.60452275001217, was detected in the last 30 mins for rst-batch.",
+          "agent.name": "opentelemetry/java/opentelemetry-java-instrumentation",
+          "labels": {
+            "process_runtime_description": "Alpine OpenJDK 64-Bit Server VM 17.0.16+8-alpine-r0",
+            "http_route": "/v1/rst/batch/renewal/riskBrowser",
+            "network_protocol_version": "1.1",
+            "thread_name": "http-nio-8080-exec-8",
+            "service_group": "APM0004135",
+            "network_peer_address": "127.0.0.6"
+          },
+          "service.language.name": "java",
+          "kibana.alert.rule.category": "APM Anomaly",
+          "kibana.alert.rule.consumer": "alerts",
+          "kibana.alert.rule.execution.uuid": "a6ee9b1a-3e8a-475c-90c3-b9c022c37f93",
+          "kibana.alert.rule.name": "APM Alerts prd1",
+          "kibana.alert.rule.parameters": {
+            "windowSize": 30,
+            "windowUnit": "m",
+            "anomalySeverityType": "critical",
+            "anomalyDetectorTypes": [
+              "txLatency",
+              "txFailureRate"
+            ],
+            "environment": "prd1"
+          },
+          "kibana.alert.rule.producer": "apm",
+          "kibana.alert.rule.revision": 4,
+          "kibana.alert.rule.rule_type_id": "apm.anomaly",
+          "kibana.alert.rule.tags": [],
+          "kibana.alert.rule.uuid": "49347c0b-727b-417a-b379-39b8c27c1ccc",
+          "kibana.space_ids": [
+            "default"
+          ],
+          "@timestamp": "2026-11-02T11:28:47.911Z",
+          "event.action": "close",
+          "event.kind": "signal",
+          "kibana.alert.rule.execution.timestamp": "2026-11-02T11:28:47.911Z",
+          "kibana.alert.action_group": "recovered",
+          "kibana.alert.flapping": true,
+          "kibana.alert.flapping_history": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "kibana.alert.instance.id": "rst-batch_request_apm-tx-latency-and-errors-prod_0",
+          "kibana.alert.maintenance_window_ids": [],
+          "kibana.alert.consecutive_matches": 0,
+          "kibana.alert.pending_recovered_count": 0,
+          "kibana.alert.status": "recovered",
+          "kibana.alert.uuid": "4b101b3e-ee71-4086-b47c-136da0f1da1c",
+          "kibana.alert.workflow_status": "open",
+          "kibana.alert.duration.us": 1199917000,
+          "kibana.alert.start": "2026-02-04T11:11:13.777Z",
+          "kibana.alert.time_range": {
+            "gte": "2026-02-04T11:11:13.777Z",
+            "lte": "2026-02-04T11:31:13.694Z"
+          },
+          "kibana.version": "8.19.10",
+          "tags": [],
+          "kibana.alert.previous_action_group": "recovered",
+          "kibana.alert.end": "2026-02-04T11:31:13.694Z"
+        },
+        "sort": [
+          1793618927911
+        ]
+      }
+    ]
+  }
+}
+
+#IQ4a
+# 123: GET kbn:/api/fleet/epm/packages/installed?perPage=200 [200 ]
+{
+  "items": [
+    {
+      "name": "apm",
+      "version": "9.5.3",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-apm.app-*",
+          "title": "app_logs"
+        },
+        {
+          "name": "metrics-apm.app.*-*",
+          "title": "app_metrics"
+        },
+        {
+          "name": "logs-apm.error-*",
+          "title": "error_logs"
+        },
+        {
+          "name": "metrics-apm.internal-*",
+          "title": "internal_metrics"
+        },
+        {
+          "name": "traces-apm.rum-*",
+          "title": "rum_traces"
+        },
+        {
+          "name": "traces-apm.sampled-*",
+          "title": "sampled_traces"
+        },
+        {
+          "name": "traces-apm-*",
+          "title": "traces"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Elastic APM",
+      "description": "Monitor, detect, and diagnose complex application performance issues.",
+      "icons": [
+        {
+          "src": "/img/logo_apm.svg",
+          "title": "APM Logo",
+          "size": "32x32",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "cisco_asa",
+      "version": "2.46.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-cisco_asa.log-*",
+          "title": "log"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Cisco ASA",
+      "description": "Collect logs from Cisco ASA with Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/cisco.svg",
+          "title": "cisco",
+          "size": "216x216",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "cisco_ftd",
+      "version": "3.13.12",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-cisco_ftd.log-*",
+          "title": "log"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Cisco FTD",
+      "description": "Collect logs from Cisco FTD with Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/cisco.svg",
+          "title": "cisco",
+          "size": "216x216",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "cisco_ios",
+      "version": "1.36.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-cisco_ios.log-*",
+          "title": "log"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Cisco IOS",
+      "description": "Collect logs from Cisco IOS with Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/cisco.svg",
+          "title": "cisco",
+          "size": "216x216",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "cyberarkpas",
+      "version": "2.29.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-cyberarkpas.audit-*",
+          "title": "audit"
+        },
+        {
+          "name": "logs-cyberarkpas.monitor-*",
+          "title": "monitor"
+        }
+      ],
+      "rolledBack": false,
+      "title": "CyberArk Privileged Access Security",
+      "description": "Collect logs from CyberArk Privileged Access Security with Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/logo.svg",
+          "title": "CyberArk logo",
+          "size": "32x32",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "elastic_agent",
+      "version": "2.9.6",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-elastic_agent.apm_server-*",
+          "title": "apm_server_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.apm_server-*",
+          "title": "apm_server_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.auditbeat-*",
+          "title": "auditbeat_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.auditbeat-*",
+          "title": "auditbeat_metrics"
+        },
+        {
+          "name": "logs-elastic_agent-*",
+          "title": "elastic_agent_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.elastic_agent-*",
+          "title": "elastic_agent_metrics"
+        },
+        {
+          "name": "metrics-elastic_agent.endpoint_security-*",
+          "title": "endpoint_security_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.endpoint_security-*",
+          "title": "endpoint_sercurity_logs"
+        },
+        {
+          "name": "logs-elastic_agent.filebeat-*",
+          "title": "filebeat_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.filebeat-*",
+          "title": "filebeat_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.fleet_server-*",
+          "title": "fleet_server_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.fleet_server-*",
+          "title": "fleet_server_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.heartbeat-*",
+          "title": "heartbeat_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.heartbeat-*",
+          "title": "heartbeat_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.metricbeat-*",
+          "title": "metricbeat_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.metricbeat-*",
+          "title": "metricbeat_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.osquerybeat-*",
+          "title": "osquerybeat_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.osquerybeat-*",
+          "title": "osquerybeat_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.packetbeat-*",
+          "title": "packetbeat_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.packetbeat-*",
+          "title": "packetbeat_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.cloud_defend-*",
+          "title": "cloud_defend_logs"
+        },
+        {
+          "name": "logs-elastic_agent.cloudbeat-*",
+          "title": "cloudbeat_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.cloudbeat-*",
+          "title": "cloudbeat_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.filebeat_input-*",
+          "title": "filebeat_input_logs"
+        },
+        {
+          "name": "metrics-elastic_agent.filebeat_input-*",
+          "title": "filebeat_input_metrics"
+        },
+        {
+          "name": "logs-elastic_agent.pf_elastic_collector-*",
+          "title": "pf_elastic_collector"
+        },
+        {
+          "name": "logs-elastic_agent.pf_elastic_symbolizer-*",
+          "title": "pf_elastic_symbolizer"
+        },
+        {
+          "name": "logs-elastic_agent.pf_host_agent-*",
+          "title": "pf_host_agent_logs"
+        },
+        {
+          "name": "logs-elastic_agent.status_change-*",
+          "title": "status_change_logs"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Elastic Agent",
+      "description": "Collect logs and metrics from Elastic Agents.",
+      "icons": [
+        {
+          "src": "/img/logo_elastic_agent.svg",
+          "title": "logo Elastic Agent",
+          "size": "64x64",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "endpoint",
+      "version": "9.5.1-prerelease.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": ".logs-endpoint.action.responses-*",
+          "title": "action_responses"
+        },
+        {
+          "name": ".logs-endpoint.actions-*",
+          "title": "actions"
+        },
+        {
+          "name": "logs-endpoint.alerts-*",
+          "title": "alerts"
+        },
+        {
+          "name": ".logs-endpoint.diagnostic.collection-*",
+          "title": "collection"
+        },
+        {
+          "name": "logs-endpoint.events.file-*",
+          "title": "file"
+        },
+        {
+          "name": "logs-endpoint.events.library-*",
+          "title": "library"
+        },
+        {
+          "name": "metrics-endpoint.metadata-*",
+          "title": "metadata"
+        },
+        {
+          "name": "metrics-endpoint.metrics-*",
+          "title": "metrics"
+        },
+        {
+          "name": "logs-endpoint.events.network-*",
+          "title": "network"
+        },
+        {
+          "name": "metrics-endpoint.policy-*",
+          "title": "policy"
+        },
+        {
+          "name": "logs-endpoint.events.process-*",
+          "title": "process"
+        },
+        {
+          "name": "logs-endpoint.events.registry-*",
+          "title": "registry"
+        },
+        {
+          "name": "logs-endpoint.events.security-*",
+          "title": "security"
+        },
+        {
+          "name": "logs-endpoint.events.api-*",
+          "title": "api"
+        },
+        {
+          "name": "logs-endpoint.events.device-*",
+          "title": "device"
+        },
+        {
+          "name": ".logs-endpoint.heartbeat-*",
+          "title": "heartbeat"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Elastic Defend",
+      "description": "Protect your hosts and cloud workloads with threat prevention, detection, and deep security data visibility.",
+      "icons": [
+        {
+          "src": "/img/security-logo-color-64px.svg",
+          "size": "16x16",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "filestream",
+      "version": "2.5.1",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-generic-*",
+          "title": "generic"
+        },
+        {
+          "name": "logs-filestream.generic-*",
+          "title": "filestream.generic"
+        },
+        {
+          "name": "logs-cnac-*",
+          "title": "cnac"
+        },
+        {
+          "name": "logs-powerbi-*",
+          "title": "powerbi"
+        },
+        {
+          "name": "logs-tableau.logs-*",
+          "title": "tableau.logs"
+        },
+        {
+          "name": "logs-claimsworkflow-*",
+          "title": "claimsworkflow"
+        },
+        {
+          "name": "logs-imageright-*",
+          "title": "imageright"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Custom Logs (Filestream)",
+      "description": "Collect log data using filestream with Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/icon.svg",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "fleet_server",
+      "version": "1.6.1",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "metrics-fleet_server.agent_status-*",
+          "title": "agent_status_metrics"
+        },
+        {
+          "name": "metrics-fleet_server.agent_versions-*",
+          "title": "agent_versions_metrics"
+        },
+        {
+          "name": "logs-fleet_server.output_health-*",
+          "title": "output_health_logs"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Fleet Server",
+      "description": "Centrally manage Elastic Agents with the Fleet Server integration.",
+      "icons": [
+        {
+          "src": "/img/logo_fleet_server.svg",
+          "title": "logo Fleet Server",
+          "size": "64x64",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "gcp",
+      "version": "2.51.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-gcp.audit-*",
+          "title": "audit"
+        },
+        {
+          "name": "logs-gcp.dns-*",
+          "title": "dns"
+        },
+        {
+          "name": "logs-gcp.firewall-*",
+          "title": "firewall"
+        },
+        {
+          "name": "logs-gcp.vpcflow-*",
+          "title": "vpcflow"
+        },
+        {
+          "name": "metrics-gcp.billing-*",
+          "title": "billing"
+        },
+        {
+          "name": "metrics-gcp.cloudrun_metrics-*",
+          "title": "cloudrun_metrics"
+        },
+        {
+          "name": "metrics-gcp.cloudsql_mysql-*",
+          "title": "cloudsql_mysql"
+        },
+        {
+          "name": "metrics-gcp.cloudsql_postgresql-*",
+          "title": "cloudsql_postgresql"
+        },
+        {
+          "name": "metrics-gcp.cloudsql_sqlserver-*",
+          "title": "cloudsql_sqlserver"
+        },
+        {
+          "name": "metrics-gcp.compute-*",
+          "title": "compute"
+        },
+        {
+          "name": "metrics-gcp.dataproc-*",
+          "title": "dataproc"
+        },
+        {
+          "name": "metrics-gcp.firestore-*",
+          "title": "firestore"
+        },
+        {
+          "name": "metrics-gcp.gke-*",
+          "title": "gke"
+        },
+        {
+          "name": "logs-gcp.loadbalancing_logs-*",
+          "title": "loadbalancing_logs"
+        },
+        {
+          "name": "metrics-gcp.loadbalancing_metrics-*",
+          "title": "loadbalancing_metrics"
+        },
+        {
+          "name": "metrics-gcp.pubsub-*",
+          "title": "pubsub"
+        },
+        {
+          "name": "metrics-gcp.redis-*",
+          "title": "redis"
+        },
+        {
+          "name": "metrics-gcp.storage-*",
+          "title": "storage"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Google Cloud Platform",
+      "description": "Collect logs and metrics from Google Cloud Platform with Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/logo_gcp.svg",
+          "title": "logo gcp",
+          "size": "32x32",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "gcp_pubsub",
+      "version": "2.3.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-generic-*",
+          "title": "generic"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Custom Google Pub/Sub Logs",
+      "description": "Collect Logs from Google Pub/Sub topics",
+      "icons": [
+        {
+          "src": "/img/logo_gcp.svg",
+          "title": "logo gcp",
+          "size": "32x32",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "httpjson",
+      "version": "1.25.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-httpjson.generic-*",
+          "title": "generic"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "ibmmq",
+      "version": "1.9.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-ibmmq.errorlog-*",
+          "title": "errorlog"
+        },
+        {
+          "name": "metrics-ibmmq.qmgr-*",
+          "title": "qmgr"
+        }
+      ],
+      "rolledBack": false,
+      "title": "IBM MQ",
+      "description": "Collect logs and metrics from IBM MQ with Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/ibmmq.svg",
+          "title": "ibmmq",
+          "size": "32x32",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "iis",
+      "version": "1.24.9",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-iis.access-*",
+          "title": "access"
+        },
+        {
+          "name": "metrics-iis.application_pool-*",
+          "title": "application_pool"
+        },
+        {
+          "name": "logs-iis.error-*",
+          "title": "error"
+        },
+        {
+          "name": "metrics-iis.webserver-*",
+          "title": "webserver"
+        },
+        {
+          "name": "metrics-iis.website-*",
+          "title": "website"
+        }
+      ],
+      "rolledBack": false,
+      "title": "IIS",
+      "description": "Collect access logs, error logs, and performance metrics from IIS on Windows via Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/iis.svg",
+          "title": "iis",
+          "size": "100x100",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "kafka",
+      "version": "1.27.2",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "metrics-kafka.broker-*",
+          "title": "broker"
+        },
+        {
+          "name": "metrics-kafka.consumergroup-*",
+          "title": "consumergroup"
+        },
+        {
+          "name": "logs-kafka.log-*",
+          "title": "log"
+        },
+        {
+          "name": "metrics-kafka.partition-*",
+          "title": "partition"
+        },
+        {
+          "name": "metrics-kafka.consumer-*",
+          "title": "consumer"
+        },
+        {
+          "name": "metrics-kafka.controller-*",
+          "title": "controller"
+        },
+        {
+          "name": "metrics-kafka.jvm-*",
+          "title": "jvm"
+        },
+        {
+          "name": "metrics-kafka.log_manager-*",
+          "title": "log_manager"
+        },
+        {
+          "name": "metrics-kafka.network-*",
+          "title": "network"
+        },
+        {
+          "name": "metrics-kafka.producer-*",
+          "title": "producer"
+        },
+        {
+          "name": "metrics-kafka.raft-*",
+          "title": "raft"
+        },
+        {
+          "name": "metrics-kafka.replica_manager-*",
+          "title": "replica_manager"
+        },
+        {
+          "name": "metrics-kafka.topic-*",
+          "title": "topic"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Kafka",
+      "description": "Monitor Kafka broker health - logs and metrics via Jolokia JMX and Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/logo_kafka.svg",
+          "title": "logo kafka",
+          "size": "32x32",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "kubernetes",
+      "version": "1.85.4",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "metrics-kubernetes.apiserver-*",
+          "title": "apiserver"
+        },
+        {
+          "name": "logs-kubernetes.audit_logs-*",
+          "title": "audit_logs"
+        },
+        {
+          "name": "metrics-kubernetes.container-*",
+          "title": "container"
+        },
+        {
+          "name": "logs-kubernetes.container_logs-*",
+          "title": "container_logs"
+        },
+        {
+          "name": "metrics-kubernetes.controllermanager-*",
+          "title": "controllermanager"
+        },
+        {
+          "name": "metrics-kubernetes.event-*",
+          "title": "event"
+        },
+        {
+          "name": "metrics-kubernetes.node-*",
+          "title": "node"
+        },
+        {
+          "name": "metrics-kubernetes.pod-*",
+          "title": "pod"
+        },
+        {
+          "name": "metrics-kubernetes.proxy-*",
+          "title": "proxy"
+        },
+        {
+          "name": "metrics-kubernetes.scheduler-*",
+          "title": "scheduler"
+        },
+        {
+          "name": "metrics-kubernetes.state_container-*",
+          "title": "state_container"
+        },
+        {
+          "name": "metrics-kubernetes.state_cronjob-*",
+          "title": "state_cronjob"
+        },
+        {
+          "name": "metrics-kubernetes.state_daemonset-*",
+          "title": "state_daemonset"
+        },
+        {
+          "name": "metrics-kubernetes.state_deployment-*",
+          "title": "state_deployment"
+        },
+        {
+          "name": "metrics-kubernetes.state_job-*",
+          "title": "state_job"
+        },
+        {
+          "name": "metrics-kubernetes.state_namespace-*",
+          "title": "state_namespace"
+        },
+        {
+          "name": "metrics-kubernetes.state_node-*",
+          "title": "state_node"
+        },
+        {
+          "name": "metrics-kubernetes.state_persistentvolume-*",
+          "title": "state_persistentvolume"
+        },
+        {
+          "name": "metrics-kubernetes.state_persistentvolumeclaim-*",
+          "title": "state_persistentvolumeclaim"
+        },
+        {
+          "name": "metrics-kubernetes.state_pod-*",
+          "title": "state_pod"
+        },
+        {
+          "name": "metrics-kubernetes.state_replicaset-*",
+          "title": "state_replicaset"
+        },
+        {
+          "name": "metrics-kubernetes.state_resourcequota-*",
+          "title": "state_resourcequota"
+        },
+        {
+          "name": "metrics-kubernetes.state_service-*",
+          "title": "state_service"
+        },
+        {
+          "name": "metrics-kubernetes.state_statefulset-*",
+          "title": "state_statefulset"
+        },
+        {
+          "name": "metrics-kubernetes.state_storageclass-*",
+          "title": "state_storageclass"
+        },
+        {
+          "name": "metrics-kubernetes.system-*",
+          "title": "system"
+        },
+        {
+          "name": "metrics-kubernetes.volume-*",
+          "title": "volume"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Kubernetes",
+      "description": "Collect logs and metrics from Kubernetes clusters with Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/logo_kubernetes.svg",
+          "title": "Logo Kubernetes",
+          "size": "32x32",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "log",
+      "version": "2.4.4",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-log.log-*",
+          "title": "log"
+        },
+        {
+          "name": "logs-ihs-*",
+          "title": "ihs"
+        },
+        {
+          "name": "logs-jmeter-*",
+          "title": "jmeter"
+        },
+        {
+          "name": "logs-oag.access-*",
+          "title": "oag.access"
+        },
+        {
+          "name": "logs-orchapi.new-*",
+          "title": "orchapi.new"
+        },
+        {
+          "name": "logs-jptest-*",
+          "title": "jptest"
+        },
+        {
+          "name": "logs-merlin-*",
+          "title": "merlin"
+        },
+        {
+          "name": "logs-okta.log-*",
+          "title": "okta.log"
+        },
+        {
+          "name": "logs-control.m-*",
+          "title": "control.m"
+        },
+        {
+          "name": "logs-tableau-*",
+          "title": "tableau"
+        },
+        {
+          "name": "logs-powerbi.semantic-*",
+          "title": "powerbi.semantic"
+        },
+        {
+          "name": "logs-generic-*",
+          "title": "generic"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Custom Logs (Deprecated)",
+      "description": "Collect custom logs with Elastic Agent.",
+      "icons": [
+        {
+          "src": "/img/icon.svg",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "logstash",
+      "version": "2.11.3",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-logstash.log-*",
+          "title": "log"
+        },
+        {
+          "name": "metrics-logstash.stack_monitoring.node-*",
+          "title": "node"
+        },
+        {
+          "name": "metrics-logstash.stack_monitoring.node_stats-*",
+          "title": "node_stats"
+        },
+        {
+          "name": "logs-logstash.slowlog-*",
+          "title": "slowlog"
+        },
+        {
+          "name": "metrics-logstash.health_report-*",
+          "title": "health_report"
+        },
+        {
+          "name": "metrics-logstash.node-*",
+          "title": "node_cel"
+        },
+        {
+          "name": "metrics-logstash.pipeline-*",
+          "title": "pipeline"
+        },
+        {
+          "name": "metrics-logstash.plugins-*",
+          "title": "plugins"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "microsoft_sqlserver",
+      "version": "2.17.1",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-microsoft_sqlserver.audit-*",
+          "title": "audit"
+        },
+        {
+          "name": "metrics-microsoft_sqlserver.availability_groups-*",
+          "title": "availability_groups"
+        },
+        {
+          "name": "logs-microsoft_sqlserver.log-*",
+          "title": "log"
+        },
+        {
+          "name": "metrics-microsoft_sqlserver.performance-*",
+          "title": "performance"
+        },
+        {
+          "name": "metrics-microsoft_sqlserver.transaction_log-*",
+          "title": "transaction_log"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Microsoft SQL Server",
+      "description": "Collect events from Microsoft SQL Server with Elastic Agent",
+      "icons": [
+        {
+          "src": "/img/microsoft-sql-server-logo.svg",
+          "title": "Microsoft SQL Server",
+          "size": "32x32",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "okta",
+      "version": "3.16.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-okta.system-*",
+          "title": "system"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "oracle",
+      "version": "1.31.4",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-oracle.database_audit-*",
+          "title": "database_audit"
+        },
+        {
+          "name": "metrics-oracle.memory-*",
+          "title": "memory"
+        },
+        {
+          "name": "metrics-oracle.performance-*",
+          "title": "performance"
+        },
+        {
+          "name": "metrics-oracle.sysmetric-*",
+          "title": "sysmetric"
+        },
+        {
+          "name": "metrics-oracle.system_statistics-*",
+          "title": "system_statistics"
+        },
+        {
+          "name": "metrics-oracle.tablespace-*",
+          "title": "tablespace"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "osquery_manager",
+      "version": "1.35.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-osquery_manager.result-*",
+          "title": "result"
+        },
+        {
+          "name": "logs-osquery_manager.action.responses-*",
+          "title": "action_responses"
+        },
+        {
+          "name": "logs-osquery_manager.query_profile-*",
+          "title": "query_profile"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "profiler_agent",
+      "version": "8.17.3",
+      "status": "installed",
+      "dataStreams": [],
+      "rolledBack": false,
+      "title": "Universal Profiling Agent",
+      "description": "Fleet-wide, whole-system, continuous profiling with zero instrumentation.",
+      "icons": [
+        {
+          "size": "48x46",
+          "src": "/img/profiler-logo-color-48px.svg",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "prometheus",
+      "version": "1.24.4",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "metrics-prometheus.collector-*",
+          "title": "collector"
+        },
+        {
+          "name": "metrics-prometheus.query-*",
+          "title": "query"
+        },
+        {
+          "name": "metrics-prometheus.remote_write-*",
+          "title": "remote_write"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "proofpoint",
+      "version": "0.9.1",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-proofpoint.emailsecurity-*",
+          "title": "emailsecurity"
+        }
+      ],
+      "title": "Proofpoint Logs",
+      "description": "Deprecated. Use a product-specific Proofpoint package instead.",
+      "icons": [
+        {
+          "src": "/img/logo.svg",
+          "title": "Proofpoint Email Security logo",
+          "size": "32x32",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "security_ai_prompts",
+      "version": "1.0.15",
+      "status": "installed",
+      "dataStreams": [],
+      "rolledBack": false
+    },
+    {
+      "name": "security_detection_engine",
+      "version": "9.5.9",
+      "status": "installed",
+      "dataStreams": [],
+      "rolledBack": false
+    },
+    {
+      "name": "servicenow",
+      "version": "2.2.1",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-servicenow.event-*",
+          "title": "event"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "sql",
+      "version": "1.2.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "metrics-generic-*",
+          "title": "generic"
+        },
+        {
+          "name": "metrics-sql-*",
+          "title": "sql"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "synthetics",
+      "version": "1.8.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "synthetics-browser-*",
+          "title": "browser"
+        },
+        {
+          "name": "synthetics-browser.network-*",
+          "title": "browser_network"
+        },
+        {
+          "name": "synthetics-browser.screenshot-*",
+          "title": "browser_screenshot"
+        },
+        {
+          "name": "synthetics-http-*",
+          "title": "http"
+        },
+        {
+          "name": "synthetics-icmp-*",
+          "title": "icmp"
+        },
+        {
+          "name": "synthetics-tcp-*",
+          "title": "tcp"
+        }
+      ],
+      "rolledBack": false,
+      "title": "Elastic Synthetics",
+      "description": "Internal Elastic integration for providing access to private locations.",
+      "icons": [
+        {
+          "src": "/img/uptime-logo-color-64px.svg",
+          "size": "16x16",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "sysmon_linux",
+      "version": "1.9.1",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-sysmon_linux.log-*",
+          "title": "log"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "system",
+      "version": "2.24.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-system.application-*",
+          "title": "application"
+        },
+        {
+          "name": "logs-system.auth-*",
+          "title": "auth"
+        },
+        {
+          "name": "metrics-system.core-*",
+          "title": "core"
+        },
+        {
+          "name": "metrics-system.cpu-*",
+          "title": "cpu"
+        },
+        {
+          "name": "metrics-system.diskio-*",
+          "title": "diskio"
+        },
+        {
+          "name": "metrics-system.filesystem-*",
+          "title": "filesystem"
+        },
+        {
+          "name": "metrics-system.fsstat-*",
+          "title": "fsstat"
+        },
+        {
+          "name": "metrics-system.load-*",
+          "title": "load"
+        },
+        {
+          "name": "metrics-system.memory-*",
+          "title": "memory"
+        },
+        {
+          "name": "metrics-system.network-*",
+          "title": "network"
+        },
+        {
+          "name": "metrics-system.process-*",
+          "title": "process"
+        },
+        {
+          "name": "metrics-system.process.summary-*",
+          "title": "process_summary"
+        },
+        {
+          "name": "logs-system.security-*",
+          "title": "security"
+        },
+        {
+          "name": "metrics-system.socket_summary-*",
+          "title": "socket_summary"
+        },
+        {
+          "name": "logs-system.syslog-*",
+          "title": "syslog"
+        },
+        {
+          "name": "logs-system.system-*",
+          "title": "system"
+        },
+        {
+          "name": "metrics-system.uptime-*",
+          "title": "uptime"
+        },
+        {
+          "name": "metrics-system.ntp-*",
+          "title": "ntp"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "tenable_io",
+      "version": "4.14.1",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-tenable_io.asset-*",
+          "title": "asset"
+        },
+        {
+          "name": "logs-tenable_io.audit-*",
+          "title": "audit"
+        },
+        {
+          "name": "logs-tenable_io.plugin-*",
+          "title": "plugin"
+        },
+        {
+          "name": "logs-tenable_io.scan-*",
+          "title": "scan"
+        },
+        {
+          "name": "logs-tenable_io.vulnerability-*",
+          "title": "vulnerability"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "tenable_sc",
+      "version": "2.5.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-tenable_sc.asset-*",
+          "title": "asset"
+        },
+        {
+          "name": "logs-tenable_sc.plugin-*",
+          "title": "plugin"
+        },
+        {
+          "name": "logs-tenable_sc.vulnerability-*",
+          "title": "vulnerability"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "vsphere",
+      "version": "1.25.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "metrics-vsphere.datastore-*",
+          "title": "datastore"
+        },
+        {
+          "name": "metrics-vsphere.host-*",
+          "title": "host"
+        },
+        {
+          "name": "logs-vsphere.log-*",
+          "title": "log"
+        },
+        {
+          "name": "metrics-vsphere.virtualmachine-*",
+          "title": "virtualmachine"
+        },
+        {
+          "name": "metrics-vsphere.cluster-*",
+          "title": "cluster"
+        },
+        {
+          "name": "metrics-vsphere.datastorecluster-*",
+          "title": "datastorecluster"
+        },
+        {
+          "name": "metrics-vsphere.network-*",
+          "title": "network"
+        },
+        {
+          "name": "metrics-vsphere.resourcepool-*",
+          "title": "resourcepool"
+        }
+      ],
+      "rolledBack": false
+    },
+    {
+      "name": "windows",
+      "version": "3.10.0",
+      "status": "installed",
+      "dataStreams": [
+        {
+          "name": "logs-windows.forwarded-*",
+          "title": "forwarded"
+        },
+        {
+          "name": "metrics-windows.perfmon-*",
+          "title": "perfmon"
+        },
+        {
+          "name": "logs-windows.powershell-*",
+          "title": "powershell"
+        },
+        {
+          "name": "logs-windows.powershell_operational-*",
+          "title": "powershell_operational"
+        },
+        {
+          "name": "metrics-windows.service-*",
+          "title": "service"
+        },
+        {
+          "name": "logs-windows.sysmon_operational-*",
+          "title": "sysmon_operational"
+        },
+        {
+          "name": "logs-windows.applocker_exe_and_dll-*",
+          "title": "applocker_exe_and_dll"
+        },
+        {
+          "name": "logs-windows.applocker_msi_and_script-*",
+          "title": "applocker_msi_and_script"
+        },
+        {
+          "name": "logs-windows.applocker_packaged_app_deployment-*",
+          "title": "applocker_packaged_app_deployment"
+        },
+        {
+          "name": "logs-windows.applocker_packaged_app_execution-*",
+          "title": "applocker_packaged_app_execution"
+        },
+        {
+          "name": "logs-windows.windows_defender-*",
+          "title": "windows_defender"
+        }
+      ],
+      "rolledBack": false
+    }
+  ],
+  "total": 36,
+  "searchAfter": [
+    "windows"
+  ]
+}
+
+#IQ4b
+# 130: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+       last_data        | docs_last_24h | docs_last_7d  |            feed             
+------------------------+---------------+---------------+-----------------------------
+2026-11-02T11:09:16.106Z|64810          |109667         |CMDB relations               
+2026-11-02T11:28:12.000Z|6266           |50189          |Netcool bridge               
+2026-11-02T11:28:10.100Z|216708         |1499101        |Paladin alerts               
+2026-11-02T11:27:42.561Z|33             |224            |ServiceNow SLA               
+2026-11-02T11:27:41.668Z|164            |845            |ServiceNow changes           
+2026-11-02T11:28:00.098Z|617985         |4378059        |ServiceNow incident snapshots
+2026-11-02T11:27:05.000Z|270            |5226           |ServiceNow incidents         
