@@ -195,7 +195,7 @@ WINDOW = ('TO_TIMEDURATION(CASE(?health_window == "3 days", "72 hours", ?health_
 GKE_HEALTH_Q = f"""FROM metrics-gcp.gke-*, cmdb-ci-relations* METADATA _index
 | WHERE (NOT _index LIKE "*cmdb-ci-relations*" AND @timestamp >= NOW() - {WINDOW}
          AND (gcp.gke.node.cpu.allocatable_utilization.pct IS NOT NULL OR gcp.gke.node.memory.allocatable_utilization.pct IS NOT NULL
-              OR gcp.gke.container.restart.count IS NOT NULL))
+              OR gcp.gke.node.memory.used.bytes IS NOT NULL OR gcp.gke.container.restart.count IS NOT NULL))
      OR (_index LIKE "*cmdb-ci-relations*" AND ?ci != "(no CI selected)"
          AND (parent.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci)) OR child.name IN (?ci, TO_UPPER(?ci), TO_LOWER(?ci)))
          AND (TO_STRING(parent.class) == {K8S} OR TO_STRING(child.class) == {K8S})
@@ -203,15 +203,16 @@ GKE_HEALTH_Q = f"""FROM metrics-gcp.gke-*, cmdb-ci-relations* METADATA _index
 | EVAL is_rel = _index LIKE "*cmdb-ci-relations*", ci_l = TO_LOWER(?ci),
        p_l = TO_LOWER(TO_STRING(parent.name)), c_l = TO_LOWER(TO_STRING(child.name)),
        cpu = TO_DOUBLE(gcp.gke.node.cpu.allocatable_utilization.pct), mem = TO_DOUBLE(gcp.gke.node.memory.allocatable_utilization.pct),
+       mu = TO_DOUBLE(gcp.gke.node.memory.used.bytes), ma = TO_DOUBLE(gcp.gke.node.memory.allocatable.bytes),
        rc = TO_DOUBLE(gcp.gke.container.restart.count)
 | EVAL cluster = CASE(is_rel, CASE(TO_STRING(child.class) == {K8S} AND (c_l != ci_l OR TO_STRING(parent.class) != {K8S}), c_l, p_l),
                       TO_LOWER(TO_STRING(gcp.labels.resource.cluster_name))),
        ent = CASE(is_rel, "", rc IS NOT NULL, CONCAT("c:", COALESCE(TO_STRING(gcp.labels_fingerprint), "")), COALESCE(TO_STRING(gcp.labels.resource.node_name), "")),
        project = CASE(is_rel, "", COALESCE(TO_STRING(cloud.account.id), ""))
-| STATS rel = MAX(CASE(is_rel, 1, 0)), cpu_avg_e = AVG(cpu), cpu_p90_e = PERCENTILE(cpu, 90), mem_e = MAX(mem),
+| STATS rel = MAX(CASE(is_rel, 1, 0)), cpu_avg_e = AVG(cpu), cpu_p90_e = PERCENTILE(cpu, 90), mem_u = MAX(mem), mem_used = MAX(mu), mem_alloc = MAX(ma),
         r_max = MAX(rc), r_min = MIN(rc), last_e = MAX(CASE(NOT is_rel, @timestamp))
   BY cluster, ent, project
-| EVAL restarts_e = r_max - r_min, project = CASE(project == "", null, project)
+| EVAL restarts_e = r_max - r_min, mem_e = COALESCE(mem_u, mem_used / mem_alloc), project = CASE(project == "", null, project)
 | STATS related = MAX(rel), nodes = COUNT(cpu_p90_e), cpu_a = AVG(cpu_avg_e), cpu_p = MAX(cpu_p90_e), mem_p = MAX(mem_e),
         restarts = SUM(restarts_e), last_seen = MAX(last_e), projects = VALUES(project)
   BY cluster
@@ -237,7 +238,7 @@ def gke_health_panel(section, x, y, w, h):
         'from 90 %), Warning (from 80 %, or 10+ container restarts), Silent (no data for 20 minutes; GCP metrics arrive '
         'every 5 minutes with about 5 minutes\' lag), Healthy; Not collected = a cluster in the CMDB that the GCP '
         'integration does not collect. Nodes = nodes reporting; CPU avg / p90 = node CPU use of allocatable cores '
-        '(p90 of the busiest node); Mem peak = the fullest node\'s memory use of allocatable memory; Restarts = container '
+        '(p90 of the busiest node); Mem peak = the fullest node\'s memory use of allocatable memory (used bytes / allocatable bytes: the GCP utilisation ratio is not collected); Restarts = container '
         'restarts in the window. Which clusters: the CI control\'s value if it is a cluster, plus every Kubernetes '
         'cluster linked to it in the CMDB; with no CI picked, every collected cluster. GCP metrics carry no CMDB fields, '
         'so clusters are matched on name (4 of the 5 collected clusters are CMDB CIs). CloudSQL and Storage are not '

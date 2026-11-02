@@ -453,3 +453,19 @@ FROM metrics-gcp.gke-*
 | SORT mx DESC
 | LIMIT 10
 ```
+
+### Round 20 results (2 Nov) and the fixes they led to
+
+| Check | Result | Effect on *Cloud health · GKE* |
+|---|---|---|
+| **CG5** units | CPU is a fraction: max 1.02 on g-prod-gke-elm-bridge (27 nodes), 0.17 on g-stg-gke-2 (50 nodes), 0.12 on g-prd-gke-2 (31 nodes). **Memory utilisation is null** everywhere | CPU scaling is right. Memory now comes from `node.memory.used.bytes` / `node.memory.allocatable.bytes` (both collected, CG4) |
+| **CG6** restarts | The query failed because `gcp.gke.container.restart.count` is a **counter** (`counter_long`, time-series index) that MIN/MAX don't accept | A counter is a running total, so max − min per series is right. The panel converts it with `TO_DOUBLE` first, which counters allow. The test now uses a time-series data stream with a counter field, like production |
+
+**CG7. One check left: is node memory split by memory type?** GCP reports `used_bytes` separately for *evictable*
+and *non-evictable* memory. If production has both, the panel's "largest of the two" under-states the total.
+Run this and paste the two documents:
+
+```
+GET metrics-gcp.gke-*/_search?size=2&sort=@timestamp:desc&filter_path=hits.hits._source.gcp
+{ "query": { "exists": { "field": "gcp.gke.node.memory.used.bytes" } } }
+```

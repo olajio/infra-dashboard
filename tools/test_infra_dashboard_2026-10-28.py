@@ -41,7 +41,7 @@ def cleanup():
         got = call('GET', f'/_cat/indices/{pat}?format=json&h=index&expand_wildcards=all')
         for i in got if isinstance(got, list) else []:
             call('DELETE', f'/{i["index"]}')
-    for t in ('apm-tx-test',):
+    for t in ('apm-tx-test', 't30-gke'):
         call('DELETE', f'/_index_template/{t}')
     call('DELETE', '/cmdb_with_apm_flag')
     call('DELETE', f'/{ALERTS}')
@@ -86,12 +86,24 @@ assert not call('POST', '/_bulk?refresh=true', ''.join(json.dumps({'index': {'_i
 GKE, REL30 = 'metrics-gcp.gke-t30', 'cmdb-ci-relations-t30'
 
 
+# a time-series data stream, as in production: restart.count is a counter (round20.txt, CG6)
+DIM = {'type': 'keyword', 'time_series_dimension': True}
+call('DELETE', '/_index_template/t30-gke')
+assert 'error' not in call('PUT', '/_index_template/t30-gke', {'index_patterns': [GKE], 'data_stream': {}, 'priority': 500,
+    'template': {'settings': {'index.mode': 'time_series', 'index.routing_path': [
+        'gcp.labels.resource.cluster_name', 'gcp.labels.resource.node_name', 'gcp.labels_fingerprint']},
+        'mappings': {'properties': {'@timestamp': D, 'cloud': obj(account=obj(id=K)), 'gcp': obj(
+            labels_fingerprint=DIM, labels=obj(resource=obj(cluster_name=DIM, node_name=DIM)),
+            gke=obj(container=obj(restart=obj(count={'type': 'long', 'time_series_metric': 'counter'})),
+                    node=obj(memory=obj(allocatable_utilization=obj(pct={'type': 'double'})))))}}}})   # mapped, never sent (CG5)
+
+
 def node(cluster, name, cpu, mem, minutes=5):
+    # memory as used / allocatable bytes: the utilisation field isn't collected in production (CG5)
     return {'@timestamp': ago(minutes=minutes), 'cloud': {'account': {'id': 'proj-' + cluster}},
-            'orchestrator': {'cluster': {'name': cluster}},
             'gcp': {'labels': {'resource': {'cluster_name': cluster, 'node_name': name}},
                     'gke': {'node': {'cpu': {'allocatable_utilization': {'pct': cpu}},
-                                     'memory': {'allocatable_utilization': {'pct': mem}}}}}}
+                                     'memory': {'used': {'bytes': int(mem * 64e9)}, 'allocatable': {'bytes': int(64e9)}}}}}}
 
 
 def restarts(cluster, pod, count, minutes):
