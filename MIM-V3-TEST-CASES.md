@@ -17,44 +17,48 @@ class, with up to 3 examples per class. Each example is tagged:
 > 7 days, and section 1 leaves On Hold incidents out: pick incidents with `newest_days` ≤ 6 in CA2, and not On Hold
 > for anything checked in section 1.
 
-## Values to use (Round 15, 23 Oct)
+## Values to use (Round 19, 2 Nov)
 
-Only **CA** was re-run this round (no CB, CC or CD). Most Round 14 picks for cases that need CB/CC/CD still stand,
-since those depend on CMDB relationships or non-incident servers, which change far more slowly than incidents —
-they're carried forward below and marked *(unverified since 21 Oct)*. Re-run CB/CC/CD if you want those confirmed
-too.
+From `round19.txt`: CA2, SL, OH and TL were run. CB, CC and CD were not, so the TC-05, TC-12, TC-17 and TC-18 server
+and service picks are carried forward and marked *(unverified)*. **Test soon:** the 7-day window drops incidents every
+day. INC2680236, the TC-26 pick, leaves *Escalate* and section 1 about 17 h after this run.
+
+**Picking an incident:** CA2 shows each CI's *oldest* active incident. For a CI with several incidents, type the CI
+name into the **Incident** control and pick the newest. Incidents **On Hold** show in the Incident control and in
+*Escalate*, but not in section 1 (that is TC-27).
 
 | Case | Incident / CI / controls | What to expect from this pick |
 |---|---|---|
-| **TC-02** | Incident **INC2674667 · kau1p464** (Windows, score 3: metrics + database + Windows services) | *Server*, *Database* and *Process Health* fill. Variant: **INC2673019 · vkau1pwb0003** (same shape, also prod) |
-| **TC-03** | Incident **INC2676297 · sch1h020** (AIX, no metrics, database) | *Server Health*: one row, "No data in window". Variant with real middleware names instead of "unknown": **INC2678574 · sch1h628** (`ibm_mq_amqpcsea_positional`, `ibm_mq_amqrmppa_positional`; environment `cut`, doubles as a TC-10 pick) |
-| **TC-04** | Incident **INC2667546 · Automated Claim Transaction PROD** (still active since 21 Oct, now 14 open incidents) | Section 2 fills from the CMDB. Health panels empty |
-| **TC-05** | TC-04, then Server = **vslrau1p276** *(unverified since 21 Oct)* | The health panels show vslrau1p276, including its APM service. Also in the list: vslrau1p174, vcwau1p0132. Backup: **Enterprise PolicyCenter PROD** (now incident INC2670814) with Server = **vrau1pap0041** |
-| **TC-06** | Incident **INC2673785 · CNA Central** (still active, now 4 open incidents) | The only business application with an incident. Pick it in the Application control |
-| **TC-07** | Incident **INC2670699 · MSSQLSERVER@kau1p522** (still active) | *Server View* names **kau1p522**, which sends no server metrics, so it is **not in the Server list**: health panels stay empty — a documented limit worth showing. Variants: **INC2676747 · MSSQLSERVER@vkau1pdb0015** (still active), **INC2678417 · MSSQLSERVER@vskau1p945** (new) |
-| **TC-08** | Incident **INC2678287 · adc-wan-agg2** (an **IP Switch**, score 1, 3 Netcool alerts) | A real network device this time — *Alerts on this CI* shows its 3 alerts; health panels empty. Variant: **INC2678391 · cuprsp2** (a UPS, 4 alerts) |
-| **TC-09** | Incident **INC2677314** (P2, no CI — still active) | Only *Escalate* fills |
-| **TC-10** | Incident **INC2667298 · CNA Canada Insurance System DRE** (dre, still active, now 19 open incidents, 5 changes); then **INC2676782 · lrch1d54** (drt, server with metrics, still active) | The CI's panels show; its non-production relationships are hidden. lrch1d54's health panels still fill |
-| **TC-11** | CI = **vslrau1p220** (TC-01's server) | Repeats TC-01 through the CI control. Not incident-dependent |
-| **TC-12** | CI = **vslrau1p219** *(unverified since 21 Oct — not in today's CA table, so still has no active incident)* | *Escalate* shows one row with the owners. Section 3 fills, as in TC-01 |
-| **TC-13** | Incident **INC2674667 · kau1p464**, CI = **Automated Claim Transaction PROD** | Every panel follows kau1p464, the incident's CI, not the CI control |
-| **TC-14** | (a) CI = **kau1p464**, Server = **vslrau1p229** *(server unverified since 21 Oct)*. (b) CI = **Automated Claim Transaction PROD**, Server = **vslrau1p229** | (a) The health panels show kau1p464: a server in the CI control wins. (b) They show vslrau1p229 |
-| **TC-15** | Server = **vslrau1p229** *(unverified since 21 Oct)* | The health panels fill without an incident or CI |
+| **TC-02** | Incident **INC2684835 · vskau1p1277** (Windows, prod, In Progress, score 3: metrics + database + Windows services) | *Server*, *Database* and *Process Health* fill. Variant: **INC2683913 · kau1p464** (the Round 15 server, new incident, On Hold) |
+| **TC-03** | Incident **INC2684506 · kw3l1p714** (Windows Server, prod, **no metrics**) | *Server Health*: one row, "No data in window". No AIX server has an active incident now. Variant: **INC2684495 · kw3l1p713** |
+| **TC-04** | Incident on **Automated Claim Transaction PROD** (14 open incidents, newest 2 days old, 1 change) | Section 2 fills from the CMDB. Health panels empty. Variant: **Europe Underwriter Desktop PROD** (12 incidents, one opened today, 9 changes) |
+| **TC-05** | TC-04, then Server = **vslrau1p276** *(unverified)* | The health panels show that server. If it isn't listed in *Server View*, pick any server shown there |
+| **TC-06** | Incident on **CNA Central** (Business Application, 5 open incidents, newest 2 days old) | Still the only business application with an incident. Pick it in the Application control |
+| **TC-07** | Incident **INC2684839 · MSSQLSERVER@vskau1p1033** (prod, opened today) | *Server View* names **vskau1p1033**. Variants: **INC2684587 · MSSQLSERVER@vskau1p945**, **INC2684399 · MSSQLSERVER@kw3l1p237**. The kau1p522 incident is 24 days old, outside *Escalate* |
+| **TC-08** | Incident **INC2684277 · sdc-core-sw2** (IP Switch, **P2**, **9** Netcool alerts, On Hold) | *Alerts on this CI* shows its 9 alerts; health panels empty. It is On Hold, so it is not in *Active Incidents*. Variant: **INC2684990 · adc-f5apm-02** (F5 BIG-IP, In Progress, no alerts) |
+| **TC-09** | Incident **INC2684997 · (no CI)** (P3, In Progress) | Only *Escalate* fills. The no-CI P2 from Round 15 has closed. 152 of the 283 CA2 rows have no CI |
+| **TC-10** | Incident on **CNA Canada Insurance System DRE** (dre, 8 incidents, 3 changes); then **INC2683481 · vclch1d0205d** (dre server with metrics and WebSphere) | The CI's panels show; its non-production relationships are hidden. vclch1d0205d's health panels fill. Variant: **INC2684847 · vslrch1d363** (drt) |
+| **TC-11** | CI = **vslrau1p220** (TC-01's server) | Repeats TC-01 through the CI control |
+| **TC-12** | CI = **vslrau1p219** *(unverified; it has no active incident in CA2)* | *Escalate* shows one row with the owners. Section 3 fills, as in TC-01 |
+| **TC-13** | Incident **INC2684835 · vskau1p1277**, CI = **Automated Claim Transaction PROD** | Every panel follows vskau1p1277, the incident's CI, not the CI control |
+| **TC-14** | (a) CI = **vskau1p1277**, Server = **vslrau1p301**. (b) CI = **Automated Claim Transaction PROD**, Server = **vslrau1p301** | (a) The health panels show vskau1p1277: a server in the CI control wins. (b) They show vslrau1p301 (Linux, sends metrics, active incident INC2684312) |
+| **TC-15** | Server = **vslrau1p301** | The health panels fill without an incident or CI |
 | **TC-16** | TC-12, then Health window 15 minutes, then 7 days | 7 days: more log groups; the first load can take up to a minute |
-| **TC-17** | Service = **juno-data-api** or **eds-data-api** *(traffic figures unverified since 21 Oct)* | *Upstream*, *Service health* and *Downstream* follow it, if it still has callers |
-| **TC-18** | Application = **Juno**, then **Agency Bill Pay** *(unverified since 21 Oct)* | *Services of the Application* lists only that application's services |
-| **TC-24** | **INC2678126 · CNA1BSYS** (mainframe LPAR, **prod**, 2 incidents, 3 changes — better than 21 Oct's dev pick); **INC2665397 · RightFax** (infrastructure service, still active); **INC2674755 · PRINT OPEN SYSTEMS DAILY JOB LOG** (batch job, still active); **INC2678582 · gnfcnacvtma-01** (Network Appliance Hardware, new, 1 change) | *Escalate* and the CMDB panels only |
+| **TC-17** | Service = **juno-data-api** or **eds-data-api** *(unverified)* | *Upstream*, *Service health* and *Downstream* follow it, if it still has callers |
+| **TC-18** | Application = **Juno**, then **Agency Bill Pay** *(unverified)* | *Services of the Application* lists only that application's services |
+| **TC-24** | **INC2684435 · CNA1BSYS** (mainframe LPAR, prod, 4 changes); **SSL/VPN** (infrastructure service, 5 incidents, one opened today); **INC2673853 · HARDY TandemAcumen Rec Report** (batch job, dev, In Progress); **INC2684990 · adc-f5apm-02** (F5 BIG-IP) | *Escalate* and the CMDB panels only. The only Cloud DataBase incident (pubsub_data_view) is 28 days old, outside *Escalate* |
+| **TC-25** | Telemetry = *Enrolled, no telemetry yet* | 41 applications (TL), e.g. **Claim Center** (APM0003115), **Data Lake** (APM0003248), **Adobe Experience Manager** (APM0004638), **Wage Calculator** (APM0004472) |
+| **TC-26** | **INC2680236 · Claim Financial Interface PROD** (P3, 2 SLA records, 1 breached); **INC2684181 · Claim Center PROD** (P3, 2 SLA records, none breached) | The first shows **Breached**. If it shows another status, its latest SLA record is the unbreached one. The second shows Breaching / Paused / Within SLA / Met. Any other row, e.g. INC2684312, shows **No SLA record**. Only 6 active incidents have an SLA record |
+| **TC-27** | **INC2684277 · sdc-core-sw2** (P2 On Hold, 68 h) or **INC2684604 · vclau1p0147** (P2 On Hold, 33 h) | Both are P2s over 8 h, but neither appears in *Active Incidents* or the *P2 over 8 h* tile. Picking either in the Incident control still fills *Escalate*. 20 On Hold P2s were opened in the last 7 days, 16 of them on vslrau1p001 / vslrau1p105 |
+| **TC-28** | Nothing picked | Count the P1, P2 and P3 rows in *Active Incidents* and compare them with the three tiles |
 
-**What changed since Round 14 (23 Oct):**
-- **TC-08 finally has a real network device:** `adc-wan-agg2`, an IP Switch, with 3 live Netcool alerts — a better
-  fit than the UPS workaround from 21 Oct.
-- **Most long-running picks held:** the same incidents are still open on *kau1p522* (TC-07), *CNA Central* (TC-06),
-  *Automated Claim Transaction PROD* (TC-04), the no-CI P2 (TC-09) and both TC-10 CIs — two days hasn't closed them.
-- **TC-02's and TC-24's 21 Oct picks closed** (vkau1pdb0016, m10w3l2gm0a30bm, the old UPS `cumtri1`); replaced above.
-- **Still no active incident's CI runs APM services** (CA's `apm` / `services` columns are empty throughout). The
-  section 3 dependency panels are only shown through TC-11, TC-12, TC-15 and TC-17.
-- **Database metrics are recorded against the SQL instance's name** (`MSSQLSERVER@…`), not the server's, so
-  *Database Health* for a picked server may show only its SQL Server Windows service.
+**What changed since Round 15 (23 Oct):**
+- **Most 23 Oct incidents closed or fell out of the 7-day window.** TC-02, 03, 07, 08, 09 and 24 have new picks.
+  The TC-04, 06 and 10 CIs still have active incidents.
+- **On Hold is common:** 91 of the 152 no-CI rows and most server rows are On Hold. They suit TC-27, but not checks in
+  section 1.
+- **Still no active incident's CI runs APM services**, so the section 3 dependency panels are only shown through
+  TC-11, TC-12, TC-15 and TC-17.
 
 ## A. The incident's CI is not a server with APM
 

@@ -398,8 +398,18 @@ GET metrics-gcp.*/_field_caps?fields=gcp.gke.*,gcp.compute.*,gcp.storage.*,gcp.c
 | Compute (19) | `instance.cpu.usage.pct`, `instance.uptime.sec`, disk/network bytes, `firewall.dropped_packets_count` | CPU %, uptime reset (reboot); no memory % without the Ops agent (only balloon fields) |
 | Storage (9) | `api.request.count`, `storage.object.count`, `storage.total.bytes`, network bytes | No health signal beyond request volume. Error ratio needs `api.request.count` split by response code, which is not in the field list. |
 
-**Conclusion:** there are enough metrics to colour Cloud SQL, GKE and Compute health. Storage can only show size and traffic.
-The remaining question is whether the panel can **follow the CI**, because GCP documents have no `ci.*` enrichment.
-That depends on CG2 and CG3, which were not in `round17d.txt`. Run both in Discover and save them as `round17d_CG2.csv` and
-`round17d_CG3.csv`. If CMDB names match GCP project, cluster or instance names, the panel joins on name. If not, it can
-show only an unfiltered GCP overview.
+**CG2 and CG3: do the collected GCP resources match CMDB names?**
+
+| GCP resource | Collected (CG2) | In the CMDB (CG3) | Match |
+|---|---|---|---|
+| GKE clusters | g-prd-gke-2, g-pre-gke-4, g-pre-gke-5, g-stg-gke-2, g-prod-gke-elm-bridge | 34 `cmdb_ci_kubernetes_cluster` names | **4 of 5** (all but g-pre-gke-4). g-prd-gke-2 has 189 CMDB relations |
+| Projects | 9 (anomalo, spg, looker cut/stg/prd, gke-prod, gke-preprod, gke-stg, elm-bridge) | 21 `cmdb_ci_gcp_project` names | **3 of 9**: cna-g-prd-proj-gke-prod, cna-g-pre-proj-gke-preprod, cna-g-prod-proj-elm-bridge |
+| Cloud SQL | 6 (anomalo and spg instances; the resource is `project:instance`) | 8 `cmdb_ci_cloud_database` names (abp, bandc, clmfi, cnax, mvr …) | **None**. Different databases on each side |
+| Buckets | 18 (looker, elm-bridge, cloudbuild) | 15 `cmdb_ci_cloud_object_storage` names | **None** |
+| Compute VMs | Mostly GKE nodes and Looker VMs | Not in CG3 (server classes) | Not checked |
+
+**Conclusion (Cloud health: Partly achievable).** GKE health can follow the CI: when the selected CI is a Kubernetes
+cluster, or one of its relations is, match `gcp.labels.resource.cluster_name` to
+the CMDB name. Show node CPU and memory %, container restarts and volumes near full. Cloud SQL cannot follow a CI until one
+of two things happens: the collected anomalo and spg instances are added to the CMDB, or the CMDB's databases are
+added to the GCP integration. Buckets carry no health signal. `INFRA-DASHBOARD-KPIS.xlsx` is updated.

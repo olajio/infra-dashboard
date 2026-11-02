@@ -2143,3 +2143,9 @@ FROM cmdb_with_apm_flag, metrics-apm.service_transaction.1m-* METADATA _index
 """
 }
 ```
+
+### Round 19 results (2 Nov)
+
+`round19.txt` has CA2 (283 CIs with active incidents, 152 with no CI), SL (6 active incidents with an SLA record, 1
+breached), OH (20 On Hold P2s in the last 7 days) and TL (41 enrolled applications with no telemetry). CB, CC and CD
+were not run. The picks for TC-02 to TC-28 are in `MIM-V3-TEST-CASES.md` under "Values to use (Round 19, 2 Nov)".
