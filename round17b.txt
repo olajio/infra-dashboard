@@ -1,0 +1,1582 @@
+# 3: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+     docs      |       last_seen        | data_stream.dataset  
+---------------+------------------------+----------------------
+180            |2026-11-02T11:57:59.734Z|vsphere.cluster       
+900            |2026-11-02T11:57:58.709Z|vsphere.datastore     
+720            |2026-11-02T11:58:04.044Z|vsphere.host          
+2520           |2026-11-02T11:57:58.719Z|vsphere.network       
+180            |2026-11-02T11:58:01.504Z|vsphere.resourcepool  
+8280           |2026-11-02T11:58:06.455Z|vsphere.virtualmachine
+
+# 16: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+     docs      |       last_seen        |  data_stream.dataset  
+---------------+------------------------+-----------------------
+4080           |2026-11-02T11:55:00.000Z|gcp.cloudsql_postgresql
+60167          |2026-11-02T11:52:00.000Z|gcp.compute            
+5428802        |2026-11-02T11:53:06.948Z|gcp.gke                
+255            |2026-11-02T11:44:00.000Z|gcp.storage            
+
+# 29: GET kbn:/api/alerting/rules/_find?per_page=100&search_fields=name&search=paladin* [200 ]
+{
+  "page": 1,
+  "per_page": 100,
+  "total": 0,
+  "data": []
+}
+# 34: GET .alerts-observability.*/_search [200 OK]
+{
+  "took": 63,
+  "timed_out": false,
+  "_shards": {
+    "total": 151,
+    "successful": 151,
+    "skipped": 108,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 3455,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": []
+  },
+  "aggregations": {
+    "by_rule": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "paladin-log-win_eventids",
+          "doc_count": 1111,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 1111
+              },
+              {
+                "key": "event.eventMessageText",
+                "doc_count": 1111
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 2,
+            "sum_other_doc_count": 143,
+            "buckets": [
+              {
+                "key": "vskau1p1379,Event found for ci: vskau1p1379, event_id: 1069, provider_name: failoverclustering",
+                "doc_count": 939
+              },
+              {
+                "key": "vkau1pap0099,Event found for ci: vkau1pap0099, event_id: 36, provider_name: time_service",
+                "doc_count": 22
+              },
+              {
+                "key": "vkau1pdb0022,Event found for ci: vkau1pdb0022, event_id: 55, provider_name: ntfs",
+                "doc_count": 7
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 3,
+            "sum_other_doc_count": 322,
+            "buckets": [
+              {
+                "key": "Event found for ci: vskau1p1379, event_id: 1069, provider_name: failoverclustering",
+                "doc_count": 939
+              },
+              {
+                "key": "vskau1p1379",
+                "doc_count": 939
+              },
+              {
+                "key": "Event found for ci: vkau1pap0099, event_id: 36, provider_name: time_service",
+                "doc_count": 22
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-host-uptime-c30",
+          "doc_count": 502,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.id",
+                "doc_count": 502
+              },
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 502
+              },
+              {
+                "key": "paladin.enrichment.monitor.actives",
+                "doc_count": 502
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 2,
+            "sum_other_doc_count": 484,
+            "buckets": [
+              {
+                "key": "1444c0941b12821879450f22dd4bcb5a,vskau1p1375,paladin-host-uptime-c30:b72014f038df922306f64b45cc56f1ea091cfaca6d8f63ae48f225f8b2bd1931",
+                "doc_count": 7
+              },
+              {
+                "key": "b9d727ba1be36110c71921b6b04bcbde,kau1pscxapp034,paladin-host-uptime-c30:9ca60421e31479161860285dca1c8574e95255c195cf31d7c2a5297a513461e4",
+                "doc_count": 6
+              },
+              {
+                "key": "3528026e1b43391016544227cc4bcb4c,kw3mne105,paladin-host-uptime-c30:ed901e3b647eeab00495bab574361de3ce048a84249083cb7d7c8f7639c23d76",
+                "doc_count": 5
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 2,
+            "sum_other_doc_count": 1485,
+            "buckets": [
+              {
+                "key": "1444c0941b12821879450f22dd4bcb5a",
+                "doc_count": 7
+              },
+              {
+                "key": "paladin-host-uptime-c30:b72014f038df922306f64b45cc56f1ea091cfaca6d8f63ae48f225f8b2bd1931",
+                "doc_count": 7
+              },
+              {
+                "key": "vskau1p1375",
+                "doc_count": 7
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-process-middleware-c0",
+          "doc_count": 340,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.id",
+                "doc_count": 340
+              },
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 340
+              },
+              {
+                "key": "conf_id",
+                "doc_count": 340
+              },
+              {
+                "key": "process_name",
+                "doc_count": 340
+              },
+              {
+                "key": "process_name_mw",
+                "doc_count": 340
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 320,
+            "buckets": [
+              {
+                "key": "9cd81923db32c700643cb96c4e96191f,surfsda5,java,8d517ecd5c35ab7a624210dfaf7182bde86f8731c7d6f377906aa90813801dde,java#uUf8gjgtErUXw64i4Ib2Lt1ry0YCHhHnsczFX+IS8L4=",
+                "doc_count": 7
+              },
+              {
+                "key": "9cd81923db32c700643cb96c4e961921,surfsda6,java,95466ae56129d6775cf80eb8ec7ce8ed5bbb0d0dc63775705a07f73c914edfa1,java#2mXag6Ta2EGJTrFomROhP1GULnfsHthOevTPkeMSXdY=",
+                "doc_count": 7
+              },
+              {
+                "key": "9cd81923db32c700643cb96c4e96191f,surfsda5,java,a5b676d404ce638d7cb0b7951ace4e951b2e2e8c1e61651efb6c2fe38b5f96cb,java#o24i1GOFwUtrbcfgwdtOzay98Y03EqnkRQc04leNt9c=",
+                "doc_count": 6
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 12,
+            "sum_other_doc_count": 1465,
+            "buckets": [
+              {
+                "key": "java",
+                "doc_count": 174
+              },
+              {
+                "key": "19a75d01dbf24700643cb96c4e96192d",
+                "doc_count": 31
+              },
+              {
+                "key": "sau1h103",
+                "doc_count": 30
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-filesystem-usage",
+          "doc_count": 313,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.id",
+                "doc_count": 313
+              },
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 313
+              },
+              {
+                "key": "paladin.monitor.actives",
+                "doc_count": 313
+              },
+              {
+                "key": "system.filesystem.mount_point",
+                "doc_count": 313
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 243,
+            "buckets": [
+              {
+                "key": "3aea97351b2c511411d9a7d4bd4bcb6a,kw3lniicsd002,/var/log,paladin-filesystem-usage-w90_c95:c669b4e1b7a52d136fb46b9f345d6dcd23d0b30a8db0be6c6ea11b2f5db69545",
+                "doc_count": 47
+              },
+              {
+                "key": "892ed3ce1b331554c71921b6b04bcb79,vslrch1d439,/var/log/audit,paladin-filesystem-usage-w90_c95:85541d0d27d98bb8b88339739d79e325808794d328a907a01df68f532faf771f",
+                "doc_count": 17
+              },
+              {
+                "key": """8617a28c1ec0cf10778d837f3ccf1cee,vkau1psc0001,C:\,paladin-filesystem-usage-w85_c90:5d67412817d85507282b2a1bf490372cae5ae636a89e9f88413b758ceddd3b41""",
+                "doc_count": 6
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 1044,
+            "buckets": [
+              {
+                "key": "/opt",
+                "doc_count": 99
+              },
+              {
+                "key": """C:\""",
+                "doc_count": 56
+              },
+              {
+                "key": "/var/log",
+                "doc_count": 53
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-url-availability-c0",
+          "doc_count": 300,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.id",
+                "doc_count": 300
+              },
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 300
+              },
+              {
+                "key": "paladin.enrichment.monitor.actives",
+                "doc_count": 300
+              },
+              {
+                "key": "url.full",
+                "doc_count": 300
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 2,
+            "sum_other_doc_count": 61,
+            "buckets": [
+              {
+                "key": "ea4779ae1be08910314a98ac0a4bcbb2,vslrau1p301,https://jitbit_prod.cna.com,paladin-url-availability-c0:816a53638aff3477f476da12a28c5f98f12dd64417b13b03a332e420cbb018c5",
+                "doc_count": 223
+              },
+              {
+                "key": "bb1771ae1be08910314a98ac0a4bcbda,vslrau1p300,https://ilap-api.gcp.cna.com/v1/interface/health,paladin-url-availability-c0:38b938e541fd2bbfd8ca21c38adfe2b72f352a7a05be5aa0ad1a78e1cfc58bf3",
+                "doc_count": 9
+              },
+              {
+                "key": "64d7f5ee1be08910314a98ac0a4bcbfd,vslrau1p305,https://ilap-api.gcp.cna.com/v1/interface/health,paladin-url-availability-c0:c0b23051728b35c3979b19810c64022f64f4f31ad90915cc58bff4a499c0adf6",
+                "doc_count": 7
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 6,
+            "sum_other_doc_count": 511,
+            "buckets": [
+              {
+                "key": "ea4779ae1be08910314a98ac0a4bcbb2",
+                "doc_count": 233
+              },
+              {
+                "key": "vslrau1p301",
+                "doc_count": 233
+              },
+              {
+                "key": "https://jitbit_prod.cna.com",
+                "doc_count": 223
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-windows-service-code0-c1",
+          "doc_count": 209,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.id",
+                "doc_count": 209
+              },
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 209
+              },
+              {
+                "key": "paladin.enrichment.monitor.actives",
+                "doc_count": 209
+              },
+              {
+                "key": "windows.service.display_name",
+                "doc_count": 209
+              },
+              {
+                "key": "windows.service.name",
+                "doc_count": 209
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 773,
+            "buckets": [
+              {
+                "key": "gc-agents-service",
+                "doc_count": 126
+              },
+              {
+                "key": "Guardicore Agent Service",
+                "doc_count": 121
+              },
+              {
+                "key": "0e82adaafbb06a94dbacfaba75efdc0b",
+                "doc_count": 25
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 188,
+            "buckets": [
+              {
+                "key": "8f9a97b01b9e0e1806943267cc4bcbbf,vskau1p1373,gc-agents-service,paladin-windows-service-code0-c1:3cf5599389bfe84b8b5567406d1dc7f3e72774d6c27d0408d1ecea18449e2262,Guardicore Agent Service",
+                "doc_count": 7
+              },
+              {
+                "key": "b9d727ba1be36110c71921b6b04bcbde,kau1pscxapp034,gc-agents-service,paladin-windows-service-code0-c1:a1ee9e58e5b8480118b4626bd98a5be99a90fd46a5fcf16216785aad3fb73103,Guardicore Agent Service",
+                "doc_count": 7
+              },
+              {
+                "key": "baab2eed1b9ace1079450f22dd4bcb4a,vskau1p1376,gc-agents-service,paladin-windows-service-code0-c1:9fd0d39c72c455f8fed4d19e8fad87b1f234ef54ac78e9cf5883540de7ba8cc6,Guardicore Agent Service",
+                "doc_count": 7
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-process-linux-nonprod_default-c0",
+          "doc_count": 129,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci_id",
+                "doc_count": 129
+              },
+              {
+                "key": "ci_name",
+                "doc_count": 129
+              },
+              {
+                "key": "conf_id",
+                "doc_count": 129
+              },
+              {
+                "key": "process_name",
+                "doc_count": 129
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 126,
+            "buckets": [
+              {
+                "key": "031a4bc61bf7b5141207ececbc4bcb81,vslrblyc001,chronyd,0c1ea053c258def93f8f3f944462c6f9d49d21ec9c657b9f15ae1cacd13536bf",
+                "doc_count": 1
+              },
+              {
+                "key": "031a4bc61bf7b5141207ececbc4bcb81,vslrblyc001,crond,625d9788367c6b33862681241d003ab71721d45a1d72c0632f7eb5e54daeec2a",
+                "doc_count": 1
+              },
+              {
+                "key": "031a4bc61bf7b5141207ececbc4bcb81,vslrblyc001,sshd,d9bcba17c8ed58ba3b9e0c71b1cb17c74312dfade22bc12d498c28e1cbc1fe4a",
+                "doc_count": 1
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 437,
+            "buckets": [
+              {
+                "key": "sshd",
+                "doc_count": 28
+              },
+              {
+                "key": "crond",
+                "doc_count": 26
+              },
+              {
+                "key": "chronyd",
+                "doc_count": 25
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-data_outages",
+          "doc_count": 78,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci_id",
+                "doc_count": 78
+              },
+              {
+                "key": "ci_name",
+                "doc_count": 78
+              },
+              {
+                "key": "conf_id",
+                "doc_count": 78
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 71,
+            "buckets": [
+              {
+                "key": "44bd852d1bea51508ac08622604bcbc5,vskch1e145,6ca90b8ea52d6d1a8eb36e8c131452112ab469ef484577742af4a58e8ce2dde3",
+                "doc_count": 3
+              },
+              {
+                "key": "031a4bc61bf7b5141207ececbc4bcb81,vslrblyc001,6ca90b8ea52d6d1a8eb36e8c131452112ab469ef484577742af4a58e8ce2dde3",
+                "doc_count": 2
+              },
+              {
+                "key": "031a4bc61bf7b5141207ececbc4bcba9,vslrblyc003,6ca90b8ea52d6d1a8eb36e8c131452112ab469ef484577742af4a58e8ce2dde3",
+                "doc_count": 2
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 148,
+            "buckets": [
+              {
+                "key": "6ca90b8ea52d6d1a8eb36e8c131452112ab469ef484577742af4a58e8ce2dde3",
+                "doc_count": 78
+              },
+              {
+                "key": "vskch1e145",
+                "doc_count": 5
+              },
+              {
+                "key": "44bd852d1bea51508ac08622604bcbc5",
+                "doc_count": 3
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-memory-usage-high_prio-ml",
+          "doc_count": 71,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ml.anomaly.partition_field_value",
+                "doc_count": 71
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "d5c8de2adbce8300643cb96c4e961943#kw3l1p35#78a5270037ba3eea83f26f57318cb3ee8a6fb1864ebe3a28c46b159747d5b3ad",
+                "doc_count": 60
+              },
+              {
+                "key": "596856e6dbce8300643cb96c4e96198c#kw3l1p134#a47a1a9c811743c426d0a10004c4c17e309937c193bea59bf4a67d3afe20e9be",
+                "doc_count": 10
+              },
+              {
+                "key": "a6e71666dbce8300643cb96c4e961974#kau1p523#ed7e05553d2f948f97954a8a2bf4af6882d9b36de309700a9cde2eb2d795c841",
+                "doc_count": 1
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "d5c8de2adbce8300643cb96c4e961943#kw3l1p35#78a5270037ba3eea83f26f57318cb3ee8a6fb1864ebe3a28c46b159747d5b3ad",
+                "doc_count": 60
+              },
+              {
+                "key": "596856e6dbce8300643cb96c4e96198c#kw3l1p134#a47a1a9c811743c426d0a10004c4c17e309937c193bea59bf4a67d3afe20e9be",
+                "doc_count": 10
+              },
+              {
+                "key": "a6e71666dbce8300643cb96c4e961974#kau1p523#ed7e05553d2f948f97954a8a2bf4af6882d9b36de309700a9cde2eb2d795c841",
+                "doc_count": 1
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-selfmonitoring-rule-execution",
+          "doc_count": 65,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "rule.name",
+                "doc_count": 65
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 13,
+            "buckets": [
+              {
+                "key": "paladin-filesystem-usage",
+                "doc_count": 46
+              },
+              {
+                "key": "paladin-429_resource_exhausted-c5",
+                "doc_count": 3
+              },
+              {
+                "key": "paladin-cpu-usage-low_prio-diff-ml",
+                "doc_count": 3
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 13,
+            "buckets": [
+              {
+                "key": "paladin-filesystem-usage",
+                "doc_count": 46
+              },
+              {
+                "key": "paladin-429_resource_exhausted-c5",
+                "doc_count": 3
+              },
+              {
+                "key": "paladin-cpu-usage-low_prio-diff-ml",
+                "doc_count": 3
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-ibmmq-q-channel_status",
+          "doc_count": 48,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ml.model.by_field_value",
+                "doc_count": 48
+              },
+              {
+                "key": "ml.model.partition_field_value",
+                "doc_count": 48
+              },
+              {
+                "key": "paladin.enrichment.notification.severities.critical.bcc",
+                "doc_count": 48
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 11,
+            "buckets": [
+              {
+                "key": "38fa4fb75abc7614dc287a7b530d60e3#vrau1pap0016#INMGRPL1.PRD1Q16NFA#5c9f8000a5aa5812757cdc55a9af9b27c1bb1cb5fe3893cfe481f8c9011366f5,INMGRPL1.PRD1Q16NFA,WebServicesQueuing@cna.com",
+                "doc_count": 33
+              },
+              {
+                "key": "350645ca93235e98dcf1f9cd1dba103e#vslrau1p510#INMGRPL1.CSQ1#f4005d24cf78fb79961137f4ccad5df2e439d6d2c8a2de49764ccbd5d821e692,INMGRPL1.CSQ1,WebServicesQueuing@cna.com",
+                "doc_count": 2
+              },
+              {
+                "key": "62d5454efbe7d298dbacfaba75efdc79#vslrau1p509#INMGRPL1.CSQ1#aca13b4010607f85b2522a1354b98d910c887bcd13fca36236eff5185a9e2a17,INMGRPL1.CSQ1,WebServicesQueuing@cna.com",
+                "doc_count": 2
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 30,
+            "buckets": [
+              {
+                "key": "WebServicesQueuing@cna.com",
+                "doc_count": 48
+              },
+              {
+                "key": "38fa4fb75abc7614dc287a7b530d60e3#vrau1pap0016#INMGRPL1.PRD1Q16NFA#5c9f8000a5aa5812757cdc55a9af9b27c1bb1cb5fe3893cfe481f8c9011366f5",
+                "doc_count": 33
+              },
+              {
+                "key": "INMGRPL1.PRD1Q16NFA",
+                "doc_count": 33
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-cpu-usage-low_prio-diff-ml",
+          "doc_count": 47,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ml.anomaly.partition_field_value",
+                "doc_count": 47
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 33,
+            "buckets": [
+              {
+                "key": "30b2b93293db9a90dcf1f9cd1dba10c5#kw3mne119#f518207f08cc63bb6a49beb5e847e6ca1b7498c2044830579493c0774812ca67",
+                "doc_count": 5
+              },
+              {
+                "key": "e43a12eedbce8300643cb96c4e96193a#kw3l1p404#163e2157842c0f6e54d92595458f0cc2b2bedb0a11721d1b5a4ee603885bdc08",
+                "doc_count": 5
+              },
+              {
+                "key": "ae4c7ef61b52d910314a98ac0a4bcb9e#kw3l1p743#0e223123d1914003032e7b369f11d30c8473166d24828c64e00a274b1c339507",
+                "doc_count": 4
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 33,
+            "buckets": [
+              {
+                "key": "30b2b93293db9a90dcf1f9cd1dba10c5#kw3mne119#f518207f08cc63bb6a49beb5e847e6ca1b7498c2044830579493c0774812ca67",
+                "doc_count": 5
+              },
+              {
+                "key": "e43a12eedbce8300643cb96c4e96193a#kw3l1p404#163e2157842c0f6e54d92595458f0cc2b2bedb0a11721d1b5a4ee603885bdc08",
+                "doc_count": 5
+              },
+              {
+                "key": "ae4c7ef61b52d910314a98ac0a4bcb9e#kw3l1p743#0e223123d1914003032e7b369f11d30c8473166d24828c64e00a274b1c339507",
+                "doc_count": 4
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-memory-usage-low_prio-diff-ml",
+          "doc_count": 47,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ml.anomaly.partition_field_value",
+                "doc_count": 47
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 32,
+            "buckets": [
+              {
+                "key": "c1f43e741b04ce9016544227cc4bcb48#vskau1p1322#60ab250a31f42bcaaa7e08858343dfa003d4121a2ffb4ff9435b79de1febca71",
+                "doc_count": 7
+              },
+              {
+                "key": "275eead3cbee6a98b2355ae5fadd6621#vksdcpdb0007#fdca476041ed325dddcd3c5fa7aff70077319fdfb51c24d489b04c26a9f5d5f3",
+                "doc_count": 4
+              },
+              {
+                "key": "616ea613b5aea654ff1e493c8f27d60e#vksdcpdb0006#ed039a260dd9e15a3b333e9901df88bcea89b0d749f50bfbf22ebea5d29770ca",
+                "doc_count": 4
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 32,
+            "buckets": [
+              {
+                "key": "c1f43e741b04ce9016544227cc4bcb48#vskau1p1322#60ab250a31f42bcaaa7e08858343dfa003d4121a2ffb4ff9435b79de1febca71",
+                "doc_count": 7
+              },
+              {
+                "key": "275eead3cbee6a98b2355ae5fadd6621#vksdcpdb0007#fdca476041ed325dddcd3c5fa7aff70077319fdfb51c24d489b04c26a9f5d5f3",
+                "doc_count": 4
+              },
+              {
+                "key": "616ea613b5aea654ff1e493c8f27d60e#vksdcpdb0006#ed039a260dd9e15a3b333e9901df88bcea89b0d749f50bfbf22ebea5d29770ca",
+                "doc_count": 4
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-log-ibmcc_errors",
+          "doc_count": 43,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 43
+              },
+              {
+                "key": "event.eventMessageText",
+                "doc_count": 43
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 26,
+            "buckets": [
+              {
+                "key": "vkau1pap0020,18 Errors found in logs-filestream.generic-default, Category: PATH_NOT_FOUND, Host: vkau1pap0020",
+                "doc_count": 7
+              },
+              {
+                "key": "vkau1pap0020,24 Errors found in logs-filestream.generic-default, Category: PATH_NOT_FOUND, Host: vkau1pap0020",
+                "doc_count": 6
+              },
+              {
+                "key": "vkau1pap0020,15 Errors found in logs-filestream.generic-default, Category: PATH_NOT_FOUND, Host: vkau1pap0020",
+                "doc_count": 4
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 32,
+            "buckets": [
+              {
+                "key": "vkau1pap0020",
+                "doc_count": 41
+              },
+              {
+                "key": "18 Errors found in logs-filestream.generic-default, Category: PATH_NOT_FOUND, Host: vkau1pap0020",
+                "doc_count": 7
+              },
+              {
+                "key": "24 Errors found in logs-filestream.generic-default, Category: PATH_NOT_FOUND, Host: vkau1pap0020",
+                "doc_count": 6
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-process-linux-prod_default-c0",
+          "doc_count": 37,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci_id",
+                "doc_count": 37
+              },
+              {
+                "key": "ci_name",
+                "doc_count": 37
+              },
+              {
+                "key": "conf_id",
+                "doc_count": 37
+              },
+              {
+                "key": "process_name",
+                "doc_count": 37
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 34,
+            "buckets": [
+              {
+                "key": "371acbc61bf7b5141207ececbc4bcbdc,vslrauc006,chronyd,a4274aa9ba5765641105b22f507decb920d215547c1355f5b2ffc1971b7f1bb2",
+                "doc_count": 1
+              },
+              {
+                "key": "371acbc61bf7b5141207ececbc4bcbdc,vslrauc006,crond,24789a9743349ef6978d2e591ab5a8ff12048bdd3328cd3d45ee27f4452d5965",
+                "doc_count": 1
+              },
+              {
+                "key": "371acbc61bf7b5141207ececbc4bcbdc,vslrauc006,sshd,58f0c467f67b8996548477e88b35b07a97210566d183ba67574831e287e8d906",
+                "doc_count": 1
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 123,
+            "buckets": [
+              {
+                "key": "sshd",
+                "doc_count": 9
+              },
+              {
+                "key": "chronyd",
+                "doc_count": 8
+              },
+              {
+                "key": "crond",
+                "doc_count": 8
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-tenable-scanner",
+          "doc_count": 28,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.id",
+                "doc_count": 28
+              },
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 28
+              },
+              {
+                "key": "scanner.name",
+                "doc_count": 28
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 2,
+            "sum_other_doc_count": 78,
+            "buckets": [
+              {
+                "key": "1d8cfc0c47f30a1441c076edd46d4387",
+                "doc_count": 2
+              },
+              {
+                "key": "22ccb0cc47f30a1441c076edd46d4383",
+                "doc_count": 2
+              },
+              {
+                "key": "272cb08847f30a1441c076edd46d43b6",
+                "doc_count": 2
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 2,
+            "sum_other_doc_count": 22,
+            "buckets": [
+              {
+                "key": "1d8cfc0c47f30a1441c076edd46d4387,kw3mnp87-slough,Slough4_DC",
+                "doc_count": 2
+              },
+              {
+                "key": "22ccb0cc47f30a1441c076edd46d4383,vslrau1p461-aur,Aurora5_DC",
+                "doc_count": 2
+              },
+              {
+                "key": "272cb08847f30a1441c076edd46d43b6,kw3l1d77-slo,Slough_DC",
+                "doc_count": 2
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-cpu-usage-high_prio-ml",
+          "doc_count": 21,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ml.anomaly.partition_field_value",
+                "doc_count": 21
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 11,
+            "buckets": [
+              {
+                "key": "1baba59b8702f4100259553e3fbb35e1#vskau1p1020#576c48fa8d5474efd98f6332720111892a708dc1d9f4089871270d9c404a8e5c",
+                "doc_count": 5
+              },
+              {
+                "key": "62335b69db547b4c854e77298c9619ca#vskch1c110#5f6e48a83672676aa88da5c2204b054d9e08003a8b02669d4600fb601a8c5beb",
+                "doc_count": 3
+              },
+              {
+                "key": "6eb7d626dbce8300643cb96c4e9619a5#kw3l1p135#4338e55948d22321754ecba41fbf23ec7a10c93e423c026d498b32c00182ee87",
+                "doc_count": 2
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 11,
+            "buckets": [
+              {
+                "key": "1baba59b8702f4100259553e3fbb35e1#vskau1p1020#576c48fa8d5474efd98f6332720111892a708dc1d9f4089871270d9c404a8e5c",
+                "doc_count": 5
+              },
+              {
+                "key": "62335b69db547b4c854e77298c9619ca#vskch1c110#5f6e48a83672676aa88da5c2204b054d9e08003a8b02669d4600fb601a8c5beb",
+                "doc_count": 3
+              },
+              {
+                "key": "6eb7d626dbce8300643cb96c4e9619a5#kw3l1p135#4338e55948d22321754ecba41fbf23ec7a10c93e423c026d498b32c00182ee87",
+                "doc_count": 2
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-host-availability-c0",
+          "doc_count": 21,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.id",
+                "doc_count": 21
+              },
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 21
+              },
+              {
+                "key": "paladin.enrichment.monitor.actives",
+                "doc_count": 21
+              },
+              {
+                "key": "url.full",
+                "doc_count": 21
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 17,
+            "buckets": [
+              {
+                "key": "34a1ae62b180139082184bd46423d78d,kw3l1p713,icmp://kw3l1p713.cna.com,paladin-host-availability-c0:b2a24b2553963855d565126901b560345265a388434a6d6768c65fc252618df7",
+                "doc_count": 2
+              },
+              {
+                "key": "0b497f8a1be40d10c71921b6b04bcbaf,vskch1e140,icmp://vskch1e140.cna.com,paladin-host-availability-c0:6853cfd06892b72a13b8ab6b73cf65437bd72506da2f1e59f14889dff003e932",
+                "doc_count": 1
+              },
+              {
+                "key": "350829501b6bd510314a98ac0a4bcbb4,vslrch1s003,icmp://vslrch1s003.cna.com,paladin-host-availability-c0:2807d2b771dba23c011b811bed310fc35d9968ccbb779821ee257aaed6ee667a",
+                "doc_count": 1
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 1,
+            "sum_other_doc_count": 78,
+            "buckets": [
+              {
+                "key": "34a1ae62b180139082184bd46423d78d",
+                "doc_count": 2
+              },
+              {
+                "key": "64d7f5ee1be08910314a98ac0a4bcbfd",
+                "doc_count": 2
+              },
+              {
+                "key": "icmp://kw3l1p713.cna.com",
+                "doc_count": 2
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-ibmmq-bo-c500_w100",
+          "doc_count": 15,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ml.model.by_field_value",
+                "doc_count": 15
+              },
+              {
+                "key": "ml.model.partition_field_value",
+                "doc_count": 15
+              },
+              {
+                "key": "paladin.enrichment.notification.severities.critical.bcc",
+                "doc_count": 15
+              },
+              {
+                "key": "paladin.enrichment.notification.severities.critical.to",
+                "doc_count": 15
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 15,
+            "buckets": [
+              {
+                "key": "62d5454efbe7d298dbacfaba75efdc79#vslrau1p509#PRD1.V10.EG8.CLMS.CLAIMNGR.RQI.V8.BO#d598992aa2d3e734a68c75509f319b528e5bde56dad312b579ef96fc86431aa7",
+                "doc_count": 15
+              },
+              {
+                "key": "ClaimCenterProductionSupport@cna.com;IIBProductionSupport@cna.com;WebServicesQueuing@cna.com",
+                "doc_count": 15
+              },
+              {
+                "key": "PRD1.V10.EG8.CLMS.CLAIMNGR.RQI.V8.BO",
+                "doc_count": 15
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "62d5454efbe7d298dbacfaba75efdc79#vslrau1p509#PRD1.V10.EG8.CLMS.CLAIMNGR.RQI.V8.BO#d598992aa2d3e734a68c75509f319b528e5bde56dad312b579ef96fc86431aa7,PRD1.V10.EG8.CLMS.CLAIMNGR.RQI.V8.BO,ClaimCenterProductionSupport@cna.com;IIBProductionSupport@cna.com;WebServicesQueuing@cna.com,ioannis.kotsovolos@atos.net",
+                "doc_count": 15
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-genrocketexception-c3",
+          "doc_count": 12,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "host.name",
+                "doc_count": 12
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "vslrch1e180",
+                "doc_count": 12
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "vslrch1e180",
+                "doc_count": 12
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-tcp-availability-c0",
+          "doc_count": 7,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.id",
+                "doc_count": 7
+              },
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 7
+              },
+              {
+                "key": "paladin.enrichment.monitor.actives",
+                "doc_count": 7
+              },
+              {
+                "key": "url.full",
+                "doc_count": 7
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 12,
+            "buckets": [
+              {
+                "key": "ea4779ae1be08910314a98ac0a4bcbb2",
+                "doc_count": 7
+              },
+              {
+                "key": "vslrau1p301",
+                "doc_count": 7
+              },
+              {
+                "key": "paladin-tcp-availability-c0:0883c2e81cb866768c446bb8adeb4f68e503428d919182fa3b5df3e5d48449f8",
+                "doc_count": 2
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 2,
+            "buckets": [
+              {
+                "key": "ea4779ae1be08910314a98ac0a4bcbb2,vslrau1p301,tcp://prd-ldap-tam60.cna.com:389,paladin-tcp-availability-c0:0883c2e81cb866768c446bb8adeb4f68e503428d919182fa3b5df3e5d48449f8",
+                "doc_count": 2
+              },
+              {
+                "key": "ea4779ae1be08910314a98ac0a4bcbb2,vslrau1p301,tcp://prd-ldap-tam60.cna.com:636,paladin-tcp-availability-c0:3c6debee473b72e887a0aec7b48a6748dd8b6db0f0f2035660f092e0e59ea7eb",
+                "doc_count": 2
+              },
+              {
+                "key": "ea4779ae1be08910314a98ac0a4bcbb2,vslrau1p301,tcp://ldap.cna.com:389,paladin-tcp-availability-c0:a75b91bdea00a0cd454adae5e60773dfe15dd31988cb568b8ca567ff4f4510cf",
+                "doc_count": 1
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-process-linux-nonprod_custom-c0",
+          "doc_count": 5,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci_id",
+                "doc_count": 5
+              },
+              {
+                "key": "ci_name",
+                "doc_count": 5
+              },
+              {
+                "key": "conf_id",
+                "doc_count": 5
+              },
+              {
+                "key": "process_name",
+                "doc_count": 5
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 2,
+            "buckets": [
+              {
+                "key": "21c2e588db72c700643cb96c4e961960,vslrch1d143,ibmslapd,6cdedf9889c703a9dd9a1625070868c420288f46364866b5ddbdafa54d341c7b",
+                "doc_count": 1
+              },
+              {
+                "key": "c1c269ccdbb687404a65d5ab5e961990,vslrch1d144,ibmslapd,09fdba488391a6b6a54b1e4027c024841eb31d49c79ac931cc8d5fac1315d596",
+                "doc_count": 1
+              },
+              {
+                "key": "c9f13fc0db720300643cb96c4e9619e0,sch1h760,errdemon,6f93cb0f3308fad188a9111a61c50bfddb41a3e27d7d2f8c01212d3a49be8b21",
+                "doc_count": 1
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 12,
+            "buckets": [
+              {
+                "key": "c9f13fc0db720300643cb96c4e9619e0",
+                "doc_count": 3
+              },
+              {
+                "key": "sch1h760",
+                "doc_count": 3
+              },
+              {
+                "key": "ibmslapd",
+                "doc_count": 2
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-process-linux-prod_custom-c0",
+          "doc_count": 4,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci_id",
+                "doc_count": 4
+              },
+              {
+                "key": "ci_name",
+                "doc_count": 4
+              },
+              {
+                "key": "conf_id",
+                "doc_count": 4
+              },
+              {
+                "key": "process_name",
+                "doc_count": 4
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 9,
+            "buckets": [
+              {
+                "key": "87cd1309db764f404a65d5ab5e961947",
+                "doc_count": 3
+              },
+              {
+                "key": "sau1h070",
+                "doc_count": 3
+              },
+              {
+                "key": "73356802b89e4c00575f8c370ad3aa2deb71e06492297a9450c61144749819eb",
+                "doc_count": 1
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 1,
+            "buckets": [
+              {
+                "key": "87cd1309db764f404a65d5ab5e961947,sau1h070,errdemon,73356802b89e4c00575f8c370ad3aa2deb71e06492297a9450c61144749819eb",
+                "doc_count": 1
+              },
+              {
+                "key": "87cd1309db764f404a65d5ab5e961947,sau1h070,inetd,e0374e1f2aa9d29966b0686e1b27ece524fd7533244497beeb9dc934164e766c",
+                "doc_count": 1
+              },
+              {
+                "key": "87cd1309db764f404a65d5ab5e961947,sau1h070,qdaemon,a889c755e08fcfc1b78aa5699d62f726f4a303bd86cb0a0c06c28ac3cc06dfe2",
+                "doc_count": 1
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-fileage_audit",
+          "doc_count": 1,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": []
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": []
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "*",
+                "doc_count": 1
+              }
+            ]
+          }
+        },
+        {
+          "key": "paladin-memory-usage-static-w85_c90",
+          "doc_count": 1,
+          "group_fields": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "ci.id",
+                "doc_count": 1
+              },
+              {
+                "key": "ci.name_normalized",
+                "doc_count": 1
+              },
+              {
+                "key": "paladin.enrichment.monitor.actives",
+                "doc_count": 1
+              }
+            ]
+          },
+          "group_values": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "627c15661bfd9410314b31d3cc4bcb51",
+                "doc_count": 1
+              },
+              {
+                "key": "paladin-memory-usage-static-w85_c90:2a9262b2797566831bd4937ba6b56a65c435e09087e482355690fee8151a90eb",
+                "doc_count": 1
+              },
+              {
+                "key": "vskau1p952",
+                "doc_count": 1
+              }
+            ]
+          },
+          "instances": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "627c15661bfd9410314b31d3cc4bcb51,vskau1p952,paladin-memory-usage-static-w85_c90:2a9262b2797566831bd4937ba6b56a65c435e09087e482355690fee8151a90eb",
+                "doc_count": 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+# 46: GET .alerts-observability.*/_search?size=1&sort=@timestamp:desc&q=kibana.alert.rule.name:"paladin-host-uptime-c30" [200 OK]
+{
+  "took": 24,
+  "timed_out": false,
+  "_shards": {
+    "total": 151,
+    "successful": 151,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".internal.alerts-observability.threshold.alerts-default-000027",
+        "_id": "5225169b-80f4-48f3-ad35-bdf867a1c1fa",
+        "_score": null,
+        "_source": {
+          "kibana.alert.reason": "Max system.uptime.duration.ms is 3.05503, below the threshold of 30. (duration: 30 mins, data view: metric*, group: 07b5c934db72c300643cb96c4e96193e,sch1h498,paladin-host-uptime-c30:5ef19d575791488d1ae2e949168a71abe67e590b3d8942ff94c9cf0c0128c46b)",
+          "kibana.alert.evaluation.values": [
+            3.0550333333333333
+          ],
+          "kibana.alert.evaluation.threshold": [
+            30
+          ],
+          "kibana.alert.evaluation.time_range": {
+            "gte": "2026-11-02T11:20:14.381Z",
+            "lte": "2026-11-02T11:55:22.964Z"
+          },
+          "kibana.alert.group": [
+            {
+              "field": "ci.id",
+              "value": "07b5c934db72c300643cb96c4e96193e"
+            },
+            {
+              "field": "ci.name_normalized",
+              "value": "sch1h498"
+            },
+            {
+              "field": "paladin.enrichment.monitor.actives",
+              "value": "paladin-host-uptime-c30:5ef19d575791488d1ae2e949168a71abe67e590b3d8942ff94c9cf0c0128c46b"
+            }
+          ],
+          "kibana.alert.grouping": {
+            "ci": {
+              "id": "07b5c934db72c300643cb96c4e96193e",
+              "name_normalized": "sch1h498"
+            },
+            "paladin": {
+              "enrichment": {
+                "monitor": {
+                  "actives": "paladin-host-uptime-c30:5ef19d575791488d1ae2e949168a71abe67e590b3d8942ff94c9cf0c0128c46b"
+                }
+              }
+            }
+          },
+          "kibana.alert.severity": "critical",
+          "tags": [
+            "paladin",
+            "dataset:'system.uptime'",
+            "prod"
+          ],
+          "kibana.alert.rule.category": "Custom threshold",
+          "kibana.alert.rule.consumer": "stackAlerts",
+          "kibana.alert.rule.execution.uuid": "e7bd8739-ceca-406d-88d7-f3f9b48d852a",
+          "kibana.alert.rule.name": "paladin-host-uptime-c30",
+          "kibana.alert.rule.parameters": {
+            "criteria": [
+              {
+                "comparator": "<",
+                "metrics": [
+                  {
+                    "name": "A",
+                    "field": "system.uptime.duration.ms",
+                    "aggType": "max"
+                  }
+                ],
+                "threshold": [
+                  30
+                ],
+                "timeSize": 30,
+                "timeUnit": "m",
+                "equation": "A/60000"
+              }
+            ],
+            "alertOnNoData": false,
+            "alertOnGroupDisappear": false,
+            "searchConfiguration": {
+              "query": {
+                "query": """event.dataset : "system.uptime"  and paladin.enrichment.monitor.actives : paladin-host-uptime-c30*""",
+                "language": "kuery"
+              },
+              "index": "65b8023e-bd13-4d39-96ef-bf1526209b5d"
+            },
+            "groupBy": [
+              "ci.id",
+              "ci.name_normalized",
+              "paladin.enrichment.monitor.actives"
+            ]
+          },
+          "kibana.alert.rule.producer": "observability",
+          "kibana.alert.rule.revision": 4,
+          "kibana.alert.rule.rule_type_id": "observability.rules.custom_threshold",
+          "kibana.alert.rule.tags": [
+            "paladin",
+            "dataset:'system.uptime'",
+            "prod"
+          ],
+          "kibana.alert.rule.uuid": "06749566-91c1-427e-894a-d7268774eb53",
+          "kibana.space_ids": [
+            "bridge-p"
+          ],
+          "@timestamp": "2026-11-02T11:55:17.542Z",
+          "event.action": "active",
+          "event.kind": "signal",
+          "kibana.alert.rule.execution.timestamp": "2026-11-02T11:55:17.542Z",
+          "kibana.alert.action_group": "custom_threshold.fired",
+          "kibana.alert.flapping": false,
+          "kibana.alert.flapping_history": [],
+          "kibana.alert.instance.id": "07b5c934db72c300643cb96c4e96193e,sch1h498,paladin-host-uptime-c30:5ef19d575791488d1ae2e949168a71abe67e590b3d8942ff94c9cf0c0128c46b",
+          "kibana.alert.maintenance_window_ids": [],
+          "kibana.alert.maintenance_window_names": [],
+          "kibana.alert.consecutive_matches": 6409,
+          "kibana.alert.pending_recovered_count": 0,
+          "kibana.alert.muted": false,
+          "kibana.alert.snoozed": false,
+          "kibana.alert.status": "active",
+          "kibana.alert.uuid": "5225169b-80f4-48f3-ad35-bdf867a1c1fa",
+          "kibana.alert.workflow_status": "open",
+          "kibana.alert.duration.us": 1926584732000,
+          "kibana.alert.start": "2026-10-11T04:45:32.810Z",
+          "kibana.alert.time_range": {
+            "gte": "2026-10-11T04:45:32.810Z"
+          },
+          "kibana.version": "9.5.3",
+          "kibana.alert.previous_action_group": "custom_threshold.fired"
+        },
+        "sort": [
+          1793620517542
+        ]
+      }
+    ]
+  }
+}
