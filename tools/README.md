@@ -53,3 +53,6 @@ from `MIM V3.ndjson`**, reusing MIM V3's tested panels, so rebuild it after MIM 
 `INFRA-DASHBOARD-KPIS.xlsx`; queries for the placeholder KPIs: `dashboard_queries.md`.
 2 Nov: the *Elastic infra alerts* placeholder became a panel built in the script (`elastic_alerts_panel`): Elastic
 Observability alerts matched to the CI on its name inside `kibana.alert.instance.id` (Round 17b).
+2 Nov: the *Cloud health* placeholder became *Cloud health · GKE* (`gke_health_panel`): one row per GKE cluster from
+`metrics-gcp.gke-*`, matched to the CI on the CMDB cluster name and its `cmdb_ci_kubernetes_cluster` relations
+(Round 17d). VMware and Custom integration stay placeholders.

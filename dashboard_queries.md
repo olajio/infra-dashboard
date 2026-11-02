@@ -413,3 +413,43 @@ cluster, or one of its relations is, match `gcp.labels.resource.cluster_name` to
 the CMDB name. Show node CPU and memory %, container restarts and volumes near full. Cloud SQL cannot follow a CI until one
 of two things happens: the collected anomalo and spg instances are added to the CMDB, or the CMDB's databases are
 added to the GCP integration. Buckets carry no health signal. `INFRA-DASHBOARD-KPIS.xlsx` is updated.
+
+### Built (2 Nov): *Cloud health · GKE*
+
+Section 2 of the Infrastructure Dashboard now has a **Cloud health · GKE** table in place of the Cloud placeholder.
+It shows one row per GKE cluster, problems first:
+
+| Column | Meaning |
+|---|---|
+| Status | Critical (CPU p90 or memory from 90 %), Warning (from 80 %, or 10+ restarts), Silent (no data for 20 min), Healthy. **Not collected** = a cluster linked in the CMDB that the GCP integration doesn't collect |
+| Nodes, CPU avg %, CPU p90 %, Mem peak % | Node use of allocatable CPU / memory; p90 and peak are the busiest node's |
+| Restarts | Container restarts in the Health window |
+
+**Which clusters:** the CI control's value if it is a cluster, plus every Kubernetes cluster linked to that CI in the
+CMDB. With no CI picked, every collected cluster appears. Clusters are matched on `gcp.labels.resource.cluster_name`.
+
+**Two checks to run once in production** (Dev Tools, `POST /_query?format=txt`). The panel assumes the answers
+below. If they differ, tell me and I'll adjust it.
+
+**CG5. Are the utilisation fields fractions (0–1) or percentages?** The panel expects 0–1 (GCP's ratio) and scales it
+by 100. It reads values above 2 as percentages already.
+
+```
+FROM metrics-gcp.gke-*
+| WHERE @timestamp >= NOW() - 1 hour AND gcp.gke.node.cpu.allocatable_utilization.pct IS NOT NULL
+| STATS cpu_max = MAX(gcp.gke.node.cpu.allocatable_utilization.pct), mem_max = MAX(gcp.gke.node.memory.allocatable_utilization.pct),
+        nodes = COUNT_DISTINCT(gcp.labels.resource.node_name) BY gcp.labels.resource.cluster_name
+```
+
+**CG6. Is the restart count a running total?** The panel takes max − min per container series (`gcp.labels_fingerprint`).
+Series with the same non-zero value in every sample mean a running total, which is right. Mostly 0s with occasional
+1s mean per-period deltas, and the panel would then need to sum them.
+
+```
+FROM metrics-gcp.gke-*
+| WHERE @timestamp >= NOW() - 6 hours AND gcp.gke.container.restart.count IS NOT NULL
+| STATS mn = MIN(gcp.gke.container.restart.count), mx = MAX(gcp.gke.container.restart.count), samples = COUNT(*)
+  BY gcp.labels_fingerprint
+| SORT mx DESC
+| LIMIT 10
+```

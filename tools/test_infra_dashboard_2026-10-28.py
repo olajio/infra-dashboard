@@ -35,7 +35,7 @@ def call(method, path, body=None, nd=False):
 
 
 def cleanup():
-    for pat in ('*-t15*', '*-test*', '*-t16j*', '*-t18k*', '*-t27s*', '*-t28*'):
+    for pat in ('*-t15*', '*-test*', '*-t16j*', '*-t18k*', '*-t27s*', '*-t28*', '*-t30*'):
         for ds in (call('GET', f'/_data_stream/{pat}').get('data_streams') or []):
             call('DELETE', f'/_data_stream/{ds["name"]}')
         got = call('GET', f'/_cat/indices/{pat}?format=json&h=index&expand_wildcards=all')
@@ -81,6 +81,44 @@ alerts = [alert('07b5c934db72c300643cb96c4e96193e,srva,paladin-host-uptime-c30:5
           alert('rst-batch_request_apm-tx-latency-and-errors-prod_0', 'APM Alerts prd1', 'active')]       # not an infrastructure rule
 assert not call('POST', '/_bulk?refresh=true', ''.join(json.dumps({'index': {'_index': ALERTS}}) + '\n' + json.dumps(a) + '\n'
                                                         for a in alerts), nd=True).get('errors')
+
+# GKE metrics, shaped like round17c.txt (Cloud health · GKE, 2 Nov), and CMDB links to Kubernetes clusters
+GKE, REL30 = 'metrics-gcp.gke-t30', 'cmdb-ci-relations-t30'
+
+
+def node(cluster, name, cpu, mem, minutes=5):
+    return {'@timestamp': ago(minutes=minutes), 'cloud': {'account': {'id': 'proj-' + cluster}},
+            'orchestrator': {'cluster': {'name': cluster}},
+            'gcp': {'labels': {'resource': {'cluster_name': cluster, 'node_name': name}},
+                    'gke': {'node': {'cpu': {'allocatable_utilization': {'pct': cpu}},
+                                     'memory': {'allocatable_utilization': {'pct': mem}}}}}}
+
+
+def restarts(cluster, pod, count, minutes):
+    return {'@timestamp': ago(minutes=minutes), 'cloud': {'account': {'id': 'proj-' + cluster}},
+            'gcp': {'labels': {'resource': {'cluster_name': cluster}}, 'labels_fingerprint': 'fp-' + pod,   # one per time series
+                    'gke': {'container': {'restart': {'count': count}}}}}
+
+
+gke = [node('g-prd-gke-2', 'n1', 0.50, 0.60), node('g-prd-gke-2', 'n2', 0.95, 0.70),          # Critical: a node at 95 % CPU
+       restarts('g-prd-gke-2', 'p1', 3, 30), restarts('g-prd-gke-2', 'p1', 5, 5),              # 2 restarts in the window
+       restarts('g-prd-gke-2', 'p2', 7, 30), restarts('g-prd-gke-2', 'p2', 7, 5),              # none
+       node('g-stg-gke-2', 'n3', 0.30, 0.85, 3),                                                 # Warning: memory 85 %
+       node('g-pre-gke-4', 'n4', 0.20, 0.30, 40)]                                                # Silent: 40 minutes ago
+assert not call('POST', '/_bulk?refresh=true', ''.join(json.dumps({'create': {'_index': GKE}}) + '\n' + json.dumps(d) + '\n'
+                                                        for d in gke), nd=True).get('errors')
+call('PUT', f'/{REL30}', {'mappings': {'properties': {
+    '@timestamp': D, 'is_marked_for_deletion': {'type': 'boolean'}, 'type': obj(name=K),
+    'parent': obj(name=K, **{'class': K}, environment=K, install_status=K),
+    'child': obj(name=K, **{'class': K}, environment=K, install_status=K)}}})
+rel30 = lambda p, pc, c, cc, gone=False: {'@timestamp': ago(days=30), 'is_marked_for_deletion': gone,
+                                          'type': {'name': 'Runs on::Runs'}, 'parent': {'name': p, 'class': pc},
+                                          'child': {'name': c, 'class': cc}}
+KC = 'cmdb_ci_kubernetes_cluster'
+assert not call('POST', '/_bulk?refresh=true', ''.join(json.dumps({'index': {'_index': REL30}}) + '\n' + json.dumps(d) + '\n' for d in [
+    rel30('GKE App PROD', 'cmdb_ci_service_auto', 'g-prd-gke-2', KC),
+    rel30('GKE App PROD', 'cmdb_ci_service_auto', 'g-dr-gke-1', KC),                            # in the CMDB, not collected
+    rel30('GKE App PROD', 'cmdb_ci_service_auto', 'g-stg-gke-2', KC, gone=True)]), nd=True).get('errors')
 
 
 def inc(n, p, s, ci):
@@ -186,6 +224,16 @@ try:
     check('Middleware Health: the MQ queue manager', 'QM1' in json.dumps(run('Middleware Health', ci='srvA')), True)
     check('Database Health: the SQL Server service', 'mssqlserver' in json.dumps(run('Database Health', ci='srvA')).lower(), True)
     check('Process Health has rows', len(run('Process Health', ci='srvA')) > 0, True)
+    gk = lambda **v: [(r['cluster'], r['status']) for r in run('Cloud health · GKE', **v)]
+    check('Cloud health · GKE with no CI: every collected cluster, problems first', gk(),
+          [('g-prd-gke-2', 'Critical'), ('g-pre-gke-4', 'Silent'), ('g-stg-gke-2', 'Warning')])
+    g = {r['cluster']: r for r in run('Cloud health · GKE')}['g-prd-gke-2']
+    check('Cloud health · GKE: nodes, CPU p90 of the busiest node, memory peak, restarts in the window, project',
+          (g['nodes'], g['cpu_p90'], g['mem_peak'], g['restarts'], g['project']), (2, 95.0, 70.0, 2, 'proj-g-prd-gke-2'))
+    check('Cloud health · GKE for an application service: its linked clusters (deleted links ignored)',
+          gk(ci='GKE App PROD'), [('g-prd-gke-2', 'Critical'), ('g-dr-gke-1', 'Not collected')])
+    check('Cloud health · GKE for a cluster CI: that cluster', gk(ci='g-stg-gke-2'), [('g-stg-gke-2', 'Warning')])
+    check('Cloud health · GKE for a server with no cluster: empty', gk(ci='srvA'), [])
     print('Section 3')
     check('Applications related to srvA', 'App PROD' in json.dumps(run('Applications related to this CI', ci='srvA')), True)
     check('Service health: the APM service on srvA', 'app-api' in json.dumps(run('Service health', ci='srvA')), True)
