@@ -2278,5 +2278,5 @@ others, which fill *Upstream*, *Service health* and *Downstream*:
 | surclaim-cfe-service-api | Claims Front End | 13 | 184 |
 | claimecm-service-api | Claim ECM | 11 | 225 |
 
-Claim ECM has 5 services in the top 25, so it is the best Application pick until RD3 runs. Used in
+Claim ECM has 4 services in the top 25, so it is the best Application pick until RD3 runs. Used in
 `MIM-V4-TEST-RUNSHEET.md` (TC-17, TC-18).

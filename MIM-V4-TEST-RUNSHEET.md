@@ -51,7 +51,7 @@ closed since 2 Nov. Use the variant in the last column.
 | **TC-15** Server control alone | — | — | `vslrau1p301` | — | Health panels filled; section 2 empty |
 | **TC-16** Health window | — | `vslrau1p219` (or `vslrau1p220`) | — | Health window = `15 minutes`, then `7 days` | One screenshot per window: CPU / memory and *Errors from the Logs* (7 days can take a minute) |
 | **TC-17** One service | — | — | — | Service = `rst-api` (Risk Support Tool: calls 23 services, busy all hour). Backups: `dmf`, `blport-webapp` | *Upstream*, *Service health*, *Downstream* |
-| **TC-18** Application control | — | — | — | Application = `Risk Support Tool`, then `Claim ECM` (5 busy services). Backup: `Enterprise Content Service 2.0` | *Services of the Application* for each |
+| **TC-18** Application control | — | — | — | Application = `Risk Support Tool`, then `Claim ECM` (4 busy services). Backup: `Enterprise Content Service 2.0` | *Services of the Application* for each |
 | **TC-19** Nothing selected | — | — | — | — (after Reset changes) | Section 1 filled; section 2 empty; *Application Health* listing every application |
 
 ## Behaviour and navigation (section C)
