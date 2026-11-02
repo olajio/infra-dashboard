@@ -2163,6 +2163,11 @@ with the id, then `DELETE`. If it fails in Dev Tools, run the part between `"""`
 > and `logs-apm.app.*`, as *Errors from the Logs* does. The syslog indices alone have no `log.level`. RD3 no longer
 > counts `host.name`, which service-transaction metrics don't have. Re-run both and paste them into `round21b.txt`.
 
+> **Fixed again 2 Nov (`round21c.txt`):** Dev Tools gave a 502 (the query was too heavy), and Discover rejects
+> conditions (`IS NULL`, `LIKE`, `IN`) inside `STATS`. Every condition is now computed in an `EVAL` before `STATS`, and the
+> logs window is down to 15 minutes. **Run it in Discover** (ES|QL mode): paste the part between the `"""`, and save the
+> result as CSV `round21_RD1.csv`. Discover's time picker doesn't matter; the query sets its own windows.
+
 ### RD1. Servers ranked by how many panels they fill
 
 `score` = panels filled: Server Health 1; APM services 4 (*APM Services Health*, *Service health*, *Upstream*,
@@ -2175,7 +2180,8 @@ POST /_query/async?format=json
 FROM .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.process-*, metrics-windows.service-*, synthetics-*, logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, logs-jboss-*, logs-aix-syslog-*, logs-system.syslog-*, logs-filestream.generic-*, logs-apm.error-*, logs-apm.app.*, .ds-bridge-alerts-netcool-default-*, servicenow-change-requests-*, servicenow-incidents-* METADATA _index
 | WHERE ((_index LIKE "*system.cpu*" OR _index LIKE "*apm.internal*" OR _index LIKE "*system.process*" OR _index LIKE "*windows.service*")
           AND @timestamp >= NOW() - 15 minutes)
-     OR ((_index LIKE "*synthetics*" OR _index LIKE "*logs-*") AND @timestamp >= NOW() - 1 hour)
+     OR (_index LIKE "*synthetics*" AND @timestamp >= NOW() - 1 hour)
+     OR (_index LIKE "*logs-*" AND @timestamp >= NOW() - 15 minutes)
      OR (_index LIKE "*netcool*" AND @timestamp >= NOW() - 7 days)
      OR (_index LIKE "*change-request*" AND (end_at >= NOW() - 7 days OR start_date >= NOW() - 7 days))
      OR (_index LIKE "*servicenow-incidents*" AND opened_at >= NOW() - 7 days)
@@ -2190,27 +2196,31 @@ FROM .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.pro
        prod_apm = src == "apm" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"),
        wname = TO_LOWER(TO_STRING(windows.service.name)),
        lvl = TO_LOWER(TO_STRING(log.level)),
-       active = src == "inc" AND TO_INTEGER(priority) IN (1, 2, 3)
-                AND NOT TO_STRING(state_name) IN ("Resolved", "Closed", "Canceled", "Cancelled")
-| STATS metrics = MAX(CASE(src == "cpu", 1, 0)),
-        prod = MAX(CASE(src == "cpu" AND (env IS NULL OR env IN ("", "null") OR env LIKE "prod*" OR env LIKE "prd*"), 1, 0)),
-        apm = COUNT_DISTINCT(CASE(prod_apm, TO_STRING(service.name))), svc = VALUES(CASE(prod_apm, TO_STRING(service.name))),
-        mw = VALUES(CASE(src == "proc", TO_STRING(paladin.enrichment.computed.proc_type))),
-        win = MAX(CASE(src == "win", 1, 0)),
-        db = MAX(CASE(src == "win" AND (wname LIKE "*sql*" OR wname LIKE "*oracle*" OR wname LIKE "*db2*" OR wname LIKE "*postgres*"
-                      OR wname LIKE "*mysql*" OR wname LIKE "*mongo*"), 1, 0)),
-        synth = COUNT_DISTINCT(CASE(src == "syn", TO_STRING(monitor.name))),
-        log_errors = SUM(CASE(src == "log" AND (COALESCE(TO_INTEGER(syslog_severity_code), 9) <= 4
-                     OR lvl IN ("error", "err", "severe", "critical", "crit", "fatal", "alert", "emergency", "emerg", "warning", "warn")), 1, 0)),
-        alerts = COUNT_DISTINCT(CASE(src == "alert", TO_STRING(netcool.identifier))),
-        changes = COUNT_DISTINCT(CASE(src == "chg", TO_STRING(number))),
-        incidents = VALUES(CASE(active, CONCAT(TO_STRING(number), " · P", TO_STRING(priority))))
+       sev = COALESCE(TO_INTEGER(syslog_severity_code), 9)
+| EVAL is_cpu = CASE(src == "cpu", 1, 0),
+       is_prod = CASE(src == "cpu" AND (env IS NULL OR env IN ("", "null") OR env LIKE "prod*" OR env LIKE "prd*"), 1, 0),
+       svc = CASE(prod_apm, TO_STRING(service.name)),
+       mwt = CASE(src == "proc", TO_STRING(paladin.enrichment.computed.proc_type)),
+       is_win = CASE(src == "win", 1, 0),
+       is_db = CASE(src == "win" AND (wname LIKE "*sql*" OR wname LIKE "*oracle*" OR wname LIKE "*db2*" OR wname LIKE "*postgres*"
+                    OR wname LIKE "*mysql*" OR wname LIKE "*mongo*"), 1, 0),
+       mon = CASE(src == "syn", TO_STRING(monitor.name)),
+       is_err = CASE(src == "log" AND (sev <= 4 OR lvl IN ("error", "err", "severe", "critical", "crit", "fatal", "alert",
+                     "emergency", "emerg", "warning", "warn")), 1, 0),
+       alert_id = CASE(src == "alert", TO_STRING(netcool.identifier)),
+       chg = CASE(src == "chg", TO_STRING(number)),
+       inc = CASE(src == "inc" AND TO_INTEGER(priority) IN (1, 2, 3)
+                  AND NOT TO_STRING(state_name) IN ("Resolved", "Closed", "Canceled", "Cancelled"),
+                  CONCAT(TO_STRING(number), " · P", TO_STRING(priority)))
+| STATS metrics = MAX(is_cpu), prod = MAX(is_prod), apm = COUNT_DISTINCT(svc), svcs = VALUES(svc), mw = VALUES(mwt),
+        win = MAX(is_win), db = MAX(is_db), synth = COUNT_DISTINCT(mon), log_errors = SUM(is_err),
+        alerts = COUNT_DISTINCT(alert_id), changes = COUNT_DISTINCT(chg), incidents = VALUES(inc)
   BY key
 | WHERE metrics == 1 AND prod == 1
 | EVAL n_mw = COALESCE(MV_COUNT(mw), 0), n_inc = COALESCE(MV_COUNT(incidents), 0)
 | EVAL score = 1 + CASE(apm > 0, 4, 0) + CASE(n_mw > 0, 1, 0) + CASE(n_mw > 0 OR win == 1, 1, 0) + db + CASE(synth > 0, 1, 0)
              + CASE(log_errors > 0, 1, 0) + CASE(alerts > 0, 1, 0) + CASE(changes > 0, 1, 0) + CASE(n_inc > 0, 1, 0)
-| EVAL services = MV_CONCAT(MV_SLICE(MV_SORT(svc), 0, 1), ", "), middleware = MV_CONCAT(MV_SLICE(MV_SORT(mw), 0, 1), ", "),
+| EVAL services = MV_CONCAT(MV_SLICE(MV_SORT(svcs), 0, 1), ", "), middleware = MV_CONCAT(MV_SLICE(MV_SORT(mw), 0, 1), ", "),
        incident = MV_FIRST(MV_SORT(incidents, "DESC"))
 | SORT score DESC, apm DESC, log_errors DESC, key ASC
 | KEEP key, score, apm, services, middleware, win, db, synth, log_errors, alerts, changes, incident
