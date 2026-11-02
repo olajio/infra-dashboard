@@ -2373,3 +2373,17 @@ under RD1. **RD3:** the applications with the most production services (last hou
 | Underwriting Tools | 8 | 994 |
 
 TC-18 now uses CNA PolicyCenter, then Juno.
+
+### Round 21 results: RD1a and RD1b (2 Nov)
+
+**RD1a** (100 servers): 25 servers score 7 of 7 (metrics, APM, JBoss middleware). The top one is **vslrau1p338**, with 4
+production services (agency-api, bond-api, corp-data-api …), then vslrau1p337 (3) and vrau1pap0041 / 0042
+(papc services). vslrau1p219, vslrau1p220, vslrau1p229 and vslrau1p276 (clmact) also score 7. Windows servers with
+SQL Server score 3, e.g. kau1p802, hg1-bosql01, kw3l1p237.
+
+**RD1b** (240 CIs): **none of the APM servers has an incident, change or alert in the last 7 days.** Changes sit on
+application services (Data Lake PROD 13, Power BI PROD 8, CNA PolicyCenter PROD 6). Netcool alerts sit on network
+devices and jobs (adc-wan-agg1 4, cuwash1 1 with incident INC2685121). Only three Windows/SQL servers have a change
+(kau1p802, hg1-bosql01, aurcnacvtcmdcen).
+
+So no single pick fills every panel. `MIM-V4-TEST-RUNSHEET.md` now opens with three combinations that do, together.
