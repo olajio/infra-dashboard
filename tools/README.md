@@ -42,6 +42,17 @@ To rebuild `MIM V3.ndjson` from the colleague's export, run the patches in order
 `mim_v3_patch_2026-10-15.py "updated mim dashboard.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16b.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16d.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16e.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16f.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16g.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16h.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16i.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-16j.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-18k.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-18l.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-18m.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-18n.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-20o.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-20p.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-20q.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-25r.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-27s.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-28t.py "MIM V3.ndjson" "MIM V3.ndjson"`, then `mim_v3_patch_2026-10-29u.py "MIM V3.ndjson" "MIM V3.ndjson"`.
 Tests: `test_mim_v3_2026-10-14.py`, `-16.py`, `-15.py`, `-16b.py`, `-16d.py`, `-16e.py`, `-16f.py`, `-16g.py`, `-16h.py`, `-16i.py`, `-16j.py`, `-18k.py`, `-18m.py`, `-18n.py`, `-20o.py`, `-25r.py`, `-27s.py`, each with `"MIM V3.ndjson"`, against a local Elasticsearch on port 9200 (since 16 Oct: Elasticsearch and Kibana 9.5.3 from Docker Hub, the cluster's version; set `cluster.routing.allocation.disk.threshold_enabled: false` if the disk is nearly full).
 
+## MIM V4 (2 Nov 2026)
+
+`MIM V4.ndjson` (dashboard id `3fab3e69-e0bd-51fb-94b4-5eb70ef20d9b`, title *MIM V4*) is our last MIM V3 (through
+29u, with the Telemetry control) plus the **New collapsible section** a colleague added to an older copy
+(`mim v3 updated.ndjson`, which lacked 29u). That section stays at the bottom with its four panels: the CI and
+Assignment Group option lists, *Total Incident Count by CI* and *P1/P2 Incidents by Assignment Group*. The file also
+carries the `servicenow-incidents-*` data view its option lists use, and the colleague's default time range (last 7
+days; only that section follows the time picker). Rebuild:
+`python3 mim_v4_build_2026-11-02.py "MIM V3.ndjson" "mim v3 updated.ndjson" "MIM V4.ndjson"`. Its own id means
+importing it leaves MIM V3 in place.
+
 ## Infrastructure Dashboard (28 Oct 2026)
 
 `Infrastructure Dashboard.ndjson` is the CI-driven dashboard for the KPIs in `dashboard_kpis.txt`. It is **built
