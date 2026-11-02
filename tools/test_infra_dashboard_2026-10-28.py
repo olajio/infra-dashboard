@@ -20,6 +20,7 @@ ago = lambda **kw: (NOW - timedelta(**kw)).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 K, D = {'type': 'keyword'}, {'type': 'date'}
 obj = lambda **p: {'properties': p}
 INC, CHG = 'servicenow-incidents-t28', 'servicenow-change-requests-t28'
+ALERTS = '.alerts-observability.t28'
 
 
 def call(method, path, body=None, nd=False):
@@ -43,6 +44,7 @@ def cleanup():
     for t in ('apm-tx-test',):
         call('DELETE', f'/_index_template/{t}')
     call('DELETE', '/cmdb_with_apm_flag')
+    call('DELETE', f'/{ALERTS}')
 
 
 cleanup()
@@ -61,6 +63,24 @@ TXT = {'type': 'text', 'fields': {'keyword': {'type': 'keyword'}}}
 call('PUT', '/cmdb_with_apm_flag', {'mappings': {'properties': {   # telemetry onboarding list read by Application Health (29 Oct)
     '@timestamp': D, 'name': TXT, 'number': TXT, 'install_status': TXT, 'is_monitored': {'type': 'boolean'},
     'support_group': obj(l2=obj(name=TXT))}}})
+# Elastic Observability alerts, shaped like round17b.txt: the server is inside kibana.alert.instance.id
+call('PUT', f'/{ALERTS}', {'mappings': {'properties': {'@timestamp': D, 'kibana': obj(alert=obj(
+    instance=obj(id=K), status=K, severity=K, reason=K, start=D, rule=obj(name=K)))}}})
+
+
+def alert(instance, rule, status, sev='critical'):
+    return {'@timestamp': ago(minutes=5), 'kibana': {'alert': {'instance': {'id': instance}, 'status': status, 'severity': sev,
+            'reason': f'{rule} on {instance[:40]}', 'start': ago(hours=2), 'rule': {'name': rule}}}}
+
+
+alerts = [alert('07b5c934db72c300643cb96c4e96193e,srva,paladin-host-uptime-c30:5ef1', 'paladin-host-uptime-c30', 'active'),
+          alert('d5c8de2adbce8300643cb96c4e961943#srva#78a52700', 'paladin-cpu-usage-high_prio-ml', 'recovered', 'minor'),
+          alert('srva', 'paladin-genrocketexception-c3', 'active', 'warning'),
+          alert('8f9a97b01b9e0e1806943267cc4bcbbf,srvz,/var/log,paladin-filesystem-usage-w90_c95:c66', 'paladin-filesystem-usage', 'active'),
+          alert('srva-other,paladin-host-uptime-c30:1', 'paladin-host-uptime-c30', 'active'),           # another CI's name starts the same
+          alert('rst-batch_request_apm-tx-latency-and-errors-prod_0', 'APM Alerts prd1', 'active')]       # not an infrastructure rule
+assert not call('POST', '/_bulk?refresh=true', ''.join(json.dumps({'index': {'_index': ALERTS}}) + '\n' + json.dumps(a) + '\n'
+                                                        for a in alerts), nd=True).get('errors')
 
 
 def inc(n, p, s, ci):
@@ -150,6 +170,17 @@ try:
     check('Changes on this CI: its own, last 7 days',
           sorted(r['number'] for r in run('Changes on this CI (last 7 days)', ci='srvA')), ['CHG1'])
     check('Alerts on this CI', 'a-srvA' in json.dumps(run('Alerts on this CI (Netcool)', ci='srvA')), True)
+    ea = run('Elastic infra alerts', ci='srvA')
+    check('Elastic infra alerts on srvA: threshold, ML and host alerts, active first',
+          [(r['state'], r['server'], r['rule']) for r in ea],
+          [('Active', 'srva', 'paladin-host-uptime-c30'), ('Active', 'srva', 'paladin-genrocketexception-c3'),
+           ('Recovered', 'srva', 'paladin-cpu-usage-high_prio-ml')] if ea and ea[0]['rule'] == 'paladin-host-uptime-c30' else
+          [('Active', 'srva', 'paladin-genrocketexception-c3'), ('Active', 'srva', 'paladin-host-uptime-c30'),
+           ('Recovered', 'srva', 'paladin-cpu-usage-high_prio-ml')])
+    check('Elastic infra alerts with no CI: every active paladin alert, with its server',
+          sorted((r['server'], r['rule']) for r in run('Elastic infra alerts')),
+          [('srva', 'paladin-genrocketexception-c3'), ('srva', 'paladin-host-uptime-c30'),
+           ('srva-other', 'paladin-host-uptime-c30'), ('srvz', 'paladin-filesystem-usage')])
     print('Section 2')
     check('Server Health: srvA reporting', [(r.get('server') or r.get('host.name') or r.get('ci.name')) for r in run('Server Health', ci='srvA')][:1], ['srvA'])
     check('Middleware Health: the MQ queue manager', 'QM1' in json.dumps(run('Middleware Health', ci='srvA')), True)

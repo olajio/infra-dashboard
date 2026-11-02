@@ -130,16 +130,72 @@ def count_tile(name, pri, colour, section, x, y, w, h):
                         'managed': False}}}}}}
 
 
+ELASTIC_ALERTS_Q = """FROM .alerts-observability.*
+| WHERE @timestamp >= NOW() - 7 days
+| EVAL parts = SPLIT(REPLACE(TO_LOWER(TO_STRING(kibana.alert.instance.id)), "#", ","), ",")
+| EVAL inst = CONCAT(",", MV_CONCAT(parts, ","), ",")
+| WHERE (?ci == "(no CI selected)" AND TO_STRING(kibana.alert.status) == "active" AND TO_STRING(kibana.alert.rule.name) LIKE "paladin*")
+     OR (?ci != "(no CI selected)" AND LOCATE(inst, CONCAT(",", TO_LOWER(?ci), ",")) > 0)
+| EVAL head = MV_FIRST(parts)
+| EVAL server = CASE(MV_COUNT(parts) > 1 AND LENGTH(head) == 32, MV_FIRST(MV_SLICE(parts, 1, 1)), head),
+       state = CASE(TO_STRING(kibana.alert.status) == "active", "Active", "Recovered"),
+       severity = COALESCE(TO_STRING(kibana.alert.severity), "—"), rule = TO_STRING(kibana.alert.rule.name),
+       reason = TO_STRING(kibana.alert.reason), started = TO_DATETIME(kibana.alert.start), last_seen = @timestamp
+| SORT state ASC, started DESC
+| LIMIT 200
+| KEEP state, severity, server, rule, reason, started, last_seen"""
+
+
+def elastic_alerts_panel(section, x, y, w, h):
+    """Elastic Observability alerts (the paladin-* infrastructure rules and any other rule) on the selected CI."""
+    name = 'Elastic infra alerts'
+    p = copy_panel('Alerts on this CI', section, x, y, w, h, new_title=name, time_range={'from': 'now-7d', 'to': 'now'},
+                   description=('Alerts raised by Elastic\'s own alerting rules (Observability: the paladin-* '
+                                'infrastructure rules for host uptime and availability, filesystem, CPU and memory, '
+                                'processes, Windows services, IBM MQ, plus any other rule) on the CI picked in the CI '
+                                'control, last 7 days, active first. Matched on the CI name inside the alert\'s instance '
+                                'id (the rules group by CMDB CI). With no CI picked: every active paladin-* alert. '
+                                'Netcool alerts are in Alerts on this CI (Netcool). Reads .alerts-observability.*, '
+                                'which needs read access to the alert indices.'))
+    st = p['embeddableConfig']['attributes']['state']
+    (lid, layer), = st['datasourceStates']['textBased']['layers'].items()
+    dv = uid('dataview/alerts-observability')
+    S, D = {'type': 'string', 'esType': 'keyword'}, {'type': 'date', 'esType': 'date'}
+    cols = [('state', 'Now', S), ('severity', 'Severity', S), ('server', 'Server', S), ('rule', 'Rule', S),
+            ('reason', 'Reason', S), ('started', 'Started', D), ('last_seen', 'Last seen', D)]
+    layer['columns'] = [{'columnId': c, 'fieldName': c, 'label': l, 'customLabel': True, 'meta': m, 'inMetricDimension': True}
+                        for c, l, m in cols]
+    layer.pop('allColumns', None)
+    layer['index'] = dv
+    layer['query'] = {'esql': ELASTIC_ALERTS_Q}
+    st['query'] = {'esql': ELASTIC_ALERTS_Q}
+    title = '.alerts-observability.*'
+    st['datasourceStates']['textBased']['indexPatternRefs'] = [{'id': dv, 'title': title, 'timeField': '@timestamp'}]
+    st['adHocDataViews'] = {dv: {'id': dv, 'title': title, 'timeFieldName': '@timestamp', 'sourceFilters': [], 'type': 'esql',
+                                 'fieldFormats': {}, 'runtimeFieldMap': {}, 'allowNoIndex': False, 'name': title,
+                                 'allowHidden': True, 'managed': False}}
+    badge = lambda pairs: {'colorMode': 'badge', 'palette': {'type': 'palette', 'name': 'default'}, 'colorMapping': {
+        'paletteId': 'default', 'colorMode': {'type': 'categorical'},
+        'assignments': [{'rules': [{'type': 'match', 'pattern': k, 'matchEntireWord': True, 'matchCase': True}],
+                         'color': {'type': 'colorCode', 'colorCode': v}, 'touched': True} for k, v in pairs],
+        'specialAssignments': [{'rules': [{'type': 'other'}], 'color': {'type': 'colorCode', 'colorCode': '#8a96a8'}, 'touched': True}]}}
+    vis = {'state': dict(badge([('Active', '#d6453d'), ('Recovered', '#1f9e6b')]), width=95, alignment='center'),
+           'severity': dict(badge([('critical', '#d6453d'), ('major', '#d95926'), ('high', '#d95926'), ('medium', '#c98a0b'),
+                                   ('warning', '#c98a0b'), ('minor', '#c98a0b'), ('low', '#6f87a6')]), width=85, alignment='center'),
+           'server': {'width': 130}, 'rule': {'width': 230}, 'reason': {'width': 520}, 'started': {'width': 150},
+           'last_seen': {'width': 150}}
+    st['visualization']['columns'] = [dict({'columnId': c, 'isTransposed': False, 'isMetric': c not in ('server', 'rule')}, **vis[c])
+                                      for c, _, _ in cols]
+    return p
+
+
 panels = []
 # ---------------- 1 · Incidents, changes and alerts ----------------
 panels += [
-    count_tile('Active P1 incidents', 1, '#d6453d', S1, 0, 0, 8, 6),
-    count_tile('Active P2 incidents', 2, '#c98a0b', S1, 8, 0, 8, 6),
-    copy_panel('User base · ServiceNow', S1, 16, 0, 8, 6, new_title='User impact · ServiceNow'),
-    copy_panel('Real users · RUM', S1, 24, 0, 8, 6, new_title='User impact · RUM'),
-    placeholder('Elastic infra alerts', S1, 32, 0, 16, 6,
-                'Alerts from Elastic\'s own alerting rules: not confirmed on this cluster yet (IQ3 in '
-                '*dashboard_queries.md*). Netcool alerts on the CI are in *Alerts on this CI* below.'),
+    count_tile('Active P1 incidents', 1, '#d6453d', S1, 0, 0, 12, 6),
+    count_tile('Active P2 incidents', 2, '#c98a0b', S1, 12, 0, 12, 6),
+    copy_panel('User base · ServiceNow', S1, 24, 0, 12, 6, new_title='User impact · ServiceNow'),
+    copy_panel('Real users · RUM', S1, 36, 0, 12, 6, new_title='User impact · RUM'),
     copy_panel('Escalate', S1, 0, 6, 48, 8, new_title='Incidents on this CI', time_range=WINDOW_30D,
                description='Active P1, P2 and P3 incidents on the CI picked in the CI control (state not Resolved, '
                            'Closed, Canceled or Cancelled), with the CI\'s CMDB class, environment and support '
@@ -153,6 +209,7 @@ panels += [
                            '"<CI>.cna.com"), last 7 days, one row per alert: its state now (Open, or Cleared once its '
                            'latest record is a clear / resolution), severity, text, first and last seen, and how many '
                            'times Netcool has seen it fire (a high number means a recurring or flapping problem).'),
+    elastic_alerts_panel(S1, 0, 25, 48, 10),
 ]
 # ---------------- 2 · Infrastructure overview ----------------
 panels += [

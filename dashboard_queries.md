@@ -289,3 +289,25 @@ GET .alerts-observability.*/_search
 
 GET .alerts-observability.*/_search?size=1&sort=@timestamp:desc&q=kibana.alert.rule.name:"paladin-host-uptime-c30"
 ```
+
+### Round 17b results (2 Nov 2026)
+
+| Query | Result | Meaning |
+|---|---|---|
+| IQ5a | vSphere data sets: cluster, datastore, host, network, resource pool, virtual machine (8,280 VM records an hour) | All from the one VCF cluster seen in IQ1b |
+| IQ5b | GCP data sets: `gcp.cloudsql_postgresql`, `gcp.compute` (60,167 / hour), `gcp.gke` (5.4 M / hour), `gcp.storage` | Next: IQ2b for each, to see the resource fields (Round 17c) |
+| IQ5c | 0 rules found | The paladin rules live in the Kibana space `bridge-p` (IQ5d); Dev Tools searched the default space |
+| IQ5d | 3,455 paladin alerts in 7 days, 27 rules. The server is in `kibana.alert.group` (`ci.name_normalized` / `ci_name`) and inside `kibana.alert.instance.id`: `<ci sys_id>,<server>,…` for the threshold rules, `<sys_id>#<server>#…` for the ML rules, the host name alone for one rule | **Elastic infra alerts can be matched to a CI** |
+
+**Built (2 Nov):** the *Elastic infra alerts* placeholder on the Infrastructure Dashboard is now a real panel: Elastic
+Observability alerts on the selected CI (matched on the CI name inside `kibana.alert.instance.id`), last 7 days, active
+first; with no CI picked, every active paladin-* alert with its server.
+
+**IQ2b for each GCP data set (Round 17c)** — paste into `round17c.txt`:
+
+```
+GET metrics-gcp.compute-*/_search?size=1&sort=@timestamp:desc
+GET metrics-gcp.gke-*/_search?size=1&sort=@timestamp:desc
+GET metrics-gcp.storage-*/_search?size=1&sort=@timestamp:desc
+GET metrics-gcp.cloudsql_postgresql-*/_search?size=1&sort=@timestamp:desc
+```

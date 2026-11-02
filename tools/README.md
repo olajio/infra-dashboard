@@ -51,3 +51,5 @@ from `MIM V3.ndjson`**, reusing MIM V3's tested panels, so rebuild it after MIM 
 "Infrastructure Dashboard.ndjson"` against a local Elasticsearch (it loads the data of the `-15`, `-16j`, `-18k` and
 `-27s` tests plus its own, runs every panel query with and without a CI picked, and cleans up). KPI status:
 `INFRA-DASHBOARD-KPIS.xlsx`; queries for the placeholder KPIs: `dashboard_queries.md`.
+2 Nov: the *Elastic infra alerts* placeholder became a panel built in the script (`elastic_alerts_panel`): Elastic
+Observability alerts matched to the CI on its name inside `kibana.alert.instance.id` (Round 17b).
