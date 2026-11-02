@@ -212,3 +212,80 @@ FROM servicenow-incidents-*, servicenow-task-sla-*, servicenow-change-requests-*
 | IQ3a/IQ3b show Observability rules and IQ3c alerts with `host.name` | **Elastic Infra Alerts** for the CI's servers |
 | IQ3 shows no Observability rules | The KPI needs alerting rules created first (an Elastic configuration task, not a dashboard one) |
 | You confirm which feeds count, and IQ4b shows them | **Custom integration health**: one row per feed, red when it hasn't delivered within an agreed time |
+
+---
+
+## Round 17 results (2 Nov 2026)
+
+| Query | Result | Meaning |
+|---|---|---|
+| IQ1a, IQ2a | Failed: `Unknown column [ci.name]` | vSphere and GCP data carry no CMDB enrichment. Re-run as IQ5a / IQ5b below |
+| IQ1b | One collector (`vslrau1p302`) reports on one VMware Cloud Foundation cluster (`bly1-vcf-m1c1`, Blythewood): VM name in `vsphere.virtualmachine.name`, host in `vsphere.host.name` (FQDN, e.g. `vxbly1h003.cna.com`), status green / yellow / red, CPU, memory, datastore usage | The fields needed for VMware health exist |
+| IQ1c | 46 VMs in vSphere (last hour), 2,740 servers sending OS metrics, **1** name in both | VM names don't match the monitored servers |
+| IQ1d | 549 ESX hosts in the CMDB, **4** in vSphere, 0 matching | Only one small cluster is collected; most of the VMware estate isn't |
+| IQ2b | Not run (needs the data set names from IQ2a) | Re-run after IQ5b |
+| IQ2c (`round17_IQ2c.csv`) | Cloud CIs in CMDB relations: 13,762 Kubernetes replica sets, 7,010 namespaces, 2,519 cloud service accounts, 448 Kubernetes clusters, 270 Google data centres, 123 GCP projects, 27 cloud load balancers, 10 cloud databases … | Cloud resources are in the CMDB, so a CI link may be possible |
+| IQ2d | No AWS or Azure indices | GCP only |
+| IQ3a | Observability alert indices in use: metrics, custom threshold, APM, logs, SLO, uptime, ML anomaly | Elastic alerting is active |
+| IQ3b | Only rule ids came back (883 rules): the `fields=` filter stripped the rest | Re-run as IQ5c below |
+| IQ3c | 9,415 alerts in 7 days (692 active): custom threshold 4,265, synthetics 2,726, APM anomaly 1,372, metric threshold 647, SLO 321 … Infrastructure rules **paladin-***: host uptime, filesystem usage, CPU / memory (ML), middleware and Linux processes, Windows services, IBM MQ channel status, data outages, Windows event ids. `ci.name` on **0** alerts, `host.name` on only **4** hosts | Infra alerts exist; the server must be found in another field (IQ5d) |
+| IQ4a | 36 Fleet integrations; custom ones: Custom Logs (filestream, log), httpjson, Custom Google Pub/Sub | |
+| IQ4b | All feeds delivered within the last hour (2 Nov 11:27–11:28): Paladin alerts 216,708 in 24 h, ServiceNow incident snapshots 617,985, CMDB relations 64,810, Netcool bridge 6,266, ServiceNow incidents 270, changes 164, **SLA 33** | Feed freshness can be shown as a panel; the SLA feed's low volume matches the SLA gap (`sla_email.md`) |
+
+## IQ5. Follow-ups (Round 17b)
+
+Paste the answers into `round17b.txt`. If one fails in Dev Tools, run the ES|QL in Discover and save the CSV as
+`round17b_IQ5x.csv`.
+
+**IQ5a. IQ1a without the CMDB field**
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM metrics-vsphere.*
+| WHERE @timestamp >= NOW() - 1 hour
+| STATS docs = COUNT(*), last_seen = MAX(@timestamp) BY data_stream.dataset
+| SORT data_stream.dataset
+"""
+}
+```
+
+**IQ5b. IQ2a without the CMDB field** — then run IQ2b once for each data set it lists (`gcp.gke` → `metrics-gcp.gke-*`)
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM metrics-gcp.*
+| WHERE @timestamp >= NOW() - 1 hour
+| STATS docs = COUNT(*), last_seen = MAX(@timestamp) BY data_stream.dataset
+| SORT data_stream.dataset
+"""
+}
+```
+
+**IQ5c. The paladin rules, in full** (IQ3b without the field filter, limited to the infrastructure rules)
+
+```
+GET kbn:/api/alerting/rules/_find?per_page=100&search_fields=name&search=paladin*
+```
+
+**IQ5d. Where the server name is in the infrastructure alerts** — the group-by values and instance ids per paladin
+rule, then one full alert from the host uptime rule
+
+```
+GET .alerts-observability.*/_search
+{
+  "size": 0,
+  "query": { "bool": { "filter": [
+    { "range": { "@timestamp": { "gte": "now-7d" } } },
+    { "prefix": { "kibana.alert.rule.name": "paladin" } } ] } },
+  "aggs": { "by_rule": { "terms": { "field": "kibana.alert.rule.name", "size": 30 }, "aggs": {
+    "group_fields": { "terms": { "field": "kibana.alert.group.field", "size": 5 } },
+    "group_values": { "terms": { "field": "kibana.alert.group.value", "size": 3 } },
+    "instances": { "terms": { "field": "kibana.alert.instance.id", "size": 3 } } } } }
+}
+
+GET .alerts-observability.*/_search?size=1&sort=@timestamp:desc&q=kibana.alert.rule.name:"paladin-host-uptime-c30"
+```
