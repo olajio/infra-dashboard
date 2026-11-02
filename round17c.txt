@@ -1,0 +1,513 @@
+# 2: GET metrics-gcp.compute-*/_search?size=1&sort=@timestamp:desc [200 OK]
+{
+  "took": 1014,
+  "timed_out": false,
+  "_shards": {
+    "total": 9,
+    "successful": 9,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".ds-metrics-gcp.compute-default-2026.10.28-000350",
+        "_id": "rxJycphnTBeWL8vLgb1Q33___l5j3Lk_h6wdQg",
+        "_score": null,
+        "_source": {
+          "@timestamp": "2026-11-02T12:02:00.000Z",
+          "agent": {
+            "ephemeral_id": "7a1b7961-8c11-44e8-857d-404c3e01310b",
+            "id": "6966707f-5c49-488c-a011-028f35dc8e56",
+            "name": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "type": "metricbeat",
+            "version": "8.13.4"
+          },
+          "cloud": {
+            "account": {
+              "id": "cna-g-prod-proj-elm-bridge",
+              "name": "cna-g-prod-proj-elm-bridge"
+            },
+            "availability_zone": "us-central1-c",
+            "instance": {
+              "id": "5766540677949684269",
+              "name": "gke-g-prod-gke-elm-b-g-prd-elm-bridge-638ff988-pf3g"
+            },
+            "machine": {
+              "type": "n2-highmem-8"
+            },
+            "provider": "gcp",
+            "region": "us-central1"
+          },
+          "data_stream": {
+            "dataset": "gcp.compute",
+            "namespace": "default",
+            "type": "metrics"
+          },
+          "ecs": {
+            "version": "8.0.0"
+          },
+          "elastic_agent": {
+            "id": "6966707f-5c49-488c-a011-028f35dc8e56",
+            "snapshot": false,
+            "version": "8.13.4"
+          },
+          "event": {
+            "agent_id_status": "verified",
+            "dataset": "gcp.compute",
+            "duration": 1334878981,
+            "ingested": "2026-11-02T12:06:11Z",
+            "module": "gcp"
+          },
+          "gcp": {
+            "compute": {
+              "instance": {
+                "network": {
+                  "egress": {
+                    "bytes": 4375143,
+                    "packets": {
+                      "count": 13990
+                    }
+                  },
+                  "ingress": {
+                    "bytes": 30330512,
+                    "packets": {
+                      "count": 30948
+                    }
+                  }
+                }
+              }
+            },
+            "labels": {
+              "metrics": {
+                "loadbalanced": "true"
+              },
+              "user": {
+                "goog-gke-cluster-id-base32": "uim5ushyzfdxvhe6gabb6g466goe4nfx5pievgvi2rnm6fwiydpa",
+                "goog-gke-cost-management": "",
+                "goog-gke-node": "",
+                "goog-k8s-cluster-location": "us-central1",
+                "goog-k8s-cluster-name": "g-prod-gke-elm-bridge",
+                "goog-k8s-node-pool-name": "g-prd-elm-bridge-frozen"
+              }
+            },
+            "labels_fingerprint": "lkSZSA7qQGFtgFMrxZPsZGxptiM="
+          },
+          "host": {
+            "architecture": "x86_64",
+            "containerized": false,
+            "hostname": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "id": "5766540677949684269",
+            "ip": "172.26.130.5",
+            "mac": "5A-83-C1-BA-88-51",
+            "name": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "os": {
+              "codename": "focal",
+              "family": "debian",
+              "kernel": "6.12.94+",
+              "name": "Ubuntu",
+              "platform": "ubuntu",
+              "type": "linux",
+              "version": "20.04.6 LTS (Focal Fossa)"
+            }
+          },
+          "metricset": {
+            "name": "metrics",
+            "period": 300000
+          },
+          "orchestrator": {
+            "cluster": {
+              "name": "g-prod-gke-elm-bridge"
+            }
+          },
+          "service": {
+            "type": "gcp"
+          },
+          "tags": "gcp-compute"
+        },
+        "sort": [
+          1793620920000
+        ]
+      }
+    ]
+  }
+}
+# 3: GET metrics-gcp.gke-*/_search?size=1&sort=@timestamp:desc [200 OK]
+{
+  "took": 1432,
+  "timed_out": false,
+  "_shards": {
+    "total": 8,
+    "successful": 8,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".ds-metrics-gcp.gke-default-2026.11.02-002330",
+        "_id": "oaBGSfJVuLX5XHWkn-32bX___l5j27Om721CQw",
+        "_score": null,
+        "_source": {
+          "@timestamp": "2026-11-02T12:03:06.969Z",
+          "agent": {
+            "ephemeral_id": "7a1b7961-8c11-44e8-857d-404c3e01310b",
+            "id": "6966707f-5c49-488c-a011-028f35dc8e56",
+            "name": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "type": "metricbeat",
+            "version": "8.13.4"
+          },
+          "cloud": {
+            "account": {
+              "id": "cna-g-prod-proj-elm-bridge",
+              "name": "cna-g-prod-proj-elm-bridge"
+            },
+            "provider": "gcp"
+          },
+          "data_stream": {
+            "dataset": "gcp.gke",
+            "namespace": "default",
+            "type": "metrics"
+          },
+          "ecs": {
+            "version": "8.0.0"
+          },
+          "elastic_agent": {
+            "id": "6966707f-5c49-488c-a011-028f35dc8e56",
+            "snapshot": false,
+            "version": "8.13.4"
+          },
+          "event": {
+            "agent_id_status": "verified",
+            "dataset": "gcp.gke",
+            "duration": 33690537621,
+            "ingested": "2026-11-02T12:07:42Z",
+            "module": "gcp"
+          },
+          "gcp": {
+            "gke": {
+              "node": {
+                "cpu": {
+                  "allocatable_cores": {
+                    "value": 15.89
+                  },
+                  "total_cores": {
+                    "value": 16
+                  }
+                },
+                "ephemeral_storage": {
+                  "allocatable": {
+                    "bytes": 18828602911
+                  }
+                },
+                "memory": {
+                  "allocatable": {
+                    "bytes": 61481123840
+                  },
+                  "total": {
+                    "bytes": 67428646912
+                  }
+                }
+              }
+            },
+            "labels": {
+              "resource": {
+                "cluster_name": "g-prod-gke-elm-bridge",
+                "location": "us-central1",
+                "node_name": "gke-g-prod-gke-elm-b-g-prd-elm-bridge-79484884-cgk6"
+              }
+            },
+            "labels_fingerprint": "vllzx417ygPs1bjgtFR9RpaZZMg="
+          },
+          "host": {
+            "architecture": "x86_64",
+            "containerized": false,
+            "hostname": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "ip": "172.26.130.5",
+            "mac": "5A-83-C1-BA-88-51",
+            "name": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "os": {
+              "codename": "focal",
+              "family": "debian",
+              "kernel": "6.12.94+",
+              "name": "Ubuntu",
+              "platform": "ubuntu",
+              "type": "linux",
+              "version": "20.04.6 LTS (Focal Fossa)"
+            }
+          },
+          "ingest": {
+            "pipeline": "metrics-gcp.gke@custom"
+          },
+          "ingest_lag_in_sec": 275,
+          "ingest_time": "2026-11-02T12:07:42.881335989Z",
+          "metricset": {
+            "name": "metrics",
+            "period": 300000
+          },
+          "orchestrator": {
+            "cluster": {
+              "name": "g-prod-gke-elm-bridge"
+            }
+          },
+          "service": {
+            "type": "gcp"
+          },
+          "tags": "gcp-gke"
+        },
+        "sort": [
+          1793620986969
+        ]
+      }
+    ]
+  }
+}
+# 4: GET metrics-gcp.storage-*/_search?size=1&sort=@timestamp:desc [200 OK]
+{
+  "took": 15,
+  "timed_out": false,
+  "_shards": {
+    "total": 9,
+    "successful": 9,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".ds-metrics-gcp.storage-default-2026.10.28-000347",
+        "_id": "oQSKb0AQAySIsL1rtKgMRX___l5j5Aw_8aonGw",
+        "_score": null,
+        "_source": {
+          "@timestamp": "2026-11-02T11:54:00.000Z",
+          "agent": {
+            "ephemeral_id": "7a1b7961-8c11-44e8-857d-404c3e01310b",
+            "id": "6966707f-5c49-488c-a011-028f35dc8e56",
+            "name": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "type": "metricbeat",
+            "version": "8.13.4"
+          },
+          "cloud": {
+            "account": {
+              "id": "cna-g-prod-proj-elm-bridge",
+              "name": "cna-g-prod-proj-elm-bridge"
+            },
+            "provider": "gcp"
+          },
+          "data_stream": {
+            "dataset": "gcp.storage",
+            "namespace": "default",
+            "type": "metrics"
+          },
+          "ecs": {
+            "version": "8.0.0"
+          },
+          "elastic_agent": {
+            "id": "6966707f-5c49-488c-a011-028f35dc8e56",
+            "snapshot": false,
+            "version": "8.13.4"
+          },
+          "event": {
+            "agent_id_status": "verified",
+            "dataset": "gcp.storage",
+            "duration": 820652863,
+            "ingested": "2026-11-02T12:05:54Z",
+            "module": "gcp"
+          },
+          "gcp": {
+            "labels": {
+              "metrics": {
+                "method": "ReadObject",
+                "response_code": "OK"
+              },
+              "resource": {
+                "bucket_name": "cna-com-g-prod-proj-elm-bridge-bkt-elm",
+                "location": "us"
+              }
+            },
+            "labels_fingerprint": "JYD8QD0k0O4Gm1AhTRgXKPtpitw=",
+            "storage": {
+              "api": {
+                "request": {
+                  "count": 4
+                }
+              },
+              "network": {
+                "received": {
+                  "bytes": 0
+                },
+                "sent": {
+                  "bytes": 62342638
+                }
+              }
+            }
+          },
+          "host": {
+            "architecture": "x86_64",
+            "containerized": false,
+            "hostname": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "ip": "172.26.130.5",
+            "mac": "5A-83-C1-BA-88-51",
+            "name": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "os": {
+              "codename": "focal",
+              "family": "debian",
+              "kernel": "6.12.94+",
+              "name": "Ubuntu",
+              "platform": "ubuntu",
+              "type": "linux",
+              "version": "20.04.6 LTS (Focal Fossa)"
+            }
+          },
+          "metricset": {
+            "name": "metrics",
+            "period": 300000
+          },
+          "orchestrator": {
+            "cluster": {
+              "name": "g-prod-gke-elm-bridge"
+            }
+          },
+          "service": {
+            "type": "gcp"
+          },
+          "tags": "gcp-storage"
+        },
+        "sort": [
+          1793620440000
+        ]
+      }
+    ]
+  }
+}
+# 5: GET metrics-gcp.cloudsql_postgresql-*/_search?size=1&sort=@timestamp:desc [200 OK]
+{
+  "took": 11,
+  "timed_out": false,
+  "_shards": {
+    "total": 9,
+    "successful": 9,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": ".ds-metrics-gcp.cloudsql_postgresql-default-2026.10.28-000152",
+        "_id": "oQL78Y9DRNZjd3j43caKE3___l5j2Q-_1b_14g",
+        "_score": null,
+        "_source": {
+          "@timestamp": "2026-11-02T12:06:00.000Z",
+          "agent": {
+            "ephemeral_id": "7a1b7961-8c11-44e8-857d-404c3e01310b",
+            "id": "6966707f-5c49-488c-a011-028f35dc8e56",
+            "name": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "type": "metricbeat",
+            "version": "8.13.4"
+          },
+          "cloud": {
+            "account": {
+              "id": "cna-g-prod-proj-spg",
+              "name": "cna-g-prod-proj-spg"
+            },
+            "provider": "gcp"
+          },
+          "data_stream": {
+            "dataset": "gcp.cloudsql_postgresql",
+            "namespace": "default",
+            "type": "metrics"
+          },
+          "ecs": {
+            "version": "8.0.0"
+          },
+          "elastic_agent": {
+            "id": "6966707f-5c49-488c-a011-028f35dc8e56",
+            "snapshot": false,
+            "version": "8.13.4"
+          },
+          "event": {
+            "agent_id_status": "verified",
+            "dataset": "gcp.cloudsql_postgresql",
+            "duration": 3080166977,
+            "ingested": "2026-11-02T12:09:09Z",
+            "module": "gcp"
+          },
+          "gcp": {
+            "cloudsql_postgresql": {
+              "database": {
+                "instance_state": false
+              }
+            },
+            "labels": {
+              "cloudsql": {
+                "name": "postgres",
+                "version": "14"
+              },
+              "metrics": {
+                "state": "SUSPENDED"
+              },
+              "resource": {
+                "database_id": "cna-g-prod-proj-spg:g-prd-spg-main-csql-pg",
+                "region": "us-central"
+              }
+            },
+            "labels_fingerprint": "thwGxzqCNhGG2l7J/VJGYsI8VdA="
+          },
+          "host": {
+            "architecture": "x86_64",
+            "containerized": false,
+            "hostname": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "ip": "172.26.130.5",
+            "mac": "5A-83-C1-BA-88-51",
+            "name": "elastic-agent-gcp-integration-agent-58cd547874-d9w4d",
+            "os": {
+              "codename": "focal",
+              "family": "debian",
+              "kernel": "6.12.94+",
+              "name": "Ubuntu",
+              "platform": "ubuntu",
+              "type": "linux",
+              "version": "20.04.6 LTS (Focal Fossa)"
+            }
+          },
+          "metricset": {
+            "name": "metrics",
+            "period": 60000
+          },
+          "orchestrator": {
+            "cluster": {
+              "name": "g-prod-gke-elm-bridge"
+            }
+          },
+          "service": {
+            "type": "gcp"
+          },
+          "tags": "gcp-cloudsql-postgresql"
+        },
+        "sort": [
+          1793621160000
+        ]
+      }
+    ]
+  }
+}
