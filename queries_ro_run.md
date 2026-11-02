@@ -2219,10 +2219,14 @@ FROM .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.pro
   "wait_for_completion_timeout": "5s",
   "keep_on_completion": true }
 
-GET /_query/async/<id from the answer above>?format=txt
+GET /_query/async/<id from the answer above>?format=txt&wait_for_completion_timeout=60s
 
 DELETE /_query/async/<id>
 ```
+
+**If the GET shows only "OK", RD1 is still running.** Repeat the GET, without the DELETE, until it returns the table.
+Each GET waits up to 60 s. The query reads an hour of logs, so it can take a few minutes. Run the DELETE only after
+you have the table. If it never finishes, run it in **Discover** (ES|QL mode) and save the CSV as `round21_RD1.csv`.
 
 ### RD2. Services with the most traffic and outbound calls (Service control)
 
@@ -2280,3 +2284,21 @@ others, which fill *Upstream*, *Service health* and *Downstream*:
 
 Claim ECM has 4 services in the top 25, so it is the best Application pick until RD3 runs. Used in
 `MIM-V4-TEST-RUNSHEET.md` (TC-17, TC-18).
+
+### Round 21b results (2 Nov)
+
+**RD1:** the GET came back before the query finished (empty "OK"), so there are no results yet. Re-run it as described
+under RD1. **RD3:** the applications with the most production services (last hour):
+
+| Application | Services | Minutes with traffic |
+|---|---|---|
+| CNA PolicyCenter | 13 | 1307 |
+| CNA.COM | 12 | 680 |
+| Juno | 10 | 752 |
+| Surety External Agency Integration | 9 | 1420 |
+| Claim ECM | 9 | 1311 |
+| Jupiter | 9 | 1137 |
+| Claim Financial Interface | 8 | 1111 |
+| Underwriting Tools | 8 | 994 |
+
+TC-18 now uses CNA PolicyCenter, then Juno.
