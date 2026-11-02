@@ -1,0 +1,1291 @@
+#CG1
+# 2: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+   projects    |   clusters    |   databases   |    buckets    |      vms      |  data_stream.dataset  
+---------------+---------------+---------------+---------------+---------------+-----------------------
+7              |0              |0              |18             |0              |gcp.storage            
+2              |0              |6              |0              |0              |gcp.cloudsql_postgresql
+7              |0              |0              |0              |271            |gcp.compute            
+4              |5              |0              |0              |0              |gcp.gke                
+
+
+#CG4
+# 15: GET metrics-gcp.*/_field_caps?fields=gcp.gke.*,gcp.compute.*,gcp.storage.*,gcp.cloudsql_postgresql.*&filter_path=fields.*.*.type [200 OK]
+{
+  "fields": {
+    "gcp.cloudsql_postgresql.database.insights.pertag.row": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.cpu.usage_time.sec": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.perquery.io_time": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.vacuum.oldest_transaction_age": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage.authz.acl_operations": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.ephemeral_storage.request": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.cpu": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.available_for_failover": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage.storage.object.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.cpu.request_utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.firewall.dropped": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.used": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.memory.total_usage": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.memory.allocatable_utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.cpu.allocatable_utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.memory.balloon.ram_size": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.memory.page_fault": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.aggregate.latencies": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage.api.request.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.uptime": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.replication.replica_lag": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.perquery.row": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.compute": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.disk.write": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.aggregate.io_time": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.pod.network": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.memory.request": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.pid_used.value": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.bytes_used": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.up": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.bytes_used.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.node.network.sent": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.network.ingress.packets.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.disk.read.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.uptime.sec": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.compute.instance.uptime": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.allocatable.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage.storage.total.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.network.egress.packets": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.aggregate.row.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.pod.network.sent.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.replication.replica_byte_lag.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.memory.balloon.ram_used": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.pod": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.memory.quota": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.num_backends": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.storage.authz.acl_based_object_access": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.uptime.sec": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.transaction_id_utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.transaction.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.cpu.limit_utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke.node_daemon.cpu.core_usage_time.sec": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.auto_failover_request.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.network.received_bytes": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.ephemeral_storage.limit": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.pertag.execution_time": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.cpu.utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke.container.restart.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.ephemeral_storage.request.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.uptime.sec": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.memory.request_utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.replication.replica_lag.sec": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.storage.authz": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.total": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.disk.read_ops_count.value": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.ephemeral_storage.used.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.inodes_total": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.pertag.lock_time": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.aggregate.execution_time": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.cpu.limit_utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.transaction_id.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.pod.volume": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.cpu": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.write_ops.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.ephemeral_storage": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.cpu.allocatable_cores.value": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke.container.cpu.core_usage_time.sec": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.write_ops": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.memory.limit_utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke.node_daemon.cpu.core_usage_time": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.memory.used": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.uptime_total": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.cpu.core_usage_time.sec": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.network.sent_bytes": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.memory": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.cpu.request_cores.value": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.compute.instance.cpu.reserved_cores": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.memory.limit.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.memory.balloon.ram_size.value": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.pertag.row.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.pertag.latencies": {
+      "histogram": {
+        "type": "histogram"
+      }
+    },
+    "gcp.gke.pod.volume.utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.memory.quota.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.ephemeral_storage.used": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.vacuum": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.read_ops.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.cpu.reserved_cores.count": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke.node.memory.used.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage.authz.acl_operations.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.memory.limit_utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.disk.write_ops_count": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.firewall.dropped_packets_count.value": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.uptime_total.sec": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.memory.balloon.ram_used.value": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.pod.network.received": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.allocatable": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.cpu.usage.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.storage.network": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.pod.network.received.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.cpu.limit_cores.value": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke.node.memory.allocatable_utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke.node.network.sent.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.disk.read": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.perquery.shared_blk_access": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.pod.volume.used.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.pertag.shared_blk_access.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.memory.request.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.inodes_free": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.storage.storage": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.auto_failover_request": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.pod.volume.used": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.cpu.total_cores": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.used.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.memory.balloon.swap_out": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.pod.volume.total": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.perquery.execution_time": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.memory.request_utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.aggregate.lock_time": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.aggregate": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.memory.page_fault.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.node.cpu.total_cores.value": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.storage.authz.object_specific_acl_mutation.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.memory.total": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.replication.network_lag": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.memory.balloon.swap_in": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.pod.network.sent": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.cpu.allocatable_utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.memory.utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.memory.allocatable": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.memory.total.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.disk.write.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.memory": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.transaction": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.pid_used": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.replication.replica_byte_lag": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.firewall": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.network.egress": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.uptime": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.transaction_id_utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.num_backends.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage.network.received.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage.storage.total": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.memory.used.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.node.cpu.allocatable_cores": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.storage.storage.total_byte_seconds": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.network.connections": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.storage.storage.total_byte_seconds.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.cpu.request_utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.compute.instance.cpu.usage_time.sec": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke.pod.volume.total.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.instance_state": {
+      "boolean": {
+        "type": "boolean"
+      }
+    },
+    "gcp.gke.node.pid_limit.value": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.network.sent_bytes.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.replication": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.pertag": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.storage.api.request": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.disk.read_ops_count": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.total.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.replication.network_lag.sec": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.cpu.usage_time": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.aggregate.shared_blk_access.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.cpu.request_cores": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.cpu.usage_time": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.pod.volume.utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.inodes_free.value": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.quota": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.storage.authz.object_specific_acl_mutation": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node_daemon": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.network.received.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.cpu.reserved_cores": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.network.connections.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.cpu.limit_cores": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.cpu.core_usage_time": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.network.received": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.pertag.io_time": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.perquery.lock_time": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.memory": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.network.ingress.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.network.ingress.packets": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.firewall.dropped.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.network": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.perquery.row.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.network.received_bytes.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.node_daemon.memory.used.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage.api": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.storage.authz.acl_based_object_access.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.restart": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.quota.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.ephemeral_storage.limit.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.node.pid_limit": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.disk.read_ops": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.disk.write_ops_count.value": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.memory.balloon.swap_out.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.node.ephemeral_storage.inodes_total.value": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.gke.container.cpu.core_usage_time": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.memory": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.firewall.dropped_packets_count": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.memory.usage": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.cpu.usage": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.cpu.utilization": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.perquery.latencies": {
+      "histogram": {
+        "type": "histogram"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.pertag.shared_blk_access": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.memory.usage.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.transaction_id": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.memory.allocatable.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.storage.storage.object": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.storage.network.sent": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.aggregate.shared_blk_access": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.network.ingress": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node_daemon.cpu": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.memory.limit": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node_daemon.memory.used": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.network.egress.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.perquery.shared_blk_access.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.memory.balloon.swap_in.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.memory.total_usage.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.memory.utilization.pct": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.storage.network.sent.bytes": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.memory.balloon": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.perquery": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.cpu": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.insights.aggregate.row": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.storage.network.received": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node_daemon.memory": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.cpu.reserved_cores.value": {
+      "double": {
+        "type": "double"
+      }
+    },
+    "gcp.gke": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.memory.used": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.node.network": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.cloudsql_postgresql.database.network": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.gke.container.cpu": {
+      "object": {
+        "type": "object"
+      }
+    },
+    "gcp.compute.instance.network.egress.packets.count": {
+      "long": {
+        "type": "long"
+      }
+    },
+    "gcp.compute.instance.disk": {
+      "object": {
+        "type": "object"
+      }
+    }
+  }
+}
+
+
+For queries CG2 and CG3, I got the following:
+The selected request contains an error. Please resolve it and try again.
