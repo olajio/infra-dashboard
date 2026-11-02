@@ -311,3 +311,69 @@ GET metrics-gcp.gke-*/_search?size=1&sort=@timestamp:desc
 GET metrics-gcp.storage-*/_search?size=1&sort=@timestamp:desc
 GET metrics-gcp.cloudsql_postgresql-*/_search?size=1&sort=@timestamp:desc
 ```
+
+### Round 17c results (2 Nov 2026)
+
+| Data set | Resource fields | Metrics in the sample |
+|---|---|---|
+| `gcp.compute` | `cloud.account.id` (project), `cloud.instance.name` (here a GKE node VM), `cloud.machine.type`, `gcp.labels.user.goog-k8s-cluster-name` | network egress / ingress bytes and packets |
+| `gcp.gke` | `gcp.labels.resource.cluster_name`, `gcp.labels.resource.node_name`, `cloud.account.id` | node CPU / memory capacity (allocatable, total) |
+| `gcp.storage` | `gcp.labels.resource.bucket_name`, `gcp.labels.metrics.response_code` | API request count, bytes sent / received |
+| `gcp.cloudsql_postgresql` | `gcp.labels.resource.database_id` (`project:instance`), `gcp.labels.metrics.state` | `database.instance_state`, state (RUNNING / SUSPENDED …) |
+
+The samples come from two projects only (`cna-g-prod-proj-elm-bridge`, `cna-g-prod-proj-spg`), against 123 GCP projects in
+the CMDB. Before building Cloud health: how much of GCP is collected, and do its names match the CMDB's cloud CIs?
+
+## Round 17d — GCP coverage and its match to the CMDB
+
+Paste into `round17d.txt`. CG2 and CG3 can return a few hundred rows: run them in **Discover** (ES|QL mode) and save
+the CSVs as `round17d_CG2.csv` and `round17d_CG3.csv` (CG3 reads the CMDB relations, which timed out in Dev Tools in
+Round 17).
+
+**CG1. How much of GCP is collected (last hour)**
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM metrics-gcp.*
+| WHERE @timestamp >= NOW() - 1 hour
+| STATS projects = COUNT_DISTINCT(cloud.account.id), clusters = COUNT_DISTINCT(gcp.labels.resource.cluster_name),
+        databases = COUNT_DISTINCT(gcp.labels.resource.database_id), buckets = COUNT_DISTINCT(gcp.labels.resource.bucket_name),
+        vms = COUNT_DISTINCT(cloud.instance.name)
+  BY data_stream.dataset
+"""
+}
+```
+
+**CG2. Every collected project and resource** (Discover → CSV)
+
+```
+FROM metrics-gcp.*
+| WHERE @timestamp >= NOW() - 1 hour
+| EVAL resource = CASE(data_stream.dataset == "gcp.gke", TO_STRING(gcp.labels.resource.cluster_name),
+                       data_stream.dataset == "gcp.cloudsql_postgresql", TO_STRING(gcp.labels.resource.database_id),
+                       data_stream.dataset == "gcp.storage", TO_STRING(gcp.labels.resource.bucket_name),
+                       COALESCE(TO_STRING(`gcp.labels.user.goog-k8s-cluster-name`), TO_STRING(cloud.instance.name)))
+| STATS docs = COUNT(*) BY data_stream.dataset, project = cloud.account.id, resource
+| SORT data_stream.dataset, project, resource
+| LIMIT 2000
+```
+
+**CG3. The cloud CIs in the CMDB, by class and name** (Discover → CSV)
+
+```
+FROM cmdb-ci-relations*
+| EVAL p = parent.class IN ("cmdb_ci_gcp_project", "cmdb_ci_kubernetes_cluster", "cmdb_ci_cloud_database", "cmdb_ci_cloud_object_storage")
+| EVAL cls = CASE(p, parent.class, child.class), name = CASE(p, parent.name, child.name)
+| WHERE cls IN ("cmdb_ci_gcp_project", "cmdb_ci_kubernetes_cluster", "cmdb_ci_cloud_database", "cmdb_ci_cloud_object_storage")
+| STATS relations = COUNT(*) BY cls, name
+| SORT cls, name
+| LIMIT 2000
+```
+
+**CG4. Every GCP metric collected, by data set** (the sample documents showed only some of them)
+
+```
+GET metrics-gcp.*/_field_caps?fields=gcp.gke.*,gcp.compute.*,gcp.storage.*,gcp.cloudsql_postgresql.*&filter_path=fields.*.*.type
+```
