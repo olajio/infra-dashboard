@@ -2159,6 +2159,10 @@ Application and Service. Paste the answers into `round21.txt`. RD1 uses the asyn
 with the id, then `DELETE`. If it fails in Dev Tools, run the part between `"""` in Discover and save it as
 `round21_RD1.csv`.
 
+> **Fixed 2 Nov after the first run (`round21.txt`):** RD1 now also reads `logs-filestream.generic-*`, `logs-apm.error-*`
+> and `logs-apm.app.*`, as *Errors from the Logs* does. The syslog indices alone have no `log.level`. RD3 no longer
+> counts `host.name`, which service-transaction metrics don't have. Re-run both and paste them into `round21b.txt`.
+
 ### RD1. Servers ranked by how many panels they fill
 
 `score` = panels filled: Server Health 1; APM services 4 (*APM Services Health*, *Service health*, *Upstream*,
@@ -2168,7 +2172,7 @@ database 1; synthetic monitor 1; log errors 1; Netcool alerts 1; changes 1; acti
 ```
 POST /_query/async?format=json
 { "query": """
-FROM .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.process-*, metrics-windows.service-*, synthetics-*, logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, logs-jboss-*, logs-aix-syslog-*, logs-system.syslog-*, .ds-bridge-alerts-netcool-default-*, servicenow-change-requests-*, servicenow-incidents-* METADATA _index
+FROM .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.process-*, metrics-windows.service-*, synthetics-*, logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, logs-jboss-*, logs-aix-syslog-*, logs-system.syslog-*, logs-filestream.generic-*, logs-apm.error-*, logs-apm.app.*, .ds-bridge-alerts-netcool-default-*, servicenow-change-requests-*, servicenow-incidents-* METADATA _index
 | WHERE ((_index LIKE "*system.cpu*" OR _index LIKE "*apm.internal*" OR _index LIKE "*system.process*" OR _index LIKE "*windows.service*")
           AND @timestamp >= NOW() - 15 minutes)
      OR ((_index LIKE "*synthetics*" OR _index LIKE "*logs-*") AND @timestamp >= NOW() - 1 hour)
@@ -2252,9 +2256,27 @@ POST /_query?format=txt
 FROM metrics-apm.service_transaction.1m-*
 | WHERE @timestamp >= NOW() - 1 hour AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production")
      AND ci.name IS NOT NULL
-| STATS services = COUNT_DISTINCT(service.name), hosts = COUNT_DISTINCT(host.name) BY application = TO_STRING(ci.name)
-| SORT services DESC, hosts DESC
+| STATS services = COUNT_DISTINCT(service.name), tx_minutes = COUNT(*) BY application = TO_STRING(ci.name)
+| SORT services DESC, tx_minutes DESC
 | LIMIT 15
 """
 }
 ```
+
+### Round 21 results (2 Nov, first run)
+
+RD1 and RD3 failed (fixed above; re-run into `round21b.txt`). RD2 worked. The busiest production services that call
+others, which fill *Upstream*, *Service health* and *Downstream*:
+
+| Service | Application | Calls out | Minutes with traffic (1 h window) |
+|---|---|---|---|
+| rst-api | Risk Support Tool | 23 | 258 |
+| dmf | Document Management Facility | 15 | 605 |
+| blport-webapp | Billing Portal | 15 | 219 |
+| jupiter-orchestration | Jupiter | 14 | 117 |
+| papc-papcintcons1 | Enterprise PolicyCenter | 13 | 412 |
+| surclaim-cfe-service-api | Claims Front End | 13 | 184 |
+| claimecm-service-api | Claim ECM | 11 | 225 |
+
+Claim ECM has 5 services in the top 25, so it is the best Application pick until RD3 runs. Used in
+`MIM-V4-TEST-RUNSHEET.md` (TC-17, TC-18).

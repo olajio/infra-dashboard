@@ -50,8 +50,8 @@ closed since 2 Nov. Use the variant in the last column.
 | **TC-14b** App service in CI, Server used | — | `Automated Claim Transaction PROD` | `vslrau1p301` | — | Health panels showing **vslrau1p301** |
 | **TC-15** Server control alone | — | — | `vslrau1p301` | — | Health panels filled; section 2 empty |
 | **TC-16** Health window | — | `vslrau1p219` (or `vslrau1p220`) | — | Health window = `15 minutes`, then `7 days` | One screenshot per window: CPU / memory and *Errors from the Logs* (7 days can take a minute) |
-| **TC-17** One service | — | — | — | Service = `juno-data-api` (if not listed: `eds-data-api`, or the top entry) | *Upstream*, *Service health*, *Downstream* |
-| **TC-18** Application control | — | — | — | Application = `Juno`, then `Agency Bill Pay` (if not listed: any two entries) | *Services of the Application* for each |
+| **TC-17** One service | — | — | — | Service = `rst-api` (Risk Support Tool: calls 23 services, busy all hour). Backups: `dmf`, `blport-webapp` | *Upstream*, *Service health*, *Downstream* |
+| **TC-18** Application control | — | — | — | Application = `Risk Support Tool`, then `Claim ECM` (5 busy services). Backup: `Enterprise Content Service 2.0` | *Services of the Application* for each |
 | **TC-19** Nothing selected | — | — | — | — (after Reset changes) | Section 1 filled; section 2 empty; *Application Health* listing every application |
 
 ## Behaviour and navigation (section C)
@@ -73,5 +73,5 @@ closed since 2 Nov. Use the variant in the last column.
 | **TC-27** On Hold left out | First nothing; then `INC2684277 · sdc-core-sw2` | — | — | With nothing picked, INC2684277 (P2, On Hold, 68 h) is **not** in *Active Incidents* or the *P2 over 8 h* tile. Once picked, it shows in *Escalate* | Section 1 without it; *Escalate* with it |
 | **TC-28** Tiles match the table | — | — | — | Active P1 = P1 rows in *Active Incidents*; P2 over 8 h = P2 rows; P3 over 24 h = P3 rows | Tiles and table in one screenshot |
 
-**Not covered by Round 19** (values carried over from 21 Oct): the TC-05 server, TC-12's vslrau1p219 and the TC-17 / TC-18
-picks. Use each row's fallback if a value isn't in the list.
+**Not covered by Round 19** (values carried over from 21 Oct): the TC-05 server and TC-12's vslrau1p219.
+TC-17 / TC-18 use Round 21 (RD2, 2 Nov). Use each row's fallback if a value isn't in the list.
