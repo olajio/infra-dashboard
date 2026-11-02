@@ -2149,3 +2149,112 @@ FROM cmdb_with_apm_flag, metrics-apm.service_transaction.1m-* METADATA _index
 `round19.txt` has CA2 (283 CIs with active incidents, 152 with no CI), SL (6 active incidents with an SLA record, 1
 breached), OH (20 On Hold P2s in the last 7 days) and TL (41 enrolled applications with no telemetry). CB, CC and CD
 were not run. The picks for TC-02 to TC-28 are in `MIM-V3-TEST-CASES.md` under "Values to use (Round 19, 2 Nov)".
+
+## Round 21: the picks that fill the most panels (2 Nov 2026)
+
+Most section 2 and 3 panels stay empty unless the CI (or Server) is a **server that sends data**. Round 19's picks
+were incident-first, and no active incident sits on a server running APM services. These queries go server-first.
+They rank every production server sending metrics by how many panels it would fill, and pick the busiest
+Application and Service. Paste the answers into `round21.txt`. RD1 uses the async form like CA2: `POST`, then `GET`
+with the id, then `DELETE`. If it fails in Dev Tools, run the part between `"""` in Discover and save it as
+`round21_RD1.csv`.
+
+### RD1. Servers ranked by how many panels they fill
+
+`score` = panels filled: Server Health 1; APM services 4 (*APM Services Health*, *Service health*, *Upstream*,
+*Downstream*); middleware processes 1 (*Middleware Health*); processes or Windows services 1 (*Process Health*);
+database 1; synthetic monitor 1; log errors 1; Netcool alerts 1; changes 1; active incident 1. Maximum 13.
+
+```
+POST /_query/async?format=json
+{ "query": """
+FROM .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.process-*, metrics-windows.service-*, synthetics-*, logs-syslog-classic-*, logs-websphere-syslog-*, logs-redhat6x-syslog-*, logs-jboss-*, logs-aix-syslog-*, logs-system.syslog-*, .ds-bridge-alerts-netcool-default-*, servicenow-change-requests-*, servicenow-incidents-* METADATA _index
+| WHERE ((_index LIKE "*system.cpu*" OR _index LIKE "*apm.internal*" OR _index LIKE "*system.process*" OR _index LIKE "*windows.service*")
+          AND @timestamp >= NOW() - 15 minutes)
+     OR ((_index LIKE "*synthetics*" OR _index LIKE "*logs-*") AND @timestamp >= NOW() - 1 hour)
+     OR (_index LIKE "*netcool*" AND @timestamp >= NOW() - 7 days)
+     OR (_index LIKE "*change-request*" AND (end_at >= NOW() - 7 days OR start_date >= NOW() - 7 days))
+     OR (_index LIKE "*servicenow-incidents*" AND opened_at >= NOW() - 7 days)
+| EVAL src = CASE(_index LIKE "*system.cpu*", "cpu", _index LIKE "*apm.internal*", "apm", _index LIKE "*system.process*", "proc",
+                  _index LIKE "*windows.service*", "win", _index LIKE "*synthetics*", "syn", _index LIKE "*netcool*", "alert",
+                  _index LIKE "*change-request*", "chg", _index LIKE "*servicenow-incidents*", "inc", "log")
+| EVAL key = TO_LOWER(CASE(src == "apm", TO_STRING(host.name),
+                           src == "syn", COALESCE(TO_STRING(ci.name), REPLACE(TO_STRING(url.domain), "[.]cna[.]com$", "")),
+                           TO_STRING(ci.name)))
+| WHERE LENGTH(key) > 0
+| EVAL env = CASE(src == "cpu", TO_LOWER(TO_STRING(ci.environment))),
+       prod_apm = src == "apm" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"),
+       wname = TO_LOWER(TO_STRING(windows.service.name)),
+       lvl = TO_LOWER(TO_STRING(log.level)),
+       active = src == "inc" AND TO_INTEGER(priority) IN (1, 2, 3)
+                AND NOT TO_STRING(state_name) IN ("Resolved", "Closed", "Canceled", "Cancelled")
+| STATS metrics = MAX(CASE(src == "cpu", 1, 0)),
+        prod = MAX(CASE(src == "cpu" AND (env IS NULL OR env IN ("", "null") OR env LIKE "prod*" OR env LIKE "prd*"), 1, 0)),
+        apm = COUNT_DISTINCT(CASE(prod_apm, TO_STRING(service.name))), svc = VALUES(CASE(prod_apm, TO_STRING(service.name))),
+        mw = VALUES(CASE(src == "proc", TO_STRING(paladin.enrichment.computed.proc_type))),
+        win = MAX(CASE(src == "win", 1, 0)),
+        db = MAX(CASE(src == "win" AND (wname LIKE "*sql*" OR wname LIKE "*oracle*" OR wname LIKE "*db2*" OR wname LIKE "*postgres*"
+                      OR wname LIKE "*mysql*" OR wname LIKE "*mongo*"), 1, 0)),
+        synth = COUNT_DISTINCT(CASE(src == "syn", TO_STRING(monitor.name))),
+        log_errors = SUM(CASE(src == "log" AND (COALESCE(TO_INTEGER(syslog_severity_code), 9) <= 4
+                     OR lvl IN ("error", "err", "severe", "critical", "crit", "fatal", "alert", "emergency", "emerg", "warning", "warn")), 1, 0)),
+        alerts = COUNT_DISTINCT(CASE(src == "alert", TO_STRING(netcool.identifier))),
+        changes = COUNT_DISTINCT(CASE(src == "chg", TO_STRING(number))),
+        incidents = VALUES(CASE(active, CONCAT(TO_STRING(number), " · P", TO_STRING(priority))))
+  BY key
+| WHERE metrics == 1 AND prod == 1
+| EVAL n_mw = COALESCE(MV_COUNT(mw), 0), n_inc = COALESCE(MV_COUNT(incidents), 0)
+| EVAL score = 1 + CASE(apm > 0, 4, 0) + CASE(n_mw > 0, 1, 0) + CASE(n_mw > 0 OR win == 1, 1, 0) + db + CASE(synth > 0, 1, 0)
+             + CASE(log_errors > 0, 1, 0) + CASE(alerts > 0, 1, 0) + CASE(changes > 0, 1, 0) + CASE(n_inc > 0, 1, 0)
+| EVAL services = MV_CONCAT(MV_SLICE(MV_SORT(svc), 0, 1), ", "), middleware = MV_CONCAT(MV_SLICE(MV_SORT(mw), 0, 1), ", "),
+       incident = MV_FIRST(MV_SORT(incidents, "DESC"))
+| SORT score DESC, apm DESC, log_errors DESC, key ASC
+| KEEP key, score, apm, services, middleware, win, db, synth, log_errors, alerts, changes, incident
+| LIMIT 30
+""",
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
+
+### RD2. Services with the most traffic and outbound calls (Service control)
+
+`calls_out` = what the service calls (fills *Upstream*). `tx_minutes` = minutes with traffic in the last hour.
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM metrics-apm.service_transaction.1m-*, metrics-apm.service_destination.1m-* METADATA _index
+| WHERE @timestamp >= NOW() - 1 hour AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production")
+| EVAL dest = _index LIKE "*service_destination*"
+| STATS apps = VALUES(CASE(NOT dest, TO_STRING(ci.name))), tx_minutes = SUM(CASE(NOT dest, 1, 0)),
+        calls_out = COUNT_DISTINCT(CASE(dest, TO_STRING(span.destination.service.resource)))
+  BY service = TO_STRING(service.name)
+| WHERE tx_minutes > 0
+| EVAL application = MV_FIRST(apps)
+| SORT calls_out DESC, tx_minutes DESC
+| KEEP service, application, calls_out, tx_minutes
+| LIMIT 25
+"""
+}
+```
+
+### RD3. Applications with the most production services (Application control)
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM metrics-apm.service_transaction.1m-*
+| WHERE @timestamp >= NOW() - 1 hour AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production")
+     AND ci.name IS NOT NULL
+| STATS services = COUNT_DISTINCT(service.name), hosts = COUNT_DISTINCT(host.name) BY application = TO_STRING(ci.name)
+| SORT services DESC, hosts DESC
+| LIMIT 15
+"""
+}
+```

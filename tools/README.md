@@ -52,6 +52,8 @@ carries the `servicenow-incidents-*` data view its option lists use, and the col
 days; only that section follows the time picker). Rebuild:
 `python3 mim_v4_build_2026-11-02.py "MIM V3.ndjson" "mim v3 updated.ndjson" "MIM V4.ndjson"`. Its own id means
 importing it leaves MIM V3 in place.
+Patch **02v** (`mim_patch_2026-11-02v.py`, applied to MIM V4 after the build): section 3 controls in the order
+Server, Application, Telemetry, Service, Health window. Rebuild chain: build V4, then 02v.
 
 ## Infrastructure Dashboard (28 Oct 2026)
 
