@@ -1,5 +1,7 @@
 # MIM V3 — test cases (20 Oct 2026)
 
+**Exact control values for each case: `MIM-V4-TEST-RUNSHEET.md`.**
+
 TC-01 is done: *MIM-V3-TEST-CASE-INC2676403.md* (a server CI with APM). This catalog covers every other kind of CI
 and every control combination.
 
