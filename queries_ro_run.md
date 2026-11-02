@@ -2163,6 +2163,8 @@ with the id, then `DELETE`. If it fails in Dev Tools, run the part between `"""`
 > and `logs-apm.app.*`, as *Errors from the Logs* does. The syslog indices alone have no `log.level`. RD3 no longer
 > counts `host.name`, which service-transaction metrics don't have. Re-run both and paste them into `round21b.txt`.
 
+> **Replaced by RD1a and RD1b below:** RD1 still timed out (Bad Gateway) in Discover.
+>
 > **Fixed again 2 Nov (`round21c.txt`):** Dev Tools gave a 502 (the query was too heavy), and Discover rejects
 > conditions (`IS NULL`, `LIKE`, `IN`) inside `STATS`. Every condition is now computed in an `EVAL` before `STATS`, and the
 > logs window is down to 15 minutes. **Run it in Discover** (ES|QL mode): paste the part between the `"""`, and save the
@@ -2237,6 +2239,65 @@ DELETE /_query/async/<id>
 **If the GET shows only "OK", RD1 is still running.** Repeat the GET, without the DELETE, until it returns the table.
 Each GET waits up to 60 s. The query reads an hour of logs, so it can take a few minutes. Run the DELETE only after
 you have the table. If it never finishes, run it in **Discover** (ES|QL mode) and save the CSV as `round21_RD1.csv`.
+
+### RD1a and RD1b: light replacements for RD1 (2 Nov, after the second 502)
+
+RD1 timed out even in Discover: it read 17 sources at once, including APM application logs. These two queries read a
+few sources each, over short windows. Run each in **Discover** (ES|QL mode) and save as CSV: `round21_RD1a.csv`
+and `round21_RD1b.csv`. I combine them. Logs and synthetics are left out; they add at most 2 panels.
+
+**RD1a. Production servers: metrics, APM services, middleware, Windows services (last 10 minutes)**
+
+```
+FROM .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.process-*, metrics-windows.service-* METADATA _index
+| WHERE @timestamp >= NOW() - 10 minutes
+| EVAL src = CASE(_index LIKE "*system.cpu*", "cpu", _index LIKE "*apm.internal*", "apm", _index LIKE "*system.process*", "proc", "win")
+| EVAL key = TO_LOWER(CASE(src == "apm", TO_STRING(host.name), TO_STRING(ci.name)))
+| WHERE LENGTH(key) > 0
+| EVAL env = CASE(src == "cpu", TO_LOWER(TO_STRING(ci.environment))),
+       prod_apm = src == "apm" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"),
+       wname = TO_LOWER(TO_STRING(windows.service.name))
+| EVAL is_cpu = CASE(src == "cpu", 1, 0),
+       is_prod = CASE(src == "cpu" AND (env IS NULL OR env IN ("", "null") OR env LIKE "prod*" OR env LIKE "prd*"), 1, 0),
+       svc = CASE(prod_apm, TO_STRING(service.name)),
+       mwt = CASE(src == "proc", TO_STRING(paladin.enrichment.computed.proc_type)),
+       is_win = CASE(src == "win", 1, 0),
+       is_db = CASE(src == "win" AND (wname LIKE "*sql*" OR wname LIKE "*oracle*" OR wname LIKE "*db2*" OR wname LIKE "*postgres*"
+                    OR wname LIKE "*mysql*" OR wname LIKE "*mongo*"), 1, 0)
+| STATS metrics = MAX(is_cpu), prod = MAX(is_prod), apm = COUNT_DISTINCT(svc), svcs = VALUES(svc), mw = VALUES(mwt),
+        win = MAX(is_win), db = MAX(is_db)
+  BY key
+| WHERE metrics == 1 AND prod == 1
+| EVAL n_mw = COALESCE(MV_COUNT(mw), 0)
+| EVAL score = 1 + CASE(apm > 0, 4, 0) + CASE(n_mw > 0, 1, 0) + CASE(n_mw > 0 OR win == 1, 1, 0) + db
+| EVAL services = MV_CONCAT(MV_SLICE(MV_SORT(svcs), 0, 2), ", "), middleware = MV_CONCAT(MV_SLICE(MV_SORT(mw), 0, 2), ", ")
+| SORT score DESC, apm DESC, key ASC
+| KEEP key, score, apm, services, middleware, win, db
+| LIMIT 100
+```
+
+**RD1b. Per CI: active incidents opened in the last 7 days, changes and Netcool alerts (last 7 days)**
+
+```
+FROM servicenow-incidents-*, servicenow-change-requests-*, .ds-bridge-alerts-netcool-default-* METADATA _index
+| WHERE (_index LIKE "*servicenow-incidents*" AND opened_at >= NOW() - 7 days)
+     OR (_index LIKE "*change-request*" AND (end_at >= NOW() - 7 days OR start_date >= NOW() - 7 days))
+     OR (_index LIKE "*netcool*" AND @timestamp >= NOW() - 7 days)
+| EVAL key = TO_LOWER(TO_STRING(ci.name))
+| WHERE LENGTH(key) > 0
+| EVAL src = CASE(_index LIKE "*servicenow-incidents*", "inc", _index LIKE "*change-request*", "chg", "alert")
+| EVAL inc = CASE(src == "inc" AND TO_INTEGER(priority) IN (1, 2, 3)
+                  AND NOT TO_STRING(state_name) IN ("Resolved", "Closed", "Canceled", "Cancelled"),
+                  CONCAT(TO_STRING(number), " · ", TO_STRING(state_name))),
+       chg = CASE(src == "chg", TO_STRING(number)),
+       alert_id = CASE(src == "alert", TO_STRING(netcool.identifier))
+| STATS incidents = VALUES(inc), changes = COUNT_DISTINCT(chg), alerts = COUNT_DISTINCT(alert_id) BY key
+| EVAL n_inc = COALESCE(MV_COUNT(incidents), 0), incident = MV_FIRST(MV_SORT(incidents, "DESC"))
+| WHERE n_inc > 0 OR changes > 0 OR alerts > 0
+| SORT n_inc DESC, changes DESC, alerts DESC
+| KEEP key, n_inc, incident, changes, alerts
+| LIMIT 2000
+```
 
 ### RD2. Services with the most traffic and outbound calls (Service control)
 
