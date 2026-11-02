@@ -377,3 +377,29 @@ FROM cmdb-ci-relations*
 ```
 GET metrics-gcp.*/_field_caps?fields=gcp.gke.*,gcp.compute.*,gcp.storage.*,gcp.cloudsql_postgresql.*&filter_path=fields.*.*.type
 ```
+
+### Round 17d results (2 Nov)
+
+**CG1 — what is collected (last hour)**
+
+| Data set | Projects | Resources |
+|---|---|---|
+| gcp.compute | 7 | 271 VMs |
+| gcp.storage | 7 | 18 buckets |
+| gcp.gke | 4 | 5 clusters |
+| gcp.cloudsql_postgresql | 2 | 6 databases |
+
+**CG4: health signals available per data set**
+
+| Data set | Fields | Fields that can drive a health colour |
+|---|---|---|
+| Cloud SQL (46) | `database.up`-style state is in `database.instance_state`; also `cpu.utilization.pct`, `memory.utilization.pct`, `disk.utilization.pct`, `network.connections.count`, `replication.replica_lag.sec`, `auto_failover_request.count` | instance_state (down = red), CPU/memory/disk % (same 80/90 thresholds as Database Health), replica lag |
+| GKE (40) | `node.cpu.allocatable_utilization.pct`, `node.memory.allocatable_utilization.pct`, `container.restart.count`, `container.cpu/memory.limit_utilization.pct`, `pod.volume.utilization.pct`, `node.pid_used/pid_limit` | node CPU/memory %, container restarts, volumes near full |
+| Compute (19) | `instance.cpu.usage.pct`, `instance.uptime.sec`, disk/network bytes, `firewall.dropped_packets_count` | CPU %, uptime reset (reboot); no memory % without the Ops agent (only balloon fields) |
+| Storage (9) | `api.request.count`, `storage.object.count`, `storage.total.bytes`, network bytes | No health signal beyond request volume. Error ratio needs `api.request.count` split by response code, which is not in the field list. |
+
+**Conclusion:** there are enough metrics to colour Cloud SQL, GKE and Compute health. Storage can only show size and traffic.
+The remaining question is whether the panel can **follow the CI**, because GCP documents have no `ci.*` enrichment.
+That depends on CG2 and CG3, which were not in `round17d.txt`. Run both in Discover and save them as `round17d_CG2.csv` and
+`round17d_CG3.csv`. If CMDB names match GCP project, cluster or instance names, the panel joins on name. If not, it can
+show only an unfiltered GCP overview.
