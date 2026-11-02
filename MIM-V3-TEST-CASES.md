@@ -12,9 +12,10 @@ class, with up to 3 examples per class. Each example is tagged:
 **Defaults unless a case says otherwise:** Health window *24 hours*, Service *(services on this CI)*, Application
 *(all applications)*, CI and Server controls empty. Use **More → Reset changes** between cases.
 
-> **Refreshing the values:** incidents close quickly. Re-run **CA** in `queries_ro_run.md` (Round 14, re-run as
-> Round 15) before a test session if these no longer appear in the controls — the query itself doesn't change, just
-> paste a fresh result. Run CB too for any CI you need confirmed in the Server list.
+> **Refreshing the values:** incidents close quickly. Run **Round 19** in `queries_ro_run.md` (CA2, plus CB / CC / CD,
+> SL, OH, TL) before a test session. Since 25–27 Oct, *Escalate* and section 1 only show incidents opened in the last
+> 7 days, and section 1 leaves On Hold incidents out: pick incidents with `newest_days` ≤ 6 in CA2, and not On Hold
+> for anything checked in section 1.
 
 ## Values to use (Round 15, 23 Oct)
 
@@ -92,6 +93,15 @@ too.
 | **TC-22** | Selections are not saved | Pick an incident, reload the page without saving | The dashboard opens on the saved defaults. **More → Reset changes** also clears the selection |
 | **TC-23** | Auto-refresh | Leave TC-01 open for 5 minutes | Panels refresh by themselves (*Min. ago* and *Last data* values change) |
 | **TC-24** | Other CI classes (mainframe LPAR, infrastructure service, batch job, cloud database) | Open an incident on such a CI (see the values table) | *Escalate* and the CMDB panels fill; the health panels stay empty, as these CIs send no server data |
+
+## D. Added for the current MIM V3 (3 Nov 2026)
+
+| ID | Scenario | Pick | Expected |
+|---|---|---|---|
+| **TC-25** | Telemetry control | Telemetry = *Enrolled, no telemetry yet* (no CI, then any CI) | *Application Health* lists only the applications from **TL** in Round 19, each marked *Enrolled — no telemetry yet*, whatever the CI. Back to *(all applications)* with no CI: the same applications appear after all the others |
+| **TC-26** | SLA column from ServiceNow's breach flag | An incident from **SL** with `breached` > 0 and `in_table` = yes, and one with `breached` = 0 | The first shows **Breached** in *Active Incidents*; the second Breaching / Paused / Within SLA / Met. An incident not in SL shows **No SLA record** |
+| **TC-27** | On Hold left out of section 1 | An incident from **OH** | It is **not** in *Active Incidents*, not counted in the Active P1 / P2 over 8 h / P3 over 24 h tiles, and not in the Time to Resolve graph; it still appears in the Incident control and in *Escalate* when picked |
+| **TC-28** | Tiles match the table | Section 1, nothing picked | Active P1 = the number of P1 rows in *Active Incidents*; P2 over 8 h = its P2 rows; P3 over 24 h = its P3 rows |
 
 ## Suggested order for the team demo
 

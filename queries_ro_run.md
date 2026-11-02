@@ -1991,3 +1991,155 @@ FROM cmdb_with_apm_flag, cmdb-ci-relations* METADATA _index
 nothing. What the list adds is the **27 enrolled applications with no telemetry yet** (and their onboarding status),
 and an accurate coverage number once retired applications are left out (Portfolio v3's *APM Coverage* = 164 / 2,341
 counts retired applications in the denominator).
+
+## Round 19 — values for the remaining test cases on the current MIM V3 (3 Nov 2026)
+
+TC-01 and TC-04 are done. Since Round 15 the dashboard changed in ways that matter for the picks: *Escalate* and
+section 1 read the last **7 days** (an incident's `@timestamp` is its opened time, so older incidents drop out of them),
+section 1 leaves **On Hold** incidents out and lists P2 / P3 only past 8 h / 24 h, the SLA column reads
+`task_has_breached`, and a **Telemetry** control was added. CA2 is CA with each incident's age and state; CB, CC and
+CD are unchanged (above, Round 14); SL, OH and TL are new.
+
+Paste every answer into `round19.txt` with its name above it. CA2 and CB use the async form (`POST`, then `GET` with
+the id, then `DELETE`). If one fails in Dev Tools, run the part between the `"""` in **Discover** (ES|QL mode) and save
+the CSV as `round19_<name>.csv`.
+
+| Query | Feeds |
+|---|---|
+| **CA2** | TC-02, 03, 05, 06, 07, 08, 09, 10, 13, 14, 24 — pick incidents with `newest_days` ≤ 6 so *Escalate* shows them |
+| **CB** (Round 14) | TC-05, TC-07, TC-14: run it for the CA2 picks of those cases |
+| **CC** (Round 14) | TC-12, TC-15 |
+| **CD** (Round 14) | TC-17 |
+| **SL** | TC-26: SLA column (an incident with an SLA record, breached and not) |
+| **OH** | TC-27: On Hold incidents left out of section 1 |
+| **TL** | TC-25: Telemetry control worklist |
+
+### CA2. Every active incident's CI, what data it has, and how old its incidents are
+
+Columns as CA, plus `newest_days` (age of its newest active incident, in days; *Escalate* and section 1 show it only
+while ≤ 6) and `states` (its incidents' states; On Hold ones don't appear in section 1).
+
+```
+POST /_query/async?format=json
+{ "query": """
+FROM servicenow-incidents-*, .ds-metrics-system.cpu-default*, metrics-apm.internal-*, metrics-system.process-*, metrics-windows.service-*, metricbeat-*, .ds-bridge-alerts-netcool-default-*, servicenow-change-requests-* METADATA _index
+| WHERE (_index LIKE "*servicenow-incidents*" AND opened_at >= NOW() - 31 days)
+     OR (_index LIKE "*change-request*" AND (end_at >= NOW() - 7 days OR start_date >= NOW() - 7 days))
+     OR (_index LIKE "*netcool*" AND @timestamp >= NOW() - 7 days)
+     OR (@timestamp >= NOW() - 15 minutes AND (_index LIKE "*system.cpu*" OR _index LIKE "*apm.internal*"
+         OR _index LIKE "*system.process*" OR _index LIKE "*windows.service*" OR _index LIKE "*metricbeat*"))
+| EVAL src = CASE(_index LIKE "*servicenow-incidents*", "inc", _index LIKE "*change-request*", "chg", _index LIKE "*netcool*", "alert",
+                  _index LIKE "*system.cpu*", "cpu", _index LIKE "*apm.internal*", "apm", _index LIKE "*system.process*", "proc",
+                  _index LIKE "*windows.service*", "win", "sql")
+| EVAL key = COALESCE(TO_LOWER(CASE(src == "apm", TO_STRING(host.name), TO_STRING(ci.name))), CONCAT("(no CI) ", TO_STRING(number)))
+| WHERE LENGTH(key) > 0
+| EVAL pri = CASE(src == "inc", TO_INTEGER(priority)), wname = TO_LOWER(TO_STRING(windows.service.name))
+| EVAL is_active = src == "inc" AND pri IN (1, 2, 3) AND NOT TO_STRING(state_name) IN ("Resolved", "Closed", "Canceled", "Cancelled")
+| EVAL incident = CASE(is_active, CONCAT(TO_STRING(number), " · P", TO_STRING(pri))),
+       age_days = CASE(is_active, DATE_DIFF("day", TO_DATETIME(opened_at), NOW())),
+       inc_state = CASE(is_active, TO_STRING(state_name)),
+       cls = CASE(src == "inc", TO_STRING(ci.class_name)), env = CASE(src == "inc", TO_LOWER(TO_STRING(ci.environment))),
+       inc_ci = CASE(src == "inc", TO_STRING(ci.name)),
+       service = CASE(src == "apm" AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"),
+                      TO_STRING(service.name)),
+       mw = CASE(src == "proc", TO_STRING(paladin.enrichment.computed.proc_type)),
+       db = CASE(src == "sql", 1, src == "win" AND (wname LIKE "*sql*" OR wname LIKE "*oracle*" OR wname LIKE "*db2*"
+                 OR wname LIKE "*postgres*" OR wname LIKE "*mysql*" OR wname LIKE "*mongo*" OR wname LIKE "*sybase*"), 1, 0),
+       alert = CASE(src == "alert", TO_STRING(netcool.identifier)), chg = CASE(src == "chg", TO_STRING(number))
+| STATS incidents = VALUES(incident), newest_days = MIN(age_days), states = VALUES(inc_state), classes = VALUES(cls),
+        envs = VALUES(env), names = VALUES(inc_ci), metrics = MAX(CASE(src == "cpu", 1, 0)), services = VALUES(service),
+        middleware = VALUES(mw), db = MAX(db), win = MAX(CASE(src == "win", 1, 0)), alerts = COUNT_DISTINCT(alert),
+        changes = COUNT_DISTINCT(chg)
+  BY key
+| WHERE MV_COUNT(incidents) > 0
+| EVAL class = COALESCE(MV_FIRST(classes), CASE(MV_COUNT(names) > 0, "(no class)", "(no CI)")),
+       env = COALESCE(MV_FIRST(envs), "—"), ci = COALESCE(MV_FIRST(names), "(no CI)"),
+       n_incidents = MV_COUNT(incidents), incident = MV_FIRST(MV_SORT(incidents)), states = MV_CONCAT(MV_SORT(states), ", "),
+       apm = COALESCE(MV_COUNT(services), 0), services = MV_CONCAT(MV_SLICE(MV_SORT(services), 0, 1), ", "),
+       middleware = MV_CONCAT(MV_SLICE(MV_SORT(middleware), 0, 1), ", ")
+| EVAL score = metrics + CASE(apm > 0, 5, 0) + CASE(MV_COUNT(middleware) > 0, 1, 0) + db + CASE(win == 1 OR MV_COUNT(middleware) > 0, 1, 0)
+             + CASE(alerts > 0, 1, 0) + CASE(changes > 0, 1, 0)
+| SORT class ASC, score DESC, newest_days ASC, ci ASC
+| KEEP class, ci, incident, n_incidents, newest_days, states, env, score, metrics, apm, services, middleware, db, win, alerts, changes
+| LIMIT 1000
+""",
+  "wait_for_completion_timeout": "5s",
+  "keep_on_completion": true }
+
+GET /_query/async/<id from the answer above>?format=txt
+
+DELETE /_query/async/<id>
+```
+
+### SL. Active incidents that have an SLA record, breached first (TC-26)
+
+`in_table` = yes when *Active Incidents* lists it (P1, or P2 over 8 h, or P3 over 24 h). Pick one with `breached` > 0
+and one with 0.
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incidents-*, servicenow-task-sla-* METADATA _index
+| EVAL src = CASE(_index LIKE "*task-sla*", "sla", "inc")
+| WHERE src == "sla" OR opened_at >= NOW() - 7 days
+| EVAL inc = CASE(src == "sla", TO_STRING(task_number), TO_STRING(number))
+| WHERE inc LIKE "INC*"
+| EVAL active = src == "inc" AND TO_INTEGER(priority) IN (1, 2, 3)
+               AND NOT TO_STRING(state_name) IN ("On Hold", "Resolved", "Closed", "Canceled", "Cancelled"),
+       counted = src == "sla" AND COALESCE(TO_LOWER(TO_STRING(stage)), "") != "cancelled"
+| STATS act = MAX(CASE(active, 1, 0)), pri = MIN(CASE(src == "inc", TO_INTEGER(priority))),
+        opened = MAX(CASE(src == "inc", TO_DATETIME(opened_at))), ci = VALUES(CASE(src == "inc", TO_STRING(ci.name))),
+        slas = SUM(CASE(counted, 1, 0)), breached = SUM(CASE(counted AND COALESCE(TO_BOOLEAN(task_has_breached), false), 1, 0))
+  BY inc
+| WHERE act == 1 AND slas > 0
+| EVAL age_hours = DATE_DIFF("hours", opened, NOW()),
+       in_table = CASE(pri == 1 OR (pri == 2 AND age_hours > 8) OR (pri == 3 AND age_hours > 24), "yes", "no"),
+       ci = MV_FIRST(ci)
+| SORT breached DESC, in_table DESC, pri ASC
+| KEEP inc, pri, ci, age_hours, in_table, slas, breached
+| LIMIT 50
+"""
+}
+```
+
+### OH. On Hold P1–P3 incidents opened in the last 7 days (TC-27)
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incidents-*
+| WHERE opened_at >= NOW() - 7 days AND TO_INTEGER(priority) IN (1, 2, 3) AND TO_STRING(state_name) == "On Hold"
+| STATS opened = MAX(TO_DATETIME(opened_at)) BY number, priority, ci.name
+| EVAL age_hours = DATE_DIFF("hours", opened, NOW())
+| SORT priority ASC, age_hours DESC
+| KEEP number, priority, ci.name, age_hours
+| LIMIT 20
+"""
+}
+```
+
+### TL. Enrolled applications with no telemetry yet: the Telemetry worklist (TC-25)
+
+The applications *Application Health* should list with Telemetry = *Enrolled, no telemetry yet*.
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM cmdb_with_apm_flag, metrics-apm.service_transaction.1m-* METADATA _index
+| WHERE _index LIKE "*cmdb_with_apm_flag*" OR @timestamp >= NOW() - 1 hour
+| EVAL flag = _index LIKE "*cmdb_with_apm_flag*"
+| WHERE (flag AND is_monitored == true AND COALESCE(TO_LOWER(TO_STRING(install_status)), "") != "retired")
+     OR (NOT flag AND TO_LOWER(TO_STRING(service.environment)) IN ("prd1", "prd2", "prd", "prod", "production"))
+| EVAL num = CASE(flag, TO_STRING(`number.keyword`), TO_STRING(ci.number)), app = CASE(flag, TO_STRING(`name.keyword`))
+| STATS listed = MAX(CASE(flag, 1, 0)), sends = MAX(CASE(flag, 0, 1)), application = VALUES(app) BY num
+| WHERE listed == 1 AND sends == 0
+| EVAL application = MV_FIRST(application)
+| SORT application
+| KEEP application, num
+| LIMIT 200
+"""
+}
+```
