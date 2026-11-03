@@ -61,8 +61,13 @@ call('PUT', f'/{CHG}', {'mappings': {'properties': {
     'state_name': K, 'type': obj(normalized=K), 'category': obj(**{'1': K}), 'assignment_group': obj(name=K)}}})
 TXT = {'type': 'text', 'fields': {'keyword': {'type': 'keyword'}}}
 call('PUT', '/cmdb_with_apm_flag', {'mappings': {'properties': {   # telemetry onboarding list read by Application Health (29 Oct)
-    '@timestamp': D, 'name': TXT, 'number': TXT, 'install_status': TXT, 'is_monitored': {'type': 'boolean'},
+    '@timestamp': D, 'name': TXT, 'number': TXT, 'install_status': TXT, 'operational_status': TXT, 'is_monitored': {'type': 'boolean'},
     'support_group': obj(l2=obj(name=TXT))}}})
+# the applications MIM escalates (3 Nov, patch 03w): In Production + Operational + monitored; Payment Hub is not monitored
+flag = lambda name, mon=True: {'@timestamp': ago(hours=6), 'name': name, 'number': 'APM-' + name[:3], 'is_monitored': mon,
+                               'install_status': 'In Production', 'operational_status': 'Operational'}
+assert not call('POST', '/_bulk?refresh=true', ''.join(json.dumps({'index': {'_index': 'cmdb_with_apm_flag'}}) + '\n' + json.dumps(d) + '\n'
+                for d in (flag('Juno'), flag('Automated Claim Transaction'), flag('Payment Hub', mon=False))), nd=True).get('errors')
 # Elastic Observability alerts, shaped like round17b.txt: the server is inside kibana.alert.instance.id
 call('PUT', f'/{ALERTS}', {'mappings': {'properties': {'@timestamp': D, 'kibana': obj(alert=obj(
     instance=obj(id=K), status=K, severity=K, reason=K, start=D, rule=obj(name=K)))}}})
@@ -154,7 +159,7 @@ for index, docs in ((INC, [inc('INC801', 1, 'New', 'srvA'), inc('INC802', 2, 'In
     lines += ''.join(json.dumps({'index': {'_index': index}}) + '\n' + json.dumps(d) + '\n' for d in docs)
 assert not call('POST', '/_bulk?refresh=true', lines, nd=True).get('errors')
 
-dash = json.loads(open(sys.argv[1]).readline())
+dash = json.loads([l for l in open(sys.argv[1]) if l.strip()][-1])
 A = dash['attributes']
 panels = json.loads(A['panelsJSON'])
 title = lambda p: p['embeddableConfig'].get('title') or (p['embeddableConfig'].get('savedVis') or {}).get('title')
@@ -170,7 +175,7 @@ def check(name, got, want):
 
 
 DEFAULTS = {'ci': '(no CI selected)', 'server': '(no server selected)', 'health_window': '24 hours',
-            'service': '(services on this CI)', 'application': '(all applications)', 'telemetry': '(all applications)',
+            'service': '(services on this CI)', 'application': '(all applications)', 'monitored_app': '(all monitored applications)',
             '_tstart': ago(hours=1), '_tend': ago()}
 
 
@@ -250,7 +255,17 @@ try:
     check('Applications related to srvA', 'App PROD' in json.dumps(run('Applications related to this CI', ci='srvA')), True)
     check('Service health: the APM service on srvA', 'app-api' in json.dumps(run('Service health', ci='srvA')), True)
     check('Services of the Application: one application', sorted({r['ci.name'] for r in run('Services of the Application', application='Juno')}), ['Juno'])
-    check('Application Health with no CI: every production application', len(run('Application Health')) > 0, True)
+    check('Application Health with no CI: the monitored applications only',
+          sorted(r['ci.name'] for r in run('Application Health')), ['Automated Claim Transaction', 'Juno'])
+    check('Application Health, Monitored application = Juno', [r['ci.name'] for r in run('Application Health', monitored_app='Juno')], ['Juno'])
+    check('Services of the Application leaves out an unmonitored application',
+          [r['service.name'] for r in run('Services of the Application', application='Payment Hub')], [])
+    pins = sorted((v['order'], v['config']['title']) for v in A['pinned_panels']['panels'].values())
+    check('top bar: CI, then Monitored application', pins, [(0, 'CI'), (1, 'Monitored application')])
+    row = sorted((p for p in panels if p['type'] == 'esql_control' and p['gridData'].get('sectionId') == P['Application']['gridData']['sectionId']),
+                 key=lambda p: p['gridData']['x'])
+    check('section 3 controls: no Telemetry', [(title(p), p['gridData']['x'], p['gridData']['w']) for p in row],
+          [('Application', 0, 24), ('Service', 24, 24)])
 finally:
     cleanup()
 

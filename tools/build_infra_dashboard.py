@@ -1,8 +1,8 @@
 """Build the CI-driven Infrastructure Dashboard from MIM V3's panels (28 Oct 2026, dashboard_kpis.txt).
 
-Usage: build_infra_dashboard.py "MIM V3.ndjson" "Infrastructure Dashboard.ndjson"
+Usage: build_infra_dashboard.py "MIM V4.ndjson" "Infrastructure Dashboard.ndjson"   (MIM V3 until 3 Nov)
 
-Control input: the CI control (pinned, the same as MIM V3's). Three sections, one per KPI group:
+Control inputs: the CI and Monitored application controls (pinned, the same as MIM V4's). Three sections:
   1 · Incidents, changes and alerts      2 · Infrastructure overview (incl. cloud)      3 · Applications overview
 Achieved KPIs reuse MIM V3's tested panels; KPIs not achievable yet are placeholder cards that say why.
 MIM V3's panels also read the Incident control, which this dashboard doesn't have: `?incident` is replaced by its
@@ -21,7 +21,7 @@ DASH_ID = uid('dashboard')
 S1, S2, S3 = uid('section-1'), uid('section-2'), uid('section-3')
 WINDOW_30D = {'from': 'now-30d', 'to': 'now'}
 
-mim = json.loads(open(SRC).readline())
+mim = next(o for o in (json.loads(l) for l in open(SRC) if l.strip()) if o.get('type') == 'dashboard')
 MA = mim['attributes']
 mim_panels = json.loads(MA['panelsJSON'])
 title = lambda p: p['embeddableConfig'].get('title') or (p['embeddableConfig'].get('savedVis') or {}).get('title')
@@ -323,9 +323,8 @@ panels += [
 ]
 # ---------------- 3 · Applications overview ----------------
 panels += [
-    copy_panel('Application', S3, 0, 0, 16, 3),
-    copy_panel('Service', S3, 16, 0, 16, 3),
-    copy_panel('Telemetry', S3, 32, 0, 16, 3),
+    copy_panel('Application', S3, 0, 0, 24, 3),
+    copy_panel('Service', S3, 24, 0, 24, 3),
     copy_panel('Applications related to this CI', S3, 0, 3, 22, 12),
     copy_panel('Application Health', S3, 22, 3, 26, 12),
     copy_panel('Services of the Application', S3, 0, 15, 26, 12),
@@ -334,6 +333,7 @@ panels += [
 
 s = json.dumps(panels, ensure_ascii=False)
 assert '?incident' not in s
+assert '?telemetry' not in s
 ids = [p['panelIndex'] for p in panels]
 assert len(ids) == len(set(ids))
 
@@ -342,6 +342,10 @@ assert len(ci_ctrl) == 1
 (ci_key, ci_val), = ci_ctrl.items()
 ci_val = copy.deepcopy(ci_val)
 ci_val['order'] = 0
+mon = [v for v in MA['pinned_panels']['panels'].values() if v['config'].get('variable_name') == 'monitored_app']
+assert len(mon) == 1, 'build from MIM V4 (patch 03w)'
+mon_val = copy.deepcopy(mon[0])
+mon_val['order'] = 1
 
 dash = {
     'type': 'dashboard', 'id': DASH_ID, 'managed': False, 'references': [],
@@ -357,7 +361,7 @@ dash = {
         'optionsJSON': MA['optionsJSON'],
         'refreshInterval': MA['refreshInterval'],
         'timeRestore': True, 'timeFrom': 'now-24h', 'timeTo': 'now',
-        'pinned_panels': {'panels': {uid('control/ci'): ci_val}},
+        'pinned_panels': {'panels': {uid('control/ci'): ci_val, uid('control/monitored_app'): mon_val}},
         'sections': [
             {'collapsed': False, 'gridData': {'i': S1, 'y': 0}, 'title': '1 · Incidents, changes and alerts'},
             {'collapsed': False, 'gridData': {'i': S2, 'y': 1}, 'title': '2 · Infrastructure overview (including cloud)'},

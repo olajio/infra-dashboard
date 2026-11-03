@@ -58,14 +58,17 @@ Patch **03w** (`mim_patch_2026-11-03w.py`, test `test_mim_v4_2026-11-03w.py`): a
 control (`?monitored_app`) lists the applications MIM escalates, from `cmdb_with_apm_flag` with install status "In
 Production", operational status "Operational" and monitored = true. It scopes Application Health, Services of the
 Application and the section 3 Application / Service lists (matched on the APM number). The Telemetry control is
-removed. Rebuild chain: build V4, then 02v, then 03w. The Infrastructure Dashboard still carries the Telemetry
-control (it is built from MIM V3).
+removed. Patch **03x** (`mim_patch_2026-11-03x.py`) removes the colleague's "New collapsible section" again (its 4
+panels, their references and the data view they used). Rebuild chain: build V4, then 02v, 03w, 03x.
+Control lists are not filtered by the dashboard's time range (checked 3 Nov), so the Monitored application list does
+not depend on when `cmdb_with_apm_flag` was last refreshed.
 
 ## Infrastructure Dashboard (28 Oct 2026)
 
 `Infrastructure Dashboard.ndjson` is the CI-driven dashboard for the KPIs in `dashboard_kpis.txt`. It is **built
-from `MIM V3.ndjson`**, reusing MIM V3's tested panels, so rebuild it after MIM V3 changes:
-`python3 build_infra_dashboard.py "MIM V3.ndjson" "Infrastructure Dashboard.ndjson"` (dashboard id
+from `MIM V4.ndjson`** (MIM V3 until 3 Nov), reusing MIM V3's tested panels, so rebuild it after MIM V3 changes:
+`python3 build_infra_dashboard.py "MIM V4.ndjson" "Infrastructure Dashboard.ndjson"` (from MIM V3 until 3 Nov; since
+then it carries the Monitored application control and no Telemetry control) (dashboard id
 `0ed4078f-ae6c-5721-b852-20f0cf4d7a33`; import with overwrite). Test: `test_infra_dashboard_2026-10-28.py
 "Infrastructure Dashboard.ndjson"` against a local Elasticsearch (it loads the data of the `-15`, `-16j`, `-18k` and
 `-27s` tests plus its own, runs every panel query with and without a CI picked, and cleans up). KPI status:
