@@ -70,6 +70,15 @@ not depend on when `cmdb_with_apm_flag` was last refreshed.
 > Application Health / Services of the Application failed with "Unknown query parameter [monitored_app]". Reset
 > changes discards the stale copy. A new browser session also works. Reproduced and confirmed on Kibana 9.5.3.
 
+## MIM V5 (3 Nov 2026): the new look
+
+`MIM V5.ndjson` (dashboard id `e26ed2ea-9d3e-5f84-a198-e0389dbe3b39`, title *MIM V5*) is MIM V4 with a new look,
+built by `build_mim_v5.py "MIM V4.ndjson" "MIM V5.ndjson"`. Every MIM V4 panel and query is kept unchanged (the build
+checks that); MIM V4 stays as the working version. Borrowed from the Portfolio and Applications Operations dashboards:
+Portfolio-style KPI tiles in section 1 (icon, number green at 0 and in the priority colour above it, priority strip),
+two new tiles (*Needs attention now*, *Open alerts, no incident*), section icons, smaller placeholders, and row
+numbers on the long tables. Rebuild after any MIM V4 change. Functional test: `test_mim_v4_2026-11-03w.py "MIM V5.ndjson"`.
+
 ## Infrastructure Dashboard (28 Oct 2026)
 
 `Infrastructure Dashboard.ndjson` is the CI-driven dashboard for the KPIs in `dashboard_kpis.txt`. It is **built
