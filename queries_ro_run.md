@@ -2395,7 +2395,9 @@ one of its servers). The query takes two lists from Round 21: the 13 application
 (7 days) whose application is In Production, Operational and monitored, and the 50 servers that send metrics and run
 production APM services. It returns which of those servers each application service is linked to in the CMDB.
 
-Run it in **Discover** (ES|QL mode). The time picker does not matter. Save the result as CSV `round22_RD4.csv`.
+Run it in **Dev Tools** (`POST /_query?format=txt`), or in Discover with the time picker on **Last 5 years**. Discover
+filters on each relation's own date, and most links are older than its default range, so it returned nothing on
+3 Nov.
 
 ### RD4
 
@@ -2411,3 +2413,19 @@ FROM cmdb-ci-relations*
 | SORT app, server
 | LIMIT 500
 ```
+
+### Round 22 results (3 Nov, Dev Tools: `round22_RD4.txt`)
+
+Five of the 13 application services are linked to APM servers. All of these servers score 7 of 7 in RD1a (metrics,
+APM services, JBoss):
+
+| Application service | Incident (2 Nov) | Changes | APM servers (services) |
+|---|---|---|---|
+| Enterprise PolicyCenter PROD | INC2685216 · New | 1 | vrau1pap0039, 0040, 0043 (papc-papcintcons1); vrau1pap0041, 0042 (papc-papcservices1, papc-uwservices1) |
+| Underwriting Tools PROD | INC2684982 · In Progress | 0 | vslrau1p337, vslrau1p338 (agency-api, bond-api, corp-data-api …) |
+| Claim Center PROD | INC2685372 · New | 0 | vslrau1p226 (clmecmbulk) |
+| Automated Claim Transaction PROD | INC2685169 · On Hold | 1 | vslrau1p276 (clmact) |
+| eFile PROD | INC2685260 · On Hold | 0 | vslrau1p400, vslrau1p401 (efile) |
+
+The other 8 have no link to an APM server, among them Data Lake PROD (13 changes) and CNA PolicyCenter PROD (6
+changes). The demo scenes are in `MIM-V4-TEST-RUNSHEET.md`.

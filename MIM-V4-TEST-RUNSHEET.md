@@ -25,19 +25,30 @@ the match. **If an incident is missing from the list,** set the time picker to *
 time picker changes no panel (TC-21), only what the list may offer. If it is still missing, the incident has
 closed since 2 Nov. Use the variant in the last column.
 
-## Fill the most panels: three combinations (Round 21, 2 Nov)
+## Demo scenes: fill (almost) every panel (Rounds 21–22, 2–3 Nov)
 
-No CI has everything at once: the servers with APM services have no incident, change or alert this week, and the
-CIs with changes or alerts are not servers. These three combinations together fill every panel. **Reset changes**
-before each one.
+For presenting the dashboard. Each scene starts from an **active incident on an application service** whose
+application is monitored, then picks one of its servers (CMDB link, RD4) that sends metrics and runs APM services.
+Netcool alerts sit only on network devices, so *Alerts on this CI* gets its own short scene. **More → Reset
+changes** before each scene. Pick the controls in the order listed.
 
-| # | Set these controls | Panels it fills |
+| Scene | Controls, in order | What fills |
 |---|---|---|
-| **1** Server deep dive | CI = `vslrau1p338`; Health window = `7 days` | Section 2: *Escalate* (owners), *Server View*, *Applications related*, *Blast radius*, *Middleware View*. Section 3: *Server Health*, *APM Services Health* (agency-api, bond-api, corp-data-api …), *Middleware Health* and *Process Health* (JBoss), *Service health*, *Upstream*, *Downstream*, *Errors from the Logs*, *Application Health*. Backups: `vslrau1p337`, `vrau1pap0041` |
-| **2** Incident with changes | Incident = `INC2685011 · Data Lake PROD`; then Server = `vslrau1p338`; Application = `CNA PolicyCenter`; Service = `rst-api` | Section 1; *Escalate*; *Changes in the Last 7 Days* (13 changes); the CMDB panels; the health panels (from the Server control); *Services of the Application*; *Service health*, *Upstream*, *Downstream* (rst-api). Backup incident: `INC2685206 · Power BI PROD` (8 changes) |
-| **3** Alerts | CI = `adc-wan-agg1` (4 Netcool alerts), or Incident = `INC2685121 · cuwash1` (In Progress, 1 alert) | *Alerts on this CI*, *Escalate* |
+| **1. Enterprise PolicyCenter** (main scene) | Incident = `INC2685216 · Enterprise PolicyCenter PROD` (New) → Server = `vrau1pap0041` → Monitored application = `Enterprise PolicyCenter` → Application = `Enterprise PolicyCenter` → Service = `papc-papcintcons1` | Section 1; *Escalate*; *Changes* (1 change); *Server View* (5 APM servers vrau1pap0039–0043), the other CMDB views; *Server*, *Middleware* (JBoss), *Process*, *APM Services Health* (papc-papcservices1, papc-uwservices1); *Application Health*; *Services of the Application*; *Service health*, *Upstream* (papc-papcintcons1 calls 13 services), *Downstream* |
+| **2. Underwriting Tools** | Incident = `INC2684982 · Underwriting Tools PROD` (In Progress) → Server = `vslrau1p338` → Monitored application = `Underwriting Tools` → Application = `Underwriting Tools` → Service = `suruwt-api` | As scene 1, with the busiest APM server: 4 services (agency-api, bond-api, corp-data-api …). *Changes* is empty (no change on this CI) |
+| **3. Alerts** | Incident = `INC2685121 · cuwash1` (In Progress), or with no incident CI = `adc-wan-agg1` | *Alerts on this CI* (1 and 4 Netcool alerts), *Escalate* |
 
-Section 1 (tiles, *Active Incidents*, *Time to Resolve*, *Open Alerts with No Incident*) fills with nothing selected.
+**Backups if an incident has closed:** `INC2685372 · Claim Center PROD` (New) with Server `vslrau1p226`;
+`INC2685169 · Automated Claim Transaction PROD` (On Hold) with Server `vslrau1p276` and Service `clmact` (the TC04
+combination, which filled every panel); `INC2685260 · eFile PROD` (On Hold) with Server `vslrau1p400`. On Hold
+incidents fill *Escalate* but are left out of section 1's table.
+
+**Not measured in advance:** *Database Health*, *Synthetics Health* and *Errors from the Logs* for these servers.
+They are JBoss servers with no database service, so *Database Health* will probably stay empty. If *Errors from the
+Logs* is empty at 24 hours, set the Health window to `7 days`.
+
+**On the day:** incidents age out of the 7-day window and close. If an incident is missing from the Incident list,
+use the next backup.
 
 ## The incident's CI (section A)
 
