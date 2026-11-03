@@ -1,0 +1,7 @@
+install_status.keyword: In Production
+
+
+operational_status.keyword: Operational
+
+
+is_monitored: true
