@@ -25,30 +25,26 @@ the match. **If an incident is missing from the list,** set the time picker to *
 time picker changes no panel (TC-21), only what the list may offer. If it is still missing, the incident has
 closed since 2 Nov. Use the variant in the last column.
 
-## Demo scenes: fill (almost) every panel (Rounds 21–22, 2–3 Nov)
+## Demo scenes: fill (almost) every panel (Rounds 21–22, checked with screenshots on 3 Nov)
 
-For presenting the dashboard. Each scene starts from an **active incident on an application service** whose
-application is monitored, then picks one of its servers (CMDB link, RD4) that sends metrics and runs APM services.
-Netcool alerts sit only on network devices, so *Alerts on this CI* gets its own short scene. **More → Reset
-changes** before each scene. Pick the controls in the order listed.
+**Drive the demo from the CI control, not an incident.** *Escalate* still lists every active incident on the CI
+(last 7 days), and the scene keeps working when one incident closes or goes On Hold. Pick an **application service**
+in CI, then one of its servers that runs APM services in **Server**, then the **Application** and a **Service**.
+**More → Reset changes** before each scene. Pick the controls in the order listed.
 
-| Scene | Controls, in order | What fills |
+| Scene | Controls, in order | Result |
 |---|---|---|
-| **1. Enterprise PolicyCenter** (main scene) | Incident = `INC2685216 · Enterprise PolicyCenter PROD` (New) → Server = `vrau1pap0041` → Monitored application = `Enterprise PolicyCenter` → Application = `Enterprise PolicyCenter` → Service = `papc-papcintcons1` | Section 1; *Escalate*; *Changes* (1 change); *Server View* (5 APM servers vrau1pap0039–0043), the other CMDB views; *Server*, *Middleware* (JBoss), *Process*, *APM Services Health* (papc-papcservices1, papc-uwservices1); *Application Health*; *Services of the Application*; *Service health*, *Upstream* (papc-papcintcons1 calls 13 services), *Downstream* |
-| **2. Underwriting Tools** | Incident = `INC2684982 · Underwriting Tools PROD` (In Progress) → Server = `vslrau1p338` → Monitored application = `Underwriting Tools` → Application = `Underwriting Tools` → Service = `suruwt-api` | As scene 1, with the busiest APM server: 4 services (agency-api, bond-api, corp-data-api …). *Changes* is empty (no change on this CI) |
-| **3. Alerts** | Incident = `INC2685121 · cuwash1` (In Progress), or with no incident CI = `adc-wan-agg1` | *Alerts on this CI* (1 and 4 Netcool alerts), *Escalate* |
+| **1. eFile** (main scene; screenshots `efile.docx`) | CI = `eFile PROD` → Server = `vslrau1p400` → Application = `eFile` → Service = `efile` | **17 of 20 panels filled** on 3 Nov: *Escalate* (4 incidents), all CMDB views (blast radius 18), *Application Health*, *Services of the Application*, *Upstream* (efile → oracle, 67,671 calls), *Service health* (0.0 % failed), *Downstream* (billigportal, spc-int-consumer, papc-papcintcons1), *Middleware*, *Process*, *APM Services*, *Server*, *Synthetics Health*, *Errors from the Logs*. Empty: *Changes*, *Alerts*, *Database Health* |
+| **2. Underwriting Tools** (screenshots `scene2.docx`) | CI = `Underwriting Tools PROD` (or Incident `INC2684982`) → Server = `vslrau1p338` → Application = `Underwriting Tools` → **Service = `oltp-data-api`** (runs on vslrau1p338) or `suruwt-data-api` (busiest, 21.8 / min) | As scene 1, with 4 APM services on the server. On 3 Nov Service was left on *(services on this CI)*, so *Upstream*, *Service health* and *Downstream* were empty: pick a Service |
+| **3. Enterprise PolicyCenter** (for *Changes*) | CI = `Enterprise PolicyCenter PROD` → Server = `vrau1pap0041` → Application = `Enterprise PolicyCenter` → Service = `papc-papcintcons1` | As scene 1; *Changes* fills if its 2 Nov change is still within 7 days. *Upstream*: papc-papcintcons1 calls 13 services |
+| **4. Alerts** (short) | CI = `adc-wan-agg1` | *Alerts on this CI* (4 Netcool alerts on 2 Nov), *Escalate* (owners) |
+| **5. Database** (short, optional) | Keep scene 1, then Server = `kau1p802` | *Database Health* (SQL Server on a Windows server); the APM panels empty, as this server runs no APM |
 
-**Backups if an incident has closed:** `INC2685372 · Claim Center PROD` (New) with Server `vslrau1p226`;
-`INC2685169 · Automated Claim Transaction PROD` (On Hold) with Server `vslrau1p276` and Service `clmact` (the TC04
-combination, which filled every panel); `INC2685260 · eFile PROD` (On Hold) with Server `vslrau1p400`. On Hold
-incidents fill *Escalate* but are left out of section 1's table.
+**Why some incidents are missing from *Active Incidents*:** the table lists only P1s, P2s over 8 h and P3s over 24 h,
+and leaves On Hold out. An incident can be missing from it and still be active. Use the CI control.
 
-**Not measured in advance:** *Database Health*, *Synthetics Health* and *Errors from the Logs* for these servers.
-They are JBoss servers with no database service, so *Database Health* will probably stay empty. If *Errors from the
-Logs* is empty at 24 hours, set the Health window to `7 days`.
-
-**On the day:** incidents age out of the 7-day window and close. If an incident is missing from the Incident list,
-use the next backup.
+**What cannot fill in one scene:** *Changes* needs a change on the CI in the last 7 days; Netcool *Alerts* exist only
+on network devices; none of the servers running APM services runs a database. Scenes 3–5 cover these.
 
 ## The incident's CI (section A)
 
