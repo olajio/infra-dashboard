@@ -14,7 +14,7 @@ plus the new section at the bottom, so these values work on either. Background a
 | Health window (section 3) | `24 hours` |
 | Service (section 3) | `(services on this CI)` |
 | Application (section 3) | `(all applications)` |
-| Telemetry (section 3) | `(all applications)` |
+| Monitored application (pinned, top) | `(all monitored applications)` |
 
 In the tables, **—** means leave that control at its default. Pick values in the order of the columns, left to right.
 
@@ -81,7 +81,7 @@ Section 1 (tiles, *Active Incidents*, *Time to Resolve*, *Open Alerts with No In
 
 | Case | Incident | CI | Other controls | Expected | Screenshot |
 |---|---|---|---|---|---|
-| **TC-25** Telemetry control | — | — then `vslrau1p220` | Telemetry = `Enrolled, no telemetry yet` | *Application Health* lists only applications marked *Enrolled — no telemetry yet* (41 on 2 Nov, e.g. Claim Center, Data Lake, Adobe Experience Manager, Wage Calculator), with or without a CI | *Application Health*, both times |
+| **TC-25** Monitored application control | — | — | Monitored application = `(all monitored applications)`, then `Claim Center`, then `Juno` | *Application Health* and *Services of the Application* show only the applications in `cmdb_with_apm_flag` that are In Production, Operational and monitored (138 on 2 Nov), then only the one picked. Applications with no APM data yet are listed last as *Enrolled — no telemetry yet*. The section 3 Application and Service lists offer only those applications' services | *Application Health* and *Services of the Application* for each value |
 | **TC-26a** SLA breached | — | — | — | *Active Incidents* row **INC2680236** (Claim Financial Interface PROD) shows **Breached**. **Run this by about 05:00 UTC on 3 Nov**: after that it is older than 7 days and leaves the table | That row |
 | **TC-26b** SLA not breached | — | — | — | Row **INC2684181** (Claim Center PROD) shows Breaching / Paused / Within SLA / Met; row **INC2684312** shows **No SLA record** | Those rows |
 | **TC-27** On Hold left out | First nothing; then `INC2684277 · sdc-core-sw2` | — | — | With nothing picked, INC2684277 (P2, On Hold, 68 h) is **not** in *Active Incidents* or the *P2 over 8 h* tile. Once picked, it shows in *Escalate* | Section 1 without it; *Escalate* with it |

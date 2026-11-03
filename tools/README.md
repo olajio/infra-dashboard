@@ -54,6 +54,12 @@ days; only that section follows the time picker). Rebuild:
 importing it leaves MIM V3 in place.
 Patch **02v** (`mim_patch_2026-11-02v.py`, applied to MIM V4 after the build): section 3 controls in the order
 Server, Application, Telemetry, Service, Health window. Rebuild chain: build V4, then 02v.
+Patch **03w** (`mim_patch_2026-11-03w.py`, test `test_mim_v4_2026-11-03w.py`): a pinned **Monitored application**
+control (`?monitored_app`) lists the applications MIM escalates, from `cmdb_with_apm_flag` with install status "In
+Production", operational status "Operational" and monitored = true. It scopes Application Health, Services of the
+Application and the section 3 Application / Service lists (matched on the APM number). The Telemetry control is
+removed. Rebuild chain: build V4, then 02v, then 03w. The Infrastructure Dashboard still carries the Telemetry
+control (it is built from MIM V3).
 
 ## Infrastructure Dashboard (28 Oct 2026)
 
