@@ -4,7 +4,9 @@ These are the exact values to pick in each control, one row per test case. MIM V
 plus the new section at the bottom, so these values work on either. Background and expected results:
 `MIM-V3-TEST-CASES.md`.
 
-**Before every case:** use **More → Reset changes**. Everything then goes back to its default:
+**After importing a new version of the dashboard, and before every case:** use **More → Reset changes**. After an
+import this also clears Kibana's stale copy of the controls, which can otherwise hide new controls such as *Monitored
+application*. Everything then goes back to its default:
 
 | Control | Default |
 |---|---|

@@ -63,6 +63,13 @@ panels, their references and the data view they used). Rebuild chain: build V4, 
 Control lists are not filtered by the dashboard's time range (checked 3 Nov), so the Monitored application list does
 not depend on when `cmdb_with_apm_flag` was last refreshed.
 
+
+> **After importing a new version, open the dashboard and use More (⋯) → Reset changes.** Kibana keeps each
+> viewer's unsaved changes (control picks, for example) in the browser session and reapplies them over a newly
+> imported version. Those stale controls then hide new ones. On 3 Nov this hid the Monitored application control, and
+> Application Health / Services of the Application failed with "Unknown query parameter [monitored_app]". Reset
+> changes discards the stale copy. A new browser session also works. Reproduced and confirmed on Kibana 9.5.3.
+
 ## Infrastructure Dashboard (28 Oct 2026)
 
 `Infrastructure Dashboard.ndjson` is the CI-driven dashboard for the KPIs in `dashboard_kpis.txt`. It is **built
