@@ -2387,3 +2387,27 @@ devices and jobs (adc-wan-agg1 4, cuwash1 1 with incident INC2685121). Only thre
 (kau1p802, hg1-bosql01, aurcnacvtcmdcen).
 
 So no single pick fills every panel. `MIM-V4-TEST-RUNSHEET.md` now opens with three combinations that do, together.
+
+## Round 22: application services with an incident, and the APM servers they run on (3 Nov 2026)
+
+For presenting MIM V4 with as few empty panels as possible (approach 2: an incident on an application service, plus
+one of its servers). The query takes two lists from Round 21: the 13 application services with an active incident
+(7 days) whose application is In Production, Operational and monitored, and the 50 servers that send metrics and run
+production APM services. It returns which of those servers each application service is linked to in the CMDB.
+
+Run it in **Discover** (ES|QL mode). The time picker does not matter. Save the result as CSV `round22_RD4.csv`.
+
+### RD4
+
+```
+FROM cmdb-ci-relations*
+| WHERE (child.name IN ("VRAU1PAP0039", "VRAU1PAP0040", "VRAU1PAP0041", "VRAU1PAP0042", "VRAU1PAP0043", "VSLRAU1P217", "VSLRAU1P218", "VSLRAU1P219", "VSLRAU1P220", "VSLRAU1P226", "VSLRAU1P228", "VSLRAU1P229", "VSLRAU1P230", "VSLRAU1P276", "VSLRAU1P277", "VSLRAU1P278", "VSLRAU1P279", "VSLRAU1P280", "VSLRAU1P308", "VSLRAU1P309", "VSLRAU1P330", "VSLRAU1P331", "VSLRAU1P337", "VSLRAU1P338", "VSLRAU1P344", "VSLRAU1P345", "VSLRAU1P366", "VSLRAU1P367", "VSLRAU1P388", "VSLRAU1P389", "VSLRAU1P396", "VSLRAU1P397", "VSLRAU1P398", "VSLRAU1P399", "VSLRAU1P400", "VSLRAU1P401", "VSLRAU1P407", "VSLRAU1P408", "VSLRAU1P416", "VSLRAU1P432", "VSLRAU1P433", "VSLRAU1P434", "VSLRAU1P435", "VSLRAU1P441", "VSLRAU1P442", "VSLRAU1P447", "VSLRAU1P448", "VSLRAU1P457", "VSLRAU1P458", "VSLRAU1P459", "vrau1pap0039", "vrau1pap0040", "vrau1pap0041", "vrau1pap0042", "vrau1pap0043", "vslrau1p217", "vslrau1p218", "vslrau1p219", "vslrau1p220", "vslrau1p226", "vslrau1p228", "vslrau1p229", "vslrau1p230", "vslrau1p276", "vslrau1p277", "vslrau1p278", "vslrau1p279", "vslrau1p280", "vslrau1p308", "vslrau1p309", "vslrau1p330", "vslrau1p331", "vslrau1p337", "vslrau1p338", "vslrau1p344", "vslrau1p345", "vslrau1p366", "vslrau1p367", "vslrau1p388", "vslrau1p389", "vslrau1p396", "vslrau1p397", "vslrau1p398", "vslrau1p399", "vslrau1p400", "vslrau1p401", "vslrau1p407", "vslrau1p408", "vslrau1p416", "vslrau1p432", "vslrau1p433", "vslrau1p434", "vslrau1p435", "vslrau1p441", "vslrau1p442", "vslrau1p447", "vslrau1p448", "vslrau1p457", "vslrau1p458", "vslrau1p459") OR parent.name IN ("VRAU1PAP0039", "VRAU1PAP0040", "VRAU1PAP0041", "VRAU1PAP0042", "VRAU1PAP0043", "VSLRAU1P217", "VSLRAU1P218", "VSLRAU1P219", "VSLRAU1P220", "VSLRAU1P226", "VSLRAU1P228", "VSLRAU1P229", "VSLRAU1P230", "VSLRAU1P276", "VSLRAU1P277", "VSLRAU1P278", "VSLRAU1P279", "VSLRAU1P280", "VSLRAU1P308", "VSLRAU1P309", "VSLRAU1P330", "VSLRAU1P331", "VSLRAU1P337", "VSLRAU1P338", "VSLRAU1P344", "VSLRAU1P345", "VSLRAU1P366", "VSLRAU1P367", "VSLRAU1P388", "VSLRAU1P389", "VSLRAU1P396", "VSLRAU1P397", "VSLRAU1P398", "VSLRAU1P399", "VSLRAU1P400", "VSLRAU1P401", "VSLRAU1P407", "VSLRAU1P408", "VSLRAU1P416", "VSLRAU1P432", "VSLRAU1P433", "VSLRAU1P434", "VSLRAU1P435", "VSLRAU1P441", "VSLRAU1P442", "VSLRAU1P447", "VSLRAU1P448", "VSLRAU1P457", "VSLRAU1P458", "VSLRAU1P459", "vrau1pap0039", "vrau1pap0040", "vrau1pap0041", "vrau1pap0042", "vrau1pap0043", "vslrau1p217", "vslrau1p218", "vslrau1p219", "vslrau1p220", "vslrau1p226", "vslrau1p228", "vslrau1p229", "vslrau1p230", "vslrau1p276", "vslrau1p277", "vslrau1p278", "vslrau1p279", "vslrau1p280", "vslrau1p308", "vslrau1p309", "vslrau1p330", "vslrau1p331", "vslrau1p337", "vslrau1p338", "vslrau1p344", "vslrau1p345", "vslrau1p366", "vslrau1p367", "vslrau1p388", "vslrau1p389", "vslrau1p396", "vslrau1p397", "vslrau1p398", "vslrau1p399", "vslrau1p400", "vslrau1p401", "vslrau1p407", "vslrau1p408", "vslrau1p416", "vslrau1p432", "vslrau1p433", "vslrau1p434", "vslrau1p435", "vslrau1p441", "vslrau1p442", "vslrau1p447", "vslrau1p448", "vslrau1p457", "vslrau1p458", "vslrau1p459"))
+     AND COALESCE(TO_LOWER(TO_STRING(is_marked_for_deletion)), "false") != "true"
+| EVAL p = TO_LOWER(TO_STRING(parent.name)), c = TO_LOWER(TO_STRING(child.name))
+| EVAL app = CASE(p IN ("automated claim transaction prod", "claim center prod", "cna central", "cna policycenter prod", "data lake prod", "efile prod", "enterprise policycenter prod", "jupiter prod", "notice of loss prod", "procede prod", "risk support tool prod", "surety policycenter prod", "underwriting tools prod"), p, c IN ("automated claim transaction prod", "claim center prod", "cna central", "cna policycenter prod", "data lake prod", "efile prod", "enterprise policycenter prod", "jupiter prod", "notice of loss prod", "procede prod", "risk support tool prod", "surety policycenter prod", "underwriting tools prod"), c),
+       server = CASE(p IN ("automated claim transaction prod", "claim center prod", "cna central", "cna policycenter prod", "data lake prod", "efile prod", "enterprise policycenter prod", "jupiter prod", "notice of loss prod", "procede prod", "risk support tool prod", "surety policycenter prod", "underwriting tools prod"), c, p)
+| WHERE app IS NOT NULL
+| STATS links = COUNT(*) BY app, server
+| SORT app, server
+| LIMIT 500
+```
