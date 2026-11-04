@@ -2,7 +2,10 @@
 
 *3 Nov 2026. Applies to MIM V4 and the Infrastructure Dashboard (patch 03w).*
 
-**Decision needed from the team:** should the section 3 **Application** list follow the application picked in the top
+**Decided 4 Nov: B, leave as is.** The section 3 Application list keeps following the rules of the monitored set, not
+the top pick. The rest of this page is kept for reference.
+
+~~Decision needed from the team:~~ should the section 3 **Application** list follow the application picked in the top
 **Monitored application** control? Kibana 9.5.3 supports this (tested on 3 Nov). See the question at the end.
 
 ## The controls involved

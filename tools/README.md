@@ -79,6 +79,13 @@ Portfolio-style KPI tiles in section 1 (icon, number green at 0 and in the prior
 two new tiles (*Needs attention now*, *Open alerts, no incident*), section icons, smaller placeholders, and row
 numbers on the long tables. Rebuild after any MIM V4 change. Functional test: `test_mim_v4_2026-11-03w.py "MIM V5.ndjson"`.
 
+**From 4 Nov the basis is the team's manual layout** (`updated mim v5.ndjson`, panels moved and resized in Kibana), not
+`build_mim_v5.py`. Patch **04a** (`mim_v5_patch_2026-11-04a.py "updated mim v5.ndjson" "MIM V5.ndjson"`, test
+`test_mim_v5_2026-11-04a.py "MIM V4.ndjson" "MIM V5.ndjson"`) applies new_suggestions2.txt: Escalate gets State and
+Opened and loses CI support group; Active Incidents gets Opened; Open Alerts with No Incident shows only the selected
+CI's alerts and its CMDB-linked CIs'. It also makes the controls hard to miss: icon titles, full-width top bar, and
+"Start here" banners. The Infrastructure Dashboard got the same control treatment in `build_infra_dashboard.py`.
+
 ## Infrastructure Dashboard (28 Oct 2026)
 
 `Infrastructure Dashboard.ndjson` is the CI-driven dashboard for the KPIs in `dashboard_kpis.txt`. It is **built

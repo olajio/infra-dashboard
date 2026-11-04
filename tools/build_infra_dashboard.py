@@ -331,6 +331,59 @@ panels += [
     copy_panel('Service health', S3, 26, 15, 22, 12),
 ]
 
+# ---------------- controls made hard to miss (4 Nov): icons in their titles, "Start here" banners ----------------
+ICONS = {'ci': '🖥️ CI', 'monitored_app': '🧩 Monitored application', 'server': '🖥️ Server',
+         'health_window': '⏱️ Health window', 'application': '🧩 Application', 'service': '⚙️ Service'}
+
+
+def banner(name, step, headline, detail, section, colour='#0b64dd'):
+    """A coloured how-to strip (Vega, so it can have colour and bold text; no data)."""
+    def txt(y, value, size, weight, fill=None, style=None):
+        enc = {'x': {'value': 54}, 'y': {'signal': y}, 'text': {'value': value}, 'baseline': {'value': 'middle'},
+               'fontSize': {'value': size}, 'fontWeight': {'value': weight}, 'limit': {'signal': 'width - 70'}}
+        if fill:
+            enc['fill'] = {'value': fill}
+        m = {'type': 'text', 'encode': {'update': enc}}
+        if style:
+            m['style'] = style
+        return m
+    spec = {'$schema': 'https://vega.github.io/schema/vega/v5.json', 'autosize': {'type': 'fit', 'contains': 'padding'},
+            'padding': 0, 'marks': [
+                {'type': 'rect', 'encode': {'update': {'x': {'value': 0}, 'y': {'value': 0}, 'width': {'signal': 'width'},
+                                                       'height': {'signal': 'height'}, 'fill': {'value': colour},
+                                                       'fillOpacity': {'value': 0.16}, 'cornerRadius': {'value': 6}}}},
+                {'type': 'rect', 'encode': {'update': {'x': {'value': 0}, 'y': {'value': 0}, 'width': {'value': 6},
+                                                       'height': {'signal': 'height'}, 'fill': {'value': colour}}}},
+                {'type': 'symbol', 'encode': {'update': {'x': {'value': 30}, 'y': {'signal': 'height / 2'},
+                                                         'shape': {'value': 'circle'}, 'size': {'value': 700},
+                                                         'fill': {'value': colour}}}},
+                {'type': 'text', 'encode': {'update': {'x': {'value': 30}, 'y': {'signal': 'height / 2 + 1'},
+                                                       'text': {'value': step}, 'align': {'value': 'center'},
+                                                       'baseline': {'value': 'middle'}, 'fontSize': {'value': 15},
+                                                       'fontWeight': {'value': 'bold'}, 'fill': {'value': 'white'}}}},
+                txt('height / 2 - 8', headline, 15, 'bold', fill=colour),
+                txt('height / 2 + 11', detail, 12, 'normal', style='guide-label')]}
+    pid = uid('banner/' + name)
+    return {'type': 'legacy_vis', 'panelIndex': pid, 'gridData': {'x': 0, 'y': 0, 'w': 48, 'h': 3, 'i': pid, 'sectionId': section},
+            'embeddableConfig': {'title': name, 'hide_title': True, 'description': 'How to use the controls. Not data.',
+                                 'savedVis': {'title': name, 'description': '', 'type': 'vega',
+                                              'params': {'spec': json.dumps(spec, indent=2)}, 'uiState': {},
+                                              'data': {'aggs': [], 'searchSource': {}}}}}
+
+
+for p in panels:
+    if p['type'] == 'esql_control':
+        p['embeddableConfig']['title'] = ICONS[p['embeddableConfig']['variable_name']]
+    p['gridData']['y'] += 3
+panels += [
+    banner('Start here', '1', '▲  Start here: pick a CI in the controls at the top',
+           'Every section follows it. With no CI, the dashboard shows the whole estate. More (⋯) → Reset changes clears every pick.', S1),
+    banner('Pick a server', '2', '▼  If the CI is not a server, pick one of its servers',
+           'A server CI fills these panels by itself. Health window: how far back they look.', S2),
+    banner('Pick an application and a service', '3', '▼  Pick an Application, then a Service',
+           'Application: Services of the Application · Service: Service health', S3),
+]
+
 s = json.dumps(panels, ensure_ascii=False)
 assert '?incident' not in s
 assert '?telemetry' not in s
@@ -346,6 +399,9 @@ mon = [v for v in MA['pinned_panels']['panels'].values() if v['config'].get('var
 assert len(mon) == 1, 'build from MIM V4 (patch 03w)'
 mon_val = copy.deepcopy(mon[0])
 mon_val['order'] = 1
+for v, var in ((ci_val, 'ci'), (mon_val, 'monitored_app')):   # 4 Nov: icon titles, full width
+    v['config']['title'] = ICONS[var]
+    v['grow'] = True
 
 dash = {
     'type': 'dashboard', 'id': DASH_ID, 'managed': False, 'references': [],

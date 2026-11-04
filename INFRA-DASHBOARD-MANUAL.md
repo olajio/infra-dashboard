@@ -1,6 +1,6 @@
 # Infrastructure Dashboard: user manual
 
-*3 Nov 2026 · Kibana 9.5.3 · dashboard "Infrastructure Dashboard"*
+*Updated 4 Nov 2026 · Kibana 9.5.3 · dashboard "Infrastructure Dashboard"*
 
 ## What it is for
 
@@ -28,14 +28,17 @@ is picked. **That is expected, not a fault.**
 
 ## The controls
 
+The controls have an icon in their title, and a blue **numbered banner** sits next to each group, saying what to
+pick: ① the CI (top bar), ② a server (section 2), ③ an application and a service (section 3).
+
 | Control | Where | What it does | Default |
 |---|---|---|---|
-| **CI** | Top bar | The CI to investigate. Lists CIs with a P1–P3 incident opened in the last 31 days (open or closed), and production servers that sent metrics in the last day. Type to search. | *(no CI selected)*: estate-wide view |
-| **Monitored application** | Top bar | Limits the application panels to the applications MIM escalates: In Production, Operational and monitored in `cmdb_with_apm_flag` (138 on 2 Nov). Pick one to see only that application | *(all monitored applications)* |
-| **Server** | Section 2 | The server for the health panels **when the CI is not a server** (an application service, for example). Take a server from *Applications related to this CI* or from MIM's *Server View*. If the CI is itself a server, the CI wins | *(no server selected)* |
-| **Health window** | Section 2 | How far back the health panels look: 15 minutes to 7 days | 24 hours |
-| **Application** | Section 3 | One application for *Services of the Application* (monitored applications that sent APM data in the last day) | *(all applications)* |
-| **Service** | Section 3 | One APM service for *Service health*. With the default, it uses the services running on the CI | *(services on this CI)* |
+| **🖥️ CI** | Top bar | The CI to investigate. Lists CIs with a P1–P3 incident opened in the last 31 days (open or closed), and production servers that sent metrics in the last day. Type to search. | *(no CI selected)*: estate-wide view |
+| **🧩 Monitored application** | Top bar | Limits the application panels to the applications MIM escalates: In Production, Operational and monitored in `cmdb_with_apm_flag` (138 on 2 Nov). Pick one to see only that application | *(all monitored applications)* |
+| **🖥️ Server** | Section 2 | The server for the health panels **when the CI is not a server** (an application service, for example). Take a server from *Applications related to this CI* or from MIM's *Server View*. If the CI is itself a server, the CI wins | *(no server selected)* |
+| **⏱️ Health window** | Section 2 | How far back the health panels look: 15 minutes to 7 days | 24 hours |
+| **🧩 Application** | Section 3 | One application for *Services of the Application* (monitored applications that sent APM data in the last day) | *(all applications)* |
+| **⚙️ Service** | Section 3 | One APM service for *Service health*. With the default, it uses the services running on the CI | *(services on this CI)* |
 
 **Rule of thumb:** pick the **CI** first. If it is not a server, pick one of its servers in **Server**. Then pick an
 **Application** and a **Service** to fill section 3.

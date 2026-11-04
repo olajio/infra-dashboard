@@ -261,11 +261,13 @@ try:
     check('Services of the Application leaves out an unmonitored application',
           [r['service.name'] for r in run('Services of the Application', application='Payment Hub')], [])
     pins = sorted((v['order'], v['config']['title']) for v in A['pinned_panels']['panels'].values())
-    check('top bar: CI, then Monitored application', pins, [(0, 'CI'), (1, 'Monitored application')])
-    row = sorted((p for p in panels if p['type'] == 'esql_control' and p['gridData'].get('sectionId') == P['Application']['gridData']['sectionId']),
+    check('top bar: CI, then Monitored application (icon titles)', pins, [(0, '🖥️ CI'), (1, '🧩 Monitored application')])
+    row = sorted((p for p in panels if p['type'] == 'esql_control' and p['gridData'].get('sectionId') == P['🧩 Application']['gridData']['sectionId']),
                  key=lambda p: p['gridData']['x'])
     check('section 3 controls: no Telemetry', [(title(p), p['gridData']['x'], p['gridData']['w']) for p in row],
-          [('Application', 0, 24), ('Service', 24, 24)])
+          [('🧩 Application', 0, 24), ('⚙️ Service', 24, 24)])
+    check('three Start here banners', sorted(title(p) for p in panels if p['type'] == 'legacy_vis' and 'description' in p['embeddableConfig'] and p['embeddableConfig']['description'].startswith('How to use')),
+          ['Pick a server', 'Pick an application and a service', 'Start here'])
 finally:
     cleanup()
 
