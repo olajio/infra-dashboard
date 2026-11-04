@@ -1,0 +1,9 @@
+Pending when the SLA record issue is fixed, add a column to showing the incident is opened on the "Active Incidents (P1 · P2 over 8 h · P3 over 24 h)" table and the Escalate table.
+
+For the "Open Alerts with No Incident" table, update the table to show only alerts related to the "selected/impacted CI"
+ 
+For the table: "Open Alerts with No Incident", we want to be able to click the alerts and open the alerts so we can drill down and look at the alert details. But rather than executing this now, we first need to understand where the alerts are coming from before determining how to link to it. Can you help me understand where the alerts are coming from so we can look at the details of the alert 
+ 
+Same as the "Open Alerts with No Incident" table, Do the same for "Alerts in this CI" table. we want to be able to click the alerts and open the alerts so we can drill down and look at the alert details. But rather than executing this now, we first need to understand where the alerts are coming from before determining how to link to it. Can you help me understand where the alerts are coming from so we can look at the details of the alert 
+
+For the "Escalate" table, remove the "CI support group" column. add the "State" column. The "State" column should be same as in the "Active Incidents (P1 · P2 over 8 h · P3 over 24 h)" table
