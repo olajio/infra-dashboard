@@ -18,7 +18,7 @@ SRC, OUT = sys.argv[1:3]
 NS = 'infra-dashboard/ci-driven-v1/'
 uid = lambda name: str(uuid.uuid5(uuid.NAMESPACE_URL, NS + name))
 DASH_ID = uid('dashboard')
-S1, S2, S3 = uid('section-1'), uid('section-2'), uid('section-3')
+S1, S2, S3, S4 = uid('section-1'), uid('section-2'), uid('section-3'), uid('section-4')
 WINDOW_30D = {'from': 'now-30d', 'to': 'now'}
 
 mim = next(o for o in (json.loads(l) for l in open(SRC) if l.strip()) if o.get('type') == 'dashboard')
@@ -84,8 +84,8 @@ DV_ID = uid('dataview/servicenow-incidents')
 ACTIVE = 'TO_STRING(state_name) NOT IN ("Resolved", "Closed", "Canceled", "Cancelled")'
 
 
-def count_tile(name, pri, colour, section, x, y, w, h):
-    q = ('FROM servicenow-incidents-*\n'
+def count_tile(name, pri, colour, section, x, y, w, h, icon='alert', q=None, subtitle=None, description=None):
+    q = q or ('FROM servicenow-incidents-*\n'
          f'| WHERE TO_STRING(number) LIKE "INC*" AND TO_INTEGER(priority) == {pri} AND {ACTIVE}\n'
          '| WHERE ?ci == "(no CI selected)" OR TO_STRING(ci.name) == ?ci\n'
          '| STATS metric_val = COUNT_DISTINCT(number)')
@@ -97,7 +97,7 @@ def count_tile(name, pri, colour, section, x, y, w, h):
         'gridData': {'x': x, 'y': y, 'w': w, 'h': h, 'i': pid, 'sectionId': section},
         'embeddableConfig': {
             'title': name, 'hide_title': True,
-            'description': (f'Open P{pri} incidents (priority {pri}, state not Resolved, Closed, Canceled or Cancelled) '
+            'description': description or (f'Open P{pri} incidents (priority {pri}, state not Resolved, Closed, Canceled or Cancelled) '
                             'on the CI picked in the CI control; every CI when none is picked. Green at 0. '
                             'Incidents opened in the last 30 days (fixed): the incident record\'s @timestamp is its '
                             'opened time.'),
@@ -116,7 +116,8 @@ def count_tile(name, pri, colour, section, x, y, w, h):
                     'filters': [], 'query': {'esql': q}, 'needsRefresh': False,
                     'visualization': {
                         'layerId': layer, 'layerType': 'data', 'metricAccessor': 'metric_val',
-                        'subtitle': 'Open ServiceNow incidents · selected CI (all CIs if none)',
+                        'subtitle': subtitle or 'Open ServiceNow incidents · selected CI (all CIs if none)',
+                        'icon': icon, 'iconAlign': 'left',
                         'titleWeight': 'bold', 'valueFontMode': 'default', 'applyColorTo': 'value',
                         'palette': {'name': 'custom', 'type': 'palette', 'params': {
                             'name': 'custom', 'reverse': False, 'steps': 2, 'maxSteps': 5, 'rangeType': 'number',
@@ -203,7 +204,8 @@ GKE_HEALTH_Q = f"""FROM metrics-gcp.gke-*, cmdb-ci-relations* METADATA _index
 | EVAL is_rel = _index LIKE "*cmdb-ci-relations*", ci_l = TO_LOWER(?ci),
        p_l = TO_LOWER(TO_STRING(parent.name)), c_l = TO_LOWER(TO_STRING(child.name)),
        cpu = TO_DOUBLE(gcp.gke.node.cpu.allocatable_utilization.pct), mem = TO_DOUBLE(gcp.gke.node.memory.allocatable_utilization.pct),
-       mu = TO_DOUBLE(gcp.gke.node.memory.used.bytes), ma = TO_DOUBLE(gcp.gke.node.memory.allocatable.bytes),
+       mu = CASE(TO_STRING(gcp.labels.metrics.memory_type) == "evictable", null, TO_DOUBLE(gcp.gke.node.memory.used.bytes)),
+       ma = TO_DOUBLE(gcp.gke.node.memory.allocatable.bytes),
        rc = TO_DOUBLE(gcp.gke.container.restart.count)
 | EVAL cluster = CASE(is_rel, CASE(TO_STRING(child.class) == {K8S} AND (c_l != ci_l OR TO_STRING(parent.class) != {K8S}), c_l, p_l),
                       TO_LOWER(TO_STRING(gcp.labels.resource.cluster_name))),
@@ -238,7 +240,7 @@ def gke_health_panel(section, x, y, w, h):
         'from 90 %), Warning (from 80 %, or 10+ container restarts), Silent (no data for 20 minutes; GCP metrics arrive '
         'every 5 minutes with about 5 minutes\' lag), Healthy; Not collected = a cluster in the CMDB that the GCP '
         'integration does not collect. Nodes = nodes reporting; CPU avg / p90 = node CPU use of allocatable cores '
-        '(p90 of the busiest node); Mem peak = the fullest node\'s memory use of allocatable memory (used bytes / allocatable bytes: the GCP utilisation ratio is not collected); Restarts = container '
+        '(p90 of the busiest node); Mem peak = the fullest node\'s memory use of allocatable memory (non-evictable used bytes / allocatable bytes: memory in use that Kubernetes cannot reclaim; evictable cache is left out, CG7); Restarts = container '
         'restarts in the window. Which clusters: the CI control\'s value if it is a cluster, plus every Kubernetes '
         'cluster linked to it in the CMDB; with no CI picked, every collected cluster. GCP metrics carry no CMDB fields, '
         'so clusters are matched on name (4 of the 5 collected clusters are CMDB CIs). CloudSQL and Storage are not '
@@ -284,10 +286,17 @@ def gke_health_panel(section, x, y, w, h):
 panels = []
 # ---------------- 1 · Incidents, changes and alerts ----------------
 panels += [
-    count_tile('Active P1 incidents', 1, '#d6453d', S1, 0, 0, 12, 6),
-    count_tile('Active P2 incidents', 2, '#c98a0b', S1, 12, 0, 12, 6),
-    copy_panel('User base · ServiceNow', S1, 24, 0, 12, 6, new_title='User impact · ServiceNow'),
-    copy_panel('Real users · RUM', S1, 36, 0, 12, 6, new_title='User impact · RUM'),
+    count_tile('Active P1 incidents', 1, '#d6453d', S1, 0, 0, 10, 6),
+    count_tile('Active P2 incidents', 2, '#c98a0b', S1, 10, 0, 10, 6),
+    count_tile('Active Elastic infra alerts', 0, '#d6453d', S1, 20, 0, 10, 6, icon='bell',
+               q=ELASTIC_ALERTS_Q[:ELASTIC_ALERTS_Q.index('| EVAL head')]
+               + '| STATS metric_val = COUNT_DISTINCT(CASE(TO_STRING(kibana.alert.status) == "active", TO_STRING(kibana.alert.instance.id)))',
+               subtitle='Elastic alerts active now · selected CI (every paladin alert if none)',
+               description='Active alerts from Elastic\'s alerting rules on the CI picked in the CI control, last 7 days; '
+                           'with no CI, every active paladin-* infrastructure alert. Green at 0. The same alerts as the '
+                           'Elastic infra alerts table (state Active).'),
+    copy_panel('User base · ServiceNow', S1, 30, 0, 9, 6, new_title='User impact · ServiceNow'),
+    copy_panel('Real users · RUM', S1, 39, 0, 9, 6, new_title='User impact · RUM'),
     copy_panel('Escalate', S1, 0, 6, 48, 8, new_title='Incidents on this CI', time_range=WINDOW_30D,
                description='Active P1, P2 and P3 incidents on the CI picked in the CI control (state not Resolved, '
                            'Closed, Canceled or Cancelled), with the CI\'s CMDB class, environment and support '
@@ -315,7 +324,7 @@ panels += [
     placeholder('VMware health', S2, 0, 23, 24, 6,
                 'vSphere collects one VMware Cloud Foundation cluster only (4 ESXi hosts, 46 VMs, against 549 ESX '
                 'hosts in the CMDB), with no CMDB fields; only one of its VMs matches a monitored server (Round 17). '
-                'It needs the vSphere integration extended to the main vCenters.'),
+                'It needs the vSphere integration extended to the main vCenters. Meanwhile: the VMware Infra Dashboard (section 4).'),
     placeholder('Custom integration health', S2, 24, 23, 24, 6,
                 'To be defined: which custom integrations count (for example the ServiceNow, Netcool bridge and CMDB '
                 'relation feeds) and what "healthy" means for each (data arrived within N minutes?). Query IQ4 in '
@@ -384,6 +393,31 @@ panels += [
            'Application: Services of the Application · Service: Service health', S3),
 ]
 
+# ---------------- the new look (5 Nov), as in MIM V5: row numbers, section icons, detailed-dashboard links ----------------
+for p in panels:
+    if p['type'] == 'vis' and p['embeddableConfig'].get('attributes', {}).get('visualizationType') == 'lnsDatatable' \
+            and p['embeddableConfig'].get('title') in ('Incidents on this CI', 'Changes on this CI (last 7 days)',
+                                                       'Alerts on this CI (Netcool)', 'Elastic infra alerts',
+                                                       'Applications related to this CI', 'Application Health',
+                                                       'Services of the Application'):
+        p['embeddableConfig']['attributes']['state']['visualization']['showRowNumbers'] = True
+
+DETAILED = [   # respective_detailed_dashboards.txt (5 Nov)
+    ('Server', '🖥️', 'Server Infra Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/qJk5u'),
+    ('Database', '🗄️', 'Database Infra Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/w6zL4'),
+    ('Middleware', '⚙️', 'Middleware Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/jwCRg'),
+    ('VMware', '🧱', 'VMware Infra Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/t4oxr'),
+    ('Cloud', '☁️', 'Cloud Infra Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/MDJ9f'),
+]
+for i, (domain, icon, name, url) in enumerate(DETAILED):
+    pid = uid('link/' + domain)
+    x, y, w = (0, 0, 16) if i == 0 else (16, 0, 16) if i == 1 else (32, 0, 16) if i == 2 else (0, 3, 24) if i == 3 else (24, 3, 24)
+    panels.append({'type': 'markdown', 'panelIndex': pid,
+                   'gridData': {'x': x, 'y': y, 'w': w, 'h': 3, 'i': pid, 'sectionId': S4},
+                   'embeddableConfig': {'title': f'{domain} detailed dashboard', 'hide_title': True,
+                                        'content': f'## {icon} [{name} ›]({url})',
+                                        'settings': {'open_links_in_new_tab': True}}})
+
 s = json.dumps(panels, ensure_ascii=False)
 assert '?incident' not in s
 assert '?telemetry' not in s
@@ -419,9 +453,10 @@ dash = {
         'timeRestore': True, 'timeFrom': 'now-24h', 'timeTo': 'now',
         'pinned_panels': {'panels': {uid('control/ci'): ci_val, uid('control/monitored_app'): mon_val}},
         'sections': [
-            {'collapsed': False, 'gridData': {'i': S1, 'y': 0}, 'title': '1 · Incidents, changes and alerts'},
-            {'collapsed': False, 'gridData': {'i': S2, 'y': 1}, 'title': '2 · Infrastructure overview (including cloud)'},
-            {'collapsed': False, 'gridData': {'i': S3, 'y': 2}, 'title': '3 · Applications overview'},
+            {'collapsed': False, 'gridData': {'i': S1, 'y': 0}, 'title': '🚨 1 · Incidents, changes and alerts'},
+            {'collapsed': False, 'gridData': {'i': S2, 'y': 1}, 'title': '🖥️ 2 · Infrastructure overview (including cloud)'},
+            {'collapsed': False, 'gridData': {'i': S3, 'y': 2}, 'title': '🩺 3 · Applications overview'},
+            {'collapsed': False, 'gridData': {'i': S4, 'y': 3}, 'title': '🔗 4 · Detailed dashboards'},
         ],
         'panelsJSON': s,
     },

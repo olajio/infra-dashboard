@@ -106,9 +106,16 @@ assert 'error' not in call('PUT', '/_index_template/t30-gke', {'index_patterns':
 def node(cluster, name, cpu, mem, minutes=5):
     # memory as used / allocatable bytes: the utilisation field isn't collected in production (CG5)
     return {'@timestamp': ago(minutes=minutes), 'cloud': {'account': {'id': 'proj-' + cluster}},
-            'gcp': {'labels': {'resource': {'cluster_name': cluster, 'node_name': name}},
+            'gcp': {'labels': {'resource': {'cluster_name': cluster, 'node_name': name}, 'metrics': {'memory_type': 'non-evictable'}},
                     'gke': {'node': {'cpu': {'allocatable_utilization': {'pct': cpu}},
                                      'memory': {'used': {'bytes': int(mem * 64e9)}, 'allocatable': {'bytes': int(64e9)}}}}}}
+
+
+def evictable(cluster, name, frac, minutes=5):
+    # the other memory series (CG7, 5 Nov): reclaimable cache; must not count towards Mem peak
+    return {'@timestamp': ago(minutes=minutes, seconds=1), 'cloud': {'account': {'id': 'proj-' + cluster}},
+            'gcp': {'labels': {'resource': {'cluster_name': cluster, 'node_name': name}, 'metrics': {'memory_type': 'evictable'}},
+                    'gke': {'node': {'memory': {'used': {'bytes': int(frac * 64e9)}}}}}}
 
 
 def restarts(cluster, pod, count, minutes):
@@ -121,7 +128,8 @@ gke = [node('g-prd-gke-2', 'n1', 0.50, 0.60), node('g-prd-gke-2', 'n2', 0.95, 0.
        restarts('g-prd-gke-2', 'p1', 3, 30), restarts('g-prd-gke-2', 'p1', 5, 5),              # 2 restarts in the window
        restarts('g-prd-gke-2', 'p2', 7, 30), restarts('g-prd-gke-2', 'p2', 7, 5),              # none
        node('g-stg-gke-2', 'n3', 0.30, 0.85, 3),                                                 # Warning: memory 85 %
-       node('g-pre-gke-4', 'n4', 0.20, 0.30, 40)]                                                # Silent: 40 minutes ago
+       node('g-pre-gke-4', 'n4', 0.20, 0.30, 40),
+       evictable('g-prd-gke-2', 'n1', 0.99)]                                                   # 99 % cache: ignored                                                # Silent: 40 minutes ago
 assert not call('POST', '/_bulk?refresh=true', ''.join(json.dumps({'create': {'_index': GKE}}) + '\n' + json.dumps(d) + '\n'
                                                         for d in gke), nd=True).get('errors')
 call('PUT', f'/{REL30}', {'mappings': {'properties': {
@@ -251,6 +259,14 @@ try:
           gk(ci='GKE App PROD'), [('g-prd-gke-2', 'Critical'), ('g-dr-gke-1', 'Not collected')])
     check('Cloud health · GKE for a cluster CI: that cluster', gk(ci='g-stg-gke-2'), [('g-stg-gke-2', 'Warning')])
     check('Cloud health · GKE for a server with no cluster: empty', gk(ci='srvA'), [])
+    check('Active Elastic infra alerts tile on srvA: the active alerts', run('Active Elastic infra alerts', ci='srvA')[0]['metric_val'], 2)
+    check('Active Elastic infra alerts tile with no CI: every active paladin alert', run('Active Elastic infra alerts')[0]['metric_val'], 4)
+    links = sorted(p['embeddableConfig']['content'] for p in panels if p['type'] == 'markdown' and 'detailed dashboard' in title(p))
+    check('five detailed-dashboard links', sorted(l.split('](')[1].rstrip(')') for l in links),
+          sorted('https://kibana-prod.gcp.cna.com/app/r/s/' + c for c in ['qJk5u', 'w6zL4', 'jwCRg', 't4oxr', 'MDJ9f']))
+    check('section titles with icons', [s['title'] for s in A['sections']],
+          ['🚨 1 · Incidents, changes and alerts', '🖥️ 2 · Infrastructure overview (including cloud)',
+           '🩺 3 · Applications overview', '🔗 4 · Detailed dashboards'])
     print('Section 3')
     check('Applications related to srvA', 'App PROD' in json.dumps(run('Applications related to this CI', ci='srvA')), True)
     check('Service health: the APM service on srvA', 'app-api' in json.dumps(run('Service health', ci='srvA')), True)

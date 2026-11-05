@@ -18,6 +18,10 @@ Work done since the KPIs were defined on 28 Oct 2026. **KPI #** is the row numbe
 | 2 Nov | Fixed GKE memory (used ÷ allocatable bytes) and restart counting after the Round 20 checks | 11 | Done |
 | 3 Nov | **Added the *Monitored application* control** (top bar): the application panels show only the 138 In Production, Operational and monitored applications. Removed the Telemetry control; the dashboard is now built from MIM V4 | 15, 16 | Done |
 | 3 Nov | Wrote the **user manual** with five demo scenes (`INFRA-DASHBOARD-MANUAL.md`) | All | Done |
+| 4 Nov | Made the controls hard to miss: icons in the control titles, three numbered "Start here" banners, full-width top-bar controls | All | Done |
+| 5 Nov | Fixed GKE memory after check CG7: node memory is split into evictable and non-evictable; *Mem peak* now counts non-evictable only | 11 | Done |
+| 5 Nov | **Gave the dashboard the MIM V5 look:** tile icons (green at 0), section icons, row numbers; new *Active Elastic infra alerts* tile | 1, 4 | Done |
+| 5 Nov | **Added section 4 *Detailed dashboards*:** links to the Server, Database, Middleware, VMware and Cloud infra dashboards | 6–11 | Done |
 
 ## KPI status now
 
@@ -32,8 +36,8 @@ Work done since the KPIs were defined on 28 Oct 2026. **KPI #** is the row numbe
 ## Still open
 
 - Test the five demo scenes on the dashboard (`INFRA-DASHBOARD-MANUAL.md`).
-- Cloud health (#11): run check CG7 (is node memory split by type?); Cloud SQL stays blocked until the CMDB and the
-  GCP collection cover the same databases.
+- Cloud health (#11): Cloud SQL stays blocked until the CMDB and the GCP collection cover the same databases (CG7
+  done 5 Nov).
 - Custom integration health (#12): define which integrations count and what "healthy" means.
 - User impact (#3): waiting for the ServiceNow user base and RUM integrations.
 - VMware health (#10): waiting for the vSphere integration to cover the main vCenters.

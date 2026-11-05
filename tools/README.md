@@ -101,3 +101,6 @@ Observability alerts matched to the CI on its name inside `kibana.alert.instance
 2 Nov: the *Cloud health* placeholder became *Cloud health · GKE* (`gke_health_panel`): one row per GKE cluster from
 `metrics-gcp.gke-*`, matched to the CI on the CMDB cluster name and its `cmdb_ci_kubernetes_cluster` relations
 (Round 17d). VMware and Custom integration stay placeholders.
+5 Nov: the MIM V5 look (tile icons, section icons, row numbers); a new *Active Elastic infra alerts* tile; GKE memory
+counts non-evictable memory only (CG7); section 4 *Detailed dashboards* with five link cards (`DETAILED` in the
+script, from `respective_detailed_dashboards.txt`).

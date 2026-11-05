@@ -1,6 +1,6 @@
 # Infrastructure Dashboard: user manual
 
-*Updated 4 Nov 2026 · Kibana 9.5.3 · dashboard "Infrastructure Dashboard"*
+*Updated 5 Nov 2026 · Kibana 9.5.3 · dashboard "Infrastructure Dashboard"*
 
 ## What it is for
 
@@ -12,6 +12,10 @@ and every section follows it:
 2. **Infrastructure overview:** the health of the server behind it (CPU, memory, disk, databases, middleware,
    processes), plus cloud (GKE) health.
 3. **Applications overview:** the applications that depend on the CI, and the health of their services.
+4. **Detailed dashboards:** links to the Server, Database, Middleware, VMware and Cloud infra dashboards, for depth.
+
+Since 5 Nov the dashboard has the MIM V5 look: section icons (🚨 🖥️ 🩺 🔗), tiles with icons that are green at 0,
+and row numbers in the tables.
 
 With **no CI picked**, the dashboard shows an estate-wide view: incident counts for every CI, every active Elastic
 infrastructure alert, every GKE cluster and every monitored application. The CI-specific tables stay empty until a CI
@@ -45,18 +49,19 @@ pick: ① the CI (top bar), ② a server (section 2), ③ an application and a s
 
 ## The panels, and what fills them
 
-### 1 · Incidents, changes and alerts
+### 🚨 1 · Incidents, changes and alerts
 
 | Panel | Shows | Fills when |
 |---|---|---|
 | **Active P1 incidents**, **Active P2 incidents** | Open P1 / P2 incidents (opened in the last 30 days) on the CI, or on every CI when none is picked. Green at 0 | Always |
+| **Active Elastic infra alerts** | How many Elastic infrastructure alerts are active now on the CI, or across the estate with no CI. Green at 0. The rows are in *Elastic infra alerts* below | Always |
 | **User impact · ServiceNow**, **User impact · RUM** | Placeholders: the integrations are in progress | Not yet |
 | **Incidents on this CI** | Active P1–P3 incidents on the CI with the owners to call: assignment group, assignee, group manager (with emails). Click the incident or the CI to open it in ServiceNow | The CI has an active incident opened in the last 30 days |
 | **Changes on this CI (last 7 days)** | Change requests in the last 7 days on the CI **and on CIs linked to it in the CMDB** (its ESX host, cluster, applications …) | A change touched the CI or a linked CI this week |
 | **Alerts on this CI (Netcool)** | Netcool alerts on the CI in the last 7 days: Open or Cleared, severity, how often it fired | The CI is a network device, UPS or other Netcool-monitored node with alerts |
 | **Elastic infra alerts** | Alerts from Elastic's own rules (the paladin-* rules: host up, filesystem, CPU, memory, processes, Windows services, IBM MQ) on the CI in the last 7 days. With no CI: **every active paladin alert** | No CI picked, or a server that raised an Elastic alert |
 
-### 2 · Infrastructure overview
+### 🖥️ 2 · Infrastructure overview
 
 The health panels follow **the CI if it is a server, otherwise the Server control**.
 
@@ -66,10 +71,10 @@ The health panels follow **the CI if it is a server, otherwise the Server contro
 | **Database Health** | Databases on the server: SQL Server and database services or processes (SQL Server, Oracle, Db2, PostgreSQL …), Down first | The server runs a database |
 | **Middleware Health** | Middleware on the server: IBM MQ, IBM HTTP Server, JBoss, WebSphere, IIS, Tomcat … | The server runs middleware |
 | **Process Health** | Windows services and middleware processes; Stopped = an Automatic service that is not running | The server sends process or service data |
-| **Cloud health · GKE** | One row per GKE cluster: status, nodes, CPU, memory, container restarts. With no CI: every collected cluster | No CI picked, or a cluster CI (or a CI linked to one) |
+| **Cloud health · GKE** | One row per GKE cluster: status, nodes, CPU, memory (non-evictable memory used ÷ allocatable; reclaimable cache is left out), container restarts. With no CI: every collected cluster | No CI picked, or a cluster CI (or a CI linked to one) |
 | **VMware health**, **Custom integration health** | Placeholders: not available yet (each says why) | Not yet |
 
-### 3 · Applications overview
+### 🩺 3 · Applications overview
 
 | Panel | Shows | Fills when |
 |---|---|---|
@@ -77,6 +82,19 @@ The health panels follow **the CI if it is a server, otherwise the Server contro
 | **Application Health** | Health of the monitored applications (Failing / Degraded / Healthy, error rate, services, servers). With a CI: the applications related to it. Applications with no APM data yet are listed as *Enrolled — no telemetry yet* | Always (all monitored applications), or the CI's applications |
 | **Services of the Application** | The services of the picked application, worst first: health, error rate, latency, throughput | Always (every monitored application's services), or one application's |
 | **Service health** | One tile per service: share of failed transactions in the last hour, green / amber / red | A Service is picked, or the CI runs APM services |
+
+### 🔗 4 · Detailed dashboards
+
+Each card opens the technology team's own dashboard in a new tab. They do not follow this dashboard's controls: pick
+the server or cluster again there.
+
+| Link | Opens | Use it for |
+|---|---|---|
+| **🖥️ Server Infra Dashboard** | `kibana-prod.gcp.cna.com/app/r/s/qJk5u` | Full server metrics, beyond *Server Health* |
+| **🗄️ Database Infra Dashboard** | `…/app/r/s/w6zL4` | Database detail, beyond *Database Health* |
+| **⚙️ Middleware Dashboard** | `…/app/r/s/jwCRg` | Middleware detail, beyond *Middleware Health* |
+| **🧱 VMware Infra Dashboard** | `…/app/r/s/t4oxr` | VMware, while *VMware health* is a placeholder |
+| **☁️ Cloud Infra Dashboard** | `…/app/r/s/MDJ9f` | GCP detail, beyond *Cloud health · GKE* |
 
 ## How to investigate
 
@@ -88,6 +106,7 @@ The health panels follow **the CI if it is a server, otherwise the Server contro
    Health*. Widen **Health window** to 7 days to see trends.
 5. **Check the applications:** *Application Health* for the CI's applications, then pick an **Application** and a
    **Service** to see its services and failure rate.
+6. **Go deeper:** open the technology's dashboard from section 4.
 
 **Starting without a CI:** *Elastic infra alerts* lists every active infrastructure alert. Pick one of its servers in
 **CI** to investigate it.
