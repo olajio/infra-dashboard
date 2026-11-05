@@ -106,5 +106,6 @@ counts non-evictable memory only (CG7); section 4 *Detailed dashboards* with fiv
 script, from `respective_detailed_dashboards.txt`).
 5 Nov (later): basis is the team's `infra2.ndjson` (links in one row, sections 1–3 collapsed). The **Incident** control
 is back, with MIM's logic: the copied MIM panels keep their incident rule, the panels written here read the CI
-through `CI_EXPR`. *Incidents on this CI* became *Active P1 and P2 incidents*, MIM V5's Active Incidents table for P1
-and P2 (third argument: `MIM V5.ndjson`), following the Incident / CI controls. The P1 / P2 tiles leave out On Hold.
+through `CI_EXPR`. *Incidents on this CI* became *Active Incidents (P1 · P2 over 8 h)*, MIM V5's Active Incidents
+table with MIM's 8 h rule for P2 (third argument: `MIM V5.ndjson`), following the Incident / CI controls. The P2 tile
+is *P2 over 8 h*; the tiles leave out On Hold. Section 4 also links the Applications Operations and MIM dashboards.

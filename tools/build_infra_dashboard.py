@@ -64,7 +64,7 @@ def active_incidents_panel(section, x, y, w, h):
     src = next(p for p in json.loads(mim5['attributes']['panelsJSON'])
                if (p['embeddableConfig'].get('title') or '').startswith('Active Incidents'))
     p = copy.deepcopy(src)
-    name = 'Active P1 and P2 incidents'
+    name = 'Active Incidents (P1 · P2 over 8 h)'
     pid = uid('panel/' + name)
     p['panelIndex'] = pid
     p['gridData'] = {'x': x, 'y': y, 'w': w, 'h': h, 'i': pid, 'sectionId': section}
@@ -75,7 +75,7 @@ def active_incidents_panel(section, x, y, w, h):
     q = st['query']['esql']
     for a, b in (('TO_INTEGER(priority) IN (1, 2, 3)', 'TO_INTEGER(priority) IN (1, 2)'),
                  ('| WHERE src == "inc"\n', '| WHERE src == "inc"\n| WHERE ?ci == "(no CI selected)" OR TO_STRING(ci.name) == ?ci\n'),
-                 ('| WHERE priority == 1 OR age_minutes > target\n', '')):
+                ):   # 5 Nov (later): MIM's rule kept: every P1, P2 only once open longer than 8 h
         assert q.count(a) == 1, a
         q = q.replace(a, b)
     st['query']['esql'] = q
@@ -83,8 +83,9 @@ def active_incidents_panel(section, x, y, w, h):
         if 'query' in layer:
             layer['query']['esql'] = q
     ec['attributes']['title'] = name
-    ec['description'] = ('Every active P1 and P2 incident (priority 1 or 2, state not On Hold, Resolved, Closed, Canceled '
-                         'or Cancelled), the same table as MIM\'s Active Incidents: CI, state, when opened, SLA, '
+    ec['description'] = ('Every active P1 incident, and the active P2 incidents open longer than 8 h (MIM\'s target; '
+                         'age = time since opened); active = state not On Hold, Resolved, Closed, Canceled or '
+                         'Cancelled. The same table as MIM\'s Active Incidents: CI, state, when opened, SLA, '
                          'assignment group, assignee and group manager (with emails), description. With an incident '
                          'picked: the incidents on that incident\'s CI; with a CI picked: that CI\'s. Click the incident '
                          'or the CI to open it in ServiceNow. Incidents updated in the last 30 days, like the P1 and P2 '
@@ -326,7 +327,15 @@ panels = []
 # ---------------- 1 · Incidents, changes and alerts ----------------
 panels += [
     count_tile('Active P1 incidents', 1, '#d6453d', S1, 0, 0, 10, 6),
-    count_tile('Active P2 incidents', 2, '#c98a0b', S1, 10, 0, 10, 6),
+    count_tile('P2 over 8 h', 2, '#c98a0b', S1, 10, 0, 10, 6,
+               q=('FROM servicenow-incidents-*\n'
+                  f'| WHERE TO_STRING(number) LIKE "INC*" AND TO_INTEGER(priority) == 2 AND {ACTIVE}\n'
+                  '| WHERE ?ci == "(no CI selected)" OR TO_STRING(ci.name) == ?ci\n'
+                  '| WHERE DATE_DIFF("minutes", TO_DATETIME(opened_at), NOW()) > 480\n'
+                  '| STATS metric_val = COUNT_DISTINCT(number)'),
+               subtitle='Open longer than the 8 h target · selected CI (all CIs if none)',
+               description='Active P2 incidents open longer than 8 h (MIM\'s P2 target), on the incident\'s CI or the CI '
+                           'picked; every CI when none is picked. Green at 0. The P2 rows of the Active Incidents table.'),
     count_tile('Active Elastic infra alerts', 0, '#d6453d', S1, 20, 0, 10, 6, icon='bell',
                q=ELASTIC_ALERTS_Q[:ELASTIC_ALERTS_Q.index('| EVAL head')]
                + '| STATS metric_val = COUNT_DISTINCT(CASE(TO_STRING(kibana.alert.status) == "active", TO_STRING(kibana.alert.instance.id)))',
@@ -430,7 +439,7 @@ panels += [
 # ---------------- the new look (5 Nov), as in MIM V5: row numbers, section icons, detailed-dashboard links ----------------
 for p in panels:
     if p['type'] == 'vis' and p['embeddableConfig'].get('attributes', {}).get('visualizationType') == 'lnsDatatable' \
-            and p['embeddableConfig'].get('title') in ('Active P1 and P2 incidents', 'Changes on this CI (last 7 days)',
+            and p['embeddableConfig'].get('title') in ('Active Incidents (P1 · P2 over 8 h)', 'Changes on this CI (last 7 days)',
                                                        'Alerts on this CI (Netcool)', 'Elastic infra alerts',
                                                        'Applications related to this CI', 'Application Health',
                                                        'Services of the Application'):
@@ -442,12 +451,15 @@ DETAILED = [   # respective_detailed_dashboards.txt (5 Nov)
     ('Middleware', '⚙️', 'Middleware Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/jwCRg'),
     ('VMware', '🧱', 'VMware Infra Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/t4oxr'),
     ('Cloud', '☁️', 'Cloud Infra Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/MDJ9f'),
+    ('Applications', '🩺', 'Applications Operations Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/I3R7D'),
+    ('MIM', '🚨', 'MIM Dashboard', 'https://kibana-prod.gcp.cna.com/app/r/s/ZSMtk'),
 ]
 for i, (domain, icon, name, url) in enumerate(DETAILED):
     pid = uid('link/' + domain)
     # one row, as the team arranged it in infra2.ndjson (5 Nov): Server, Database, Cloud, Middleware, VMware
-    x, w = {'Server': (0, 9), 'Database': (9, 9), 'Cloud': (18, 9), 'Middleware': (27, 9), 'VMware': (36, 10)}[domain]
-    y = 0
+    # 5 Nov (later): second row for the two related dashboards
+    x, y, w = {'Server': (0, 0, 9), 'Database': (9, 0, 9), 'Cloud': (18, 0, 9), 'Middleware': (27, 0, 9),
+               'VMware': (36, 0, 10), 'Applications': (0, 2, 24), 'MIM': (24, 2, 22)}[domain]
     panels.append({'type': 'markdown', 'panelIndex': pid,
                    'gridData': {'x': x, 'y': y, 'w': w, 'h': 2, 'i': pid, 'sectionId': S4},
                    'embeddableConfig': {'title': f'{domain} detailed dashboard', 'hide_title': True,

@@ -146,8 +146,8 @@ assert not call('POST', '/_bulk?refresh=true', ''.join(json.dumps({'index': {'_i
     rel30('GKE App PROD', 'cmdb_ci_service_auto', 'g-stg-gke-2', KC, gone=True)]), nd=True).get('errors')
 
 
-def inc(n, p, s, ci):
-    return {'@timestamp': ago(hours=3), 'number': n, 'priority': p, 'state_name': s, 'opened_at': ago(hours=3),
+def inc(n, p, s, ci, hours=3):
+    return {'@timestamp': ago(hours=3), 'number': n, 'priority': p, 'state_name': s, 'opened_at': ago(hours=hours),
             'ci': {'name': ci, 'class_name': 'Linux Server', 'environment': 'Production'},
             'assigned_to': {'name': 'Ann Lee', 'email': 'ann@x'}, 'assignment_group': {'name': 'Unix', 'manager': {'name': 'Bo'}}}
 
@@ -162,7 +162,8 @@ def chg(n, ci, days):
 lines = ''
 for index, docs in ((INC, [inc('INC801', 1, 'New', 'srvA'), inc('INC802', 2, 'In Progress', 'srvA'),
                            inc('INC803', 1, 'Resolved', 'srvA'), inc('INC804', 1, 'New', 'srvZ'),
-                           inc('INC805', 3, 'New', 'srvA'), inc('INC806', 2, 'On Hold', 'srvA')]),   # 5 Nov: P3, On Hold
+                           inc('INC805', 3, 'New', 'srvA'), inc('INC806', 2, 'On Hold', 'srvA'),
+                           inc('INC807', 2, 'New', 'srvA', hours=10)]),   # P2 past its 8 h target   # 5 Nov: P3, On Hold
                     (CHG, [chg('CHG1', 'srvA', 1), chg('CHG2', 'App PROD', 2), chg('CHG3', 'srvZ', 1),
                            chg('CHG4', 'srvA', 20)])):
     lines += ''.join(json.dumps({'index': {'_index': index}}) + '\n' + json.dumps(d) + '\n' for d in docs)
@@ -226,20 +227,20 @@ try:
                               P[t]['embeddableConfig'].get('time_range'), **v)
     print('Section 1')
     check('Active P1 on srvA', run('Active P1 incidents', ci='srvA')[0]['metric_val'], 1)
-    check('Active P2 on srvA', run('Active P2 incidents', ci='srvA')[0]['metric_val'], 1)
+    check('P2 over 8 h on srvA (INC807; INC802 is 3 h old)', run('P2 over 8 h', ci='srvA')[0]['metric_val'], 1)
     check('Active P1 with no CI picked counts every CI', run('Active P1 incidents')[0]['metric_val'] >= 2, True)
-    T = 'Active P1 and P2 incidents'
-    check(T + ' on srvA (no P3, On Hold or Resolved)', sorted(r['number'] for r in run(T, ci='srvA')), ['INC801', 'INC802'])
+    T = 'Active Incidents (P1 · P2 over 8 h)'
+    check(T + ' on srvA (P2 only past 8 h; no P3, On Hold or Resolved)', sorted(r['number'] for r in run(T, ci='srvA')), ['INC801', 'INC807'])
     allrows = {r['number'] for r in run(T)}
     check(T + ' with nothing picked: every CI\'s P1 / P2, no P3, On Hold or Resolved',
-          ({'INC801', 'INC802', 'INC804'} <= allrows, allrows & {'INC803', 'INC805', 'INC806'}), (True, set()))
+          ({'INC801', 'INC807', 'INC804'} <= allrows, allrows & {'INC802', 'INC803', 'INC805', 'INC806'}), (True, set()))
     check(T + ': MIM\'s columns', list(run(T, ci='srvA')[0]),
           ['number', 'priority', 'ci.name', 'state_name', 'opened', 'sla', 'assignment_group', 'assignee',
            'assignee_email', 'group_manager', 'manager_email', 'short_description'])
     print('Incident control (MIM logic: the incident selects its CI and wins over the CI control)')
     check('Incident INC804 → its CI srvZ: the table', [r['number'] for r in run(T, incident='INC804 · srvZ', ci='srvA')], ['INC804'])
     check('Incident INC804 → P1 tile counts srvZ', run('Active P1 incidents', incident='INC804 · srvZ', ci='srvA')[0]['metric_val'], 1)
-    check('Incident INC801 → P2 tile counts srvA', run('Active P2 incidents', incident='INC801 · srvA')[0]['metric_val'], 1)
+    check('Incident INC801 → P2 tile counts srvA', run('P2 over 8 h', incident='INC801 · srvA')[0]['metric_val'], 1)
     check('Incident INC801 → Elastic infra alerts tile on srvA',
           run('Active Elastic infra alerts', incident='INC801 · srvA')[0]['metric_val'], 2)
     check('Incident INC801 → Changes on srvA', [r['number'] for r in run('Changes on this CI (last 7 days)', incident='INC801 · srvA')], ['CHG1'])
@@ -281,8 +282,8 @@ try:
     check('Active Elastic infra alerts tile on srvA: the active alerts', run('Active Elastic infra alerts', ci='srvA')[0]['metric_val'], 2)
     check('Active Elastic infra alerts tile with no CI: every active paladin alert', run('Active Elastic infra alerts')[0]['metric_val'], 4)
     links = sorted(p['embeddableConfig']['content'] for p in panels if p['type'] == 'markdown' and 'detailed dashboard' in title(p))
-    check('five detailed-dashboard links', sorted(l.split('](')[1].rstrip(')') for l in links),
-          sorted('https://kibana-prod.gcp.cna.com/app/r/s/' + c for c in ['qJk5u', 'w6zL4', 'jwCRg', 't4oxr', 'MDJ9f']))
+    check('seven dashboard links', sorted(l.split('](')[1].rstrip(')') for l in links),
+          sorted('https://kibana-prod.gcp.cna.com/app/r/s/' + c for c in ['qJk5u', 'w6zL4', 'jwCRg', 't4oxr', 'MDJ9f', 'I3R7D', 'ZSMtk']))
     check('section titles with icons', [s['title'] for s in A['sections']],
           ['🚨 1 · Incidents, changes and alerts', '🖥️ 2 · Infrastructure overview (including cloud)',
            '🩺 3 · Applications overview', '🔗 4 · Detailed dashboards'])
