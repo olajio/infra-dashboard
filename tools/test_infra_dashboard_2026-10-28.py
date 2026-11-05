@@ -161,7 +161,8 @@ def chg(n, ci, days):
 
 lines = ''
 for index, docs in ((INC, [inc('INC801', 1, 'New', 'srvA'), inc('INC802', 2, 'In Progress', 'srvA'),
-                           inc('INC803', 1, 'Resolved', 'srvA'), inc('INC804', 1, 'New', 'srvZ')]),
+                           inc('INC803', 1, 'Resolved', 'srvA'), inc('INC804', 1, 'New', 'srvZ'),
+                           inc('INC805', 3, 'New', 'srvA'), inc('INC806', 2, 'On Hold', 'srvA')]),   # 5 Nov: P3, On Hold
                     (CHG, [chg('CHG1', 'srvA', 1), chg('CHG2', 'App PROD', 2), chg('CHG3', 'srvZ', 1),
                            chg('CHG4', 'srvA', 20)])):
     lines += ''.join(json.dumps({'index': {'_index': index}}) + '\n' + json.dumps(d) + '\n' for d in docs)
@@ -182,7 +183,7 @@ def check(name, got, want):
         fails.append(name)
 
 
-DEFAULTS = {'ci': '(no CI selected)', 'server': '(no server selected)', 'health_window': '24 hours',
+DEFAULTS = {'incident': '(all incidents)', 'ci': '(no CI selected)', 'server': '(no server selected)', 'health_window': '24 hours',
             'service': '(services on this CI)', 'application': '(all applications)', 'monitored_app': '(all monitored applications)',
             '_tstart': ago(hours=1), '_tend': ago()}
 
@@ -227,7 +228,25 @@ try:
     check('Active P1 on srvA', run('Active P1 incidents', ci='srvA')[0]['metric_val'], 1)
     check('Active P2 on srvA', run('Active P2 incidents', ci='srvA')[0]['metric_val'], 1)
     check('Active P1 with no CI picked counts every CI', run('Active P1 incidents')[0]['metric_val'] >= 2, True)
-    check('Incidents on this CI', sorted(r['number'] for r in run('Incidents on this CI', ci='srvA')), ['INC801', 'INC802'])
+    T = 'Active P1 and P2 incidents'
+    check(T + ' on srvA (no P3, On Hold or Resolved)', sorted(r['number'] for r in run(T, ci='srvA')), ['INC801', 'INC802'])
+    allrows = {r['number'] for r in run(T)}
+    check(T + ' with nothing picked: every CI\'s P1 / P2, no P3, On Hold or Resolved',
+          ({'INC801', 'INC802', 'INC804'} <= allrows, allrows & {'INC803', 'INC805', 'INC806'}), (True, set()))
+    check(T + ': MIM\'s columns', list(run(T, ci='srvA')[0]),
+          ['number', 'priority', 'ci.name', 'state_name', 'opened', 'sla', 'assignment_group', 'assignee',
+           'assignee_email', 'group_manager', 'manager_email', 'short_description'])
+    print('Incident control (MIM logic: the incident selects its CI and wins over the CI control)')
+    check('Incident INC804 → its CI srvZ: the table', [r['number'] for r in run(T, incident='INC804 · srvZ', ci='srvA')], ['INC804'])
+    check('Incident INC804 → P1 tile counts srvZ', run('Active P1 incidents', incident='INC804 · srvZ', ci='srvA')[0]['metric_val'], 1)
+    check('Incident INC801 → P2 tile counts srvA', run('Active P2 incidents', incident='INC801 · srvA')[0]['metric_val'], 1)
+    check('Incident INC801 → Elastic infra alerts tile on srvA',
+          run('Active Elastic infra alerts', incident='INC801 · srvA')[0]['metric_val'], 2)
+    check('Incident INC801 → Changes on srvA', [r['number'] for r in run('Changes on this CI (last 7 days)', incident='INC801 · srvA')], ['CHG1'])
+    check('Incident INC801 → Server Health on srvA', [r.get('host.name') or r.get('server') or r.get('ci.name') for r in run('Server Health', incident='INC801 · srvA')][:1] != [], True)
+    ctl = sorted(A['pinned_panels']['panels'].values(), key=lambda v: v['order'])
+    check('top bar: Incident, CI, Monitored application', [v['config']['title'] for v in ctl],
+          ['🚨 Incident', '🖥️ CI', '🧩 Monitored application'])
     # CHG2 is on App PROD, linked to srvA by a CMDB relation recorded in 2025: links older than the panel's 7 days
     # aren't read (documented limit), so only srvA's own recent change shows; CHG4 is 20 days old
     check('Changes on this CI: its own, last 7 days',
@@ -277,7 +296,8 @@ try:
     check('Services of the Application leaves out an unmonitored application',
           [r['service.name'] for r in run('Services of the Application', application='Payment Hub')], [])
     pins = sorted((v['order'], v['config']['title']) for v in A['pinned_panels']['panels'].values())
-    check('top bar: CI, then Monitored application (icon titles)', pins, [(0, '🖥️ CI'), (1, '🧩 Monitored application')])
+    check('top bar: Incident, CI, then Monitored application (icon titles)', pins,
+          [(0, '🚨 Incident'), (1, '🖥️ CI'), (2, '🧩 Monitored application')])
     row = sorted((p for p in panels if p['type'] == 'esql_control' and p['gridData'].get('sectionId') == P['🧩 Application']['gridData']['sectionId']),
                  key=lambda p: p['gridData']['x'])
     check('section 3 controls: no Telemetry', [(title(p), p['gridData']['x'], p['gridData']['w']) for p in row],

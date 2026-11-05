@@ -1,10 +1,10 @@
 # Infrastructure Dashboard: user manual
 
-*Updated 5 Nov 2026 · Kibana 9.5.3 · dashboard "Infrastructure Dashboard"*
+*Updated 5 Nov 2026 (Incident control) · Kibana 9.5.3 · dashboard "Infrastructure Dashboard"*
 
 ## What it is for
 
-The Infrastructure Dashboard answers one question about **one configuration item (CI)** at a time: *is this CI, and
+The Infrastructure Dashboard answers one question about **one configuration item (CI)** at a time, picked directly or through an incident: *is this CI, and
 what runs on it, healthy, and who owns it?* You pick a CI (a server, an application service, a network device …)
 and every section follows it:
 
@@ -33,10 +33,11 @@ is picked. **That is expected, not a fault.**
 ## The controls
 
 The controls have an icon in their title, and a blue **numbered banner** sits next to each group, saying what to
-pick: ① the CI (top bar), ② a server (section 2), ③ an application and a service (section 3).
+pick: ① an incident or a CI (top bar), ② a server (section 2), ③ an application and a service (section 3).
 
 | Control | Where | What it does | Default |
 |---|---|---|---|
+| **🚨 Incident** | Top bar | The incident to investigate, listed as `INC number · CI name` (active P1–P3 incidents; type the number to search). **It selects the incident's CI and wins over the CI control**, exactly as on MIM | *(all incidents)* |
 | **🖥️ CI** | Top bar | The CI to investigate. Lists CIs with a P1–P3 incident opened in the last 31 days (open or closed), and production servers that sent metrics in the last day. Type to search. | *(no CI selected)*: estate-wide view |
 | **🧩 Monitored application** | Top bar | Limits the application panels to the applications MIM escalates: In Production, Operational and monitored in `cmdb_with_apm_flag` (138 on 2 Nov). Pick one to see only that application | *(all monitored applications)* |
 | **🖥️ Server** | Section 2 | The server for the health panels **when the CI is not a server** (an application service, for example). Take a server from *Applications related to this CI* or from MIM's *Server View*. If the CI is itself a server, the CI wins | *(no server selected)* |
@@ -44,7 +45,7 @@ pick: ① the CI (top bar), ② a server (section 2), ③ an application and a s
 | **🧩 Application** | Section 3 | One application for *Services of the Application* (monitored applications that sent APM data in the last day) | *(all applications)* |
 | **⚙️ Service** | Section 3 | One APM service for *Service health*. With the default, it uses the services running on the CI | *(services on this CI)* |
 
-**Rule of thumb:** pick the **CI** first. If it is not a server, pick one of its servers in **Server**. Then pick an
+**Rule of thumb:** pick the **incident** (or, without one, the **CI**) first. If it is not a server, pick one of its servers in **Server**. Then pick an
 **Application** and a **Service** to fill section 3.
 
 ## The panels, and what fills them
@@ -53,10 +54,10 @@ pick: ① the CI (top bar), ② a server (section 2), ③ an application and a s
 
 | Panel | Shows | Fills when |
 |---|---|---|
-| **Active P1 incidents**, **Active P2 incidents** | Open P1 / P2 incidents (opened in the last 30 days) on the CI, or on every CI when none is picked. Green at 0 | Always |
+| **Active P1 incidents**, **Active P2 incidents** | Active P1 / P2 incidents (not On Hold, Resolved, Closed or Canceled; updated in the last 30 days) on the CI, or on every CI when none is picked. Green at 0. They count the rows of the table below | Always |
 | **Active Elastic infra alerts** | How many Elastic infrastructure alerts are active now on the CI, or across the estate with no CI. Green at 0. The rows are in *Elastic infra alerts* below | Always |
 | **User impact · ServiceNow**, **User impact · RUM** | Placeholders: the integrations are in progress | Not yet |
-| **Incidents on this CI** | Active P1–P3 incidents on the CI with the owners to call: assignment group, assignee, group manager (with emails). Click the incident or the CI to open it in ServiceNow | The CI has an active incident opened in the last 30 days |
+| **Active P1 and P2 incidents** | MIM's *Active Incidents* table, for P1 and P2: incident, priority, CI, state, when opened, SLA, assignment group, assignee and group manager (with emails), description. With nothing picked: **every active P1 and P2**; with an incident or CI: those on that CI. Click the incident or the CI to open it in ServiceNow | Always |
 | **Changes on this CI (last 7 days)** | Change requests in the last 7 days on the CI **and on CIs linked to it in the CMDB** (its ESX host, cluster, applications …) | A change touched the CI or a linked CI this week |
 | **Alerts on this CI (Netcool)** | Netcool alerts on the CI in the last 7 days: Open or Cleared, severity, how often it fired | The CI is a network device, UPS or other Netcool-monitored node with alerts |
 | **Elastic infra alerts** | Alerts from Elastic's own rules (the paladin-* rules: host up, filesystem, CPU, memory, processes, Windows services, IBM MQ) on the CI in the last 7 days. With no CI: **every active paladin alert** | No CI picked, or a server that raised an Elastic alert |
@@ -98,7 +99,7 @@ the server or cluster again there.
 
 ## How to investigate
 
-1. **Start from the incident's CI.** Pick it in **CI**. *Incidents on this CI* names who to call.
+1. **Start from the incident.** Pick it in **🚨 Incident** (or its CI in **CI**). *Active P1 and P2 incidents* names who to call.
 2. **Check what changed and what alerted:** *Changes*, *Alerts on this CI (Netcool)*, *Elastic infra alerts*.
 3. **Find the server.** If the CI is a server, section 2 already shows it. If not, take a server from *Applications
    related to this CI* or MIM's *Server View*, and pick it in **Server**.
@@ -119,10 +120,10 @@ the backup. **More → Reset changes** before each scene, then set the controls 
 | Scene | Controls, in order | What fills | Stays empty |
 |---|---|---|---|
 | **1. Estate overview** (open with this) | Nothing picked | *Active P1 / P2* (every CI), *Elastic infra alerts* (every active alert), *Cloud health · GKE* (every cluster), *Application Health* (138 monitored applications), *Services of the Application* | The CI tables, the server panels, *Service health*: no CI picked |
-| **2. Application service: eFile** (main scene) | CI = `eFile PROD` → Server = `vslrau1p400` → Application = `eFile` → Service = `efile` | *Active P1 / P2*, *Incidents on this CI* (4 on 3 Nov), *Changes* (if any on eFile or a linked CI), *Server*, *Middleware* (JBoss), *Process Health*, *Applications related* (18), *Application Health*, *Services of the Application*, *Service health* | *Alerts (Netcool)*, *Database Health* (JBoss server, no database) |
-| **3. Server with APM: vslrau1p338** | CI = `vslrau1p338` → Application = `Underwriting Tools` → Service = `oltp-data-api` | *Server*, *Middleware* (6 JBoss components), *Process Health*, *Elastic infra alerts* (if the server has any), *Applications related*, *Application Health*, *Services of the Application*, *Service health* | *Incidents on this CI* (no incident on the server itself), *Alerts (Netcool)*, *Database Health* |
+| **2. Application service: eFile** (main scene) | CI = `eFile PROD` → Server = `vslrau1p400` → Application = `eFile` → Service = `efile` | *Active P1 / P2*, *Active P1 and P2 incidents* (4 on 3 Nov), *Changes* (if any on eFile or a linked CI), *Server*, *Middleware* (JBoss), *Process Health*, *Applications related* (18), *Application Health*, *Services of the Application*, *Service health* | *Alerts (Netcool)*, *Database Health* (JBoss server, no database) |
+| **3. Server with APM: vslrau1p338** | CI = `vslrau1p338` → Application = `Underwriting Tools` → Service = `oltp-data-api` | *Server*, *Middleware* (6 JBoss components), *Process Health*, *Elastic infra alerts* (if the server has any), *Applications related*, *Application Health*, *Services of the Application*, *Service health* | *Active P1 and P2 incidents* (no incident on the server itself), *Alerts (Netcool)*, *Database Health* |
 | **4. Change and database: kau1p802** | CI = `kau1p802` | *Changes* (1 change on 2 Nov), *Server*, *Database* (SQL Server), *Process Health* (Windows services) | APM panels: a Windows database server with no APM |
-| **5. Network device alerts: cuwash1** | CI = `cuwash1` (backup: `adc-wan-agg2`) | *Incidents on this CI*, *Alerts on this CI (Netcool)* | Server and application panels: not a server |
+| **5. Network device alerts: cuwash1** | CI = `cuwash1` (backup: `adc-wan-agg2`) | *Active P1 and P2 incidents*, *Alerts on this CI (Netcool)* | Server and application panels: not a server |
 
 **Backups for scene 2:** CI = `Enterprise PolicyCenter PROD` → Server = `vrau1pap0041` → Application =
 `Enterprise PolicyCenter` → Service = `papc-papcintcons1` (it calls 13 services; 1 change on 2 Nov). Or CI =

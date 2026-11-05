@@ -22,6 +22,7 @@ Work done since the KPIs were defined on 28 Oct 2026. **KPI #** is the row numbe
 | 5 Nov | Fixed GKE memory after check CG7: node memory is split into evictable and non-evictable; *Mem peak* now counts non-evictable only | 11 | Done |
 | 5 Nov | **Gave the dashboard the MIM V5 look:** tile icons (green at 0), section icons, row numbers; new *Active Elastic infra alerts* tile | 1, 4 | Done |
 | 5 Nov | **Added section 4 *Detailed dashboards*:** links to the Server, Database, Middleware, VMware and Cloud infra dashboards | 6–11 | Done |
+| 5 Nov | **Added the Incident control** (top bar), as on MIM: a picked incident selects its CI. *Incidents on this CI* became **Active P1 and P2 incidents** (MIM's Active Incidents table). Built on the team's layout (`infra2.ndjson`) | 1, 2 | Done |
 
 ## KPI status now
 

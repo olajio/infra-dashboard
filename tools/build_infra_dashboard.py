@@ -1,20 +1,24 @@
 """Build the CI-driven Infrastructure Dashboard from MIM V3's panels (28 Oct 2026, dashboard_kpis.txt).
 
-Usage: build_infra_dashboard.py "MIM V4.ndjson" "Infrastructure Dashboard.ndjson"   (MIM V3 until 3 Nov)
+Usage: build_infra_dashboard.py "MIM V4.ndjson" "Infrastructure Dashboard.ndjson" ["MIM V5.ndjson"]   (MIM V3 until 3 Nov)
 
-Control inputs: the CI and Monitored application controls (pinned, the same as MIM V4's). Three sections:
+Control inputs: the Incident, CI and Monitored application controls (pinned, the same as MIM's). Sections:
   1 · Incidents, changes and alerts      2 · Infrastructure overview (incl. cloud)      3 · Applications overview
 Achieved KPIs reuse MIM V3's tested panels; KPIs not achievable yet are placeholder cards that say why.
-MIM V3's panels also read the Incident control, which this dashboard doesn't have: `?incident` is replaced by its
-"(all incidents)" default, so every panel follows the CI control (and, for the health panels, the optional Server
-control).
+Since 5 Nov the dashboard has MIM's Incident control too, with MIM's logic: a picked incident selects its CI and
+wins over the CI control. The panels copied from MIM keep their incident logic; the panels written here read the CI
+through CI_EXPR. Until 5 Nov `?incident` was replaced by its "(all incidents)" default (no_incident, now unused).
 """
 import copy
 import json
+import re
 import sys
 import uuid
 
 SRC, OUT = sys.argv[1:3]
+SRC5 = sys.argv[3] if len(sys.argv) > 3 else 'MIM V5.ndjson'
+# MIM's rule (5 Nov): the incident's CI if an incident is picked, otherwise the CI control
+CI_EXPR = '(CASE(?incident == "(all incidents)", ?ci, SUBSTRING(?incident, LOCATE(?incident, " · ") + 3)))'
 NS = 'infra-dashboard/ci-driven-v1/'
 uid = lambda name: str(uuid.uuid5(uuid.NAMESPACE_URL, NS + name))
 DASH_ID = uid('dashboard')
@@ -51,8 +55,46 @@ DESC_FIXES = [
 ]
 
 
+FROM_MIM = set()
+
+
+def active_incidents_panel(section, x, y, w, h):
+    """5 Nov: MIM V5's Active Incidents table, for active P1 and P2 incidents, following the Incident / CI controls."""
+    mim5 = next(o for o in (json.loads(l) for l in open(SRC5) if l.strip()) if o.get('type') == 'dashboard')
+    src = next(p for p in json.loads(mim5['attributes']['panelsJSON'])
+               if (p['embeddableConfig'].get('title') or '').startswith('Active Incidents'))
+    p = copy.deepcopy(src)
+    name = 'Active P1 and P2 incidents'
+    pid = uid('panel/' + name)
+    p['panelIndex'] = pid
+    p['gridData'] = {'x': x, 'y': y, 'w': w, 'h': h, 'i': pid, 'sectionId': section}
+    ec = p['embeddableConfig']
+    ec['title'] = name
+    ec['time_range'] = dict(WINDOW_30D)
+    st = ec['attributes']['state']
+    q = st['query']['esql']
+    for a, b in (('TO_INTEGER(priority) IN (1, 2, 3)', 'TO_INTEGER(priority) IN (1, 2)'),
+                 ('| WHERE src == "inc"\n', '| WHERE src == "inc"\n| WHERE ?ci == "(no CI selected)" OR TO_STRING(ci.name) == ?ci\n'),
+                 ('| WHERE priority == 1 OR age_minutes > target\n', '')):
+        assert q.count(a) == 1, a
+        q = q.replace(a, b)
+    st['query']['esql'] = q
+    for layer in st.get('datasourceStates', {}).get('textBased', {}).get('layers', {}).values():
+        if 'query' in layer:
+            layer['query']['esql'] = q
+    ec['attributes']['title'] = name
+    ec['description'] = ('Every active P1 and P2 incident (priority 1 or 2, state not On Hold, Resolved, Closed, Canceled '
+                         'or Cancelled), the same table as MIM\'s Active Incidents: CI, state, when opened, SLA, '
+                         'assignment group, assignee and group manager (with emails), description. With an incident '
+                         'picked: the incidents on that incident\'s CI; with a CI picked: that CI\'s. Click the incident '
+                         'or the CI to open it in ServiceNow. Incidents updated in the last 30 days, like the P1 and P2 '
+                         'tiles above.')
+    return p
+
+
 def copy_panel(name, section, x, y, w, h, new_title=None, description=None, time_range=None):
-    p = no_incident(copy.deepcopy(MP[name]))
+    p = copy.deepcopy(MP[name])   # keeps MIM's incident logic (5 Nov)
+    FROM_MIM.add(uid('panel/' + (new_title or name)))
     pid = uid('panel/' + (new_title or name))
     p['panelIndex'] = pid
     p['gridData'] = {'x': x, 'y': y, 'w': w, 'h': h, 'i': pid, 'sectionId': section}
@@ -64,9 +106,6 @@ def copy_panel(name, section, x, y, w, h, new_title=None, description=None, time
                 holder['title'] = new_title
     if description is not None:
         ec['description'] = description
-    elif ec.get('description'):
-        for a, b in DESC_FIXES:
-            ec['description'] = ec['description'].replace(a, b)
     if time_range:
         ec['time_range'] = dict(time_range)
     return p
@@ -81,7 +120,7 @@ def placeholder(name, section, x, y, w, h, body):
 
 
 DV_ID = uid('dataview/servicenow-incidents')
-ACTIVE = 'TO_STRING(state_name) NOT IN ("Resolved", "Closed", "Canceled", "Cancelled")'
+ACTIVE = 'TO_STRING(state_name) NOT IN ("On Hold", "Resolved", "Closed", "Canceled", "Cancelled")'   # On Hold out since 5 Nov, as in MIM
 
 
 def count_tile(name, pri, colour, section, x, y, w, h, icon='alert', q=None, subtitle=None, description=None):
@@ -297,12 +336,7 @@ panels += [
                            'Elastic infra alerts table (state Active).'),
     copy_panel('User base · ServiceNow', S1, 30, 0, 9, 6, new_title='User impact · ServiceNow'),
     copy_panel('Real users · RUM', S1, 39, 0, 9, 6, new_title='User impact · RUM'),
-    copy_panel('Escalate', S1, 0, 6, 48, 8, new_title='Incidents on this CI', time_range=WINDOW_30D,
-               description='Active P1, P2 and P3 incidents on the CI picked in the CI control (state not Resolved, '
-                           'Closed, Canceled or Cancelled), with the CI\'s CMDB class, environment and support '
-                           'group, the assignment group, assignee and group manager (with emails). Click the CI or '
-                           'the incident to open it in ServiceNow. Incidents opened in the last 30 days (fixed). '
-                           'Empty until a CI is picked.'),
+    active_incidents_panel(S1, 0, 6, 48, 8),
     copy_panel('Changes in the Last 7 Days on this CI', S1, 0, 14, 24, 11, new_title='Changes on this CI (last 7 days)'),
     copy_panel('Alerts on this CI', S1, 24, 14, 24, 11, new_title='Alerts on this CI (Netcool)',
                time_range={'from': 'now-7d', 'to': 'now'},
@@ -341,7 +375,7 @@ panels += [
 ]
 
 # ---------------- controls made hard to miss (4 Nov): icons in their titles, "Start here" banners ----------------
-ICONS = {'ci': '🖥️ CI', 'monitored_app': '🧩 Monitored application', 'server': '🖥️ Server',
+ICONS = {'incident': '🚨 Incident', 'ci': '🖥️ CI', 'monitored_app': '🧩 Monitored application', 'server': '🖥️ Server',
          'health_window': '⏱️ Health window', 'application': '🧩 Application', 'service': '⚙️ Service'}
 
 
@@ -385,8 +419,8 @@ for p in panels:
         p['embeddableConfig']['title'] = ICONS[p['embeddableConfig']['variable_name']]
     p['gridData']['y'] += 3
 panels += [
-    banner('Start here', '1', '▲  Start here: pick a CI in the controls at the top',
-           'Every section follows it. With no CI, the dashboard shows the whole estate. More (⋯) → Reset changes clears every pick.', S1),
+    banner('Start here', '1', '▲  Start here: pick an incident or a CI in the controls at the top',
+           'An incident selects its CI. Every section follows it; with neither, the whole estate. More (⋯) → Reset changes clears every pick.', S1),
     banner('Pick a server', '2', '▼  If the CI is not a server, pick one of its servers',
            'A server CI fills these panels by itself. Health window: how far back they look.', S2),
     banner('Pick an application and a service', '3', '▼  Pick an Application, then a Service',
@@ -396,7 +430,7 @@ panels += [
 # ---------------- the new look (5 Nov), as in MIM V5: row numbers, section icons, detailed-dashboard links ----------------
 for p in panels:
     if p['type'] == 'vis' and p['embeddableConfig'].get('attributes', {}).get('visualizationType') == 'lnsDatatable' \
-            and p['embeddableConfig'].get('title') in ('Incidents on this CI', 'Changes on this CI (last 7 days)',
+            and p['embeddableConfig'].get('title') in ('Active P1 and P2 incidents', 'Changes on this CI (last 7 days)',
                                                        'Alerts on this CI (Netcool)', 'Elastic infra alerts',
                                                        'Applications related to this CI', 'Application Health',
                                                        'Services of the Application'):
@@ -411,15 +445,21 @@ DETAILED = [   # respective_detailed_dashboards.txt (5 Nov)
 ]
 for i, (domain, icon, name, url) in enumerate(DETAILED):
     pid = uid('link/' + domain)
-    x, y, w = (0, 0, 16) if i == 0 else (16, 0, 16) if i == 1 else (32, 0, 16) if i == 2 else (0, 3, 24) if i == 3 else (24, 3, 24)
+    # one row, as the team arranged it in infra2.ndjson (5 Nov): Server, Database, Cloud, Middleware, VMware
+    x, w = {'Server': (0, 9), 'Database': (9, 9), 'Cloud': (18, 9), 'Middleware': (27, 9), 'VMware': (36, 10)}[domain]
+    y = 0
     panels.append({'type': 'markdown', 'panelIndex': pid,
-                   'gridData': {'x': x, 'y': y, 'w': w, 'h': 3, 'i': pid, 'sectionId': S4},
+                   'gridData': {'x': x, 'y': y, 'w': w, 'h': 2, 'i': pid, 'sectionId': S4},
                    'embeddableConfig': {'title': f'{domain} detailed dashboard', 'hide_title': True,
                                         'content': f'## {icon} [{name} ›]({url})',
                                         'settings': {'open_links_in_new_tab': True}}})
 
+# panels written here read the CI through MIM's incident rule (copied MIM panels already do)
+for p in panels:
+    if p['panelIndex'] not in FROM_MIM and p['type'] != 'esql_control':
+        p['embeddableConfig'] = json.loads(re.sub(r'\?ci\b', lambda m: CI_EXPR.replace('"', '\\"'),
+                                                  json.dumps(p['embeddableConfig'], ensure_ascii=False)))
 s = json.dumps(panels, ensure_ascii=False)
-assert '?incident' not in s
 assert '?telemetry' not in s
 ids = [p['panelIndex'] for p in panels]
 assert len(ids) == len(set(ids))
@@ -428,12 +468,16 @@ ci_ctrl = {k: v for k, v in MA['pinned_panels']['panels'].items() if v['config']
 assert len(ci_ctrl) == 1
 (ci_key, ci_val), = ci_ctrl.items()
 ci_val = copy.deepcopy(ci_val)
-ci_val['order'] = 0
+ci_val['order'] = 1
+inc = [v for v in MA['pinned_panels']['panels'].values() if v['config'].get('variable_name') == 'incident']
+assert len(inc) == 1
+inc_val = copy.deepcopy(inc[0])
+inc_val['order'] = 0
 mon = [v for v in MA['pinned_panels']['panels'].values() if v['config'].get('variable_name') == 'monitored_app']
 assert len(mon) == 1, 'build from MIM V4 (patch 03w)'
 mon_val = copy.deepcopy(mon[0])
-mon_val['order'] = 1
-for v, var in ((ci_val, 'ci'), (mon_val, 'monitored_app')):   # 4 Nov: icon titles, full width
+mon_val['order'] = 2
+for v, var in ((inc_val, 'incident'), (ci_val, 'ci'), (mon_val, 'monitored_app')):   # 4 Nov: icon titles, full width
     v['config']['title'] = ICONS[var]
     v['grow'] = True
 
@@ -442,7 +486,7 @@ dash = {
     'coreMigrationVersion': mim.get('coreMigrationVersion'), 'typeMigrationVersion': mim.get('typeMigrationVersion'),
     'attributes': {
         'title': 'Infrastructure Dashboard',
-        'description': ('Infrastructure dashboard driven by the CI control: incidents, changes and alerts on the CI; '
+        'description': ('Infrastructure dashboard driven by the Incident and CI controls (an incident selects its CI): incidents, changes and alerts on the CI; '
                         'its server, database, middleware and process health; the applications related to it and '
                         'their health. KPIs not available yet are shown as placeholder cards that say why '
                         '(dashboard_kpis.txt, INFRA-DASHBOARD-KPIS.xlsx).'),
@@ -451,11 +495,11 @@ dash = {
         'optionsJSON': MA['optionsJSON'],
         'refreshInterval': MA['refreshInterval'],
         'timeRestore': True, 'timeFrom': 'now-24h', 'timeTo': 'now',
-        'pinned_panels': {'panels': {uid('control/ci'): ci_val, uid('control/monitored_app'): mon_val}},
+        'pinned_panels': {'panels': {uid('control/incident'): inc_val, uid('control/ci'): ci_val, uid('control/monitored_app'): mon_val}},
         'sections': [
-            {'collapsed': False, 'gridData': {'i': S1, 'y': 0}, 'title': '🚨 1 · Incidents, changes and alerts'},
-            {'collapsed': False, 'gridData': {'i': S2, 'y': 1}, 'title': '🖥️ 2 · Infrastructure overview (including cloud)'},
-            {'collapsed': False, 'gridData': {'i': S3, 'y': 2}, 'title': '🩺 3 · Applications overview'},
+            {'collapsed': True, 'gridData': {'i': S1, 'y': 0}, 'title': '🚨 1 · Incidents, changes and alerts'},
+            {'collapsed': True, 'gridData': {'i': S2, 'y': 1}, 'title': '🖥️ 2 · Infrastructure overview (including cloud)'},
+            {'collapsed': True, 'gridData': {'i': S3, 'y': 2}, 'title': '🩺 3 · Applications overview'},
             {'collapsed': False, 'gridData': {'i': S4, 'y': 3}, 'title': '🔗 4 · Detailed dashboards'},
         ],
         'panelsJSON': s,
