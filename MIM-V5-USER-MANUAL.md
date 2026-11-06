@@ -1,6 +1,6 @@
 # MIM V5 dashboard: user manual
 
-*4 Nov 2026 · Kibana 9.5.3 · dashboard "MIM V5"*
+*4 Nov 2026, updated 6 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
 
 ## What it is for
 
@@ -15,7 +15,7 @@ top to bottom:
    health of the CI's applications, their services and dependencies, and the server underneath.
 4. **🔗 Related dashboards:** the Applications Operations and Infra dashboards, for deeper detail.
 
-Section 1 shows the whole estate (only its *Open Alerts with No Incident* table narrows to a picked CI). Sections 2
+Section 1 shows the whole estate (only its *Open alerts, no incident* tile narrows to a picked CI). Sections 2
 and 3 follow what you pick in the controls. With nothing picked,
 they stay mostly empty. **That is expected, not a fault.**
 
@@ -52,17 +52,16 @@ For a **server** CI, the health panels fill by themselves.
 
 ## The panels, and what fills them
 
-### 🚨 1 · Major Incident Overview (whole estate; only *Open Alerts with No Incident* follows the controls)
+### 🚨 1 · Major Incident Overview (whole estate; only the *Open alerts, no incident* tile follows the controls)
 
 | Panel | Shows | Fills when |
 |---|---|---|
 | **Needs attention now** | Every P1, every P2 open longer than 8 h and every P3 open longer than 24 h, in one number, with a strip by priority. **Green at 0** | Always |
 | **Active P1**, **P2 over 8 h**, **P3 over 24 h** | The same incidents, by priority. Green and "All clear" at 0; "Needs action" in the priority colour above 0 | Always |
-| **Open alerts, no incident** | Open Netcool alerts on production CIs with no open incident, by severity (Critical, Major, other): possible blind spots | Always |
+| **Open alerts, no incident** | How many open Netcool alerts (last 24 h) are on production CIs with no open incident, with the Critical count under it: possible blind spots. **Follows the Incident / CI controls** like the table in section 2: the CI's alerts and its CMDB-linked CIs'; every CI's when nothing is picked. Green at 0 | Always |
 | **User base · ServiceNow**, **Real users · RUM** | Placeholders: the integrations are in progress | Not yet |
 | **Active Incidents (P1 · P2 over 8 h · P3 over 24 h)** | The incidents behind the tiles: priority, CI, state, **when opened**, **SLA**, assignment group, assignee, group manager (with emails), description. Click an incident to open it in ServiceNow | Always |
-| **P1 / P2 / P3 Time to Resolve vs Target** | Average age so far of the active incidents opened each day, against the targets (P1 4 h, P2 8 h, P3 24 h, dashed lines) | Always |
-| **Open Alerts with No Incident** | Open Netcool alerts on CIs with no open incident, Critical first, last 24 h. **With an incident or CI picked:** only alerts on that CI and on CIs linked to it in the CMDB | Always |
+| **P1 / P2 / P3 Time to Resolve vs Target** | Average age so far of the active incidents opened each day, against the targets (P1 4 h, P2 8 h, P3 24 h, dashed lines, all on one hours axis) | Always |
 
 **Reading the SLA column:** *Breached* or *Breaching* come from ServiceNow's SLA records. *No SLA record* means
 ServiceNow sent no SLA record for that incident to Elastic, which is true of most incidents today (raised with the
@@ -73,9 +72,12 @@ their target. They can still be picked in the Incident control.
 
 ### 🔎 2 · Investigate the CI
 
+Layout: *Escalation Channel* and *Open Alerts with No Incident* side by side at the top; *Changes* and *Alerts on this CI* side by side under them.
+
 | Panel | Shows | Fills when |
 |---|---|---|
-| **Escalate** | **Who to call.** One row per active incident on the CI: priority, **state**, **when opened**, CI class and environment, assignment group, assignee and group manager (with emails). With a CI and no incident, one row with the CI's owners | An incident or CI is picked |
+| **Open Alerts with No Incident** | Open Netcool alerts on CIs with no open incident, Critical first, last 24 h. **With an incident or CI picked:** only alerts on that CI and on CIs linked to it in the CMDB; with nothing picked, every CI's. Sits next to *Escalation Channel* | Always |
+| **Escalation Channel** | **Who to call.** One row per active incident on the CI: priority, **state**, **when opened**, CI class and environment, assignment group, assignee and group manager (with emails). With a CI and no incident, one row with the CI's owners | An incident or CI is picked |
 | **Changes in the Last 7 Days on this CI** | Change requests in the last 7 days on the CI **and on CIs linked to it** (its ESX host, cluster, switch, applications …) | A change touched the CI or a linked CI this week |
 | **Alerts on this CI** | Netcool alerts on the CI, last 7 days: Open or Cleared, severity, and when each started compared with the incident ("likely trigger" if up to 2 h before it opened) | The CI is a Netcool-monitored node with alerts |
 | **Blast radius** | How many applications depend directly on the CI. Amber from 1, red from 5 | The CI has applications linked above it in the CMDB |
@@ -99,16 +101,16 @@ their target. They can still be picked in the Incident control.
 
 1. **Section 1:** check *Needs attention now* and the three priority tiles. Find the incident in *Active Incidents*.
 2. **Pick it** in **🚨 Incident** (type its number).
-3. **Section 2:** *Escalate* names the assignee and manager to call. Check *Changes* and *Alerts on this CI* for a
+3. **Section 2:** *Escalation Channel* names the assignee and manager to call. Check *Changes* and *Alerts on this CI* for a
    likely cause, and *Blast radius* and *Applications related* for the impact.
 4. **Section 3:** if the CI is an application service, pick one of its servers (from *Server View*) in **🖥️ Server**.
    Read *Server Health* (red or amber), then the Down rows in *Middleware*, *Database* and *Process Health*.
 5. **Applications:** *Application Health* shows the CI's applications. Pick the application in **🧩 Application**
    and its busiest service in **⚙️ Service**: *Upstream* shows what it depends on, *Downstream* who is impacted.
 6. **Logs:** *Errors from the Logs*. Widen **⏱️ Health window** to 7 days to see trends.
-7. **Escalate** to the assignee, then the group manager, both named in *Escalate*.
+7. **Escalate** to the assignee, then the group manager, both named in *Escalation Channel*.
 
-**Starting from a CI instead of an incident:** pick it in **🖥️ CI**. *Escalate* still lists every active incident on
+**Starting from a CI instead of an incident:** pick it in **🖥️ CI**. *Escalation Channel* still lists every active incident on
 it, and the scene keeps working when one incident closes. This is the most reliable way to present the dashboard.
 
 ## Demo scenes: fill as many panels as possible
@@ -121,7 +123,7 @@ missing from a list, use the next scene. **More → Reset changes** before each 
 | **1. eFile** (main scene) | CI = `eFile PROD` → Server = `vslrau1p400` → Application = `eFile` → Service = `efile` | **17 of 20 panels filled**: Escalate (4 incidents), every CMDB view (blast radius 18), Application Health, Services, Upstream (efile → oracle, 67,671 calls), Service health, Downstream, Middleware, Process, APM Services, Server, Synthetics, Errors from the Logs. Empty: Changes, Alerts, Database Health |
 | **2. Underwriting Tools** | CI = `Underwriting Tools PROD` → Server = `vslrau1p338` → Application = `Underwriting Tools` → Service = `oltp-data-api` | As scene 1, with 4 APM services on the server |
 | **3. Enterprise PolicyCenter** (for Changes) | CI = `Enterprise PolicyCenter PROD` → Server = `vrau1pap0041` → Application = `Enterprise PolicyCenter` → Service = `papc-papcintcons1` | As scene 1; *Changes* fills if its 2 Nov change is still within 7 days |
-| **4. Alerts** | CI = `cuwash1` (backup `adc-wan-agg2`) | *Alerts on this CI*, *Escalate* |
+| **4. Alerts** | CI = `cuwash1` (backup `adc-wan-agg2`) | *Alerts on this CI*, *Escalation Channel* |
 | **5. Database** | Keep scene 1, then Server = `kau1p802` | *Database Health* (SQL Server). The APM panels empty, as this server runs no APM |
 
 Section 1 fills in every scene.

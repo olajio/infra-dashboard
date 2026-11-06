@@ -85,6 +85,11 @@ numbers on the long tables. Rebuild after any MIM V4 change. Functional test: `t
 Opened and loses CI support group; Active Incidents gets Opened; Open Alerts with No Incident shows only the selected
 CI's alerts and its CMDB-linked CIs'. It also makes the controls hard to miss: icon titles, full-width top bar, and
 "Start here" banners. The Infrastructure Dashboard got the same control treatment in `build_infra_dashboard.py`.
+6 Nov: `mim_v5_patch_2026-11-06a.py "MIM V5.ndjson" "MIM V5.ndjson"` (test: `test_mim_v5_2026-11-06a.py "MIM V4.ndjson"
+"MIM V5.ndjson"`): the *Open alerts, no incident* tile becomes a Lens metric on the table's query, so it follows the
+Incident / CI controls (Vega cannot read controls); *Escalate* is renamed *Escalation Channel*; section 2 puts Escalation
+Channel and *Open Alerts with No Incident* (moved from section 1) side by side, then *Changes* and *Alerts on this CI*
+side by side; *Time to Resolve vs Target* uses one axis, so the P3 24 h line no longer reads as about 1 h.
 
 ## Infrastructure Dashboard (28 Oct 2026)
 
