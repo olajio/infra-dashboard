@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Infrastructure Overview mockup</title>
+<style>
+:root{--bg:#0b1628;--panel:#111c30;--line:#24324a;--text:#dfe5ef;--sub:#98a2b3;--blue:#36a2ef;--green:#1f9e6b;--amber:#c98a0b;--red:#d6453d;--grey:#5a6577;--p3:#3f6fb5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:13px/1.35 Inter,"Segoe UI",Arial,sans-serif}
+.top{height:44px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--line);gap:12px}
+.logo{font-weight:700;font-size:17px}.search{flex:1;max-width:460px;margin:0 auto;height:28px;border:1px solid var(--line);border-radius:6px;color:var(--sub);padding:5px 10px}
+.bar{display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line)}
+.crumb{background:#16365c;color:#9fd0ff;padding:3px 9px;border-radius:4px;font-size:12px}.crumb.b{background:#1d2a40;color:var(--sub)}
+.sp{flex:1}.btn{border:1px solid var(--line);border-radius:5px;padding:4px 10px;color:var(--sub);font-size:12px}.btn.p{background:#0b64dd;color:#fff;border-color:#0b64dd}
+.wrap{padding:6px 10px 20px}
+.sec{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;margin:14px 2px 8px}.sec .chev{color:var(--sub)}
+.grid{display:grid;grid-template-columns:repeat(48,1fr);gap:6px}
+.p{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:9px 10px;position:relative;overflow:hidden}
+.badge{display:inline-block;background:#1d2a40;color:var(--sub);border-radius:4px;padding:1px 6px;font-size:11px;margin-left:6px;font-weight:500}
+.ttl{font-weight:600;font-size:13px}
+.banner{background:#0d2a52;border-left:4px solid #0b64dd;display:flex;align-items:center;gap:12px;padding:8px 12px}
+.num{width:26px;height:26px;border-radius:50%;background:#0b64dd;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.banner b{color:#6db5ff}.banner small{display:block;color:#b8c4d6}
+/* domain tiles */
+.dom{border-top:4px solid var(--grey);min-height:132px}
+.dom.red{border-top-color:var(--red)}.dom.amber{border-top-color:var(--amber)}.dom.green{border-top-color:var(--green)}
+.dom .h{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px}.dom .ic{font-size:20px}
+.dom .st{font-size:22px;font-weight:700;margin:8px 0 2px}.red .st{color:var(--red)}.amber .st{color:var(--amber)}.green .st{color:var(--green)}.grey .st{color:#8a95a8}
+.dom ul{margin:4px 0 0;padding-left:16px;color:var(--sub);font-size:12px}.dom .go{position:absolute;right:10px;bottom:8px;color:var(--blue);font-size:12px;font-weight:600}
+.pill{font-size:10px;background:#3a2f12;color:#e2b44f;border-radius:3px;padding:1px 5px;margin-left:auto}
+/* kpi tiles */
+.kpi{min-height:96px;display:flex;flex-direction:column}.kpi .row{display:flex;align-items:center;gap:10px;margin-top:6px}
+.circ{width:34px;height:34px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:14px;flex:none}
+.kpi .lab{font-weight:600}.kpi .sub2{color:var(--sub);font-size:11px}.kpi .val{margin-left:auto;font-size:30px;font-weight:700}
+.kpi .foot{margin-top:auto;font-size:11px;font-weight:600}
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}th{text-align:left;color:var(--sub);font-weight:600;border-bottom:1px solid var(--line);padding:5px 6px}
+td{padding:6px;border-bottom:1px solid #1a2639}td.n{color:var(--sub);width:16px}.lnk{color:var(--blue)}
+.b{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;font-weight:700;color:#fff}.b.r{background:var(--red)}.b.a{background:var(--amber)}.b.g{background:var(--green)}.b.bl{background:var(--p3)}.b.gr{background:#3a465a;color:#cfd6e2}
+.dtag{font-size:11px;color:#cfd6e2;background:#1d2a40;border-radius:3px;padding:1px 6px}
+/* bars */
+.hb{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:12px}.hb span.l{width:84px;color:var(--sub)}.hb .t{flex:1;display:flex;height:14px;border-radius:3px;overflow:hidden;background:#1a2639}.hb .t i{display:block}
+.legend{display:flex;gap:12px;font-size:11px;color:var(--sub);margin-top:4px}.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.link{font-size:17px;font-weight:600;color:var(--blue);display:flex;align-items:center;gap:8px}
+.fresh{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;margin-top:6px}.fresh span{display:flex;align-items:center;gap:6px}.dot{width:9px;height:9px;border-radius:50%}
+.note{position:absolute;top:6px;right:8px;font-size:10px;color:#6b778a}
+.water{position:absolute;left:50%;transform:translateX(-50%);top:58px;background:#3a2f12;color:#f0c35a;font-size:11px;padding:3px 8px;border-radius:4px;z-index:9}
+.call{background:#ffd44d;color:#111;font-weight:700;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;position:absolute;top:4px;right:4px;z-index:5;box-shadow:0 0 0 2px #0b1628}
+.rel{position:relative}
+</style></head><body>
+<div class="water">MOCKUP · illustrative values</div>
+<div class="top"><span class="logo">⚡ elastic</span><div class="search">Find apps, content, and more.</div></div>
+<div class="bar"><span class="crumb">Dashboards</span><span class="crumb b">Infrastructure Overview</span><span class="sp"></span><span class="btn">📅 Last 24 hours</span><span class="btn p">↻ Refresh</span><span class="btn">Share</span><span class="btn">✎ Edit</span></div>
+<div class="wrap">
+
+<div class="sec"><span class="chev">⌄</span>🧭 1 · Infrastructure status</div>
+<div class="grid">
+ <div class="p banner rel" style="grid-column:span 48"><span class="call">A</span><div class="num">1</div><div><b>▲ Start here: a red or amber tile shows where to look. Click a domain tile to open its detailed dashboard.</b><small>No control to pick. Red = an open P1 or a Critical alert · Amber = a P2, a Major alert or a resource at 90 % · Grey = not monitored.</small></div></div>
+
+ <div class="p dom amber rel" style="grid-column:span 8"><span class="call">B</span><div class="h"><span class="ic">🖥️</span>Server</div><div class="st">Attention</div><ul><li>3 under pressure (disk ≥ 90 %)</li><li>1 not reporting</li><li>0 open P1 · 1 P2</li></ul><span class="go">Server dashboard ›</span></div>
+ <div class="p dom green" style="grid-column:span 8"><div class="h"><span class="ic">🗄️</span>Database<span class="pill" style="margin-right:22px">SQL Server only</span></div><div class="st">Healthy</div><ul><li>0 down · 0 degraded</li><li>0 open P1 / P2</li></ul><span class="go">Database dashboard ›</span></div>
+ <div class="p dom red" style="grid-column:span 8"><div class="h"><span class="ic">⚙️</span>Middleware<span class="pill">partial</span></div><div class="st">Action</div><ul><li>IBM MQ queue manager down</li><li>1 open P2</li></ul><span class="go">Middleware dashboard ›</span></div>
+ <div class="p dom grey" style="grid-column:span 8"><div class="h"><span class="ic">🧱</span>VMware</div><div class="st">Not monitored</div><ul><li>4 of 549 ESX hosts collected</li><li>vSphere integration pending</li></ul><span class="go">VMware dashboard ›</span></div>
+ <div class="p dom green" style="grid-column:span 8"><div class="h"><span class="ic">☁️</span>Cloud<span class="pill">GKE</span></div><div class="st">Healthy</div><ul><li>5 GKE clusters · 0 under pressure</li><li>12 container restarts (24 h)</li></ul><span class="go">Cloud dashboard ›</span></div>
+ <div class="p dom red" style="grid-column:span 8"><div class="h"><span class="ic">🌐</span>Network</div><div class="st">Action</div><ul><li>2 Critical · 4 Major alerts</li><li>devices and UPSs (Netcool)</li></ul><span class="go">Alerts below ⌄</span></div>
+
+ <div class="p kpi rel" style="grid-column:span 8"><span class="call">C</span><span class="badge" style="margin:0;align-self:flex-start">Last 30 days</span><div class="row"><div class="circ" style="border-color:var(--green);color:var(--green)">P1</div><div><div class="lab">Active P1</div><div class="sub2">infrastructure CIs</div></div><div class="val" style="color:var(--green)">0</div></div><div class="foot" style="color:var(--green)">All clear</div></div>
+ <div class="p kpi" style="grid-column:span 8"><span class="badge" style="margin:0;align-self:flex-start">Last 30 days</span><div class="row"><div class="circ" style="border-color:var(--amber);color:var(--amber)">P2</div><div><div class="lab">P2 over 8 h</div><div class="sub2">past MIM's target</div></div><div class="val" style="color:var(--amber)">2</div></div><div class="foot" style="color:var(--amber)">Needs action</div></div>
+ <div class="p kpi" style="grid-column:span 8"><span class="badge" style="margin:0;align-self:flex-start">Last 24 hours</span><div class="row"><div class="circ" style="border-color:var(--red);color:var(--red)">🔔</div><div><div class="lab">Critical alerts</div><div class="sub2">Elastic + Netcool, open</div></div><div class="val" style="color:var(--red)">5</div></div><div class="foot" style="color:var(--sub)">Major 9 · Minor 21</div></div>
+ <div class="p kpi" style="grid-column:span 8"><span class="badge" style="margin:0;align-self:flex-start">Last 10 min</span><div class="row"><div class="circ" style="border-color:var(--red);color:var(--red)">⏻</div><div><div class="lab">Servers not reporting</div><div class="sub2">no data for 10 min</div></div><div class="val" style="color:var(--red)">1</div></div><div class="foot" style="color:var(--red)">Needs action</div></div>
+ <div class="p kpi" style="grid-column:span 8"><span class="badge" style="margin:0;align-self:flex-start">Last 1 hour</span><div class="row"><div class="circ" style="border-color:var(--amber);color:var(--amber)">▲</div><div><div class="lab">Servers under pressure</div><div class="sub2">CPU, memory or disk ≥ 90 %</div></div><div class="val" style="color:var(--amber)">3</div></div><div class="foot" style="color:var(--sub)">disk 3 · CPU 0 · memory 0</div></div>
+ <div class="p kpi" style="grid-column:span 8"><span class="badge" style="margin:0;align-self:flex-start">Last 7 days</span><div class="row"><div class="circ" style="border-color:var(--amber);color:var(--amber)">⟲</div><div><div class="lab">Failed changes</div><div class="sub2">failed or backed out</div></div><div class="val" style="color:var(--amber)">1</div></div><div class="foot" style="color:var(--sub)">of 164 closed</div></div>
+</div>
+
+<div class="sec"><span class="chev">⌄</span>🚨 2 · What needs attention now</div>
+<div class="grid">
+ <div class="p rel" style="grid-column:span 26"><span class="call">D</span><span class="ttl">Active P1 / P2 incidents on infrastructure</span><span class="badge">Last 30 days</span><span class="note" style="right:32px">click an incident → ServiceNow · click a CI → MIM</span>
+  <table><tr><th></th><th>Domain</th><th>Incident</th><th>Pri</th><th>CI</th><th>State</th><th>Opened</th><th>Assignment group</th></tr>
+  <tr><td class="n">1</td><td><span class="dtag">⚙️ Middleware</span></td><td class="lnk">INC4410921</td><td><span class="b a">2</span></td><td class="lnk">vslrau1p338</td><td>In Progress</td><td>11 h ago</td><td>Middleware Support</td></tr>
+  <tr><td class="n">2</td><td><span class="dtag">🖥️ Server</span></td><td class="lnk">INC4410877</td><td><span class="b a">2</span></td><td class="lnk">kau1p802</td><td>New</td><td>9 h ago</td><td>Windows Server Ops</td></tr>
+  <tr><td class="n">3</td><td><span class="dtag">🌐 Network</span></td><td class="lnk">INC4410902</td><td><span class="b a">2</span></td><td class="lnk">cuwash1</td><td>In Progress</td><td>3 h ago</td><td>Network Ops</td></tr></table></div>
+ <div class="p rel" style="grid-column:span 22"><span class="call">E</span><span class="ttl">Open infrastructure alerts, by domain</span><span class="badge">Last 24 hours</span><span class="note" style="right:32px">click a bar → that domain's dashboard</span>
+  <div style="margin-top:10px">
+  <div class="hb"><span class="l">🌐 Network</span><div class="t"><i style="width:14%;background:var(--red)"></i><i style="width:24%;background:var(--amber)"></i><i style="width:20%;background:var(--p3)"></i></div></div>
+  <div class="hb"><span class="l">🖥️ Server</span><div class="t"><i style="width:6%;background:var(--red)"></i><i style="width:18%;background:var(--amber)"></i><i style="width:30%;background:var(--p3)"></i></div></div>
+  <div class="hb"><span class="l">⚙️ Middleware</span><div class="t"><i style="width:7%;background:var(--red)"></i><i style="width:5%;background:var(--amber)"></i><i style="width:9%;background:var(--p3)"></i></div></div>
+  <div class="hb"><span class="l">🗄️ Database</span><div class="t"><i style="width:0%"></i><i style="width:4%;background:var(--amber)"></i><i style="width:6%;background:var(--p3)"></i></div></div>
+  <div class="hb"><span class="l">☁️ Cloud</span><div class="t"><i style="width:3%;background:var(--p3)"></i></div></div>
+  <div class="hb"><span class="l">🧱 VMware</span><div class="t" style="background:repeating-linear-gradient(45deg,#1a2639 0 6px,#222f45 6px 12px)"></div></div>
+  <div class="legend"><span><i style="background:var(--red)"></i>Critical</span><span><i style="background:var(--amber)"></i>Major</span><span><i style="background:var(--p3)"></i>Minor / Warning</span><span><i style="background:#2a374d"></i>not monitored</span></div></div></div>
+ <div class="p" style="grid-column:span 48"><span class="ttl">Top open alerts</span><span class="badge">Last 24 hours</span><span class="note" style="right:32px">Critical first · click the CI → MIM, the domain → its dashboard</span>
+  <table><tr><th></th><th>Domain</th><th>Severity</th><th>CI</th><th>Alert</th><th>Source</th><th>Open for</th><th>Incident?</th></tr>
+  <tr><td class="n">1</td><td><span class="dtag">🌐 Network</span></td><td><span class="b r">Critical</span></td><td class="lnk">adc-wan-agg2</td><td>Interface down: Gi0/1</td><td>Netcool</td><td>2 h 10 min</td><td><span class="b gr">none</span></td></tr>
+  <tr><td class="n">2</td><td><span class="dtag">⚙️ Middleware</span></td><td><span class="b r">Critical</span></td><td class="lnk">vslrau1p338</td><td>IBM MQ queue manager not running</td><td>Elastic</td><td>11 h 4 min</td><td><span class="lnk">INC4410921</span></td></tr>
+  <tr><td class="n">3</td><td><span class="dtag">🖥️ Server</span></td><td><span class="b a">Major</span></td><td class="lnk">vrau1pap0041</td><td>Filesystem /var 94 % full</td><td>Elastic</td><td>5 h 30 min</td><td><span class="b gr">none</span></td></tr></table></div>
+</div>
+
+<div class="sec"><span class="chev">⌄</span>🔄 3 · Changes and trend</div>
+<div class="grid">
+ <div class="p" style="grid-column:span 24"><span class="ttl">Changes in progress or due in the next 24 h</span><span class="badge">Next 24 hours</span>
+  <table><tr><th></th><th>Domain</th><th>Change</th><th>CI</th><th>Start</th><th>State</th></tr>
+  <tr><td class="n">1</td><td><span class="dtag">🧱 VMware</span></td><td class="lnk">CHG0912201</td><td>vcenter-prod-02</td><td>today 22:00</td><td>Scheduled</td></tr>
+  <tr><td class="n">2</td><td><span class="dtag">🗄️ Database</span></td><td class="lnk">CHG0912188</td><td>kau1p802</td><td>in progress</td><td>Implement</td></tr></table></div>
+ <div class="p" style="grid-column:span 24"><span class="ttl">Infrastructure incidents opened per day, by domain</span><span class="badge">Last 30 days</span>
+  <svg viewBox="0 0 520 120" width="100%" height="118" style="margin-top:6px">
+   <g stroke="#1f2b40"><line x1="30" y1="10" x2="515" y2="10"/><line x1="30" y1="50" x2="515" y2="50"/><line x1="30" y1="90" x2="515" y2="90"/></g>
+   <g font-size="10" fill="#98a2b3"><text x="4" y="14">20</text><text x="4" y="54">10</text><text x="10" y="94">0</text><text x="30" y="112">7 Oct</text><text x="250" y="112">22 Oct</text><text x="470" y="112">5 Nov</text></g>
+   <g id="bars"></g>
+  </svg>
+  <div class="legend"><span><i style="background:#6092c0"></i>Server</span><span><i style="background:#d6bf57"></i>Network</span><span><i style="background:#b9a888"></i>Middleware</span><span><i style="background:#9170b8"></i>Database</span><span><i style="background:#54b399"></i>Cloud</span></div></div>
+</div>
+
+<div class="sec"><span class="chev">⌄</span>🔗 4 · Detailed dashboards</div>
+<div class="grid">
+ <div class="p rel" style="grid-column:span 9"><span class="call">F</span><span class="link">🖥️ Server Infra ›</span></div>
+ <div class="p" style="grid-column:span 9"><span class="link">🗄️ Database Infra ›</span></div>
+ <div class="p" style="grid-column:span 9"><span class="link">☁️ Cloud Infra ›</span></div>
+ <div class="p" style="grid-column:span 9"><span class="link">⚙️ Middleware ›</span></div>
+ <div class="p" style="grid-column:span 12"><span class="link">🧱 VMware Infra ›</span></div>
+ <div class="p" style="grid-column:span 24"><span class="link">🩺 Applications Operations Dashboard ›</span></div>
+ <div class="p" style="grid-column:span 24"><span class="link">🚨 MIM Dashboard ›</span></div>
+ <div class="p rel" style="grid-column:span 48"><span class="call">G</span><span class="ttl">Data freshness</span><span class="badge">now</span>
+  <div class="fresh"><span><i class="dot" style="background:var(--green)"></i>ServiceNow incidents · 2 min ago</span><span><i class="dot" style="background:var(--green)"></i>ServiceNow changes · 6 min</span><span><i class="dot" style="background:var(--green)"></i>Netcool bridge · 1 min</span><span><i class="dot" style="background:var(--green)"></i>Server metrics · 1 min</span><span><i class="dot" style="background:var(--green)"></i>Elastic alerts · 1 min</span><span><i class="dot" style="background:var(--green)"></i>GKE · 3 min</span><span><i class="dot" style="background:var(--amber)"></i>CMDB relations · 47 min</span></div></div>
+</div>
+</div>
+<script>
+const g=document.getElementById('bars');const cols=['#6092c0','#d6bf57','#b9a888','#9170b8','#54b399'];let s=1;
+const r=()=>{s=(s*9301+49297)%233280;return s/233280};
+for(let d=0;d<30;d++){let y=90;const x=34+d*16;[5,3,2,1,.6].forEach((m,i)=>{const h=Math.round(r()*m*2.4)*4;if(h){const e=document.createElementNS('http://www.w3.org/2000/svg','rect');e.setAttribute('x',x);e.setAttribute('y',y-h);e.setAttribute('width',11);e.setAttribute('height',h);e.setAttribute('fill',cols[i]);g.appendChild(e);y-=h}})}
+</script>
+</body></html>

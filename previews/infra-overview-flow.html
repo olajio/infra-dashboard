@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Infrastructure Overview flow</title>
+<style>
+body{margin:0;background:#0b1628;font:13px Inter,"Segoe UI",Arial,sans-serif;color:#dfe5ef}
+h1{font-size:18px;margin:16px 20px 2px}p.s{margin:0 20px 6px;color:#98a2b3}
+text{font-family:Inter,"Segoe UI",Arial,sans-serif}
+</style></head><body>
+<h1>Infrastructure Overview: how a user moves from the overview to the detail</h1>
+<p class="s">L0 overview → L1 domain dashboard → L2 detail, or MIM when there is an incident. Letters match the callouts on the mockup.</p>
+<svg viewBox="0 0 1500 900" width="1500" height="900">
+<defs>
+ <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#8fa3bf"/></marker>
+ <style>
+  .box rect{rx:8;stroke-width:1.5}.l0 rect{fill:#0d2a52;stroke:#0b64dd}.l1 rect{fill:#13263d;stroke:#36a2ef}.l2 rect{fill:#1b2a1f;stroke:#1f9e6b}
+  .mim rect{fill:#3a1714;stroke:#d6453d}.dec polygon{fill:#2b2410;stroke:#c98a0b;stroke-width:1.5}.end rect{fill:#1d2a40;stroke:#5a6577}
+  .t{fill:#dfe5ef;font-size:13px;font-weight:600;text-anchor:middle}.st{fill:#98a2b3;font-size:11px;text-anchor:middle}
+  .e{stroke:#8fa3bf;stroke-width:1.6;fill:none;marker-end:url(#a)}.lab{fill:#c9d3e0;font-size:11px}
+  .tier{fill:#6b778a;font-size:12px;font-weight:700}
+ </style>
+</defs>
+<!-- tier labels -->
+<text class="tier" x="18" y="70">L0 · OVERVIEW</text><text class="tier" x="18" y="430">L1 · DOMAIN</text><text class="tier" x="18" y="640">L2 · DETAIL / INCIDENT</text>
+<line x1="15" y1="400" x2="1485" y2="400" stroke="#1f2b40" stroke-dasharray="4 4"/><line x1="15" y1="610" x2="1485" y2="610" stroke="#1f2b40" stroke-dasharray="4 4"/>
+
+<g class="box l0"><rect x="590" y="20" width="320" height="56"/><text class="t" x="750" y="44">Open Infrastructure Overview</text><text class="st" x="750" y="62">nothing to pick · reads correctly on open</text></g>
+<g class="dec"><polygon points="750,100 900,150 750,200 600,150"/><text class="t" x="750" y="146">(A)(B) Any domain tile</text><text class="t" x="750" y="163">red, amber or grey?</text></g>
+<path class="e" d="M750,76V100"/>
+
+<g class="box end"><rect x="1080" y="122" width="300" height="56"/><text class="t" x="1230" y="146">All green: check (G) data freshness</text><text class="st" x="1230" y="164">and (3) changes due · then done</text></g>
+<path class="e" d="M900,150H1080"/><text class="lab" x="955" y="142">no</text>
+
+<g class="dec"><polygon points="750,230 920,285 750,340 580,285"/><text class="t" x="750" y="280">(C)(D) Is there an open</text><text class="t" x="750" y="297">P1 / P2 incident on it?</text></g>
+<path class="e" d="M750,200V230"/><text class="lab" x="758" y="220">yes</text>
+
+<g class="box mim"><rect x="1080" y="257" width="300" height="56"/><text class="t" x="1230" y="281">MIM dashboard</text><text class="st" x="1230" y="299">click the incident's CI in (D) · pick the incident</text></g>
+<path class="e" d="M920,285H1080"/><text class="lab" x="955" y="277">yes: run it as an incident</text>
+
+<g class="box l0"><rect x="120" y="257" width="330" height="56"/><text class="t" x="285" y="281">(E) Which domain is red / amber?</text><text class="st" x="285" y="299">click its tile, its bar, or (F) its link</text></g>
+<path class="e" d="M580,285H450"/><text class="lab" x="470" y="277">no: find the cause</text>
+
+<!-- L1 domain dashboards -->
+<g class="box l1"><rect x="40" y="440" width="210" height="62"/><text class="t" x="145" y="465">🖥️ Server Infra</text><text class="st" x="145" y="483">which servers · CPU, memory, disk</text></g>
+<g class="box l1"><rect x="275" y="440" width="210" height="62"/><text class="t" x="380" y="465">🗄️ Database Infra</text><text class="st" x="380" y="483">which instance · up / down</text></g>
+<g class="box l1"><rect x="510" y="440" width="210" height="62"/><text class="t" x="615" y="465">⚙️ Middleware</text><text class="st" x="615" y="483">which component · MQ, JBoss …</text></g>
+<g class="box l1"><rect x="745" y="440" width="210" height="62"/><text class="t" x="850" y="465">☁️ Cloud Infra</text><text class="st" x="850" y="483">which cluster / node</text></g>
+<g class="box l1"><rect x="980" y="440" width="210" height="62"/><text class="t" x="1085" y="465">🧱 VMware Infra</text><text class="st" x="1085" y="483">grey tile: limited data today</text></g>
+<g class="box l1"><rect x="1215" y="440" width="240" height="62"/><text class="t" x="1335" y="465">🌐 Network (no dashboard)</text><text class="st" x="1335" y="483">"Top open alerts" on the overview</text></g>
+<path class="e" d="M285,313C285,380 145,380 145,440"/>
+<path class="e" d="M285,313C285,390 380,390 380,440"/>
+<path class="e" d="M285,313C300,395 615,380 615,440"/>
+<path class="e" d="M285,313C320,400 850,370 850,440"/>
+<path class="e" d="M285,313C340,405 1085,365 1085,440"/>
+<path class="e" d="M285,313C360,410 1335,360 1335,440"/>
+
+<!-- L2 -->
+<g class="dec"><polygon points="700,535 860,575 700,615 540,575"/><text class="t" x="700" y="572">Cause found on one CI?</text><text class="st" x="700" y="589">a server, instance, cluster, device</text></g>
+<path class="e" d="M145,502C145,560 400,575 540,575"/><path class="e" d="M380,502C380,550 480,575 540,575"/><path class="e" d="M615,502V520C615,530 640,545 650,548"/>
+<path class="e" d="M850,502C850,530 790,550 770,556"/><path class="e" d="M1085,502C1085,560 960,575 860,575"/><path class="e" d="M1335,502C1335,575 1000,590 860,580"/>
+
+<g class="box l2"><rect x="140" y="660" width="340" height="62"/><text class="t" x="310" y="685">Domain detail panels (L2)</text><text class="st" x="310" y="703">fix it, or hand it to the domain team</text></g>
+<g class="box mim"><rect x="560" y="660" width="300" height="62"/><text class="t" x="710" y="685">MIM dashboard: pick the CI</text><text class="st" x="710" y="703">who to call · changes · alerts · blast radius</text></g>
+<g class="box l2"><rect x="940" y="660" width="330" height="62"/><text class="t" x="1105" y="685">Raise an incident in ServiceNow</text><text class="st" x="1105" y="703">when the impact needs one</text></g>
+<path class="e" d="M600,600C520,640 400,630 360,660"/><text class="lab" x="420" y="628">routine</text>
+<path class="e" d="M700,615V660"/><text class="lab" x="708" y="645">needs escalation</text>
+<path class="e" d="M860,691H940"/>
+
+<!-- back to overview -->
+<g class="box end"><rect x="560" y="780" width="300" height="56"/><text class="t" x="710" y="804">Back to the overview</text><text class="st" x="710" y="822">tile turns green once alerts clear</text></g>
+<path class="e" d="M310,722C310,790 470,808 560,808"/><path class="e" d="M1105,722C1105,790 950,808 860,808"/>
+<path class="e" d="M560,822H8V48H590" stroke-dasharray="5 4"/><text class="lab" x="14" y="390">re-check</text>
+
+<!-- legend -->
+<g transform="translate(1100,6)"><rect width="380" height="96" rx="8" fill="#111c30" stroke="#24324a"/>
+<rect x="12" y="12" width="14" height="10" fill="#0d2a52" stroke="#0b64dd"/><text class="lab" x="32" y="21">Infrastructure Overview (this page)</text>
+<rect x="12" y="32" width="14" height="10" fill="#13263d" stroke="#36a2ef"/><text class="lab" x="32" y="41">Domain dashboards (existing links)</text>
+<rect x="12" y="52" width="14" height="10" fill="#3a1714" stroke="#d6453d"/><text class="lab" x="32" y="61">MIM (incident and CI investigation)</text>
+<rect x="12" y="72" width="14" height="10" fill="#1b2a1f" stroke="#1f9e6b"/><text class="lab" x="32" y="81">Detail / action</text>
+<polygon points="267,72 276,77 267,82 258,77" fill="#2b2410" stroke="#c98a0b"/><text class="lab" x="282" y="81">Decision</text></g>
+</svg>
+</body></html>
