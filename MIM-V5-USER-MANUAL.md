@@ -1,6 +1,6 @@
 # MIM V5 dashboard: user manual
 
-*4 Nov 2026, updated 6 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
+*4 Nov 2026, updated 9 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
 
 ## What it is for
 
@@ -83,6 +83,32 @@ Layout: *Escalation Channel* and *Open Alerts with No Incident* side by side at 
 | **Blast radius** | How many applications depend directly on the CI. Amber from 1, red from 5 | The CI has applications linked above it in the CMDB |
 | **Applications related to this CI** | Every application linked to the CI in the CMDB, in both directions, with the relationship | The CI has CMDB links |
 | **Middleware View**, **Database View**, **Server View**, **Other related CIs** | The CI's CMDB neighbours by class. **Server View** names the servers to pick in the **Server** control | The CI has CMDB links |
+
+#### *Alerts on this CI* or *Open Alerts with No Incident*?
+
+Both tables read the same Netcool alerts, but answer different questions:
+
+- **Alerts on this CI:** *"What is alerting on the CI I'm investigating, and did it cause the incident?"*
+- **Open Alerts with No Incident:** *"What is alerting that nobody has raised an incident for?"* These are possible
+  blind spots.
+
+| | **Alerts on this CI** | **Open Alerts with No Incident** |
+|---|---|---|
+| **Which CIs** | Only the picked CI, matched by CMDB name or by its Netcool node (`<CI>.cna.com`) | With nothing picked, every production CI. With an incident or CI picked, that CI and the CIs linked to it in the CMDB |
+| **Incident filter** | None: shows alerts whether or not an incident exists | Leaves out any CI that has an open incident |
+| **Open or cleared** | Both, with the state now (Open or Cleared) | Open only |
+| **Time window** | Last 7 days | Last 24 hours |
+| **With nothing picked** | Empty | Fills: every open alert with no incident |
+| **Extra column** | When each alert started compared with the incident. "Likely trigger" means it started up to 2 hours before the incident was opened | How long it has been open, and whether it was acknowledged |
+| **Use it to** | Find the cause of the incident | Spot problems nobody is working on yet, around the CI |
+
+**When you pick an incident**, its CI has an open incident by definition, so that CI's own alerts never appear in
+*Open Alerts with No Incident*; they show in *Alerts on this CI*. What remains in *Open Alerts with No Incident* are
+alerts on the **linked** CIs (the switch, ESX host or other device the CI depends on) that have no incident of their
+own: a neighbouring device may be failing without anyone having raised it.
+
+On a server or application CI, both tables are often empty, because Netcool alerts mostly come from network devices
+and UPSs.
 
 ### 🩺 3 · Application & Service Health, Dependencies
 
