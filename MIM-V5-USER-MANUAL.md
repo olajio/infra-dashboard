@@ -1,6 +1,6 @@
 # MIM V5 dashboard: user manual
 
-*4 Nov 2026, updated 9 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
+*4 Nov 2026, updated 10 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
 
 ## What it is for
 
@@ -109,6 +109,21 @@ own: a neighbouring device may be failing without anyone having raised it.
 
 On a server or application CI, both tables are often empty, because Netcool alerts mostly come from network devices
 and UPSs.
+
+**Neither table contains the other.** *Alerts on this CI* goes **deeper** on one CI: open and cleared alerts, 7 days,
+incident or not. *Open Alerts with No Incident* goes **wider**: the CI's neighbours too, but only alerts open now that
+nobody is handling. They overlap in one case only:
+
+| An alert that is… | In *Alerts on this CI*? | In *Open Alerts with No Incident*? |
+|---|---|---|
+| On the picked CI, **cleared** | ✅ | ❌ (open alerts only) |
+| On the picked CI, open, but no update in the last 24 h | ✅ | ❌ (last 24 h only) |
+| On the picked CI, open, and the CI **has an open incident** (always the case when you pick an incident) | ✅ | ❌ (CIs with incidents are dropped) |
+| On a **linked CI** (switch, ESX host …), open, no incident | ❌ (picked CI only) | ✅ |
+| On the picked CI, open in the last 24 h, the CI has **no** open incident (picked in the **CI** control) | ✅ | ✅ (the only overlap) |
+
+So when you investigate an incident they usually share no rows: one shows what happened **on** the CI, the other
+what is failing **around** it that nobody has picked up.
 
 ### 🩺 3 · Application & Service Health, Dependencies
 
