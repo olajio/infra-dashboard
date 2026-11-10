@@ -92,7 +92,17 @@ Incident / CI controls (Vega cannot read controls); *Escalate* is renamed *Escal
 Channel and *Open Alerts with No Incident* (moved from section 1) side by side, then *Changes* and *Alerts on this CI*
 side by side; *Time to Resolve vs Target* uses one axis, so the P3 24 h line no longer reads as about 1 h.
 
-## Infrastructure Dashboard (28 Oct 2026)
+## Infrastructure Overview (10 Nov 2026)
+
+`Infrastructure Overview.ndjson` is the infrastructure landing page (`INFRA-OVERVIEW-KPIS.md`,
+`previews/INFRA-OVERVIEW-WALKTHROUGH.md`, manual `INFRA-OVERVIEW-MANUAL.md`). Built by
+`python3 build_infra_overview.py "MIM V5.ndjson" "Infrastructure Overview.ndjson"` (MIM V5 only for its table and
+drill-down formats). No controls. It keeps the Infrastructure Dashboard's id (`0ed4078f-ae6c-5721-b852-20f0cf4d7a33`),
+so it replaces it on import. Test: `test_infra_overview_2026-11-10.py "Infrastructure Overview.ndjson"` (its own data;
+it first removes the local test cluster's indices for the dashboard's sources; `--keep` leaves the data for a
+screenshot). The CI-driven dashboard and its manual are in `archive/`.
+
+## Infrastructure Dashboard (28 Oct 2026) — superseded on 10 Nov by the Infrastructure Overview
 
 `Infrastructure Dashboard.ndjson` is the CI-driven dashboard for the KPIs in `dashboard_kpis.txt`. It is **built
 from `MIM V4.ndjson`** (MIM V3 until 3 Nov), reusing MIM V3's tested panels, so rebuild it after MIM V3 changes:

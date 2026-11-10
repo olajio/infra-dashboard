@@ -24,6 +24,8 @@ Work done since the KPIs were defined on 28 Oct 2026. **KPI #** is the row numbe
 | 5 Nov | **Added section 4 *Detailed dashboards*:** links to the Server, Database, Middleware, VMware and Cloud infra dashboards | 6–11 | Done |
 | 5 Nov | **Added the Incident control** (top bar), as on MIM: a picked incident selects its CI. *Incidents on this CI* became **Active P1 and P2 incidents** (MIM's Active Incidents table). Built on the team's layout (`infra2.ndjson`) | 1, 2 | Done |
 | 5 Nov | P2 now follows MIM's 8 h rule (table *Active Incidents (P1 · P2 over 8 h)* and tile *P2 over 8 h*). Section 4: added the Applications Operations and MIM dashboard links | 1, 2 | Done |
+| 6 Nov | After the team review: landing-page KPIs (20, with relevance and achievability), mockup, flowchart and walkthrough | All | Done |
+| 10 Nov | **Built the Infrastructure Overview** (landing page, no controls): domain status tiles, KPI tiles, incidents, alerts, changes, trend, links, data freshness. Replaces the CI-driven dashboard (same id) | 1–6, 10, 12, 13, 16 | Done |
 
 ## KPI status now
 
