@@ -48,7 +48,7 @@ IDX = {
     f'servicenow-incidents-{T}': {'@timestamp': D, 'number': K, 'priority': I, 'state_name': K, 'opened_at': D, 'ci': CI,
                                   'assignment_group': obj(name=K), 'assigned_to': obj(name=K), 'short_description': K},
     f'servicenow-change-requests-{T}': {'@timestamp': D, 'number': K, 'start_date': D, 'end_at': D, 'state_name': K,
-                                        'close_code': K, 'closed_at': D, 'type': obj(normalized=K, name=K), 'ci': CI,
+                                        'close_code': K, 'closed_at': D, 'type': obj(normalized=K), 'ci': CI,
                                         'assignment_group': obj(name=K)},
     f'.ds-bridge-alerts-netcool-default-{T}': {'@timestamp': D, 'severity': I, 'message': K, 'node': K, 'first_occurrence': D,
                                                 'netcool': obj(identifier=K, type_name=K), 'ci': CI},
@@ -96,7 +96,7 @@ docs = {
         {'@timestamp': ago(days=1), 'number': 'CHG5', 'type': {'normalized': 'normal'}, 'start_date': ago(days=1, hours=2), 'end_at': ago(days=1), 'state_name': 'Closed', 'close_code': 'successful', 'closed_at': ago(days=1), 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},
         {'@timestamp': ago(minutes=5), 'number': 'CHG6', 'type': {'normalized': 'normal'}, 'start_date': ago(hours=1), 'end_at': iso(hours=1), 'state_name': 'Implement', 'ci': ci('app1', 'Application Service'), 'assignment_group': {'name': 'Apps'}},
         {'@timestamp': ago(minutes=5), 'number': 'CHG7', 'type': {'normalized': 'normal'}, 'state_name': 'Assess', 'ci': ci('sw1', 'IP Switch'), 'assignment_group': {'name': 'Network'}},     # pending approval
-        {'@timestamp': ago(days=1), 'number': 'CHG8', 'type': {'name': 'Standard'}, 'start_date': ago(days=1, hours=2), 'state_name': 'Closed', 'close_code': 'canceled', 'closed_at': ago(days=1), 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},  # canceled: not implemented
+        {'@timestamp': ago(days=1), 'number': 'CHG8', 'type': {'normalized': 'standard'}, 'start_date': ago(days=1, hours=2), 'state_name': 'Closed', 'close_code': 'canceled', 'closed_at': ago(days=1), 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},  # canceled: not implemented
         {'@timestamp': ago(days=10), 'number': 'CHG9', 'type': {'normalized': 'normal'}, 'start_date': ago(days=10, hours=2), 'end_at': ago(days=10), 'state_name': 'Closed', 'close_code': 'successful', 'closed_at': ago(days=10), 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},  # previous week
     ],
     f'.ds-bridge-alerts-netcool-default-{T}': [

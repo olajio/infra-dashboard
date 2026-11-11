@@ -462,7 +462,7 @@ panels.append(table(
 # Change Request Summary: the Portfolio v4 panel (four cards), rebuilt on ES|QL so each change counts once (its latest
 # record), on infrastructure CIs (and changes with no CI class), with a list of those changes beside it.
 CHG_SCOPED = CHG_LATEST + f"""| EVAL domain = {DOMAIN('TO_STRING(ci.class_name)')},
-       st = TO_STRING(state_name), ty = TO_LOWER(COALESCE(TO_STRING(type.normalized), TO_STRING(type.name), "")),
+       st = TO_STRING(state_name), ty = TO_LOWER(COALESCE(TO_STRING(type.normalized), "")),
        cl = TO_DATETIME(closed_at), sd = TO_DATETIME(start_date), ed = TO_DATETIME(end_at),
        cc = TO_LOWER(COALESCE(TO_STRING(close_code), ""))
 | WHERE {INFRA}
