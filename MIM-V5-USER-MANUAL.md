@@ -1,6 +1,6 @@
 # MIM V5 dashboard: user manual
 
-*4 Nov 2026, updated 10 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
+*4 Nov 2026, updated 11 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
 
 ## What it is for
 
@@ -72,58 +72,23 @@ their target. They can still be picked in the Incident control.
 
 ### 🔎 2 · Investigate the CI
 
-Layout: *Escalation Channel* and *Open Alerts with No Incident* side by side at the top; *Changes* and *Alerts on this CI* side by side under them.
+Layout: *Escalation Channel* and *Open Alerts with No Incident* side by side at the top; *Changes* full width under them.
 
 | Panel | Shows | Fills when |
 |---|---|---|
 | **Open Alerts with No Incident** | Open Netcool alerts on CIs with no open incident, Critical first, last 24 h. **With an incident or CI picked:** only alerts on that CI and on CIs linked to it in the CMDB; with nothing picked, every CI's. Sits next to *Escalation Channel* | Always |
 | **Escalation Channel** | **Who to call.** One row per active incident on the CI: priority, **state**, **when opened**, CI class and environment, assignment group, assignee and group manager (with emails). With a CI and no incident, one row with the CI's owners | An incident or CI is picked |
 | **Changes in the Last 7 Days on this CI** | Change requests in the last 7 days on the CI **and on CIs linked to it** (its ESX host, cluster, switch, applications …) | A change touched the CI or a linked CI this week |
-| **Alerts on this CI** | Netcool alerts on the CI, last 7 days: Open or Cleared, severity, and when each started compared with the incident ("likely trigger" if up to 2 h before it opened) | The CI is a Netcool-monitored node with alerts |
 | **Blast radius** | How many applications depend directly on the CI. Amber from 1, red from 5 | The CI has applications linked above it in the CMDB |
 | **Applications related to this CI** | Every application linked to the CI in the CMDB, in both directions, with the relationship | The CI has CMDB links |
 | **Middleware View**, **Database View**, **Server View**, **Other related CIs** | The CI's CMDB neighbours by class. **Server View** names the servers to pick in the **Server** control | The CI has CMDB links |
 
-#### *Alerts on this CI* or *Open Alerts with No Incident*?
+#### Netcool alerts in MIM V5
 
-Both tables read the same Netcool alerts, but answer different questions:
-
-- **Alerts on this CI:** *"What is alerting on the CI I'm investigating, and did it cause the incident?"*
-- **Open Alerts with No Incident:** *"What is alerting that nobody has raised an incident for?"* These are possible
-  blind spots.
-
-| | **Alerts on this CI** | **Open Alerts with No Incident** |
-|---|---|---|
-| **Which CIs** | Only the picked CI, matched by CMDB name or by its Netcool node (`<CI>.cna.com`) | With nothing picked, every production CI. With an incident or CI picked, that CI and the CIs linked to it in the CMDB |
-| **Incident filter** | None: shows alerts whether or not an incident exists | Leaves out any CI that has an open incident |
-| **Open or cleared** | Both, with the state now (Open or Cleared) | Open only |
-| **Time window** | Last 7 days | Last 24 hours |
-| **With nothing picked** | Empty | Fills: every open alert with no incident |
-| **Extra column** | When each alert started compared with the incident. "Likely trigger" means it started up to 2 hours before the incident was opened | How long it has been open, and whether it was acknowledged |
-| **Use it to** | Find the cause of the incident | Spot problems nobody is working on yet, around the CI |
-
-**When you pick an incident**, its CI has an open incident by definition, so that CI's own alerts never appear in
-*Open Alerts with No Incident*; they show in *Alerts on this CI*. What remains in *Open Alerts with No Incident* are
-alerts on the **linked** CIs (the switch, ESX host or other device the CI depends on) that have no incident of their
-own: a neighbouring device may be failing without anyone having raised it.
-
-On a server or application CI, both tables are often empty, because Netcool alerts mostly come from network devices
-and UPSs.
-
-**Neither table contains the other.** *Alerts on this CI* goes **deeper** on one CI: open and cleared alerts, 7 days,
-incident or not. *Open Alerts with No Incident* goes **wider**: the CI's neighbours too, but only alerts open now that
-nobody is handling. They overlap in one case only:
-
-| An alert that is… | In *Alerts on this CI*? | In *Open Alerts with No Incident*? |
-|---|---|---|
-| On the picked CI, **cleared** | ✅ | ❌ (open alerts only) |
-| On the picked CI, open, but no update in the last 24 h | ✅ | ❌ (last 24 h only) |
-| On the picked CI, open, and the CI **has an open incident** (always the case when you pick an incident) | ✅ | ❌ (CIs with incidents are dropped) |
-| On a **linked CI** (switch, ESX host …), open, no incident | ❌ (picked CI only) | ✅ |
-| On the picked CI, open in the last 24 h, the CI has **no** open incident (picked in the **CI** control) | ✅ | ✅ (the only overlap) |
-
-So when you investigate an incident they usually share no rows: one shows what happened **on** the CI, the other
-what is failing **around** it that nobody has picked up.
+*Alerts on this CI* was **removed on 11 Nov** at the team's request. Netcool alerts stay in **Open Alerts with No
+Incident** (and its tile in section 1): with an incident or CI picked, it shows open alerts on the CIs **linked** to it
+in the CMDB that have no incident of their own: a neighbouring switch, ESX host or other device that may be failing
+without anyone having raised it. The picked CI's own alerts are not shown there when the CI has an open incident.
 
 ### 🩺 3 · Application & Service Health, Dependencies
 
@@ -142,7 +107,7 @@ what is failing **around** it that nobody has picked up.
 
 1. **Section 1:** check *Needs attention now* and the three priority tiles. Find the incident in *Active Incidents*.
 2. **Pick it** in **🚨 Incident** (type its number).
-3. **Section 2:** *Escalation Channel* names the assignee and manager to call. Check *Changes* and *Alerts on this CI* for a
+3. **Section 2:** *Escalation Channel* names the assignee and manager to call. Check *Changes* and *Open Alerts with No Incident* for a
    likely cause, and *Blast radius* and *Applications related* for the impact.
 4. **Section 3:** if the CI is an application service, pick one of its servers (from *Server View*) in **🖥️ Server**.
    Read *Server Health* (red or amber), then the Down rows in *Middleware*, *Database* and *Process Health*.
@@ -164,7 +129,7 @@ missing from a list, use the next scene. **More → Reset changes** before each 
 | **1. eFile** (main scene) | CI = `eFile PROD` → Server = `vslrau1p400` → Application = `eFile` → Service = `efile` | **17 of 20 panels filled**: Escalate (4 incidents), every CMDB view (blast radius 18), Application Health, Services, Upstream (efile → oracle, 67,671 calls), Service health, Downstream, Middleware, Process, APM Services, Server, Synthetics, Errors from the Logs. Empty: Changes, Alerts, Database Health |
 | **2. Underwriting Tools** | CI = `Underwriting Tools PROD` → Server = `vslrau1p338` → Application = `Underwriting Tools` → Service = `oltp-data-api` | As scene 1, with 4 APM services on the server |
 | **3. Enterprise PolicyCenter** (for Changes) | CI = `Enterprise PolicyCenter PROD` → Server = `vrau1pap0041` → Application = `Enterprise PolicyCenter` → Service = `papc-papcintcons1` | As scene 1; *Changes* fills if its 2 Nov change is still within 7 days |
-| **4. Alerts** | CI = `cuwash1` (backup `adc-wan-agg2`) | *Alerts on this CI*, *Escalation Channel* |
+| **4. Alerts** | Nothing picked, then CI = a device listed in *Open Alerts with No Incident* | *Open Alerts with No Incident* (whole estate, then around the CI), *Escalation Channel* |
 | **5. Database** | Keep scene 1, then Server = `kau1p802` | *Database Health* (SQL Server). The APM panels empty, as this server runs no APM |
 
 Section 1 fills in every scene.
@@ -174,8 +139,8 @@ Section 1 fills in every scene.
 - **One CI at a time.** The CI list offers only CIs with a recent incident or production servers sending metrics
   today. A device with no recent incident cannot be picked.
 - **An application service has no metrics of its own.** Pick one of its servers in **Server**.
-- **Netcool alerts exist mostly on network devices and UPSs**, so *Alerts on this CI* is usually empty for servers
-  and applications.
+- **Netcool alerts exist mostly on network devices and UPSs**, so *Open Alerts with No Incident* fills mostly
+  around infrastructure CIs. The picked CI's own Netcool alerts are no longer shown (*Alerts on this CI* removed 11 Nov).
 - **SLA records:** most incidents show *No SLA record* until the ServiceNow SLA integration is fixed.
 - **Database metrics** are recorded under the SQL instance's name (`MSSQLSERVER@host`), so some databases appear only
   as their Windows service.

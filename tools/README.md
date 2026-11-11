@@ -85,6 +85,8 @@ numbers on the long tables. Rebuild after any MIM V4 change. Functional test: `t
 Opened and loses CI support group; Active Incidents gets Opened; Open Alerts with No Incident shows only the selected
 CI's alerts and its CMDB-linked CIs'. It also makes the controls hard to miss: icon titles, full-width top bar, and
 "Start here" banners. The Infrastructure Dashboard got the same control treatment in `build_infra_dashboard.py`.
+11 Nov: `mim_v5_patch_2026-11-11a.py "MIM V5.ndjson" "MIM V5.ndjson"` (test `test_mim_v5_2026-11-11a.py "MIM V4.ndjson"
+"MIM V5.ndjson"`) removes *Alerts on this CI*; *Changes* takes the full row. KPI sheet: `update_mim_kpi_sheet_2026-11-11.py`.
 6 Nov: KPI sheet updated with `update_mim_kpi_sheet_2026-11-06.py SRC.xlsx OUT.xlsx` (9 MIM rows, cells only).
 6 Nov: `mim_v5_patch_2026-11-06a.py "MIM V5.ndjson" "MIM V5.ndjson"` (test: `test_mim_v5_2026-11-06a.py "MIM V4.ndjson"
 "MIM V5.ndjson"`): the *Open alerts, no incident* tile becomes a Lens metric on the table's query, so it follows the
