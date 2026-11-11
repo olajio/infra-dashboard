@@ -48,7 +48,8 @@ IDX = {
     f'servicenow-incidents-{T}': {'@timestamp': D, 'number': K, 'priority': I, 'state_name': K, 'opened_at': D, 'ci': CI,
                                   'assignment_group': obj(name=K), 'assigned_to': obj(name=K), 'short_description': K},
     f'servicenow-change-requests-{T}': {'@timestamp': D, 'number': K, 'start_date': D, 'end_at': D, 'state_name': K,
-                                        'close_code': K, 'ci': CI, 'assignment_group': obj(name=K)},
+                                        'close_code': K, 'closed_at': D, 'type': obj(normalized=K, name=K), 'ci': CI,
+                                        'assignment_group': obj(name=K)},
     f'.ds-bridge-alerts-netcool-default-{T}': {'@timestamp': D, 'severity': I, 'message': K, 'node': K, 'first_occurrence': D,
                                                 'netcool': obj(identifier=K, type_name=K), 'ci': CI},
     f'.alerts-observability.{T}': {'@timestamp': D, 'kibana': obj(alert=obj(status=K, severity=K, reason=K, start=D,
@@ -88,12 +89,15 @@ docs = {
         inc('INC9', 2, 'New', 'esx1', 'ESX Server', 12),                        # VMware, P2 past 8 h
     ],
     f'servicenow-change-requests-{T}': [
-        {'@timestamp': ago(minutes=5), 'number': 'CHG1', 'start_date': ago(hours=1), 'end_at': iso(hours=2), 'state_name': 'Implement', 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},
-        {'@timestamp': ago(minutes=5), 'number': 'CHG2', 'start_date': iso(hours=5), 'end_at': iso(hours=6), 'state_name': 'Scheduled', 'ci': ci('db1', 'MSFT SQL Server Instance'), 'assignment_group': {'name': 'DBA'}},
-        {'@timestamp': ago(minutes=5), 'number': 'CHG3', 'start_date': iso(days=3), 'end_at': iso(days=3, hours=1), 'state_name': 'Scheduled', 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},
-        {'@timestamp': ago(days=2), 'number': 'CHG4', 'start_date': ago(days=2, hours=2), 'end_at': ago(days=2), 'state_name': 'Closed', 'close_code': 'unsuccessful', 'ci': ci('sw1', 'IP Switch'), 'assignment_group': {'name': 'Network'}},
-        {'@timestamp': ago(days=1), 'number': 'CHG5', 'start_date': ago(days=1, hours=2), 'end_at': ago(days=1), 'state_name': 'Closed', 'close_code': 'successful', 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},
-        {'@timestamp': ago(minutes=5), 'number': 'CHG6', 'start_date': ago(hours=1), 'end_at': iso(hours=1), 'state_name': 'Implement', 'ci': ci('app1', 'Application Service'), 'assignment_group': {'name': 'Apps'}},
+        {'@timestamp': ago(minutes=5), 'number': 'CHG1', 'type': {'normalized': 'normal'}, 'start_date': ago(hours=1), 'end_at': iso(hours=2), 'state_name': 'Implement', 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},
+        {'@timestamp': ago(minutes=5), 'number': 'CHG2', 'type': {'normalized': 'standard'}, 'start_date': iso(hours=5), 'end_at': iso(hours=6), 'state_name': 'Scheduled', 'ci': ci('db1', 'MSFT SQL Server Instance'), 'assignment_group': {'name': 'DBA'}},
+        {'@timestamp': ago(minutes=5), 'number': 'CHG3', 'type': {'normalized': 'emergency'}, 'start_date': iso(days=3), 'end_at': iso(days=3, hours=1), 'state_name': 'Scheduled', 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},
+        {'@timestamp': ago(days=2), 'number': 'CHG4', 'type': {'normalized': 'normal'}, 'start_date': ago(days=2, hours=2), 'end_at': ago(days=2), 'state_name': 'Closed', 'close_code': 'unsuccessful', 'closed_at': ago(days=2), 'ci': ci('sw1', 'IP Switch'), 'assignment_group': {'name': 'Network'}},
+        {'@timestamp': ago(days=1), 'number': 'CHG5', 'type': {'normalized': 'normal'}, 'start_date': ago(days=1, hours=2), 'end_at': ago(days=1), 'state_name': 'Closed', 'close_code': 'successful', 'closed_at': ago(days=1), 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},
+        {'@timestamp': ago(minutes=5), 'number': 'CHG6', 'type': {'normalized': 'normal'}, 'start_date': ago(hours=1), 'end_at': iso(hours=1), 'state_name': 'Implement', 'ci': ci('app1', 'Application Service'), 'assignment_group': {'name': 'Apps'}},
+        {'@timestamp': ago(minutes=5), 'number': 'CHG7', 'type': {'normalized': 'normal'}, 'state_name': 'Assess', 'ci': ci('sw1', 'IP Switch'), 'assignment_group': {'name': 'Network'}},     # pending approval
+        {'@timestamp': ago(days=1), 'number': 'CHG8', 'type': {'name': 'Standard'}, 'start_date': ago(days=1, hours=2), 'state_name': 'Closed', 'close_code': 'canceled', 'closed_at': ago(days=1), 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},  # canceled: not implemented
+        {'@timestamp': ago(days=10), 'number': 'CHG9', 'type': {'normalized': 'normal'}, 'start_date': ago(days=10, hours=2), 'end_at': ago(days=10), 'state_name': 'Closed', 'close_code': 'successful', 'closed_at': ago(days=10), 'ci': ci('srv1', 'Linux Server'), 'assignment_group': {'name': 'Unix'}},  # previous week
     ],
     f'.ds-bridge-alerts-netcool-default-{T}': [
         {'@timestamp': ago(minutes=10), 'severity': 5, 'message': 'Interface down', 'node': 'sw1.cna.com', 'first_occurrence': ago(hours=2),
@@ -243,9 +247,17 @@ try:
     check('alerts bar = Top open alerts rows', sum(bar.values()), len(rows))
 
     print('Section 3')
-    rows = run('Changes in progress or due in the next 24 h')
-    check('changes: in progress CHG1, due CHG2; not CHG3 (3 days), closed or application', [(r['number'], r['when'], r['domain']) for r in rows],
-          [('CHG1', 'In progress', 'Server'), ('CHG2', 'Due in 24 h', 'Database')])
+    s = esql(vq('Change Request Summary', 'stats'))[0]
+    check('Change Request Summary: open (N / S / E), implemented this week vs before, pending, scheduled 7 d',
+          {k: s[k] for k in ('open', 'normal', 'standard', 'emergency', 'implemented', 'implemented_prev', 'pending', 'scheduled')},
+          {'open': 4, 'normal': 2, 'standard': 1, 'emergency': 1, 'implemented': 2, 'implemented_prev': 1, 'pending': 1, 'scheduled': 2})
+    rows = run('Change requests')
+    check('Change requests list: in progress, pending, scheduled, implemented; application change and canceled left out',
+          [(r['status'], r['number'], r['change_type']) for r in rows],
+          [('In progress', 'CHG1', 'Normal'), ('Pending approval', 'CHG7', 'Normal'), ('Scheduled (7 d)', 'CHG2', 'Standard'),
+           ('Scheduled (7 d)', 'CHG3', 'Emergency'), ('Implemented this week', 'CHG4', 'Normal'), ('Implemented this week', 'CHG5', 'Normal')])
+    check('summary and list side by side', [(P[x]['gridData']['x'], P[x]['gridData']['y'], P[x]['gridData']['w'])
+                                           for x in ('Change Request Summary', 'Change requests')], [(0, 0, 18), (18, 0, 30)])
     trend = {}
     for r in esql(vq('Infrastructure incidents per day', 'raw')):   # summed over days: the test incidents can span midnight
         trend[r['domain']] = trend.get(r['domain'], 0) + r['n']

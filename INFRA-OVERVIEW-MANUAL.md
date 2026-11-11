@@ -40,8 +40,13 @@ picker changes nothing: each panel has its own window, shown on its badge.
 
 | Panel | Shows |
 |---|---|
-| **Changes in progress or due in the next 24 h** | Changes on infrastructure CIs that have started and not ended, or start within 24 h |
+| **Change Request Summary** | Four cards, as on Portfolio v4: **Open changes** (not Closed or Canceled) with N / S / E = normal, standard, emergency; **Implemented this week** (Closed, not canceled, in the last 7 days) with the change against the week before; **Pending approval** (Assess or Authorize: action required); **Scheduled next 7 days** (Scheduled, starting within 7 days) |
+| **Change requests** | The changes behind the cards, beside it: In progress first, then Pending approval, Scheduled (7 d), other Open, and Implemented this week, with type, state, domain, CI, planned start and end, assignment group |
 | **Infrastructure incidents per day** | Incidents of every priority opened per day in the last 30 days, by domain |
+
+Both change panels count **each change once** (its latest record, updated in the last 30 days), on infrastructure CIs
+or with no CI class (most changes have none: IO2). Portfolio v4 counts records, so its numbers are higher for the
+same changes.
 
 ### 🔗 4 · Detailed dashboards
 

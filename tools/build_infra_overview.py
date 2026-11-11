@@ -459,23 +459,86 @@ panels.append(table(
     D7, AL_IDX, drilldowns=[SN_DRILLDOWNS[1]] if len(SN_DRILLDOWNS) > 1 else None))
 
 # ---------------- 3 · Changes and trend ----------------
-chg_q = CHG_LATEST + f"""| WHERE TO_STRING(state_name) NOT IN ("Closed", "Canceled", "Cancelled")
-    AND TO_DATETIME(start_date) <= NOW() + 24 hours AND (end_at IS NULL OR TO_DATETIME(end_at) >= NOW())
-| EVAL domain = {DOMAIN('TO_STRING(ci.class_name)')},
-       when = CASE(TO_DATETIME(start_date) <= NOW(), "In progress", "Due in 24 h")
+# Change Request Summary: the Portfolio v4 panel (four cards), rebuilt on ES|QL so each change counts once (its latest
+# record), on infrastructure CIs (and changes with no CI class), with a list of those changes beside it.
+CHG_SCOPED = CHG_LATEST + f"""| EVAL domain = {DOMAIN('TO_STRING(ci.class_name)')},
+       st = TO_STRING(state_name), ty = TO_LOWER(COALESCE(TO_STRING(type.normalized), TO_STRING(type.name), "")),
+       cl = TO_DATETIME(closed_at), sd = TO_DATETIME(start_date), ed = TO_DATETIME(end_at),
+       cc = TO_LOWER(COALESCE(TO_STRING(close_code), ""))
 | WHERE {INFRA}
-| SORT start_date ASC
-| LIMIT 200
-| KEEP domain, when, number, ci.name, start_date, end_at, state_name, assignment_group.name"""
+| EVAL is_open = st NOT IN ("Closed", "Canceled", "Cancelled"),
+       is_pending = st IN ("Assess", "Authorize"),
+       is_sched = st == "Scheduled" AND sd >= NOW() AND sd < NOW() + 7 days,
+       is_impl = st == "Closed" AND cc != "canceled" AND cl >= NOW() - 7 days AND cl <= NOW(),
+       is_impl_prev = st == "Closed" AND cc != "canceled" AND cl >= NOW() - 14 days AND cl < NOW() - 7 days,
+       is_running = st NOT IN ("Closed", "Canceled", "Cancelled") AND sd <= NOW() AND (ed IS NULL OR ed >= NOW())
+"""
+sum_q = CHG_SCOPED + """| STATS open = COUNT_DISTINCT(CASE(is_open, number)),
+        normal = COUNT_DISTINCT(CASE(is_open AND ty LIKE "*normal*", number)),
+        standard = COUNT_DISTINCT(CASE(is_open AND ty LIKE "*standard*", number)),
+        emergency = COUNT_DISTINCT(CASE(is_open AND ty LIKE "*emergency*", number)),
+        implemented = COUNT_DISTINCT(CASE(is_impl, number)), implemented_prev = COUNT_DISTINCT(CASE(is_impl_prev, number)),
+        pending = COUNT_DISTINCT(CASE(is_pending, number)), scheduled = COUNT_DISTINCT(CASE(is_sched, number))"""
+
+
+def card(i, icon, value, label, sub, sub_colour, stroke):
+    """One of the four cards, in a 2 x 2 grid that fills the panel (Portfolio's layout, sized to the panel)."""
+    x = 'cw * ' + str(i % 2) + ' + 4'
+    y = 'ch * ' + str(i // 2) + ' + 4'
+    return {'type': 'group', 'encode': {'update': {
+        'x': {'signal': x}, 'y': {'signal': y}, 'width': {'signal': 'cw - 8'}, 'height': {'signal': 'ch - 8'},
+        'cornerRadius': {'value': 8}, 'stroke': {'value': stroke}, 'strokeWidth': {'value': 1.5},
+        'fill': {'value': stroke}, 'fillOpacity': {'value': 0.06}}},
+        'marks': [
+            txt({'value': 14}, {'signal': '(ch - 8) / 2'}, {'value': icon}, 34),
+            txt({'value': 64}, {'signal': '(ch - 8) / 2 - 18'}, {'signal': value}, 24, 'bold', style='guide-title'),
+            txt({'value': 64}, {'signal': '(ch - 8) / 2 + 4'}, {'value': label}, 12, style='guide-label'),
+            dict(txt({'value': 64}, {'signal': '(ch - 8) / 2 + 22'}, sub, 11, 'bold', sub_colour),
+                 **{})]}
+
+
+sum_spec = dict(VEGA, padding=2, data=[esql('stats', sum_q)],
+    signals=[{'name': 's', 'update': "data('stats')[0] || {}"},
+             {'name': 'cw', 'update': 'width / 2'}, {'name': 'ch', 'update': 'height / 2'},
+             {'name': 'pct', 'update': "s.implemented_prev > 0 ? round((s.implemented - s.implemented_prev) / s.implemented_prev * 100) : 0"},
+             {'name': 'arrow', 'update': "pct > 0 ? '▲' : pct < 0 ? '▼' : '■'"},
+             {'name': 'pctColour', 'update': f"pct > 0 ? '{GREEN}' : pct < 0 ? '{RED}' : '{GREY}'"}],
+    marks=[
+        card(0, '📂', 's.open || 0', 'Open changes', {'signal': "'N: ' + (s.normal || 0) + '   S: ' + (s.standard || 0) + '   E: ' + (s.emergency || 0)"},
+             {'signal': "(s.emergency || 0) > 0 ? '" + RED + "' : '#3b82f6'"}, '#244a78'),
+        card(1, '✅', 's.implemented || 0', 'Implemented this week',
+             {'signal': "arrow + ' ' + abs(pct) + '% vs previous week (' + (s.implemented_prev || 0) + ')'"}, {'signal': 'pctColour'}, '#1d5c3d'),
+        card(2, '⏳', 's.pending || 0', 'Pending approval', {'signal': "(s.pending || 0) > 0 ? 'Action required (Assess, Authorize)' : 'Nothing waiting'"},
+             {'value': AMBER}, '#7a5515'),
+        card(3, '📅', 's.scheduled || 0', 'Scheduled next 7 days', {'value': 'Forward looking'}, {'value': '#8b5cf6'}, '#5840a5')])
+panels.append(vega('Change Request Summary', sum_spec, S3, 0, 0, 18, 12,
+                   'Like Portfolio v4\'s Change Request Summary, for infrastructure: each change counted once (its latest '
+                   'record, updated in the last 30 days), on infrastructure CIs or with no CI class (most changes have none). '
+                   'Open = not Closed or Canceled, by type (N normal, S standard, E emergency). Implemented this week = '
+                   'Closed (not canceled) in the last 7 days, against the 7 days before. Pending approval = Assess or '
+                   'Authorize. Scheduled next 7 days = Scheduled and starting within 7 days. The list beside it shows the '
+                   'changes.', D30))
+
+list_q = CHG_SCOPED + """| WHERE is_open OR is_impl
+| EVAL status = CASE(is_running, "In progress", is_pending, "Pending approval", is_sched, "Scheduled (7 d)",
+                     is_impl, "Implemented this week", "Open"),
+       s_rank = CASE(status == "In progress", 1, status == "Pending approval", 2, status == "Scheduled (7 d)", 3,
+                     status == "Open", 4, 5),
+       change_type = CASE(ty LIKE "*emergency*", "Emergency", ty LIKE "*standard*", "Standard", ty LIKE "*normal*", "Normal", "—")
+| SORT s_rank ASC, sd ASC
+| LIMIT 500
+| KEEP status, number, change_type, state_name, domain, ci.name, start_date, end_at, assignment_group.name"""
 panels.append(table(
-    'Changes in progress or due in the next 24 h', chg_q,
-    [('domain', 'Domain', S, 95, None), ('when', 'When', S, 100, badge([('In progress', AMBER), ('Due in 24 h', BLUE)])),
-     ('number', 'Change', S, 110, None), ('ci.name', 'CI', S, 150, None), ('start_date', 'Start', D, 140, None),
-     ('end_at', 'End', D, 140, None), ('state_name', 'State', S, 100, None), ('assignment_group.name', 'Assignment group', S, 160, None)],
-    S3, 0, 0, 24, 11,
-    'Change requests on infrastructure CIs that have started and not ended, or start in the next 24 h (latest record, '
-    'not Closed or Canceled). Domain from the CI\'s CMDB class. Needs the ServiceNow feed to send scheduled changes '
-    'before they start.', D30, CHG_IDX))
+    'Change requests', list_q,
+    [('status', 'Status', S, 175, badge([('In progress', AMBER), ('Pending approval', '#d95926'), ('Scheduled (7 d)', '#8b5cf6'),
+                                         ('Open', '#3b82f6'), ('Implemented this week', GREEN)])),
+     ('number', 'Change', S, 105, None), ('change_type', 'Type', S, 105, badge([('Emergency', RED), ('Standard', GREEN), ('Normal', '#3b82f6')])),
+     ('state_name', 'State', S, 85, None), ('domain', 'Domain', S, 85, None), ('ci.name', 'CI', S, 150, None),
+     ('start_date', 'Planned start', D, 140, None), ('end_at', 'Planned end', D, 140, None),
+     ('assignment_group.name', 'Assignment group', S, 160, None)],
+    S3, 18, 0, 30, 12,
+    'The changes behind the Change Request Summary: open changes (in progress first, then pending approval, scheduled '
+    'within 7 days, other open) and those implemented this week. Same scope as the summary.', D30, CHG_IDX))
 
 trend_q = f"""FROM servicenow-incidents-*
 | WHERE TO_STRING(number) LIKE "INC*" AND opened_at >= NOW() - 30 days
@@ -500,7 +563,7 @@ trend_spec = dict(VEGA, data=[
         'x': {'scale': 'x', 'field': 't'}, 'width': {'scale': 'x', 'band': 1},
         'y': {'scale': 'y', 'field': 'y1'}, 'y2': {'scale': 'y', 'field': 'y0'}, 'fill': {'scale': 'c', 'field': 'domain'},
         'tooltip': {'signal': "timeFormat(datum.t, '%d %b') + ' · ' + datum.domain + ': ' + datum.n"}}}}])
-panels.append(vega('Infrastructure incidents per day', trend_spec, S3, 24, 0, 24, 11,
+panels.append(vega('Infrastructure incidents per day', trend_spec, S3, 0, 12, 48, 9,
                    'Incidents (every priority) opened per day in the last 30 days on infrastructure CIs, by domain from the '
                    'CI\'s CMDB class. Shows whether a domain is getting better or worse.', D30))
 
