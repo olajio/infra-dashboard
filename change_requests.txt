@@ -1,0 +1,26 @@
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "verification_exception",
+        "reason": "Found 1 problem\nline 6:97: Unknown column [type.name], did you mean any of [state_name, ci.name, type.normalized]?"
+      }
+    ],
+    "type": "verification_exception",
+    "reason": "Found 1 problem\nline 6:97: Unknown column [type.name], did you mean any of [state_name, ci.name, type.normalized]?"
+  },
+  "rawResponse": {
+    "error": {
+      "root_cause": [
+        {
+          "type": "verification_exception",
+          "reason": "Found 1 problem\nline 6:97: Unknown column [type.name], did you mean any of [state_name, ci.name, type.normalized]?"
+        }
+      ],
+      "type": "verification_exception",
+      "reason": "Found 1 problem\nline 6:97: Unknown column [type.name], did you mean any of [state_name, ci.name, type.normalized]?"
+    },
+    "status": 400
+  },
+  "isRestored": false
+}
