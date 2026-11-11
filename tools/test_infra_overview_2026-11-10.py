@@ -185,6 +185,25 @@ try:
     check('no controls on the page', dash['attributes']['pinned_panels'], {'panels': {}})
     check('no control variables in any query', sorted(set(re.findall(r'\?([a-z_]+)', ''.join(q for p in panels for _, q in queries(p))))), [])
 
+    print('Domain of every CMDB class seen in production (IO1, 11 Nov)')
+    src = open(__file__.rsplit('/', 1)[0] + '/build_infra_overview.py').read()
+    g = {}
+    exec(re.search(r'def DOMAIN\(cls\):.*?\n\n\n', src, re.S).group(0), g)
+    WANT = {'Network': ['IP Switch', 'UPS', 'Wireless Access Point', 'Network Appliance Hardware', 'Network Gear', 'IP Firewall',
+                        'DNS Name', 'IP Router', 'F5 BIG-IP', 'Palo Alto Firewall Device', 'Storage Switch', 'Communication Device'],
+            'Server': ['Linux Server', 'Windows Server', 'AIX Server', 'Mainframe LPAR', 'Hardware', 'Computer', 'IBM LPAR Instance',
+                       'Storage Server', 'UNIX Cluster', 'Server', 'Windows Cluster Node', 'UNIX Cluster Node', 'HPUX Server'],
+            'Database': ['MSFT SQL Instance', 'Oracle Database', 'Oracle Instance', 'Database', 'Database Instance',
+                         'PostgreSQL Instance', 'MSSQL Cluster', 'Cloud DataBase'],
+            'VMware': ['VMware Virtual Machine Instance', 'ESX Server'], 'Middleware': ['Tomcat WAR Inclusion'],
+            'Application': ['Mapped Application Service', 'Batch Job', 'Tag-Based Application Service', 'Application Service',
+                            'Calculated Application Service', 'Business Application', 'Service Instance', 'Business Service'],
+            'Other': ['Infrastructure Service', 'Data Center', 'Printer'], 'Unknown': ['null', '']}
+    allc = [c for cs in WANT.values() for c in cs]
+    got = esql('ROW cls = [' + ', '.join(json.dumps(c) for c in allc) + ']\n| MV_EXPAND cls\n| EVAL domain = ' + g['DOMAIN']('cls'))
+    got = {r['cls']: r['domain'] for r in got}
+    check(f'{len(allc)} classes in their domain', sorted(c for c in allc if got.get(c) != next(d for d, cs in WANT.items() if c in cs)), [])
+
     print('Tiles')
     check('Active P1: INC1 only (application, resolved, latest-resolved left out)', run('Active P1 (infrastructure)')[0]['metric_val'], 1)
     check('P2 over 8 h: INC2 and INC9 (INC3 is 2 h old, INC6 On Hold)', run('P2 over 8 h (infrastructure)')[0]['metric_val'], 2)
@@ -227,7 +246,9 @@ try:
     rows = run('Changes in progress or due in the next 24 h')
     check('changes: in progress CHG1, due CHG2; not CHG3 (3 days), closed or application', [(r['number'], r['when'], r['domain']) for r in rows],
           [('CHG1', 'In progress', 'Server'), ('CHG2', 'Due in 24 h', 'Database')])
-    trend = {(r['domain']): r['n'] for r in esql(vq('Infrastructure incidents per day', 'raw'))}
+    trend = {}
+    for r in esql(vq('Infrastructure incidents per day', 'raw')):   # summed over days: the test incidents can span midnight
+        trend[r['domain']] = trend.get(r['domain'], 0) + r['n']
     check('incidents per day (every priority, infrastructure only)', trend, {'Server': 5, 'Database': 1, 'Network': 1, 'VMware': 1})
 
     print('Section 4')

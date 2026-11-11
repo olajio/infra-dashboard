@@ -44,14 +44,16 @@ GREEN, AMBER, RED, BLUE, GREY = '#1f9e6b', '#c98a0b', '#d6453d', '#3f6fb5', '#8a
 def DOMAIN(cls):
     c = f'TO_LOWER(COALESCE({cls}, ""))'
     like = lambda *ps: ' OR '.join(f'{c} LIKE "*{p}*"' for p in ps)
-    return (f'CASE({like("esx", "vmware", "vcenter", "vsphere", "hyper_v", "hyper-v")}, "VMware", '
+    return (f'CASE({c} == "" OR {c} == "null", "Unknown", '
+            f'{like("infrastructure service")}, "Other", '
+            f'{like("esx", "vmware", "vcenter", "vsphere", "hyper_v", "hyper-v")}, "VMware", '
             f'{like("sql", "oracle", "db2", "database", "postgres", "mongo", "sybase", "_db", "db_")}, "Database", '
             f'{like("mq", "websphere", "jboss", "tomcat", "weblogic", "iis", "app_server", "application server", "web server", "web_server", "middleware")}, "Middleware", '
             f'{like("kubernetes", "gke", "cloud", "gcp", "container")}, "Cloud", '
-            f'{like("switch", "router", "ups", "firewall", "load bal", "lb_", "network", "wireless", "access point", "ip_", "ip ", "netgear", "pdu")}, "Network", '
-            f'{like("server", "linux", "windows", "win_", "aix", "solaris", "unix", "computer", "mainframe", "lpar", "storage")}, "Server", '
-            f'{like("application", "service", "business", "app")}, "Application", '
-            f'{c} == "", "Unknown", "Other")')
+            f'{like("switch", "router", "ups", "firewall", "load bal", "lb_", "network", "wireless", "access point", "ip_", "ip ", "netgear", "pdu", "big-ip", "bigip", "f5", "dns", "communication")}, "Network", '
+            f'{like("server", "linux", "windows", "win_", "aix", "solaris", "unix", "computer", "mainframe", "lpar", "storage", "hardware")}, "Server", '
+            f'{like("application", "service", "business", "app", "batch")}, "Application", '
+            '"Other")')
 
 
 PROD = ('(TO_STRING(ci.environment) IS NULL OR TO_STRING(ci.environment) IN ("", "null") '
