@@ -1,0 +1,57 @@
+# 2: POST /_query?format=txt [200 OK]
+    records    |             class             
+---------------+-------------------------------
+36037          |IP Switch                      
+31431          |UPS                            
+6073           |null                           
+3395           |Mapped Application Service     
+2667           |Linux Server                   
+1655           |Batch Job                      
+1434           |Windows Server                 
+1401           |Tag-Based Application Service  
+951            |Application Service            
+835            |Calculated Application Service 
+758            |AIX Server                     
+505            |Wireless Access Point          
+409            |Infrastructure Service         
+258            |MSFT SQL Instance              
+163            |Network Appliance Hardware     
+151            |Oracle Database                
+141            |Oracle Instance                
+127            |Mainframe LPAR                 
+119            |Network Gear                   
+82             |Business Application           
+64             |Service Instance               
+61             |Hardware                       
+52             |VMware Virtual Machine Instance
+47             |Computer                       
+34             |IP Firewall                    
+21             |DNS Name                       
+16             |IBM LPAR Instance              
+12             |Storage Server                 
+8              |IP Router                      
+7              |Database                       
+6              |UNIX Cluster                   
+6              |F5 BIG-IP                      
+5              |Server                         
+5              |Database Instance              
+4              |Windows Cluster Node           
+4              |UNIX Cluster Node              
+4              |ESX Server                     
+3              |Palo Alto Firewall Device      
+3              |Storage Switch                 
+1              |PostgreSQL Instance            
+1              |MSSQL Cluster                  
+1              |Business Service               
+1              |Tomcat WAR Inclusion           
+1              |Data Center                    
+1              |Communication Device           
+1              |Printer                        
+1              |Cloud DataBase                 
+1              |HPUX Server                    
+
+# 13: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+    changes    |  with_class   |starting_later |            close_codes             
+---------------+---------------+---------------+------------------------------------
+3251           |823            |256            |[successful, canceled, unsuccessful]
