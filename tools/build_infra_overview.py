@@ -34,7 +34,9 @@ LINKS = {   # respective_detailed_dashboards.txt
     'Server': 'https://kibana-prod.gcp.cna.com/app/r/s/qJk5u', 'Database': 'https://kibana-prod.gcp.cna.com/app/r/s/w6zL4',
     'Middleware': 'https://kibana-prod.gcp.cna.com/app/r/s/jwCRg', 'VMware': 'https://kibana-prod.gcp.cna.com/app/r/s/t4oxr',
     'Cloud': 'https://kibana-prod.gcp.cna.com/app/r/s/MDJ9f', 'Applications': 'https://kibana-prod.gcp.cna.com/app/r/s/I3R7D',
-    'MIM': 'https://kibana-prod.gcp.cna.com/app/r/s/ZSMtk'}
+    'MIM': 'https://kibana-prod.gcp.cna.com/app/r/s/ZSMtk',
+    # no short link given: Portfolio v4's dashboard id from portfolio_v4.ndjson (11 Nov)
+    'Portfolio': 'https://kibana-prod.gcp.cna.com/app/dashboards#/view/7511c5d1-3326-4c7e-91f4-6c8fdb686ee0'}
 ICON = {'Server': '🖥️', 'Database': '🗄️', 'Middleware': '⚙️', 'VMware': '🧱', 'Cloud': '☁️', 'Network': '🌐'}
 DOMAINS = ['Server', 'Database', 'Middleware', 'VMware', 'Cloud', 'Network']
 GREEN, AMBER, RED, BLUE, GREY = '#1f9e6b', '#c98a0b', '#d6453d', '#3f6fb5', '#8a96a8'
@@ -568,12 +570,14 @@ panels.append(vega('Infrastructure incidents per day', trend_spec, S3, 0, 12, 48
                    'CI\'s CMDB class. Shows whether a domain is getting better or worse.', D30))
 
 # ---------------- 4 · Detailed dashboards ----------------
-for name, d, x, y, w in [('Server Infra Dashboard', 'Server', 0, 0, 9), ('Database Infra Dashboard', 'Database', 9, 0, 9),
-                         ('Cloud Infra Dashboard', 'Cloud', 18, 0, 9), ('Middleware Dashboard', 'Middleware', 27, 0, 9),
-                         ('VMware Infra Dashboard', 'VMware', 36, 0, 12)]:
-    panels.append(markdown(f'{d} detailed dashboard', f'## {ICON[d]} [{name} ›]({LINKS[d]})', S4, x, y, w, 2))
-panels.append(markdown('Applications detailed dashboard', f'## 🩺 [Applications Operations Dashboard ›]({LINKS["Applications"]})', S4, 0, 2, 24, 2))
-panels.append(markdown('MIM detailed dashboard', f'## 🚨 [MIM Dashboard ›]({LINKS["MIM"]})', S4, 24, 2, 24, 2))
+# two lists side by side (team layout, 11 Nov): the technology dashboards on the left, the related ones on the right
+LEFT = [('Server Infra Dashboard', 'Server', '🖥️'), ('Database Infra Dashboard', 'Database', '🗄️'),
+        ('Middleware Dashboard', 'Middleware', '⚙️'), ('Cloud Infra Dashboard', 'Cloud', '☁️')]
+RIGHT = [('Applications Operations Dashboard', 'Applications', '🩺'), ('VMware Infra Dashboard', 'VMware', '🧱'),
+         ('Portfolio Dashboard', 'Portfolio', '💼'), ('MIM Dashboard', 'MIM', '🚨')]
+for x, items in ((0, LEFT), (24, RIGHT)):
+    for k, (name, key, icon) in enumerate(items):
+        panels.append(markdown(f'{key} detailed dashboard', f'## {icon} [{name} ›]({LINKS[key]})', S4, x, k * 2, 24, 2))
 
 SOURCES = [('incidents', 'ServiceNow incidents', 'servicenow-incidents'), ('changes', 'ServiceNow changes', 'servicenow-change-requests'),
            ('netcool', 'Netcool alerts', 'netcool'), ('elastic', 'Elastic alerts', 'alerts-observability'),
@@ -605,7 +609,7 @@ fresh_spec = dict(VEGA, padding=0, data=[
            {'type': 'text', 'from': {'data': 'src'}, 'style': 'guide-label', 'encode': {'update': {
                'x': {'signal': 'datum.i * cw + 20'}, 'y': {'value': 50}, 'text': {'field': 'ago'}, 'fontSize': {'value': 11},
                'baseline': {'value': 'middle'}, 'fill': {'field': 'colour'}}}}])
-panels.append(vega('Data freshness', fresh_spec, S4, 0, 4, 48, 5,
+panels.append(vega('Data freshness', fresh_spec, S4, 0, 8, 48, 5,
                    'When each source last delivered data. If a feed stops, the tiles that read it are wrong: green ≤ 30 min, '
                    'amber ≤ 2 h, red older or nothing in 2 days.', {'from': 'now-2d', 'to': 'now'}))
 

@@ -266,7 +266,12 @@ try:
     print('Section 4')
     links = sorted(re.search(r'\((https://[^)]+)\)', title_p['embeddableConfig']['content']).group(1)
                    for title_p in panels if title_p['type'] == 'markdown' and ' ›](' in title_p['embeddableConfig']['content'])
-    check('links: 5 domains under the tiles + 7 in section 4', len(links), 12)
+    check('links: 5 domains under the tiles + 8 in section 4', len(links), 13)
+    s4 = sorted((p['gridData']['x'], p['gridData']['y'], re.search(r'\[(.+?) ›', p['embeddableConfig']['content']).group(1))
+                for p in panels if p['type'] == 'markdown' and p['gridData']['sectionId'] == dash['attributes']['sections'][3]['gridData']['i'])
+    check('section 4: two lists side by side', s4,
+          [(0, 0, 'Server Infra Dashboard'), (0, 2, 'Database Infra Dashboard'), (0, 4, 'Middleware Dashboard'), (0, 6, 'Cloud Infra Dashboard'),
+           (24, 0, 'Applications Operations Dashboard'), (24, 2, 'VMware Infra Dashboard'), (24, 4, 'Portfolio Dashboard'), (24, 6, 'MIM Dashboard')])
     fr = {r['src']: r['minutes'] for r in esql(vq('Data freshness', 'raw'))}
     check('freshness: every source found', sorted(fr), sorted(['incidents', 'changes', 'netcool', 'elastic', 'metrics', 'gke', 'cmdb']))
     secs = [s['title'] for s in dash['attributes']['sections']]

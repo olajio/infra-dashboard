@@ -50,9 +50,18 @@ same changes.
 
 ### 🔗 4 · Detailed dashboards
 
-The seven dashboards (Server, Database, Cloud, Middleware, VMware, Applications Operations, MIM), and **Data
-freshness**: when each source last delivered (green ≤ 30 min, amber ≤ 2 h, red older). If a source is red, the panels
-that read it are out of date.
+Two lists side by side:
+
+| Left: technology dashboards | Right: related dashboards |
+|---|---|
+| 🖥️ Server Infra Dashboard | 🩺 Applications Operations Dashboard |
+| 🗄️ Database Infra Dashboard | 🧱 VMware Infra Dashboard |
+| ⚙️ Middleware Dashboard | 💼 Portfolio Dashboard |
+| ☁️ Cloud Infra Dashboard | 🚨 MIM Dashboard |
+
+Each opens in a new tab. The Portfolio link uses the Portfolio v4 dashboard's id (no short link was given). Below
+the lists, **Data freshness**: when each source last delivered (green ≤ 30 min, amber ≤ 2 h, red older). If a source
+is red, the panels that read it are out of date.
 
 ## How to use it
 
