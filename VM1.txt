@@ -1,0 +1,6 @@
+#! No limit defined, adding default limit of [1000]
+     hosts     |  datastores   |      vms      |  cpu_pct_max  |  ds_pct_max   |   vm_status   |     kind      
+---------------+---------------+---------------+---------------+---------------+---------------+---------------
+0              |0              |46             |null           |null           |green          |vm             
+4              |0              |0              |0.299          |null           |null           |host           
+0              |5              |0              |null           |0.459          |null           |datastore      
