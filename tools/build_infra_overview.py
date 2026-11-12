@@ -126,6 +126,38 @@ SRV_BASE = f"""FROM .ds-metrics-system.cpu-default*, .ds-metrics-system.memory-d
 """
 
 
+# VMware: the vSphere integration (metrics-vsphere.*), the same data as the VMware Infra Dashboard (vmware.ndjson).
+# Collected and used (vmware_data.xlsx): host CPU, host memory, host disk latency, datastore capacity, VM status.
+# Not collected: CPU ready, ballooning, swapping, packet loss. Thresholds from vmware_data.xlsx.
+# ".pct" fields: Elastic's 0-1 fractions (values above 1.5 are taken as already in %).
+pct = lambda e: f'CASE({e} > 1.5, {e}, {e} * 100.0)'
+VM_BASE = f"""FROM metrics-vsphere.host-*, metrics-vsphere.datastore-*, metrics-vsphere.virtualmachine-* METADATA _index
+| WHERE @timestamp >= NOW() - 1 hour
+| EVAL kind = CASE(_index LIKE "*vsphere.host*", "host", _index LIKE "*vsphere.datastore*", "datastore", "vm"),
+       ent = CASE(_index LIKE "*vsphere.host*", TO_STRING(vsphere.host.name), _index LIKE "*vsphere.datastore*",
+                  TO_STRING(vsphere.datastore.name), TO_STRING(vsphere.virtualmachine.name)),
+       recent = @timestamp >= NOW() - 15 minutes,
+       cpu = TO_DOUBLE(vsphere.host.cpu.used.pct),
+       mem = TO_DOUBLE(vsphere.host.memory.used.bytes) / TO_DOUBLE(vsphere.host.memory.total.bytes) * 100.0,
+       lat = TO_DOUBLE(vsphere.host.disk.latency.total.ms), dsu = TO_DOUBLE(vsphere.datastore.capacity.used.pct),
+       vst = TO_LOWER(TO_STRING(vsphere.virtualmachine.status))
+| STATS cpu = MAX(cpu), mem = MAX(mem), lat = MAX(lat), dsu = MAX(dsu), last_seen = MAX(@timestamp),
+        red = MAX(CASE(recent AND vst == "red", 1, 0)), yellow = MAX(CASE(recent AND vst == "yellow", 1, 0))
+  BY kind, ent
+| WHERE ent IS NOT NULL
+| EVAL cpu = {pct('cpu')}, dsu = {pct('dsu')}, silent = CASE(DATE_DIFF("minutes", last_seen, NOW()) > 15, 1, 0)
+"""
+VM_SUM_Q = VM_BASE + """| STATS hosts = COUNT(CASE(kind == "host", 1)), vms = COUNT(CASE(kind == "vm", 1)),
+        datastores = COUNT(CASE(kind == "datastore", 1)),
+        hosts_silent = SUM(CASE(kind == "host", silent, 0)), vms_red = SUM(CASE(kind == "vm", red, 0)),
+        vms_yellow = SUM(CASE(kind == "vm", yellow, 0)),
+        cpu_max = MAX(CASE(kind == "host", cpu)), mem_max = MAX(CASE(kind == "host", mem)), lat_max = MAX(CASE(kind == "host", lat)),
+        hosts_crit = SUM(CASE(kind == "host" AND (cpu >= 90 OR mem >= 95 OR lat >= 25), 1, 0)),
+        hosts_warn = SUM(CASE(kind == "host" AND (cpu >= 75 OR mem >= 85 OR lat >= 10), 1, 0)),
+        ds_crit = SUM(CASE(kind == "datastore" AND dsu >= 90, 1, 0)), ds_warn = SUM(CASE(kind == "datastore" AND dsu >= 80, 1, 0))
+| EVAL cpu_max = ROUND(cpu_max, 0), mem_max = ROUND(mem_max, 0), lat_max = ROUND(lat_max, 0)"""
+
+
 def gke_q():
     """Infrastructure Dashboard's Cloud health · GKE query, for every cluster, last hour."""
     import re
@@ -290,33 +322,42 @@ def domain_board():
                                 'default': 0}
     s1 = "data('srv')[0] || {}"
     g1 = "data('gke')[0] || {}"
+    v1 = "data('vm')[0] || {}"
     spec = dict(VEGA, padding=0, data=[
-        esql('inc', inc_q), esql('al', al_q), esql('srv', srv_q), esql('gke', gke_q2),
+        esql('inc', inc_q), esql('al', al_q), esql('srv', srv_q), esql('gke', gke_q2), esql('vm', VM_SUM_Q),
         {'name': 'dom', 'values': dom_vals, 'transform': [
             look('inc', ['p1', 'p2']), look('al', ['critical', 'major', 'alerts']),
             {'type': 'formula', 'as': 'silent', 'expr': f"datum.d == 'Server' ? (({s1}).silent || 0) : 0"},
             {'type': 'formula', 'as': 'pressure', 'expr': f"datum.d == 'Server' ? (({s1}).pressure || 0) : 0"},
             {'type': 'formula', 'as': 'gbad', 'expr': f"datum.d == 'Cloud' ? (({g1}).gke_bad || 0) : 0"},
             {'type': 'formula', 'as': 'gwarn', 'expr': f"datum.d == 'Cloud' ? (({g1}).gke_warn || 0) : 0"},
+            {'type': 'formula', 'as': 'vhave', 'expr': f"datum.d == 'VMware' ? ((({v1}).hosts || 0) + (({v1}).vms || 0)) : 1"},
+            {'type': 'formula', 'as': 'vbad', 'expr':
+                f"datum.d == 'VMware' ? ((({v1}).hosts_silent || 0) + (({v1}).hosts_crit || 0) + (({v1}).ds_crit || 0) + (({v1}).vms_red || 0)) : 0"},
+            {'type': 'formula', 'as': 'vwarn', 'expr':
+                f"datum.d == 'VMware' ? ((({v1}).hosts_warn || 0) + (({v1}).ds_warn || 0) + (({v1}).vms_yellow || 0)) : 0"},
             {'type': 'formula', 'as': 'level', 'expr':
-                "(datum.p1 > 0 || datum.critical > 0 || datum.silent > 0 || datum.gbad > 0) ? 2 : "
-                "(datum.p2 > 0 || datum.major > 0 || datum.pressure > 0 || datum.gwarn > 0) ? 1 : "
-                "(datum.d == 'VMware' ? -1 : 0)"},
+                "(datum.p1 > 0 || datum.critical > 0 || datum.silent > 0 || datum.gbad > 0 || datum.vbad > 0) ? 2 : "
+                "(datum.p2 > 0 || datum.major > 0 || datum.pressure > 0 || datum.gwarn > 0 || datum.vwarn > 0) ? 1 : "
+                "(datum.vhave == 0 ? -1 : 0)"},
             {'type': 'formula', 'as': 'word', 'expr':
                 "datum.level == 2 ? 'Action' : datum.level == 1 ? 'Attention' : datum.level == -1 ? 'Not monitored' : 'Healthy'"},
             {'type': 'formula', 'as': 'colour', 'expr':
                 f"datum.level == 2 ? '{RED}' : datum.level == 1 ? '{AMBER}' : datum.level == -1 ? '{GREY}' : '{GREEN}'"},
             {'type': 'formula', 'as': 'tag', 'expr':
                 "datum.d == 'Database' ? 'partial' : datum.d == 'Middleware' ? 'partial' : "
-                "datum.d == 'Cloud' ? 'GKE' : datum.d == 'Network' ? 'Netcool' : ''"},
+                "datum.d == 'Cloud' ? 'GKE' : datum.d == 'Network' ? 'Netcool' : datum.d == 'VMware' ? 'vSphere · partial' : ''"},
             {'type': 'formula', 'as': 'l1', 'expr': "'Open P1: ' + datum.p1 + ' · P2: ' + datum.p2"},
             {'type': 'formula', 'as': 'l2', 'expr': "'Alerts: ' + datum.critical + ' Critical · ' + datum.major + ' Major'"},
             {'type': 'formula', 'as': 'l3', 'expr':
                 f"datum.d == 'Server' ? (datum.silent + ' not reporting · ' + datum.pressure + ' under pressure (of ' + ((({s1}).servers) || 0) + ')') : "
                 f"datum.d == 'Cloud' ? ((({g1}).clusters || 0) + ' GKE clusters · ' + datum.gbad + ' critical / silent · ' + datum.gwarn + ' warning') : "
-                "datum.d == 'VMware' ? '4 of 549 ESX hosts collected (vSphere)' : "
+                f"datum.d == 'VMware' ? ((({v1}).hosts || 0) + ' hosts · ' + (({v1}).vms || 0) + ' VMs (' + (({v1}).vms_red || 0) + ' red) · ' + (({v1}).ds_warn || 0) + ' datastores ≥ 80 %') : "
                 "datum.d == 'Network' ? 'devices and UPSs · no network dashboard yet' : "
-                "datum.d == 'Database' ? 'down / slow: see the Database dashboard' : 'see the Middleware dashboard'"}]}],
+                "datum.d == 'Database' ? 'down / slow: see the Database dashboard' : 'see the Middleware dashboard'"},
+            {'type': 'formula', 'as': 'l4', 'expr':
+                f"datum.d == 'VMware' && datum.vhave > 0 ? ('Peak: CPU ' + (({v1}).cpu_max || 0) + ' % · mem ' + (({v1}).mem_max || 0) + ' % · ' + (({v1}).lat_max || 0) + ' ms') : "
+                "datum.d == 'VMware' ? 'no vSphere data in the last hour' : ''"}]}],
         signals=[{'name': 'tw', 'update': 'width / 6'}],
         marks=[{'type': 'group', 'from': {'data': 'dom'}, 'encode': {'update': {
             'x': {'signal': 'datum.i * tw + 3'}, 'y': {'value': 2}, 'width': {'signal': 'tw - 6'}, 'height': {'signal': 'height - 4'},
@@ -331,12 +372,15 @@ def domain_board():
                 txt({'value': 12}, {'value': 54}, {'signal': 'parent.word'}, 22, 'bold', {'signal': 'parent.colour'}),
                 txt({'value': 12}, {'value': 82}, {'signal': 'parent.l1'}, 11.5, style='guide-label', extra={'limit': {'signal': 'tw - 30'}}),
                 txt({'value': 12}, {'value': 99}, {'signal': 'parent.l2'}, 11.5, style='guide-label', extra={'limit': {'signal': 'tw - 30'}}),
-                txt({'value': 12}, {'value': 116}, {'signal': 'parent.l3'}, 11.5, style='guide-label', extra={'limit': {'signal': 'tw - 30'}})]}])
-    return vega('Domain status', spec, S1, 0, 3, 48, 7,
+                txt({'value': 12}, {'value': 116}, {'signal': 'parent.l3'}, 11.5, style='guide-label', extra={'limit': {'signal': 'tw - 30'}}),
+                txt({'value': 12}, {'value': 133}, {'signal': 'parent.l4'}, 11.5, style='guide-label', extra={'limit': {'signal': 'tw - 30'}})]}])
+    return vega('Domain status', spec, S1, 0, 3, 48, 8,
                 'One tile per infrastructure domain. Red (Action): an open P1, a Critical alert, a server not reporting '
                 'or a GKE cluster critical or silent. Amber (Attention): an active P2, a Major alert, a server at 90 % '
-                'CPU, memory or disk, or a GKE cluster warning. Green: none. Grey: VMware, not monitored (4 of 549 ESX '
-                'hosts collected). Domain = from the CMDB class of the incident or alert CI. Incidents: active P1 / P2 '
+                'CPU, memory or disk, or a GKE cluster warning. VMware (vSphere, last hour): red = a host silent 15 min, '
+                'host CPU ≥ 90 %, memory ≥ 95 % or disk latency ≥ 25 ms, a datastore ≥ 90 % or a red VM; amber = host '
+                'CPU ≥ 75 %, memory ≥ 85 % or latency ≥ 10 ms, a datastore ≥ 80 % or a yellow VM (vmware_data.xlsx). '
+                'Green: none. Grey: no vSphere data. Domain = from the CMDB class of the incident or alert CI. Incidents: active P1 / P2 '
                 '(latest record not On Hold, Resolved, Closed, Canceled), opened in the last 30 days. Alerts: open '
                 'Netcool alerts (24 h, production) and active Elastic paladin-* alerts. Servers: last hour. Click the '
                 'link under a tile to open its dashboard.', D30)
@@ -347,8 +391,8 @@ panels = [banner('Start here', '1', '▲  Start here: a red or amber tile shows 
           domain_board()]
 for i, d in enumerate(DOMAINS):
     content = (f'**{ICON[d]} [{d} dashboard ›]({LINKS[d]})**' if d in LINKS else
-               f'{ICON[d]} No network dashboard yet ↓')
-    panels.append(markdown(f'{d} link', content, S1, i * 8, 10, 8, 2))
+               f'{ICON[d]} No network dashboard')
+    panels.append(markdown(f'{d} link', content, S1, i * 8, 11, 8, 2))
 
 SN_IDX = 'servicenow-incidents-*'
 AL_IDX = '.ds-bridge-alerts-netcool-default-*,.alerts-observability.*'
@@ -363,30 +407,30 @@ CHG_LATEST = """FROM servicenow-change-requests-*
 """
 panels += [
     metric_tile('Active P1 (infrastructure)', INC_BASE + '| WHERE pri == 1\n| STATS metric_val = COUNT_DISTINCT(number)',
-                RED, S1, 0, 12, 8, 6, 'alert', 'Open P1 incidents on infrastructure CIs',
+                RED, S1, 0, 13, 8, 6, 'alert', 'Open P1 incidents on infrastructure CIs',
                 'Active P1 incidents (latest record not On Hold, Resolved, Closed or Canceled; opened in the last 30 days) '
                 'whose CI is infrastructure (not an application service). Green at 0. The rows are in section 2.', D30, SN_IDX),
     metric_tile('P2 over 8 h (infrastructure)', INC_BASE + '| WHERE pri == 2 AND age_minutes > 480\n| STATS metric_val = COUNT_DISTINCT(number)',
-                AMBER, S1, 8, 12, 8, 6, 'clock', 'Active P2 open longer than 8 h (MIM\'s target)',
+                AMBER, S1, 8, 13, 8, 6, 'clock', 'Active P2 open longer than 8 h (MIM\'s target)',
                 'Active P2 incidents on infrastructure CIs open longer than 8 h, MIM\'s P2 target. Green at 0.', D30, SN_IDX),
     metric_tile('Critical alerts', ALERTS_BASE + '| STATS metric_val = SUM(CASE(severity_label == "Critical", 1, 0)), '
                 'major = SUM(CASE(severity_label == "Major", 1, 0))',
-                RED, S1, 16, 12, 8, 6, 'bell', 'Open now · Netcool and Elastic',
+                RED, S1, 16, 13, 8, 6, 'bell', 'Open now · Netcool and Elastic',
                 'Open Critical alerts on infrastructure: Netcool alerts still open in the last 24 h on production CIs, '
                 'and active Elastic paladin-* alerts. Major count under the number. Green at 0.', D7, AL_IDX,
                 'major', 'Major'),
     metric_tile('Servers not reporting', SRV_BASE + '| STATS metric_val = SUM(silent), servers = COUNT(*)',
-                RED, S1, 24, 12, 8, 6, 'offline', 'No data for 10 min (seen in the last day)',
+                RED, S1, 24, 13, 8, 6, 'offline', 'No data for 10 min (seen in the last day)',
                 'Production servers that sent system metrics in the last 24 h but none in the last 10 minutes: down, or '
                 'their agent stopped. Under the number: servers reporting in the last day. Green at 0.', D7, SRV_IDX,
                 'servers', 'of'),
     metric_tile('Servers under pressure', SRV_BASE + '| STATS metric_val = SUM(pressure), disk = SUM(CASE(silent == 0, hot_disk, 0))',
-                AMBER, S1, 32, 12, 8, 6, 'warning', 'CPU p90, memory or a disk ≥ 90 %, last hour',
+                AMBER, S1, 32, 13, 8, 6, 'warning', 'CPU p90, memory or a disk ≥ 90 %, last hour',
                 'Reporting production servers with CPU p90, memory or their fullest disk at 90 % or more in the last hour. '
                 'Under the number: how many because of a disk. Green at 0.', D7, SRV_IDX, 'disk', 'Disk'),
     metric_tile('Failed changes (7 days)', CHG_LATEST + f'| WHERE TO_DATETIME(end_at) >= NOW() - 7 days AND TO_DATETIME(end_at) <= NOW()\n'
                 f'| STATS metric_val = COUNT_DISTINCT(CASE({FAILED}, number)), closed = COUNT_DISTINCT(number)',
-                AMBER, S1, 40, 12, 8, 6, 'refresh', 'Failed or backed out, last 7 days',
+                AMBER, S1, 40, 13, 8, 6, 'refresh', 'Failed or backed out, last 7 days',
                 'Change requests that ended in the last 7 days with a close code saying unsuccessful, failed or backed out. '
                 'Under the number: all changes that ended. Green at 0.', D30, CHG_IDX, 'closed', 'of'),
 ]
@@ -435,7 +479,7 @@ bar_spec = dict(VEGA, data=[
         'tooltip': {'signal': "datum.label + ': ' + datum.n + ' ' + datum.severity_label"}}}},
         {'type': 'text', 'from': {'data': 'doms'}, 'encode': {'update': {
             'y': {'scale': 'y', 'field': 'label', 'band': 0.5}, 'x': {'value': 6}, 'baseline': {'value': 'middle'},
-            'text': {'signal': "datum.domain == 'VMware' ? 'not monitored' : ''"}, 'fontSize': {'value': 11}}},
+            'text': {'value': ''}, 'fontSize': {'value': 11}}},
          'style': 'guide-label'}])
 panels.append(vega('Open infrastructure alerts by domain', bar_spec, S2, 26, 0, 22, 11,
                    'Open alerts by domain and severity: Netcool alerts open in the last 24 h on production CIs, and active '

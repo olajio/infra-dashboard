@@ -26,7 +26,7 @@ def call(method, path, body=None, nd=False):
         return json.loads(e.read() or b'{}')
 
 
-PATTERNS = ('servicenow-', '.ds-bridge-alerts-netcool', 'bridge-alerts-netcool', '.alerts-observability', '.ds-metrics-system',
+PATTERNS = ('metrics-vsphere', 'servicenow-', '.ds-bridge-alerts-netcool', 'bridge-alerts-netcool', '.alerts-observability', '.ds-metrics-system',
             'metrics-system', 'metrics-gcp.gke', '.ds-metrics-gcp.gke', 'cmdb-ci-relations')
 
 
@@ -62,11 +62,15 @@ IDX = {
         gke=obj(node=obj(cpu=obj(allocatable_utilization=obj(pct=F)),
                          memory=obj(allocatable_utilization=obj(pct=F), used=obj(bytes={'type': 'long'}), allocatable=obj(bytes={'type': 'long'}))),
                 container=obj(restart=obj(count={'type': 'long'}))))},
+    f'metrics-vsphere.host-{T}': {'@timestamp': D, 'vsphere': obj(host=obj(name=K, cpu=obj(used=obj(pct=F)), disk=obj(latency=obj(total=obj(ms={'type': 'long'}))),
+                                                                            memory=obj(used=obj(bytes={'type': 'long'}), total=obj(bytes={'type': 'long'}))))},
+    f'metrics-vsphere.datastore-{T}': {'@timestamp': D, 'vsphere': obj(datastore=obj(name=K, capacity=obj(used=obj(pct=F))))},
+    f'metrics-vsphere.virtualmachine-{T}': {'@timestamp': D, 'vsphere': obj(virtualmachine=obj(name=K, status=K))},
     f'cmdb-ci-relations-{T}': {'@timestamp': D, 'is_marked_for_deletion': B, 'parent': obj(name=K, **{'class': K}),
                                'child': obj(name=K, **{'class': K})},
 }
 # a plain index under metrics-* needs its own template (the built-in one makes data streams only)
-call('PUT', f'/_index_template/{T}-gke', {'index_patterns': [f'metrics-gcp.gke-{T}'], 'priority': 900, 'template': {}})
+call('PUT', f'/_index_template/{T}-gke', {'index_patterns': [f'metrics-gcp.gke-{T}', f'metrics-vsphere.*-{T}'], 'priority': 900, 'template': {}})
 for name, props in IDX.items():
     r = call('PUT', f'/{name}', {'mappings': {'properties': props}})
     assert r.get('acknowledged'), (name, r)
@@ -136,6 +140,14 @@ docs[f'metrics-gcp.gke-{T}'] = [{'@timestamp': ago(minutes=3), 'cloud': {'accoun
     'labels': {'resource': {'cluster_name': 'g-prd-1', 'node_name': f'n{i}'}, 'metrics': {'memory_type': 'non-evictable'}},
     'gke': {'node': {'cpu': {'allocatable_utilization': {'pct': 0.4}},
                      'memory': {'used': {'bytes': 30}, 'allocatable': {'bytes': 100}}}}}} for i in (1, 2)]
+vh = lambda name, cpu, mem, lat, minutes=3: {'@timestamp': ago(minutes=minutes), 'vsphere': {'host': {
+    'name': name, 'cpu': {'used': {'pct': cpu}}, 'disk': {'latency': {'total': {'ms': lat}}},
+    'memory': {'used': {'bytes': int(mem * 1000)}, 'total': {'bytes': 1000}}}}}
+docs[f'metrics-vsphere.host-{T}'] = [vh('esx-a', 0.92, 0.60, 4), vh('esx-b', 0.30, 0.50, 3)]          # esx-a: CPU 92 % (critical)
+docs[f'metrics-vsphere.datastore-{T}'] = [{'@timestamp': ago(minutes=3), 'vsphere': {'datastore': {'name': n, 'capacity': {'used': {'pct': p}}}}}
+                                          for n, p in (('ds1', 0.85), ('ds2', 0.50))]                      # ds1: 85 % (warning)
+docs[f'metrics-vsphere.virtualmachine-{T}'] = [{'@timestamp': ago(minutes=3), 'vsphere': {'virtualmachine': {'name': n, 'status': s}}}
+                                               for n, s in (('vm1', 'green'), ('vm2', 'red'), ('vm3', 'green'))]
 docs[f'cmdb-ci-relations-{T}'] = [{'@timestamp': ago(minutes=20), 'is_marked_for_deletion': False,
                                    'parent': {'name': 'app1', 'class': 'cmdb_ci_service_auto'}, 'child': {'name': 'srv1', 'class': 'cmdb_ci_linux_server'}}]
 body = ''.join(json.dumps({'index': {'_index': i}}) + '\n' + json.dumps(d) + '\n' for i, ds in docs.items() for d in ds)
@@ -230,6 +242,11 @@ try:
     check('servers', (s['servers'], s['silent'], s['pressure'], s['disk']), (3, 1, 1, 1))
     g = esql(vq('Domain status', 'gke'))[0]
     check('GKE clusters', (g['clusters'], g['gke_bad'], g['gke_warn']), (1, 0, 0))
+    v = esql(vq('Domain status', 'vm'))[0]
+    check('VMware (vSphere): hosts, VMs, red VMs, datastores ≥ 80 %, hosts critical / warning, peaks',
+          {k: v[k] for k in ('hosts', 'vms', 'vms_red', 'datastores', 'ds_warn', 'ds_crit', 'hosts_crit', 'hosts_warn', 'hosts_silent', 'cpu_max', 'mem_max', 'lat_max')},
+          {'hosts': 2, 'vms': 3, 'vms_red': 1, 'datastores': 2, 'ds_warn': 1, 'ds_crit': 0, 'hosts_crit': 1, 'hosts_warn': 1,
+           'hosts_silent': 0, 'cpu_max': 92.0, 'mem_max': 60.0, 'lat_max': 4.0})
 
     print('Section 2')
     rows = run('Active P1 · P2 over 8 h on infrastructure')
