@@ -143,6 +143,10 @@ FROM metrics-vsphere.host-*, metrics-vsphere.datastore-*, metrics-vsphere.virtua
 """ }
 ```
 
+**VM1 result (12 Nov, `VM1.txt`):** 4 hosts, 5 datastores, 46 VMs (all green). The % fields are fractions as
+assumed (host CPU peak 0.299 = 29.9 %, fullest datastore 0.459 = 45.9 %), so the tile reads them correctly. Coverage
+is unchanged since 2 Nov: one vSphere cluster.
+
 ## Known limits
 
 - **VMware:** health comes from what vSphere collects (4 of 549 ESX hosts on 2 Nov; check VM1). CPU ready time,
