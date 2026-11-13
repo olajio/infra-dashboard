@@ -1,6 +1,6 @@
 # MIM V5 dashboard: user manual
 
-*4 Nov 2026, updated 11 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
+*4 Nov 2026, updated 13 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
 
 ## What it is for
 
@@ -60,12 +60,10 @@ For a **server** CI, the health panels fill by themselves.
 | **Active P1**, **P2 over 8 h**, **P3 over 24 h** | The same incidents, by priority. Green and "All clear" at 0; "Needs action" in the priority colour above 0 | Always |
 | **Open alerts, no incident** | How many open Netcool alerts (last 24 h) are on production CIs with no open incident, with the Critical count under it: possible blind spots. **Follows the Incident / CI controls** like the table in section 2: the CI's alerts and its CMDB-linked CIs'; every CI's when nothing is picked. Green at 0 | Always |
 | **User base · ServiceNow**, **Real users · RUM** | Placeholders: the integrations are in progress | Not yet |
-| **Active Incidents (P1 · P2 over 8 h · P3 over 24 h)** | The incidents behind the tiles: priority, CI, state, **when opened**, **SLA**, assignment group, assignee, group manager (with emails), description. Click an incident to open it in ServiceNow | Always |
+| **Active Incidents (P1 · P2 over 8 h · P3 over 24 h)** | The incidents behind the tiles: priority, CI, state, **when opened**, assignment group, assignee, group manager (with emails), description. Click an incident to open it in ServiceNow | Always |
 | **P1 / P2 / P3 Time to Resolve vs Target** | Average age so far of the active incidents opened each day, against the targets (P1 4 h, P2 8 h, P3 24 h, dashed lines, all on one hours axis) | Always |
 
-**Reading the SLA column:** *Breached* or *Breaching* come from ServiceNow's SLA records. *No SLA record* means
-ServiceNow sent no SLA record for that incident to Elastic, which is true of most incidents today (raised with the
-ServiceNow team).
+*The SLA column was removed on 13 Nov at the team's request.*
 
 **What section 1 leaves out:** On Hold, Resolved, Closed and Canceled incidents, and P2 / P3 incidents still within
 their target. They can still be picked in the Incident control.
@@ -141,7 +139,6 @@ Section 1 fills in every scene.
 - **An application service has no metrics of its own.** Pick one of its servers in **Server**.
 - **Netcool alerts exist mostly on network devices and UPSs**, so *Open Alerts with No Incident* fills mostly
   around infrastructure CIs. The picked CI's own Netcool alerts are no longer shown (*Alerts on this CI* removed 11 Nov).
-- **SLA records:** most incidents show *No SLA record* until the ServiceNow SLA integration is fixed.
 - **Database metrics** are recorded under the SQL instance's name (`MSSQLSERVER@host`), so some databases appear only
   as their Windows service.
 - **The section 3 Application list** offers every monitored application, whatever is picked in the top **Monitored
