@@ -61,7 +61,7 @@ For a **server** CI, the health panels fill by themselves.
 | **Open alerts, no incident** | How many open Netcool alerts (last 24 h) are on production CIs with no open incident, with the Critical count under it: possible blind spots. **Follows the Incident / CI controls** like the table in section 2: the CI's alerts and its CMDB-linked CIs'; every CI's when nothing is picked. Green at 0 | Always |
 | **User base · ServiceNow**, **Real users · RUM** | Placeholders: the integrations are in progress | Not yet |
 | **Active Incidents (P1 · P2 over 8 h · P3 over 24 h)** | The incidents behind the tiles: priority, CI, state, **when opened**, assignment group, assignee, group manager (with emails), description. Click an incident to open it in ServiceNow | Always |
-| **P1 / P2 / P3 Time to Resolve vs Target** | **Time to resolve** (since 13 Nov): for the incidents resolved each day, the average hours from opened to resolved, by priority, against the targets (P1 4 h, P2 8 h, P3 24 h, dashed lines, one hours axis). A rising line = resolving more slowly. A day with no resolved P1 has no P1 point | Always |
+| **P1 / P2 / P3 Time to Resolve vs Target** | **Time to resolve** (since 13 Nov): for the incidents resolved each day, the **median** hours from opened to resolved (the typical incident; a few very long ones don't pull it up), by priority, against the targets (P1 4 h, P2 8 h, P3 24 h, dashed lines, one hours axis). A rising line = resolving more slowly. A day with no resolved P1 has no P1 point | Always |
 
 *The SLA column was removed on 13 Nov at the team's request.*
 

@@ -1,4 +1,4 @@
-"""Check MIM V5 patch 13b: Time to Resolve vs Target averages opened -> resolved per resolution day and priority.
+"""Check MIM V5 patches 13b / 13c: Time to Resolve vs Target: median opened -> resolved per resolution day and priority.
 Local Elasticsearch (9200), own data.  Usage: test_mim_v5_2026-11-13b.py "MIM V5.ndjson"
 """
 import json
@@ -49,7 +49,8 @@ def inc(n, p, opened, resolved, state='Resolved'):
 
 docs = [inc('INC1', 2, d0 - timedelta(hours=4), d0), inc('INC2', 2, d0 - timedelta(hours=10), d0),      # P2 day 0: 4 h, 10 h -> 7.0
         inc('INC3', 3, d0 - timedelta(hours=30), d0),                                                  # P3 day 0: 30 h
-        inc('INC4', 3, d1 - timedelta(hours=12), d1), inc('INC5', 3, d1 - timedelta(hours=48), d1),     # P3 day -3: 12, 48 -> 30.0
+        inc('INC4', 3, d1 - timedelta(hours=12), d1), inc('INC5', 3, d1 - timedelta(hours=48), d1),     # P3 day -3: 12, 48, 900
+        inc('INC10', 3, d1 - timedelta(hours=900), d1),                                                # -> median 48 (average 320)
         inc('INC6', 1, d1 - timedelta(hours=2), d1),                                                   # P1 day -3: 2 h
         inc('INC7', 3, NOW - timedelta(hours=5), None, 'New'),                                         # still open: not on the chart
         inc('INC8', 3, NOW - timedelta(days=20), NOW - timedelta(days=10)),                            # resolved 10 days ago: out
@@ -66,8 +67,9 @@ try:
     cols = [c['name'] for c in r['columns']]
     rows = [dict(zip(cols, v)) for v in r['values']]
     got = [(row['day'][:10], row['p1_hours'], row['p2_hours'], row['p3_hours'], row['incidents']) for row in rows]
-    check('per resolution day: average hours opened -> resolved by priority, oldest day first', got,
-          [(iso(d1)[:10], 2.0, None, 30.0, 3), (iso(d0)[:10], None, 7.0, 30.0, 3)])
+    check('per resolution day: median hours opened -> resolved by priority (a 900 h outlier does not pull it up)', got,
+          [(iso(d1)[:10], 2.0, None, 48.0, 4), (iso(d0)[:10], None, 7.0, 30.0, 3)])
+    check('axis title', ec['attributes']['state']['visualization']['yTitle'], 'Hours to resolve (median)')
     check('same columns as the chart expects', cols, ['day', 'p1_hours', 'p2_hours', 'p3_hours', 'incidents', 'open_now'])
     viz = ec['attributes']['state']['visualization']
     check('target lines kept (4 / 8 / 24 h), one axis', sorted({yc['axisMode'] for l in viz['layers'] for yc in l.get('yConfig', [])}), ['left'])
