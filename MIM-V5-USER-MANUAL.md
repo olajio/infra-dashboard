@@ -1,6 +1,6 @@
 # MIM V5 dashboard: user manual
 
-*4 Nov 2026, updated 13 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
+*4 Nov 2026, updated 16 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
 
 ## What it is for
 
@@ -26,7 +26,9 @@ they stay mostly empty. **That is expected, not a fault.**
 - **Between investigations:** **More → Reset changes** clears every pick.
 - **The time picker changes almost nothing.** Every panel in sections 1–3 has its own fixed window, shown on its
   badge (e.g. "Last 7 days"), or follows the **Health window** control. "Last 5 years" on a badge only means the
-  panel also reads CMDB links, whatever their age. The default time picker (last 7 days) affects no panel.
+  panel also reads CMDB links. The two alert panels (*Open Alerts with No Incident* and its tile) read the last
+  **7 days** since 16 Nov (CMDB links are re-sent daily; the alerts themselves are the last 24 h). The default time
+  picker (last 7 days) affects no panel.
 - **Blue numbered banners** (① at the top of section 1, ② at the top of section 3) tell you what to pick next.
 
 ## The controls

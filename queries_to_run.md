@@ -1,7 +1,7 @@
 # Queries to run (16 Nov 2026)
 
-For the items in `mim_recap.txt`. Run each in **Dev Tools** and upload the results as `recap_results.txt`.
-(The TTR1 / TTR2 checks of 13 Nov are done: results in `ttr.txt`.)
+Run in **Dev Tools** and upload the results as `recap_results2.txt`.
+Done: R2 (`r2.csv`), R3 and R4a / R4b (`recap_results.txt`). The R1 result was not in `recap_results.txt`.
 
 ## R1. What is "PBA"? Is there a PBA field in the ServiceNow data?
 
@@ -9,7 +9,8 @@ For the items in `mim_recap.txt`. Run each in **Dev Tools** and upload the resul
 GET servicenow-*/_field_caps?fields=*pba*,*PBA*,*Pba*&filter_path=fields
 ```
 
-If R1 returns a field, run this with its name in place of `FIELD`, to see its values on P1 / P2 incidents:
+An empty result (`{}`) means no field named PBA reaches Elastic. If it returns a field, run this with its name in
+place of `FIELD`:
 
 ```
 POST /_query?format=txt
@@ -24,82 +25,43 @@ FROM servicenow-incidents-*
 }
 ```
 
-## R2. How old are the CMDB links? (to choose the time range of the alert panels)
+## R4c. Which P2 incidents carry the ServiceNow duration?
 
-The alert panels show "Last 5 years" because they also read CMDB links (`cmdb-ci-relations`), and a panel's time range
-filters every index it reads. R2 shows whether the links are re-sent often enough for a shorter range.
-
-```
-POST /_query?format=txt
-{
-  "query": """
-FROM cmdb-ci-relations*
-| WHERE @timestamp >= NOW() - 5 years
-| EVAL age = CASE(@timestamp >= NOW() - 1 day, "a: last 24 h", @timestamp >= NOW() - 7 days, "b: 1-7 days",
-                  @timestamp >= NOW() - 30 days, "c: 7-30 days", "d: older than 30 days"),
-       link = CONCAT(TO_STRING(parent.name), " | ", TO_STRING(child.name))
-| STATS records = COUNT(*), links = COUNT_DISTINCT(link), newest = MAX(@timestamp), oldest = MIN(@timestamp) BY age
-| SORT age
-"""
-}
-```
-
-## R3. MTTR for P1
-
-No P1 was resolved in the 7 days the Time to Resolve chart covers (TTR1: one P1, On Hold). R3 looks back 90 days.
-
-**R3a. Every P1 resolved in the last 90 days, with its time to resolve**
+R4a found the fields `duration` and `business_duration` (stored as dates, ServiceNow's way of holding a length of
+time), but the three resolved P2s in R4b had neither. ServiceNow usually fills them when an incident is **closed**.
+R4c counts them by state.
 
 ```
 POST /_query?format=txt
 {
   "query": """
 FROM servicenow-incidents-*
-| WHERE TO_STRING(number) LIKE "INC*" AND TO_INTEGER(priority) == 1 AND resolved_at >= NOW() - 90 days
-| STATS opened = MIN(TO_DATETIME(opened_at)), resolved = MAX(TO_DATETIME(resolved_at)),
-        ci = VALUES(TO_STRING(ci.name)), state = VALUES(TO_STRING(state_name)) BY number
-| EVAL hours = ROUND(DATE_DIFF("minutes", opened, resolved) / 60.0, 1)
-| SORT resolved DESC
-| LIMIT 100
+| WHERE TO_STRING(number) LIKE "INC*" AND TO_INTEGER(priority) == 2 AND @timestamp >= NOW() - 30 days
+| EVAL has_duration = CASE(duration IS NOT NULL, 1, 0), has_business_duration = CASE(business_duration IS NOT NULL, 1, 0)
+| STATS records = COUNT(*), incidents = COUNT_DISTINCT(number), with_duration = SUM(has_duration),
+        with_business_duration = SUM(has_business_duration) BY state = TO_STRING(state_name)
+| SORT state
 """
 }
 ```
 
-**R3b. P1 MTTR: count, median and average, by month**
+## R4d. The duration values, next to the opened → resolved time
+
+`duration_hours` and `business_hours` read the dates as lengths of time; `resolve_hours` is opened → resolved, for
+comparison.
 
 ```
 POST /_query?format=txt
 {
   "query": """
 FROM servicenow-incidents-*
-| WHERE TO_STRING(number) LIKE "INC*" AND TO_INTEGER(priority) == 1 AND resolved_at >= NOW() - 90 days
-| STATS opened = MIN(TO_DATETIME(opened_at)), resolved = MAX(TO_DATETIME(resolved_at)) BY number
-| EVAL hours = DATE_DIFF("minutes", opened, resolved) / 60.0
-| STATS incidents = COUNT(*), median_hours = ROUND(MEDIAN(hours), 1), average_hours = ROUND(AVG(hours), 1),
-        max_hours = ROUND(MAX(hours), 1) BY month = DATE_TRUNC(1 month, resolved)
-| SORT month
+| WHERE TO_STRING(number) LIKE "INC*" AND TO_INTEGER(priority) == 2 AND duration IS NOT NULL
+| EVAL duration_hours = ROUND(TO_LONG(duration) / 3600000.0, 1),
+       business_hours = ROUND(TO_LONG(business_duration) / 3600000.0, 1),
+       resolve_hours = ROUND(DATE_DIFF("minutes", TO_DATETIME(opened_at), TO_DATETIME(resolved_at)) / 60.0, 1)
+| SORT @timestamp DESC
+| KEEP number, state_name, opened_at, resolved_at, closed_at, duration, business_duration, duration_hours, business_hours, resolve_hours
+| LIMIT 10
 """
 }
 ```
-
-## R4. The P2 duration calculated in ServiceNow
-
-ServiceNow's incident table usually holds it as **duration** (`calendar_duration`, `calendar_stc`) and **business
-duration** (`business_duration`, `business_stc`). R4a finds what reaches Elastic; R4b shows the values on a few
-resolved P2s next to opened / resolved.
-
-**R4a. Duration fields in the ServiceNow data**
-
-```
-GET servicenow-*/_field_caps?fields=*duration*,*stc*,*time_worked*,*resolve_time*,*business*&filter_path=fields.*.*.type
-```
-
-**R4b. Three resolved P2 incidents, with every duration-like field**
-
-```
-GET servicenow-incidents-*/_search?size=3&sort=@timestamp:desc&_source_includes=number,priority,state_name,opened_at,resolved_at,closed_at,*duration*,*stc*,*time_worked*,*resolve_time*
-{ "query": { "bool": { "filter": [ { "term": { "priority": 2 } }, { "exists": { "field": "resolved_at" } } ] } } }
-```
-
-If R4a finds nothing, the duration is not sent to Elastic: ask the ServiceNow team to add the field
-(`calendar_duration` or `business_duration`) to the incident feed.
