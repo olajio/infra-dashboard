@@ -1,0 +1,11 @@
+P3 will be removed from Dashboard
+P1 and P2 will be retained or PBA is True
+Remove SLA column
+Incident line should be going upwards rather than going downwards
+Filter showing 5 years for alert
+MTTR for P1 needs to be checked
+Duration for P2 to be added from ServiceNow
+User manual share screen shots with Matt to be incorporated in the MIM user manual
+User Manual share screen shots with Abhishek Panchal to be incorporated in Incident management user manual
+Use IT.I.SIAM.Incident_Management member for Demo call
+Use IT.I.SIAM.MIM member for Demo call
