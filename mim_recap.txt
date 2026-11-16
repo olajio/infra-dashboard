@@ -1,11 +1,21 @@
-P3 will be removed from Dashboard
-P1 and P2 will be retained or PBA is True
-Remove SLA column
-Incident line should be going upwards rather than going downwards
-Filter showing 5 years for alert
-MTTR for P1 needs to be checked
-Duration for P2 to be added from ServiceNow
-User manual share screen shots with Matt to be incorporated in the MIM user manual
+P3 will be removed from Dashboard eventually - but leave it in there for now
+
+P1 and P2 will be retained or PBA is True. I don't understand what PBA is. Do you understand it? Let me know. For now, donlt make any change about this. Let me know if you understand it.
+
+Remove SLA column - I believe this is addressed already - Confirm for me please and let me know
+
+Incident line should be going upwards rather than going downwards - I believe this is addressed already - Confirm for me please and let me know
+
+Filter showing 5 years for alert - Reduce this to last 7 days or which timeframe do you think it more appropriate. Let me know before you make the change
+
+MTTR for P1 needs to be checked - Let me know what queries you need me to run to get this value from servicenow
+
+Duration for P2 to be added from ServiceNow - let me know what queries you need me to run to add this field. I was told the duration is being calculated in ServiceNow. Let me know what queries you need me to run to find this as I should be able to retrieve it from ServiceNow
+
+User manual share screen shots with Matt to be incorporated in the MIM user manual - This is an instruction for me while presenting the dashboard. Nothing for you to do here
+
 User Manual share screen shots with Abhishek Panchal to be incorporated in Incident management user manual
-Use IT.I.SIAM.Incident_Management member for Demo call
-Use IT.I.SIAM.MIM member for Demo call
+
+Use IT.I.SIAM.Incident_Management member for Demo call - This is an instruction for me while presenting the dashboard. Nothing for you to do here
+
+Use IT.I.SIAM.MIM member for Demo call - This is an instruction for me while presenting the dashboard. Nothing for you to do here
