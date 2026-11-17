@@ -1,7 +1,8 @@
 # Action tracker: 3–17 Nov 2026
 
 Actions for the action tracker spreadsheet. MIM and the Infrastructure Dashboard are listed separately. MIM is up to
-date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard section covers 3–4 Nov.
+date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard is up to date to 17 Nov (see
+*Infrastructure Dashboard progress, 5–17 Nov*).
 
 ## MIM progress summary (to 17 Nov), for the spreadsheet
 
@@ -12,6 +13,18 @@ date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard se
 > opened) instead of the ServiceNow SLAs; both are now on the dashboard, with a *Linked incidents* count for user
 > impact and On Hold P1s shown. Every change is tested, and the user manual and MIM KPI sheet are up to date.
 > **Next:** check the new MTTR columns on live data; decisions pending on alert links and the two design previews.
+
+## Infrastructure Dashboard progress summary (to 17 Nov), for the spreadsheet
+
+> **Infrastructure Dashboard: on track; now the Infrastructure Overview.** On 5 Nov the CI-driven Infrastructure
+> Dashboard got the MIM V5 look, the Incident control, MIM's Active P1 / P2-over-8 h table and links to the detailed
+> dashboards. After the 6 Nov team review it became a landing page, the **Infrastructure Overview** (built 10 Nov):
+> one status tile per domain (Server, Database, Middleware, VMware, Cloud, Network) linking to its detailed dashboard,
+> KPI tiles, active incidents, open alerts by domain, a Change Request Summary as on Portfolio, and data freshness.
+> Domain rules were checked against every production CI class, and VMware status now comes from vSphere health. On
+> 17 Nov the team's version (*Infrastructure Overview v2*) became the basis: links are grouped into *Related
+> Dashboards* and *Detailed Dashboards*, and a *Future Releases* section shows the roadmap and planned AI insights.
+> **Next:** import v2 and check it on live data; VMware and Cloud SQL coverage depend on their integrations.
 
 ## MIM dashboard
 
@@ -75,9 +88,34 @@ date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard se
 | 4 Nov | Made the controls hard to miss: icons in the control titles, three numbered "Start here" banners (sections 1–3), full-width top-bar controls | Done | `tools/build_infra_dashboard.py`, test `test_infra_dashboard_2026-10-28.py` |
 | 4 Nov | Updated the user manual for the new controls | Done | `INFRA-DASHBOARD-MANUAL.md` |
 
-**Open (Infrastructure Dashboard):**
-- Run the demo scenes on the dashboard itself and share screenshots.
-- Cloud health (#11): run check CG7 (is node memory split by type?); Cloud SQL blocked until the CMDB and the GCP
-  collection cover the same databases.
+## Infrastructure Dashboard progress, 5–17 Nov
+
+| Date | Action | Status | Evidence |
+|---|---|---|---|
+| 5 Nov | Gave the dashboard the **MIM V5 look**: tile icons (green at 0), section icons, row numbers; new *Active Elastic infra alerts* tile | Done | `tools/build_infra_dashboard.py` |
+| 5 Nov | Added section 4 **Detailed dashboards**: links to the Server, Database, Middleware, VMware and Cloud infra dashboards, plus Applications Operations and MIM | Done | `respective_detailed_dashboards.txt` |
+| 5 Nov | Added the **Incident control** (as on MIM: a picked incident selects its CI); *Incidents on this CI* replaced by MIM's **Active Incidents (P1 · P2 over 8 h)** table, with MIM's 8 h rule for P2. Built on the team's layout (`infra2.ndjson`) | Done | Tests, `INFRA-DASHBOARD-MANUAL.md` |
+| 5 Nov | Fixed GKE memory after check CG7: *Mem peak* counts non-evictable memory only | Done | `INFRA-DASHBOARD-ACTIVITY-LOG.md` |
+| 6 Nov | After the team review: proposed the landing-page KPIs (20, with relevance and achievability), a mockup, a usage flowchart and a walkthrough | Done | `INFRA-OVERVIEW-KPIS.md`, `previews/`, *Overview KPIs* sheet in `INFRA-DASHBOARD-KPIS.xlsx` |
+| 10 Nov | **Built the Infrastructure Overview** (landing page, no controls): domain status tiles linking to each detailed dashboard, KPI tiles, active P1 / P2-over-8 h incidents, open alerts by domain, top alerts, changes, trend, data freshness. Replaces the CI-driven dashboard (same id); the old one is archived | Done | `Infrastructure Overview.ndjson`, `tools/build_infra_overview.py`, `INFRA-OVERVIEW-MANUAL.md` |
+| 11 Nov | Checked the domain rules against every production CI class (IO1 / IO2) and fixed them (e.g. F5 BIG-IP → Network, Hardware → Server); all 49 classes land in a domain | Done | Test, `INFRA-OVERVIEW-MANUAL.md` |
+| 11 Nov | Added a **Change Request Summary** as on Portfolio v4 (open N / S / E, implemented this week vs last, pending approval, scheduled next 7 days) with the change list beside it; fixed it for production's change fields | Done | `Infrastructure Overview.ndjson` |
+| 11 Nov | Dashboard links as two lists side by side; Portfolio Dashboard added | Done | `Infrastructure Overview.ndjson` |
+| 12 Nov | **VMware tile from vSphere health**: hosts, VMs, datastores over 80 %, host CPU / memory / disk latency, with the thresholds from `vmware_data.xlsx`; checked on production (VM1: 4 hosts, 5 datastores, 46 VMs) | Done | `vmware.ndjson`, `vmware_data.xlsx`, `INFRA-OVERVIEW-MANUAL.md` |
+| 17 Nov | Adopted the team's updated version (**Infrastructure Overview v2**) as the basis. Dashboard Links split into **Related Dashboards** (Executive (in progress), Portfolio, Applications Operations, Major Incident Management) and **Detailed Dashboards** (Cloud, Database, Middleware, Server, VMware) | Done | `Infrastructure Overview v2.ndjson`, `tools/infra_overview_v2_patch_2026-11-17a.py` |
+| 17 Nov | Added a **Future Releases** section: *Next Release Roadmap* and *Predictive & AI Insights* cards with the planned infrastructure items | Done | `Infrastructure Overview v2.ndjson` |
+| 17 Nov | Added 20 capabilities from the dashboard work to the Capability Tracker (CAP-086 to CAP-105) | Done | `Capability Tracker.xlsx` |
+| 5–17 Nov | Kept the user manuals, activity log and KPI workbook up to date with every change | Done | `INFRA-DASHBOARD-MANUAL.md`, `INFRA-OVERVIEW-MANUAL.md`, `INFRA-DASHBOARD-ACTIVITY-LOG.md` |
+
+**Open (Infrastructure Dashboard / Overview), as of 17 Nov:**
+- Import *Infrastructure Overview v2* and check it on live data (links, Future Releases cards).
+- Executive Dashboard: add its link once the dashboard exists (shown as *In Progress*).
+- VMware (#10): only 4 of 549 ESX hosts are collected; waiting for the vSphere integration to cover the main
+  vCenters. CPU ready time, ballooning, swapping and packet loss are not collected.
+- Cloud health (#11): Cloud SQL blocked until the CMDB and the GCP collection cover the same databases.
+- Network: no detailed dashboard yet.
 - Custom integration health (#12): needs a definition.
-- User impact (#3) and VMware health (#10): waiting for their integrations.
+- User impact (#3): waiting for the ServiceNow user base and RUM integrations.
+
+**Closed since 4 Nov:** CG7 (GKE memory) checked and fixed (5 Nov). The demo scenes on the CI-driven dashboard are no
+longer needed: it was replaced by the Infrastructure Overview on 10 Nov.
