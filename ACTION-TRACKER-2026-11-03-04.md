@@ -1,7 +1,17 @@
-# Action tracker: 3–4 Nov 2026
+# Action tracker: 3–17 Nov 2026
 
-Actions completed on 3 and 4 Nov, for the action tracker spreadsheet. MIM and the Infrastructure Dashboard are
-listed separately.
+Actions for the action tracker spreadsheet. MIM and the Infrastructure Dashboard are listed separately. MIM is up to
+date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard section covers 3–4 Nov.
+
+## MIM progress summary (to 17 Nov), for the spreadsheet
+
+> **MIM V5: on track.** Since 4 Nov MIM V5 has been refined from the team's feedback and the 16 Nov recap: P3 removed
+> (MIM covers P1 and P2 only), the SLA column removed, the alert panels cut to the last 7 days, and *Alerts on this
+> CI* removed. The time-to-resolve chart now shows a rolling 7-day median against the 4 h / 8 h targets. Agreed with
+> James Patock and Dan Tautges to report **P1 MTTR** (from when the incident became a P1) and **P2 Duration** (from
+> opened) instead of the ServiceNow SLAs; both are now on the dashboard, with a *Linked incidents* count for user
+> impact and On Hold P1s shown. Every change is tested, and the user manual and MIM KPI sheet are up to date.
+> **Next:** check the new MTTR columns on live data; decisions pending on alert links and the two design previews.
 
 ## MIM dashboard
 
@@ -22,12 +32,38 @@ listed separately.
 | 4 Nov | Updated the MIM KPI spreadsheet for MIM V5: 10 rows revised, 3 KPIs added; evidence pictures kept | MIM V5 | Done | `Dashboard Testing and Verification Template.xlsx` |
 | 4 Nov | Wrote the **MIM V5 user manual** | MIM V5 | Done | `MIM-V5-USER-MANUAL.md` |
 
-**Open (MIM):**
-- Run the Round 23 queries (alert source fields), then decide how to link alerts.
-- Decide on the MIM V5 previews (*CI at a glance*, *health distribution* bar).
+## MIM progress, 5–17 Nov
+
+| Date | Action | Dashboard | Status | Evidence |
+|---|---|---|---|---|
+| 5 Nov | Reviewed the Round 23 alert results and recommended how to link alerts: open the alert's history in Kibana Discover, and the CI's record in the ServiceNow CMDB; the Netcool Web GUI once the Netcool team confirms the server name | MIM V5 | Waiting for go-ahead | `ALERT-DRILLDOWN.md` |
+| 6 Nov | *Open alerts, no incident* tile now follows the Incident / CI controls; *Escalate* renamed *Escalation Channel*; section 2 laid out side by side; *Time to Resolve* on one axis | MIM V5 | Done | Patch 06a, test `test_mim_v5_2026-11-06a.py` |
+| 6 Nov | Updated the MIM KPI spreadsheet for the 6 Nov changes | MIM V5 | Done | `Dashboard Testing and Verification Template.xlsx` |
+| 9–10 Nov | User manual: explained the difference between *Alerts on this CI* and *Open Alerts with No Incident* | MIM V5 | Done | `MIM-V5-USER-MANUAL.md` |
+| 11 Nov | Removed *Alerts on this CI*; *Changes in the Last 7 Days* takes the full row | MIM V5 | Done | Patch 11a, test `test_mim_v5_2026-11-11a.py` |
+| 11 Nov | Preview of links from the section 3 health panels to the detailed infrastructure dashboards | MIM V5 | Preview made; not built | `previews/mim-v5-health-links-preview.png` |
+| 13 Nov | Removed the SLA column from *Active Incidents* (team request) | MIM V5 | Done | Patch 13a, test `test_mim_v5_2026-11-13a.py` |
+| 13 Nov | *Time to Resolve vs Target* fixed to show real time to resolve (opened → resolved), as a median so a few very long incidents do not distort it; checked against production (TTR1 / TTR2) | MIM V5 | Done | Patches 13b, 13c |
+| 16 Nov | Worked through the 16 Nov recap: checks for PBA, CMDB link age, P1 MTTR and P2 duration. Result: no PBA field exists, so no change | MIM V5 | Done | `mim_recap.txt`, `queries_to_run.md`, `recap_results*.txt` |
+| 16 Nov | Alert panels read the last 7 days instead of 5 years (CMDB links are re-sent daily, so nothing is lost) | MIM V5 | Done | Patch 16a, test `test_mim_v5_2026-11-16a.py` |
+| 17 Nov | Removed P3 from the whole dashboard (MIM covers P1 and P2 only); *Active Incidents* about 25 % narrower, *Time to Resolve* wider | MIM V5 | Done | Patch 17a, test `test_mim_v5_2026-11-17a.py` |
+| 17 Nov | *Time to Resolve* as a rolling 7-day median, so one slow day no longer makes the line jump | MIM V5 | Done | Patch 17b |
+| 17 Nov | Reviewed the SLA email thread (James Patock, Dan Tautges) and found the data for James's proposal (checks O1–O5): Outage records are not in Elastic, but the incident timeline gives the exact time an incident became a P1 | MIM V5 | Done | `MIM SLA update.docx`, `outage_results.txt`, `timeline_results*.txt` |
+| 17 Nov | Built **P1 MTTR** (from when the incident became a P1) and **P2 Duration** (from opened): new *Time as P1 / Duration (h)* and *Linked incidents* columns in *Active Incidents*; On Hold P1s shown (tiles too); P1 line of *Time to Resolve* = MTTR | MIM V5 | Done; to check on live data | Patch 17c, test `test_mim_v5_2026-11-17c.py` |
+| 6–17 Nov | Kept the MIM V5 user manual and the MIM KPI spreadsheet up to date with every change | MIM V5 | Done | `MIM-V5-USER-MANUAL.md`, `Dashboard Testing and Verification Template.xlsx` |
+
+**Open (MIM), as of 17 Nov:**
+- Import the updated MIM V5 and check the new MTTR / Duration and Linked incidents columns on live data.
+- Go-ahead on the alert links (Discover and CMDB now; Netcool Web GUI after the Netcool team answers).
+- Decide on the MIM V5 previews (*CI at a glance*, *health distribution* bar, links to the detailed dashboards).
+- Only if James needs the MIM team's manual adjustments: ask the ServiceNow team to add the Outage table to the
+  integration.
+- Share screenshots with Matt (MIM user manual) and Abhishek Panchal (Incident Management user manual).
 - Revisit making the Service control default to the services on the picked server (parked).
-- Add the Opened-column follow-up for SLA once the ServiceNow SLA record issue is fixed.
 - Continue the test cases on MIM V5 (TC-04 to TC-28 values are in the run sheet).
+
+**Closed since 4 Nov:** Round 23 queries run (5 Nov); the SLA follow-up is replaced by P1 MTTR / P2 Duration
+(17 Nov).
 
 ## Infrastructure Dashboard
 
