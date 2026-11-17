@@ -1,5 +1,12 @@
 # Infrastructure Overview: user manual
 
+> **17 Nov: the current version is "Infrastructure Overview v2"** (`Infrastructure Overview v2.ndjson`, id
+> `00dde42d-…`), the team's layout (`infra_overview_2.ndjson`) with `tools/infra_overview_v2_patch_2026-11-17a.py`:
+> section **🔗 2 · Dashboard Links** has two subsections, **Related Dashboards** (Executive, in progress; Portfolio;
+> Applications Operations; Major Incident Management) and **Detailed Dashboards** (Cloud Infra, Database Infra,
+> Middleware, Server Infra, VMware Infra), then Data freshness; new section **🚀 3 · Future Releases** holds the Next
+> Release Roadmap and Predictive & AI Insights cards. The rest of this manual describes the panels, which are unchanged.
+
 *10 Nov 2026, updated 11 Nov · Kibana 9.5.3 · dashboard "Infrastructure Overview" (replaces the CI-driven "Infrastructure Dashboard",
 same id, so its links and bookmarks still work). Design: `INFRA-OVERVIEW-KPIS.md`, `previews/INFRA-OVERVIEW-WALKTHROUGH.md`.*
 

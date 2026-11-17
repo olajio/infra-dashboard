@@ -107,6 +107,13 @@ Incident / CI controls (Vega cannot read controls); *Escalate* is renamed *Escal
 Channel and *Open Alerts with No Incident* (moved from section 1) side by side, then *Changes* and *Alerts on this CI*
 side by side; *Time to Resolve vs Target* uses one axis, so the P3 24 h line no longer reads as about 1 h.
 
+## Infrastructure Overview v2 (17 Nov 2026)
+
+`Infrastructure Overview v2.ndjson` = the team's `infra_overview_2.ndjson` + `infra_overview_v2_patch_2026-11-17a.py
+infra_overview_2.ndjson "Infrastructure Overview v2.ndjson"`: Dashboard Links rebuilt as Related / Detailed Dashboards
+rows (as in `related_links.png`), and a Future Releases section (as in `next_release.png`). From v2 on, changes are
+patches on the team's file; `build_infra_overview.py` built v1.
+
 ## Infrastructure Overview (10 Nov 2026)
 
 `Infrastructure Overview.ndjson` is the infrastructure landing page (`INFRA-OVERVIEW-KPIS.md`,
