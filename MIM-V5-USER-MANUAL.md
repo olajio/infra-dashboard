@@ -62,13 +62,24 @@ For a **server** CI, the health panels fill by themselves.
 | **Active P1**, **P2 over 8 h** | The same incidents, by priority. Green and "All clear" at 0; "Needs action" in the priority colour above 0 | Always |
 | **Open alerts, no incident** | How many open Netcool alerts (last 24 h) are on production CIs with no open incident, with the Critical count under it: possible blind spots. **Follows the Incident / CI controls** like the table in section 2: the CI's alerts and its CMDB-linked CIs'; every CI's when nothing is picked. Green at 0 | Always |
 | **User base · ServiceNow**, **Real users · RUM** | Placeholders: the integrations are in progress | Not yet |
-| **Active Incidents (P1 · P2 over 8 h)** | The incidents behind the tiles: priority, CI, state, **when opened**, assignment group, assignee, group manager (with emails), description. Click an incident to open it in ServiceNow | Always |
-| **P1 / P2 Time to Resolve vs Target** | **Time to resolve, rolling 7-day median** (since 17 Nov): each point is the median hours from opened to resolved of the P1 or P2 incidents resolved in the 7 days up to that day, for the last 7 days, against the targets (P1 4 h, P2 8 h, dashed lines). Smooth: one slow day no longer makes the line jump. A rising line = resolving more slowly; a resolved P1 stays in the line for 7 days | Always |
+| **Active Incidents (P1 · P2 over 8 h)** | The incidents behind the tiles: priority, CI, state, **when opened**, **Time as P1 / Duration (h)**, **Linked incidents**, assignment group, assignee, group manager (with emails), description. Longest first. Click an incident to open it in ServiceNow | Always |
+| **P1 / P2 Time to Resolve vs Target** | **P1 MTTR and P2 Duration, rolling 7-day median**: each point is the median hours of the P1 or P2 incidents resolved in the 7 days up to that day, for the last 7 days, against the targets (P1 4 h, P2 8 h, dashed lines). **P1 line = MTTR**, from when the incident became a P1 to resolved; **P2 line = Duration**, from opened to resolved. One slow day does not make the line jump. A rising line = resolving more slowly; a resolved P1 stays in the line for 7 days. Reads 30 days | Always |
 
-*The SLA column was removed on 13 Nov at the team's request.*
+*The SLA column was removed on 13 Nov at the team's request. Since 17 Nov MIM reports P1 MTTR and P2 Duration instead
+of the ServiceNow SLAs (agreed with James Patock and Dan Tautges):*
 
-**What section 1 leaves out:** On Hold, Resolved, Closed and Canceled incidents, and P2 incidents still within
-their 8 h target. **P3 incidents are not on MIM V5 at all** (removed 17 Nov): MIM covers P1 and P2 only.
+- **Time as P1 / Duration (h)** in *Active Incidents*: for a **P1**, hours since it **became a P1** (MTTR so far); for
+  a **P2**, hours since it was **opened** (Duration). The time it became a P1 comes from the ServiceNow incident timeline
+  (`servicenow-incident-timelines`), which keeps every update with its priority; if the incident was opened as a P1, or
+  the timeline has no record yet, the opened time is used. Example: INC2692216 was opened as a P3 at 18:29, became a P1
+  at 20:10 and was resolved the next day at 22:59, so its MTTR is 26.8 h (Duration 28.5 h).
+- **Linked incidents**: how many incidents name this one as their parent incident (updated in the last 7 days): the
+  user impact of a P1.
+- The MIM team's manual adjustments to the ServiceNow Outage record are not included: Outage records are not sent to
+  Elastic.
+
+**What section 1 leaves out:** Resolved, Closed and Canceled incidents, On Hold **P2** incidents (On Hold **P1s are
+shown**, since 17 Nov), and P2 incidents still within their 8 h target. **P3 incidents are not on MIM V5 at all** (removed 17 Nov): MIM covers P1 and P2 only.
 
 ### 🔎 2 · Investigate the CI
 

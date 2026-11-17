@@ -85,6 +85,11 @@ numbers on the long tables. Rebuild after any MIM V4 change. Functional test: `t
 Opened and loses CI support group; Active Incidents gets Opened; Open Alerts with No Incident shows only the selected
 CI's alerts and its CMDB-linked CIs'. It also makes the controls hard to miss: icon titles, full-width top bar, and
 "Start here" banners. The Infrastructure Dashboard got the same control treatment in `build_infra_dashboard.py`.
+17 Nov: `mim_v5_patch_2026-11-17c.py "MIM V5.ndjson" "MIM V5.ndjson"` (test `test_mim_v5_2026-11-17c.py "MIM V5.ndjson"`):
+P1 MTTR from the time the incident became a P1 (`servicenow-incident-timelines`), P2 Duration (opened to resolved,
+`resolution_time`); Active Incidents gets *Time as P1 / Duration (h)* and *Linked incidents* and shows On Hold P1s (tiles
+too); Time to Resolve reads 30 days. It supersedes `test_mim_v5_2026-11-17b.py`. KPI sheet:
+`update_mim_kpi_sheet_2026-11-17c.py`.
 17 Nov: `mim_v5_patch_2026-11-17b.py "MIM V5.ndjson" "MIM V5.ndjson"` (test `test_mim_v5_2026-11-17b.py "MIM V5.ndjson"`):
 *Time to Resolve* is a rolling 7-day median per day (panel reads 14 days). It supersedes `test_mim_v5_2026-11-13b.py`,
 which checked the daily median. KPI sheet: `update_mim_kpi_sheet_2026-11-17b.py`.

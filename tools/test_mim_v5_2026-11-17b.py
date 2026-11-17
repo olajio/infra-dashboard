@@ -1,4 +1,4 @@
-"""Check MIM V5 patch 17b: Time to Resolve vs Target = rolling 7-day median per day, P1 / P2 only, last 7 days.
+"""(Superseded by test_mim_v5_2026-11-17c.py.) Check MIM V5 patch 17b: Time to Resolve vs Target = rolling 7-day median per day, P1 / P2 only, last 7 days.
 Local Elasticsearch (9200), own data; the expected values are computed here independently of the query.
 Usage: test_mim_v5_2026-11-17b.py "MIM V5.ndjson"
 """

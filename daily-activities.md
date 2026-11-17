@@ -54,7 +54,14 @@
    13 Nov 22:59:10: **MTTR 26.8 h** from becoming P1, duration 28.5 h from opening. The snapshot estimate (20:12) was
    2 minutes out. `resolution_time` (opened to resolved, in seconds) is also on the incident records the dashboard
    already reads. About 8–9 timeline records per incident (32,518 for 3,740 incidents in 7 days).
-6. Restated the recommendations for approval before building.
+6. Restated the recommendations; approved, with Linked incidents and On Hold P1s added. Built them on MIM V5:
+   - **P1 MTTR** from the time the incident became a P1 (from the incident timeline), to resolved or now.
+   - **P2 Duration** from opened to resolved (`resolution_time`) or now.
+   - *Active Incidents*: new columns **Time as P1 / Duration (h)** and **Linked incidents** (incidents whose parent is
+     this one); **On Hold P1s now shown**, and counted by the tiles. The table no longer reads the SLA records.
+   - *Time to Resolve vs Target*: the P1 line is now MTTR from becoming a P1; the panel reads 30 days.
+   - Test with hand-worked cases (escalated P3 → P2 → P1, opened as P1, On Hold P1, child incidents, mismatched field
+     types between the two indices). Updated the user manual and seven KPI sheet rows (122, 123, 126–128, 130, 132).
 
 **Capability Tracker**
 1. Reviewed `Capability Tracker.xlsx`: 85 Elastic observability capabilities (CAP-001 to CAP-085) with category, AI
@@ -66,5 +73,6 @@
    summaries.
 
 **Open from today**
-- Ask the ServiceNow team whether the Outage table can be added to the integration (for the MIM-adjusted Duration).
-- Agree with James and Dan on the approach (P1 MTTR from Outage records, Duration for P2), then build it on MIM V5.
+- Only if James needs the MIM team's manual adjustments: ask the ServiceNow team to add the Outage table to the integration.
+- Import the updated MIM V5 and check it on real data: the new Active Incidents columns, and the P1 line on Time to
+  Resolve (INC2692216, resolved 13 Nov, counts as 26.8 h until the window passes it on 20 Nov).
