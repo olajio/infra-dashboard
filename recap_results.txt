@@ -1,151 +1,61 @@
-#R3a. Every P1 resolved in the last 90 days, with its time to resolve
-# 3: POST /_query?format=txt [200 OK]
-         opened         |        resolved        |           ci           |     state     |    number     |     hours     
-------------------------+------------------------+------------------------+---------------+---------------+---------------
-2026-11-12T18:29:32.000Z|2026-11-13T22:59:10.000Z|Email/Exchange PROD     |Resolved       |INC2692216     |28.5           
-2026-10-14T12:46:53.000Z|2026-10-14T15:46:21.000Z|Policy Center PROD      |Closed         |INC2674345     |3.0            
-2026-08-25T12:44:32.000Z|2026-08-25T19:07:02.000Z|CCIS Data Warehouse PROD|Closed         |INC2643856     |6.4            
-
-#R3b. P1 MTTR: count, median and average, by month
-# 17: POST /_query?format=txt [200 OK]
-#! No limit defined, adding default limit of [1000]
-   incidents   | median_hours  | average_hours |   max_hours   |         month          
----------------+---------------+---------------+---------------+------------------------
-1              |6.4            |6.4            |6.4            |2026-08-01T00:00:00.000Z
-1              |3.0            |3.0            |3.0            |2026-10-01T00:00:00.000Z
-1              |28.5           |28.5           |28.5           |2026-11-01T00:00:00.000Z
-
-
-#R4a. Duration fields in the ServiceNow data
-# 33: GET servicenow-*/_field_caps?fields=*duration*,*stc*,*time_worked*,*resolve_time*,*business*&filter_path=fields.*.*.type [200 OK]
+#R1. What is "PBA"? Is there a PBA field in the ServiceNow data?
+# 2: GET servicenow-*/_field_caps?fields=*pba*,*PBA*,*Pba*&filter_path=fields [200 OK]
 {
-  "fields": {
-    "sla.all.business_duration": {
-      "date": {
-        "type": "date"
+  "fields": {}
+}
+# 4: POST /_query?format=txt [400 Bad Request]
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "verification_exception",
+        "reason": """Found 1 problem
+line 4:65: Unknown column [FIELD]"""
       }
-    },
-    "business_service.name": {
-      "keyword": {
-        "type": "keyword"
-      }
-    },
-    "sla.all.duration": {
-      "date": {
-        "type": "date"
-      }
-    },
-    "business_service.name.normalized": {
-      "keyword": {
-        "type": "keyword"
-      }
-    },
-    "business_pause_duration": {
-      "date": {
-        "type": "date"
-      }
-    },
-    "sla": {
-      "object": {
-        "type": "object"
-      }
-    },
-    "sla.all.business_pause_duration": {
-      "date": {
-        "type": "date"
-      }
-    },
-    "business_service": {
-      "object": {
-        "type": "object"
-      }
-    },
-    "duration": {
-      "date": {
-        "type": "date"
-      }
-    },
-    "business_duration": {
-      "date": {
-        "type": "date"
-      }
-    },
-    "business_service.sys_id": {
-      "keyword": {
-        "type": "keyword"
-      }
-    },
-    "sla.all": {
-      "object": {
-        "type": "object"
-      }
-    }
-  }
+    ],
+    "type": "verification_exception",
+    "reason": """Found 1 problem
+line 4:65: Unknown column [FIELD]"""
+  },
+  "status": 400
 }
 
-#R4b. Three resolved P2 incidents, with every duration-like field
-# 36: GET servicenow-incidents-*/_search?size=3&sort=@timestamp:desc&_source_includes=number,priority,state_name,opened_at,resolved_at,closed_at,*duration*,*stc*,*time_worked*,*resolve_time* [200 OK]
+#R4c. Which P2 incidents carry the ServiceNow duration?
+# 17: POST /_query?format=txt [400 Bad Request]
+#! No limit defined, adding default limit of [1000]
 {
-  "took": 13,
-  "timed_out": false,
-  "_shards": {
-    "total": 1,
-    "successful": 1,
-    "skipped": 0,
-    "failed": 0
-  },
-  "hits": {
-    "total": {
-      "value": 10000,
-      "relation": "gte"
-    },
-    "max_score": null,
-    "hits": [
+  "error": {
+    "root_cause": [
       {
-        "_index": "servicenow-incidents-000001",
-        "_id": "e63345922824171007163e2cf9dcba4f",
-        "_score": null,
-        "_source": {
-          "number": "INC2693556",
-          "state_name": "Resolved",
-          "priority": 2,
-          "opened_at": "2026-11-16T10:34:53.000Z",
-          "resolved_at": "2026-11-16T10:39:37.000Z"
-        },
-        "sort": [
-          1794825293000
-        ]
-      },
-      {
-        "_index": "servicenow-incidents-000001",
-        "_id": "67d6a496eca8d310078fc80dd357d2fd",
-        "_score": null,
-        "_source": {
-          "number": "INC2693508",
-          "state_name": "Resolved",
-          "priority": 2,
-          "opened_at": "2026-11-16T08:30:59.000Z",
-          "resolved_at": "2026-11-16T08:35:37.000Z"
-        },
-        "sort": [
-          1794817859000
-        ]
-      },
-      {
-        "_index": "servicenow-incidents-000001",
-        "_id": "4742649aec64d310078fc80dd357d2a9",
-        "_score": null,
-        "_source": {
-          "number": "INC2693496",
-          "state_name": "Resolved",
-          "priority": 2,
-          "opened_at": "2026-11-16T08:11:00.000Z",
-          "resolved_at": "2026-11-16T12:17:51.000Z"
-        },
-        "sort": [
-          1794816660000
-        ]
+        "type": "verification_exception",
+        "reason": """Found 2 problems
+line 4:28: Unknown column [duration]
+line 4:86: Unknown column [business_duration]"""
       }
-    ]
-  }
+    ],
+    "type": "verification_exception",
+    "reason": """Found 2 problems
+line 4:28: Unknown column [duration]
+line 4:86: Unknown column [business_duration]"""
+  },
+  "status": 400
+}
+
+
+#R4d. The duration values, next to the opened → resolved time
+# 30: POST /_query?format=txt [400 Bad Request]
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "verification_exception",
+        "reason": """Found 1 problem
+line 3:73: Unknown column [duration]"""
+      }
+    ],
+    "type": "verification_exception",
+    "reason": """Found 1 problem
+line 3:73: Unknown column [duration]"""
+  },
+  "status": 400
 }
