@@ -3,8 +3,8 @@
 ## 17 Nov 2026
 
 **MIM V5**
-1. Removed P3 incidents from the dashboard entirely, leaving P1 and P2. P2s still appear once they're past their 8 h
-   target. This covered the tiles, *Needs attention now*, *Active Incidents*, *Escalation Channel*, the Incident and CI
+1. Removed P3 incidents from the dashboard entirely, leaving P1 and P2. P2s still appeared once they were past their
+   8 h target (changed later today: every P1 and P2 is now shown whatever its age, see below). This covered the tiles, *Needs attention now*, *Active Incidents*, *Escalation Channel*, the Incident and CI
    dropdowns, and the time-to-resolve chart.
 2. Narrowed the *Active Incidents* table by about 25 % and widened the *P1 / P2 Time to Resolve vs Target* chart to fill
    the space.
@@ -88,6 +88,11 @@
 4. Switched the Server Infra, Middleware and Applications Operations links on both dashboards to the short links in
    `links.txt` (they differed from `respective_detailed_dashboards.txt`; team decision to use `links.txt`).
 
+**Reporting**
+1. Updated the action tracker (`ACTION-TRACKER-2026-11-03-04.md`) with MIM and Infrastructure Dashboard progress from
+   5 to 17 Nov, each with a summary ready to paste into the action tracker spreadsheet.
+2. Wrote the status reply on P1 MTTR and P2 Duration (`response.md`): built on MIM V5, being checked on live data.
+
 **Capability Tracker**
 1. Reviewed `Capability Tracker.xlsx`: 85 Elastic observability capabilities (CAP-001 to CAP-085) with category, AI
    type, description, metric, target, version status, priority, owner and notes.
@@ -100,6 +105,14 @@
    not the Outage records. Noted on CAP-090 (SLA tracking) that MIM now reports P1 MTTR / P2 Duration instead.
 
 **Open from today**
-- Only if James needs the MIM team's manual adjustments: ask the ServiceNow team to add the Outage table to the integration.
-- Import the updated MIM V5 and check it on real data: the new Active Incidents columns, and the P1 line on Time to
-  Resolve (INC2692216, resolved 13 Nov, counts as 26.8 h until the window passes it on 20 Nov).
+- Import the updated **MIM V5** and **Infrastructure Overview v2** (then More → Reset changes) and check them on real
+  data:
+  - MIM: Application Health and Services of the Application load without the error; the new Active Incidents columns;
+    the P1 line on Time to Resolve (INC2692216, resolved 13 Nov, counts as 26.8 h until the window passes it on 20 Nov).
+  - Both: the Dashboard Links open the right dashboards.
+- Decide whether section 1 of MIM should also show On Hold P2s (the Incident control and Escalation Channel do).
+- Decide whether the Infrastructure Overview should also drop "P2 over 8 h" and show every active P2.
+- Decide on the MIM V5 previews (*CI at a glance*, *health distribution* bar); reminder set for 18 Nov.
+- `respective_detailed_dashboards.txt` still has the old Server Infra, Middleware and Applications Operations links.
+- Only if James needs the MIM team's manual adjustments: ask the ServiceNow team to add the Outage table to the
+  integration.
