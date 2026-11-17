@@ -1,8 +1,10 @@
+#R4e. Which ServiceNow index holds duration / business_duration, and what is in it?
 # 2: POST /_query?format=txt [200 OK]
     records    |         newest         |          _index          
 ---------------+------------------------+--------------------------
 1118           |2026-11-17T00:30:00.671Z|servicenow-task-sla-000001
 
+#R4f. Three of those records, whole (to see what the duration belongs to: the incident, or an SLA)
 # 17: GET servicenow-task-sla-000001/_search?size=3&sort=@timestamp:desc [200 OK]
 {
   "took": 9,
