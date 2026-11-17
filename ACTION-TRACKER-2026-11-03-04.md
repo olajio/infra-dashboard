@@ -11,7 +11,7 @@ date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard is
 > CI* removed. The time-to-resolve chart now shows a rolling 7-day median against the 4 h / 8 h targets. Agreed with
 > James Patock and Dan Tautges to report **P1 MTTR** (from when the incident became a P1) and **P2 Duration** (from
 > opened) instead of the ServiceNow SLAs; both are now on the dashboard, with a *Linked incidents* count for user
-> impact and On Hold P1s shown. Every change is tested, and the user manual and MIM KPI sheet are up to date.
+> impact and On Hold P1s shown. Every active P1 and P2 is now shown whatever its age. Every change is tested, and the user manual and MIM KPI sheet are up to date.
 > **Next:** check the new MTTR columns on live data; decisions pending on alert links and the two design previews.
 
 ## Infrastructure Dashboard progress summary (to 17 Nov), for the spreadsheet
@@ -63,6 +63,7 @@ date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard is
 | 17 Nov | *Time to Resolve* as a rolling 7-day median, so one slow day no longer makes the line jump | MIM V5 | Done | Patch 17b |
 | 17 Nov | Reviewed the SLA email thread (James Patock, Dan Tautges) and found the data for James's proposal (checks O1–O5): Outage records are not in Elastic, but the incident timeline gives the exact time an incident became a P1 | MIM V5 | Done | `MIM SLA update.docx`, `outage_results.txt`, `timeline_results*.txt` |
 | 17 Nov | Built **P1 MTTR** (from when the incident became a P1) and **P2 Duration** (from opened): new *Time as P1 / Duration (h)* and *Linked incidents* columns in *Active Incidents*; On Hold P1s shown (tiles too); P1 line of *Time to Resolve* = MTTR | MIM V5 | Done; to check on live data | Patch 17c, test `test_mim_v5_2026-11-17c.py` |
+| 17 Nov | Team decision: show **every active P1 and P2 regardless of age** on every panel. *P2 over 8 h* tile → *Active P2*; *Active Incidents* shows every active P1 and P2 | MIM V5 | Done | Patch 17d, test `test_mim_v5_2026-11-17d.py` |
 | 6–17 Nov | Kept the MIM V5 user manual and the MIM KPI spreadsheet up to date with every change | MIM V5 | Done | `MIM-V5-USER-MANUAL.md`, `Dashboard Testing and Verification Template.xlsx` |
 
 **Open (MIM), as of 17 Nov:**

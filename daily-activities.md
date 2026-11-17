@@ -55,6 +55,18 @@
    incidents, and fields stored as different types in the two indices). Updated the MIM V5 user manual and seven rows
    of the KPI sheet (122, 123, 126–128, 130, 132).
 
+**MIM: P1 and P2 regardless of age**
+1. Checked which MIM panels showed P2s only once open longer than 8 h: the *Needs attention now* and *P2 over 8 h*
+   tiles and the *Active Incidents* table did; the Incident control and *Escalation Channel* already showed every
+   active P2.
+2. Team decision: show every active P1 and P2 whatever its age, on every panel. Built it:
+   - *P2 over 8 h* tile renamed **Active P2** (any age); *Needs attention now* counts every active P1 and P2.
+   - *Active Incidents (P1 · P2 over 8 h)* renamed **Active Incidents (P1 · P2)**, showing every active P1 and P2.
+   - The On Hold rule is unchanged (On Hold P1s shown, On Hold P2s not, in section 1); the 8 h P2 target stays on
+     the Time to Resolve chart.
+3. Tested (a 3-hour-old P2 now shows; an On Hold P2 still does not). Updated the user manual and five KPI sheet rows
+   (122, 125, 130, 141, 163).
+
 **Capability Tracker**
 1. Reviewed `Capability Tracker.xlsx`: 85 Elastic observability capabilities (CAP-001 to CAP-085) with category, AI
    type, description, metric, target, version status, priority, owner and notes.
