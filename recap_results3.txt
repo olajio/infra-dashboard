@@ -1,0 +1,106 @@
+# 2: POST /_query?format=txt [200 OK]
+    records    |         newest         |          _index          
+---------------+------------------------+--------------------------
+1118           |2026-11-17T00:30:00.671Z|servicenow-task-sla-000001
+
+# 17: GET servicenow-task-sla-000001/_search?size=3&sort=@timestamp:desc [200 OK]
+{
+  "took": 9,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "219188aecce41b10ebdc7764ff65fb1c",
+        "_score": null,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-11-17T00:26:34.000Z",
+          "updated_at": "2026-11-17T00:26:36.000Z",
+          "@timestamp": "2026-11-17T00:30:00.671Z",
+          "sys_id": "219188aecce41b10ebdc7764ff65fb1c",
+          "task_has_breached": false,
+          "planned_end_time": "2026-11-24T00:26:34.000Z",
+          "original_breach_time": "2026-11-24T00:26:34.000Z",
+          "business_duration": "1970-01-01T00:00:02.000Z",
+          "duration": "1970-01-01T00:00:02.000Z",
+          "task_sys_id": "db2f7b96cce41b10ebdc7764ff65fb34",
+          "task_number": "INC2693944",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "0",
+          "contract_name": "PAS Helpdesk Incident Closure",
+          "contract_type": "SLA"
+        },
+        "sort": [
+          1794875400671
+        ]
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "0895a25675ec97101db25832971671a6",
+        "_score": null,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-11-16T17:44:31.000Z",
+          "updated_at": "2026-11-16T18:24:24.000Z",
+          "@timestamp": "2026-11-16T18:24:59.862Z",
+          "sys_id": "0895a25675ec97101db25832971671a6",
+          "task_has_breached": false,
+          "planned_end_time": "2026-11-23T17:44:31.000Z",
+          "original_breach_time": "2026-11-23T17:44:31.000Z",
+          "business_duration": "1970-01-01T00:39:53.000Z",
+          "duration": "1970-01-01T00:39:53.000Z",
+          "task_sys_id": "3b85625675ec97101db2583297167138",
+          "task_number": "RITM1055970",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "0.4",
+          "contract_name": "ATOS.SRQ-01- 5 Day SLA - Priority fulfillment of Service Request within Committed Timeframes",
+          "contract_type": "SLA"
+        },
+        "sort": [
+          1794853499862
+        ]
+      },
+      {
+        "_index": "servicenow-task-sla-000001",
+        "_id": "613041b060641b5007162c3ace2e70d8",
+        "_score": null,
+        "_source": {
+          "datasource": "cnaprod.service-now",
+          "created_at": "2026-11-11T18:30:49.000Z",
+          "updated_at": "2026-11-16T18:24:31.000Z",
+          "@timestamp": "2026-11-16T18:24:59.862Z",
+          "sys_id": "613041b060641b5007162c3ace2e70d8",
+          "task_has_breached": false,
+          "planned_end_time": "2026-11-16T18:30:49.000Z",
+          "original_breach_time": "2026-11-16T18:30:49.000Z",
+          "business_duration": "1970-01-03T23:53:42.000Z",
+          "duration": "1970-01-05T23:53:42.000Z",
+          "task_sys_id": "513041b060641b5007162c3ace2e70b7",
+          "task_number": "RITM1054654",
+          "stage": "in_progress",
+          "stage_name": "In progress",
+          "percentage": "99.91",
+          "contract_name": "ACN.SRQ - 3 Days SLA",
+          "contract_type": "SLA"
+        },
+        "sort": [
+          1794853499862
+        ]
+      }
+    ]
+  }
+}
