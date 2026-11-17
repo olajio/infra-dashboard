@@ -59,22 +59,22 @@ assert not call('POST', '/_bulk?refresh=true', ''.join(json.dumps({'index': {'_i
 
 dash = json.loads([l for l in open(sys.argv[1]) if l.strip()][0])
 P = {p['embeddableConfig'].get('title'): p for p in json.loads(dash['attributes']['panelsJSON'])}
-ec = P['P1 / P2 / P3 Time to Resolve vs Target (P1 4 h · P2 8 h · P3 24 h)']['embeddableConfig']
+ec = P['P1 / P2 Time to Resolve vs Target (P1 4 h · P2 8 h)']['embeddableConfig']   # P3 removed 17 Nov (patch 17a)
 q = ec['attributes']['state']['query']['esql']
 try:
     r = call('POST', '/_query?format=json', {'query': q})
     assert 'error' not in r, r
     cols = [c['name'] for c in r['columns']]
     rows = [dict(zip(cols, v)) for v in r['values']]
-    got = [(row['day'][:10], row['p1_hours'], row['p2_hours'], row['p3_hours'], row['incidents']) for row in rows]
-    check('per resolution day: median hours opened -> resolved by priority (a 900 h outlier does not pull it up)', got,
-          [(iso(d1)[:10], 2.0, None, 48.0, 4), (iso(d0)[:10], None, 7.0, 30.0, 3)])
+    got = [(row['day'][:10], row['p1_hours'], row['p2_hours'], row['incidents']) for row in rows]
+    check('per resolution day: median hours opened -> resolved, P1 / P2 only (P3 and P4 left out)', got,
+          [(iso(d1)[:10], 2.0, None, 1), (iso(d0)[:10], None, 7.0, 2)])
     check('axis title', ec['attributes']['state']['visualization']['yTitle'], 'Hours to resolve (median)')
-    check('same columns as the chart expects', cols, ['day', 'p1_hours', 'p2_hours', 'p3_hours', 'incidents', 'open_now'])
+    check('same columns as the chart expects', cols, ['day', 'p1_hours', 'p2_hours', 'incidents', 'open_now'])
     viz = ec['attributes']['state']['visualization']
     check('target lines kept (4 / 8 / 24 h), one axis', sorted({yc['axisMode'] for l in viz['layers'] for yc in l.get('yConfig', [])}), ['left'])
-    ref = [l for l in ec['attributes']['state']['datasourceStates']['textBased']['layers'].values() if 'p3_target' in json.dumps(l)][0]
-    check('targets', ref['query']['esql'], 'ROW p1_target = 4.0, p2_target = 8.0, p3_target = 24.0')
+    ref = [l for l in ec['attributes']['state']['datasourceStates']['textBased']['layers'].values() if 'p2_target' in json.dumps(l)][0]
+    check('targets', ref['query']['esql'], 'ROW p1_target = 4.0, p2_target = 8.0')
 finally:
     call('DELETE', f'/{IDX}')
 print('FAILED: ' + ', '.join(fails) if fails else 'all passed')

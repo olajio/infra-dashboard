@@ -1,6 +1,6 @@
 # MIM V5 dashboard: user manual
 
-*4 Nov 2026, updated 16 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
+*4 Nov 2026, updated 17 Nov · Kibana 9.5.3 · dashboard "MIM V5"*
 
 ## What it is for
 
@@ -35,8 +35,8 @@ they stay mostly empty. **That is expected, not a fault.**
 
 | Control | Where | What it does | Default |
 |---|---|---|---|
-| **🚨 Incident** | Top bar | The incident to investigate, listed as `INC number · CI name`. Lists active P1–P3 incidents. Type the number to search | *(all incidents)* |
-| **🖥️ CI** | Top bar | A CI to investigate without an incident: CIs with a P1–P3 incident opened in the last 31 days, and production servers that sent metrics in the last day | *(no CI selected)* |
+| **🚨 Incident** | Top bar | The incident to investigate, listed as `INC number · CI name`. Lists active P1 and P2 incidents. Type the number to search | *(all incidents)* |
+| **🖥️ CI** | Top bar | A CI to investigate without an incident: CIs with a P1 or P2 incident opened in the last 31 days, and production servers that sent metrics in the last day | *(no CI selected)* |
 | **🧩 Monitored application** | Top bar | Limits the application panels to the applications MIM escalates: In Production, Operational and monitored in `cmdb_with_apm_flag` (138 on 2 Nov). Pick one to see only that application | *(all monitored applications)* |
 | **🖥️ Server** | Section 3 | The server for the health panels **when the CI is not a server** (an application service, for example). Take a server from *Server View* (section 2) | *(no server selected)* |
 | **🧩 Application** | Section 3 | One application for *Services of the Application*: monitored applications that sent APM data in the last day | *(all applications)* |
@@ -58,17 +58,17 @@ For a **server** CI, the health panels fill by themselves.
 
 | Panel | Shows | Fills when |
 |---|---|---|
-| **Needs attention now** | Every P1, every P2 open longer than 8 h and every P3 open longer than 24 h, in one number, with a strip by priority. **Green at 0** | Always |
-| **Active P1**, **P2 over 8 h**, **P3 over 24 h** | The same incidents, by priority. Green and "All clear" at 0; "Needs action" in the priority colour above 0 | Always |
+| **Needs attention now** | Every P1 and every P2 open longer than 8 h, in one number, with a strip by priority. **Green at 0** | Always |
+| **Active P1**, **P2 over 8 h** | The same incidents, by priority. Green and "All clear" at 0; "Needs action" in the priority colour above 0 | Always |
 | **Open alerts, no incident** | How many open Netcool alerts (last 24 h) are on production CIs with no open incident, with the Critical count under it: possible blind spots. **Follows the Incident / CI controls** like the table in section 2: the CI's alerts and its CMDB-linked CIs'; every CI's when nothing is picked. Green at 0 | Always |
 | **User base · ServiceNow**, **Real users · RUM** | Placeholders: the integrations are in progress | Not yet |
-| **Active Incidents (P1 · P2 over 8 h · P3 over 24 h)** | The incidents behind the tiles: priority, CI, state, **when opened**, assignment group, assignee, group manager (with emails), description. Click an incident to open it in ServiceNow | Always |
-| **P1 / P2 / P3 Time to Resolve vs Target** | **Time to resolve** (since 13 Nov): for the incidents resolved each day, the **median** hours from opened to resolved (the typical incident; a few very long ones don't pull it up), by priority, against the targets (P1 4 h, P2 8 h, P3 24 h, dashed lines, one hours axis). A rising line = resolving more slowly. A day with no resolved P1 has no P1 point | Always |
+| **Active Incidents (P1 · P2 over 8 h)** | The incidents behind the tiles: priority, CI, state, **when opened**, assignment group, assignee, group manager (with emails), description. Click an incident to open it in ServiceNow | Always |
+| **P1 / P2 Time to Resolve vs Target** | **Time to resolve** (since 13 Nov): for the incidents resolved each day, the **median** hours from opened to resolved (the typical incident; a few very long ones don't pull it up), by priority, against the targets (P1 4 h, P2 8 h, dashed lines, one hours axis). A rising line = resolving more slowly. A day with no resolved P1 has no P1 point | Always |
 
 *The SLA column was removed on 13 Nov at the team's request.*
 
-**What section 1 leaves out:** On Hold, Resolved, Closed and Canceled incidents, and P2 / P3 incidents still within
-their target. They can still be picked in the Incident control.
+**What section 1 leaves out:** On Hold, Resolved, Closed and Canceled incidents, and P2 incidents still within
+their 8 h target. **P3 incidents are not on MIM V5 at all** (removed 17 Nov): MIM covers P1 and P2 only.
 
 ### 🔎 2 · Investigate the CI
 
