@@ -29,39 +29,31 @@
    infrastructure items.
 4. Updated the user manual.
 
-**MIM SLA / MTTR (email thread with James Patock and Dan Tautges)**
-1. Reviewed the thread (`MIM SLA update.docx`). James proposed using **MTTR for P1s** (from the ServiceNow Outage
-   record's Duration, from when the incident became P1 until resolved) and **Duration for all other priorities**
-   (Opened to Resolved), instead of the ServiceNow SLAs.
-2. Mapped it to the data: P2 duration can be built from what is already in Elastic; the P1 Outage Duration needs a
-   check that Outage records reach Elastic (queries O1–O3 in `queries_to_run.md`).
-
-3. Ran O1–O3 (`outage_results.txt`):
-   - **No ServiceNow Outage records in Elastic** (no outage index; the outage-like fields belong to change requests).
-     Using the Outage Duration needs the ServiceNow team to add the Outage table to the integration.
-   - **The open-incident snapshots give the became-P1 time** to within a few minutes (the whole open-incident list is
-     captured about every 5 minutes, kept back to 11 Aug). Last P1, INC2692216: opened 12 Nov 18:29, became P1 at
-     20:12 (P3 → P2 → P1), resolved 13 Nov about 23:00: MTTR about 26.8 h from becoming P1, against a duration of
-     28.5 h from opening.
-   - Found an unexplored index, `servicenow-incident-timelines` (10.3 M records), that may log priority changes with
-     exact times: check O4 added.
-4. Ran O4 (`timeline_results.txt`): the timeline index holds incident records with priority, state, `updated_at`,
-   a major-incident flag, the parent incident and `resolution_time` (seconds from opened to resolved, checked against
-   the dates). The search matched about 2,500 child incidents linked to the P1 INC2692216 rather than the P1 itself,
-   so check O5 was added to look at the P1's own records and whether each priority change is kept.
-5. Ran O5 (`timeline_results2.txt`): **the timeline keeps every update with its priority and state**, so it gives the
-   exact time an incident became a P1. INC2692216: opened 18:29:32 as P3, P2 at 18:48, **P1 at 20:10:13**, resolved
-   13 Nov 22:59:10: **MTTR 26.8 h** from becoming P1, duration 28.5 h from opening. The snapshot estimate (20:12) was
-   2 minutes out. `resolution_time` (opened to resolved, in seconds) is also on the incident records the dashboard
-   already reads. About 8–9 timeline records per incident (32,518 for 3,740 incidents in 7 days).
-6. Restated the recommendations; approved, with Linked incidents and On Hold P1s added. Built them on MIM V5:
-   - **P1 MTTR** from the time the incident became a P1 (from the incident timeline), to resolved or now.
-   - **P2 Duration** from opened to resolved (`resolution_time`) or now.
+**MIM P1 MTTR and P2 Duration (email thread with James Patock and Dan Tautges)**
+1. Reviewed the thread (`MIM SLA update.docx`). James proposed reporting **MTTR for P1s** (from when the incident
+   became a P1 until resolved, as in the ServiceNow Outage record) and **Duration for other priorities** (opened to
+   resolved), instead of the ServiceNow SLAs.
+2. Ran data checks O1–O5 to find where that information is in Elastic (results in `outage_results.txt`,
+   `timeline_results.txt` and `timeline_results2.txt`):
+   - **Outage records are not in Elastic.** Using them would need the ServiceNow team to add the Outage table to the
+     integration.
+   - **The incident timeline (`servicenow-incident-timelines`) keeps every update with its priority,** so it gives the
+     exact time an incident became a P1. The open-incident snapshots give the same time to within a few minutes, as a
+     fallback.
+   - **`resolution_time`** (opened to resolved, in seconds) is on the incident records, ready to use for Duration.
+   - Example, the last P1 (INC2692216, Email/Exchange): opened 12 Nov 18:29 as a P3, P2 at 18:48, **P1 at 20:10**,
+     resolved 13 Nov 22:59. **MTTR 26.8 h**, Duration 28.5 h. About 2,500 child incidents were linked to it.
+3. Recommended the approach; it was approved, with *Linked incidents* and On Hold P1s added.
+4. Built it on MIM V5:
+   - **P1 MTTR:** from when the incident became a P1 to resolved, or to now while open.
+   - **P2 Duration:** from opened to resolved, or to now while open.
    - *Active Incidents*: new columns **Time as P1 / Duration (h)** and **Linked incidents** (incidents whose parent is
-     this one); **On Hold P1s now shown**, and counted by the tiles. The table no longer reads the SLA records.
-   - *Time to Resolve vs Target*: the P1 line is now MTTR from becoming a P1; the panel reads 30 days.
-   - Test with hand-worked cases (escalated P3 → P2 → P1, opened as P1, On Hold P1, child incidents, mismatched field
-     types between the two indices). Updated the user manual and seven KPI sheet rows (122, 123, 126–128, 130, 132).
+     this one); **On Hold P1s are now shown** and counted by the tiles; sorted longest first.
+   - *Time to Resolve vs Target*: the P1 line is MTTR from becoming a P1, the P2 line is Duration; reads 30 days.
+   - Fixed two tile descriptions that still mentioned P3.
+5. Tested with hand-worked cases (an incident escalated P3 → P2 → P1, one opened as a P1, an On Hold P1, child
+   incidents, and fields stored as different types in the two indices). Updated the MIM V5 user manual and seven rows
+   of the KPI sheet (122, 123, 126–128, 130, 132).
 
 **Capability Tracker**
 1. Reviewed `Capability Tracker.xlsx`: 85 Elastic observability capabilities (CAP-001 to CAP-085) with category, AI
