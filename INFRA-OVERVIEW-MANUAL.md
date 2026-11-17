@@ -2,10 +2,14 @@
 
 > **17 Nov: the current version is "Infrastructure Overview v2"** (`Infrastructure Overview v2.ndjson`, id
 > `00dde42d-…`), the team's layout (`infra_overview_2.ndjson`) with `tools/infra_overview_v2_patch_2026-11-17a.py`:
-> section **🔗 2 · Dashboard Links** has two subsections, **Related Dashboards** (Executive, in progress; Portfolio;
-> Applications Operations; Major Incident Management) and **Detailed Dashboards** (Cloud Infra, Database Infra,
-> Middleware, Server Infra, VMware Infra), then Data freshness; new section **🚀 3 · Future Releases** holds the Next
-> Release Roadmap and Predictive & AI Insights cards. The rest of this manual describes the panels, which are unchanged.
+> section **🔗 2 · Dashboard Links** has two subsections, **Related Dashboards** (Executive Dashboard (In Progress);
+> Portfolio; Applications Operations; Infrastructure Overview; Major Incident Management) and **Detailed Dashboards**
+> (Cloud Infra, Database Infra, Middleware, Server Infra, VMware Infra); new section **🚀 3 · Future Releases** holds
+> the Next Release Roadmap and Predictive & AI Insights cards. Since 17 Nov (patch
+> `infra_overview_v2_patch_2026-11-17b.py`) every link uses the Portfolio dashboard's link font, the Executive
+> Dashboard is a link, Infrastructure Overview was added, and the **Data freshness panel was removed**. MIM V5's
+> section 4 has an identical copy of this section. The rest of this manual describes the panels, which are unchanged
+> (Data freshness, below, is no longer on v2).
 
 *10 Nov 2026, updated 11 Nov · Kibana 9.5.3 · dashboard "Infrastructure Overview" (replaces the CI-driven "Infrastructure Dashboard",
 same id, so its links and bookmarks still work). Design: `INFRA-OVERVIEW-KPIS.md`, `previews/INFRA-OVERVIEW-WALKTHROUGH.md`.*
@@ -73,7 +77,7 @@ is red, the panels that read it are out of date.
 
 ## How to use it
 
-1. **Scan the domain tiles.** All green: check *Data freshness* and *Changes*, then done.
+1. **Scan the domain tiles.** All green: check *Changes*, then done.
 2. **A red or amber tile:** read its facts. An open P1 / P2? It is an incident: find it in section 2 and run it in
    **MIM**. Otherwise open the domain's dashboard from the link under the tile and find the CI.
 3. **Network:** no dashboard yet: use *Top open alerts*, then MIM for the device.

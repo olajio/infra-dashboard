@@ -67,6 +67,25 @@
 3. Tested (a 3-hour-old P2 now shows; an On Hold P2 still does not). Updated the user manual and five KPI sheet rows
    (122, 125, 130, 141, 163).
 
+**MIM: Application Health and Services of the Application errors**
+1. Diagnosed the errors (`es_error.png`, `application_health_error.txt`, `service_health_error.txt`): the
+   `cmdb_with_apm_flag` index now has a `ci.name` field stored as text, while APM stores `ci.name` as keyword, and
+   ES|QL refuses a field with two types. The Application and Service dropdowns had the same problem.
+2. Fixed all four queries: `ci.name` is converted once, straight after the data is read. Reproduced the production
+   error locally first, then checked that the fixed panels run and return the same rows as before.
+
+**Dashboard Links (Infrastructure Overview v2 and MIM V5)**
+1. Infrastructure Overview v2:
+   - **Executive Dashboard (In Progress)** is now a link (`links.txt`), still reading "Executive Dashboard (In
+     Progress)".
+   - Added **Infrastructure Overview** before Major Incident Management.
+   - Every link now uses the Portfolio dashboard's link font (`pfv4.ndjson`); the tiles are taller so the labels
+     are not cut off.
+   - Removed the panel that only showed "Last 2 days" (Data freshness) above Future Releases.
+2. MIM V5: replaced section 4 *Related dashboards* (Applications Operations and Infra Dashboard links) with an
+   identical copy of the Infrastructure Overview's **Dashboard Links** section.
+3. Tested (links identical on both dashboards, order, font, link addresses) and updated both user manuals.
+
 **Capability Tracker**
 1. Reviewed `Capability Tracker.xlsx`: 85 Elastic observability capabilities (CAP-001 to CAP-085) with category, AI
    type, description, metric, target, version status, priority, owner and notes.

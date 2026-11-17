@@ -85,6 +85,13 @@ numbers on the long tables. Rebuild after any MIM V4 change. Functional test: `t
 Opened and loses CI support group; Active Incidents gets Opened; Open Alerts with No Incident shows only the selected
 CI's alerts and its CMDB-linked CIs'. It also makes the controls hard to miss: icon titles, full-width top bar, and
 "Start here" banners. The Infrastructure Dashboard got the same control treatment in `build_infra_dashboard.py`.
+17 Nov: `mim_v5_patch_2026-11-17e.py "MIM V5.ndjson" "Infrastructure Overview v2.ndjson" "MIM V5.ndjson"` (test
+`test_mim_v5_2026-11-17e.py "<MIM V4>.ndjson" "<MIM V5 before>.ndjson" "MIM V5.ndjson" "Infrastructure Overview v2.ndjson"
+pfv4.ndjson`): fixes "Cannot use field [ci.name] due to ambiguities" on Application Health, Services of the Application
+and the Application / Service controls (cmdb_with_apm_flag now maps ci.name as text); section 4 = a copy of
+Infrastructure Overview v2's Dashboard Links. Run after `infra_overview_v2_patch_2026-11-17b.py "Infrastructure Overview
+v2.ndjson" "Infrastructure Overview v2.ndjson"` (Executive linked, Infrastructure Overview link, Portfolio's link font,
+Data freshness removed).
 17 Nov: `mim_v5_patch_2026-11-17d.py "MIM V5.ndjson" "MIM V5.ndjson"` (test `test_mim_v5_2026-11-17d.py "MIM V5.ndjson"`,
 which supersedes the 17c test): P1 and P2 regardless of age on every panel. *P2 over 8 h* tile → *Active P2*; *Active
 Incidents (P1 · P2 over 8 h)* → *Active Incidents (P1 · P2)*. KPI sheet: `update_mim_kpi_sheet_2026-11-17d.py`.

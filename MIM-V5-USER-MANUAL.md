@@ -7,13 +7,16 @@
 MIM V5 is the **Major Incident Management** dashboard. It answers the questions a MIM lead asks during an incident,
 top to bottom:
 
-1. **🚨 Major Incident Overview:** *how bad is it right now?* Which incidents are past their target, and which alerts
+1. **🚨 Major Incident Overview:** *how bad is it right now?* Which P1 and P2 incidents are active, and which alerts
    have nobody working on them.
 2. **🔎 Investigate the CI:** *what is affected, and who do I call?* The incident's CI, its owners, what changed,
    what alerted, and what it is connected to in the CMDB.
 3. **🩺 Application & Service Health, Dependencies:** *is it the application, the service, or the server?* The
    health of the CI's applications, their services and dependencies, and the server underneath.
-4. **🔗 Related dashboards:** the Applications Operations and Infra dashboards, for deeper detail.
+4. **🔗 Dashboard Links** (since 17 Nov; the same section as on the Infrastructure Overview): **Related Dashboards**
+   (Executive (in progress), Portfolio, Applications Operations, Infrastructure Overview, Major Incident Management)
+   and **Detailed Dashboards** (Cloud Infra, Database Infra, Middleware, Server Infra, VMware Infra). Each opens in a
+   new tab.
 
 Section 1 shows the whole estate (only its *Open alerts, no incident* tile narrows to a picked CI). Sections 2
 and 3 follow what you pick in the controls. With nothing picked,
