@@ -8,13 +8,17 @@
    dropdowns, and the time-to-resolve chart.
 2. Narrowed the *Active Incidents* table by about 25 % and widened the *P1 / P2 Time to Resolve vs Target* chart to fill
    the space.
-3. Reviewed the zigzag in the P3 line on the time-to-resolve chart. Each point is the median of only the incidents
-   resolved that day, so values jump from day to day. A rolling 7-day median was offered as a smoother alternative.
+3. Reviewed the zigzag in the P3 line on the time-to-resolve chart. Each point was the median of only the incidents
+   resolved that day, so values jumped from day to day. Switched the chart to a **rolling 7-day median**: each point now
+   covers the incidents resolved in the 7 days up to that day, so a single slow day no longer makes the line jump.
 4. Ran the follow-up ServiceNow checks:
    - **PBA:** no PBA field exists in the data.
-   - **Duration fields:** not on the incident records. They sit in another ServiceNow index, which the R4e/R4f queries
-     will identify.
-5. Updated the MIM V5 user manual and seven rows of the MIM KPI spreadsheet for the P3 removal.
+   - **Duration fields:** not on the incident records. R4e/R4f found them in the ServiceNow SLA records
+     (`servicenow-task-sla`): `duration` and `business_duration` are how long each SLA has been running, per SLA
+     contract, for incidents and service requests alike. So the "duration calculated in ServiceNow" is the SLA clock,
+     not a field on the incident.
+5. Updated the MIM V5 user manual and the MIM KPI spreadsheet (seven rows for the P3 removal, two for the rolling
+   median).
 
 **Infrastructure Overview**
 1. Adopted the team's updated version (*Infrastructure Overview v2*) as the new basis.
@@ -26,5 +30,5 @@
 4. Updated the user manual.
 
 **Open from today**
-- Run the R4e/R4f queries to find where the P2 duration is held.
-- Decide whether the time-to-resolve chart should use a rolling 7-day median.
+- Decide how to show the P2 duration: the time from opened to resolved (already in the data for almost every P2), or
+  the ServiceNow SLA duration (only for incidents that have an SLA record).
