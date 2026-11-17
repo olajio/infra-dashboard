@@ -1,0 +1,119 @@
+# 1: POST /_query?format=txt [200 OK]
+       @timestamp       |       updated_at       |   priority    |  state_name   |is_major_incident|       opened_at        |      resolved_at       |resolution_time
+------------------------+------------------------+---------------+---------------+-----------------+------------------------+------------------------+---------------
+2026-11-12T18:29:32.000Z|2026-11-13T23:20:02.000Z|1              |New            |null             |2026-11-12T18:29:32.000Z|2026-11-13T22:59:10.000Z|102578         
+2026-11-12T18:30:41.000Z|2026-11-12T18:30:41.000Z|3              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T18:33:03.000Z|2026-11-12T18:33:03.000Z|3              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T18:48:47.000Z|2026-11-12T18:48:47.000Z|2              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T18:52:04.000Z|2026-11-12T18:52:04.000Z|2              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T18:53:25.000Z|2026-11-12T18:53:25.000Z|2              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T18:59:15.000Z|2026-11-12T18:59:15.000Z|2              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:00:22.000Z|2026-11-12T19:00:22.000Z|2              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:02:57.000Z|2026-11-12T19:02:57.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:07:18.000Z|2026-11-12T19:07:18.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:09:18.000Z|2026-11-12T19:09:18.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:10:43.000Z|2026-11-12T19:10:43.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:13:10.000Z|2026-11-12T19:13:10.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:14:52.000Z|2026-11-12T19:14:52.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:15:41.000Z|2026-11-12T19:15:41.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:19:15.000Z|2026-11-12T19:19:15.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:22:14.000Z|2026-11-12T19:22:14.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:29:12.000Z|2026-11-12T19:29:12.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:30:28.000Z|2026-11-12T19:30:28.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:33:00.000Z|2026-11-12T19:33:00.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:36:45.000Z|2026-11-12T19:36:45.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:38:34.000Z|2026-11-12T19:38:34.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:41:22.000Z|2026-11-12T19:41:22.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:42:15.000Z|2026-11-12T19:42:15.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:44:46.000Z|2026-11-12T19:44:46.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:53:20.000Z|2026-11-12T19:53:20.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:56:47.000Z|2026-11-12T19:56:47.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T19:58:58.000Z|2026-11-12T19:58:58.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:00:34.000Z|2026-11-12T20:00:34.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:02:28.000Z|2026-11-12T20:02:28.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:06:42.000Z|2026-11-12T20:06:42.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:08:43.000Z|2026-11-12T20:08:43.000Z|2              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:10:13.000Z|2026-11-12T20:10:13.000Z|1              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:13:05.000Z|2026-11-12T20:13:05.000Z|1              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:13:53.000Z|2026-11-12T20:13:53.000Z|1              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:17:06.000Z|2026-11-12T20:17:06.000Z|1              |In Progress    |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:22:25.000Z|2026-11-12T20:22:25.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:26:58.000Z|2026-11-12T20:26:58.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:32:58.000Z|2026-11-12T20:32:58.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:36:23.000Z|2026-11-12T20:36:23.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:39:15.000Z|2026-11-12T20:39:15.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:41:39.000Z|2026-11-12T20:41:39.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:46:35.000Z|2026-11-12T20:46:35.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:49:23.000Z|2026-11-12T20:49:23.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:50:07.000Z|2026-11-12T20:50:07.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T20:58:52.000Z|2026-11-12T20:58:52.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T21:00:13.000Z|2026-11-12T21:00:13.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T21:02:45.000Z|2026-11-12T21:02:45.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T21:03:41.000Z|2026-11-12T21:03:41.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+2026-11-12T21:09:17.000Z|2026-11-12T21:09:17.000Z|1              |On Hold        |null             |2026-11-12T18:29:32.000Z|null                    |null           
+
+# 11: POST /_query?format=txt [400 Bad Request]
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "parsing_exception",
+        "reason": "line 4:95: no viable alternative at input 'first ='"
+      }
+    ],
+    "type": "parsing_exception",
+    "reason": "line 4:95: no viable alternative at input 'first ='",
+    "caused_by": {
+      "type": "no_viable_alt_exception",
+      "reason": null
+    }
+  },
+  "status": 400
+}
+# 23: POST /_query?format=txt [200 OK]
+#! No limit defined, adding default limit of [1000]
+    records    |   incidents   
+---------------+---------------
+32518          |3740           
+
+# 31: GET servicenow-incidents-*/_field_caps?fields=resolution_time,is_major_incident,parent_incident.number&filter_path=fields [200 OK]
+{
+  "fields": {
+    "parent_incident": {
+      "object": {
+        "type": "object",
+        "metadata_field": false,
+        "searchable": false,
+        "aggregatable": false,
+        "inference": false
+      }
+    },
+    "is_major_incident": {
+      "boolean": {
+        "type": "boolean",
+        "metadata_field": false,
+        "searchable": true,
+        "aggregatable": true,
+        "inference": false
+      }
+    },
+    "parent_incident.number": {
+      "keyword": {
+        "type": "keyword",
+        "metadata_field": false,
+        "searchable": true,
+        "aggregatable": true,
+        "inference": false
+      }
+    },
+    "resolution_time": {
+      "integer": {
+        "type": "integer",
+        "metadata_field": false,
+        "searchable": true,
+        "aggregatable": true,
+        "inference": false
+      }
+    }
+  }
+}
