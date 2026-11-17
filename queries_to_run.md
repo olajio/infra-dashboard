@@ -1,30 +1,48 @@
 # Queries to run (17 Nov 2026)
 
-Run in **Dev Tools** and upload the results as `recap_results3.txt`.
+For James Patock's proposal (`MIM SLA update.docx`): P1 MTTR from the ServiceNow **Outage** record, Duration for all
+other priorities. Run in **Dev Tools** and upload the results as `outage_results.txt`.
+(Done: R1–R4f; R4e / R4f showed `duration` lives only on the SLA records in `servicenow-task-sla`.)
 
-Done: R1 (no PBA field reaches Elastic), R2, R3, R4a–R4d. R4c / R4d showed `duration` and `business_duration` are
-**not** on `servicenow-incidents-*`: R4a found them in another `servicenow-*` index. R4e finds which one.
+## O1. Do ServiceNow Outage records reach Elastic?
 
-## R4e. Which ServiceNow index holds `duration` / `business_duration`, and what is in it?
+```
+GET _cat/indices/*outage*,servicenow-*?v&h=index,docs.count,creation.date.string&s=index
+```
+
+```
+GET servicenow-*/_field_caps?fields=*outage*,*begin*,*end*,*u_*&filter_path=fields
+```
+
+## O2. When did a P1 become a P1? (the fallback if Outage records are not synced)
+
+The open-incident snapshots keep each incident's priority over time; the first snapshot at priority 1 is about when it
+became a P1. Shown for the last P1 (INC2692216, Email/Exchange PROD, 12–13 Nov).
 
 ```
 POST /_query?format=txt
 {
   "query": """
-FROM servicenow-* METADATA _index
-| WHERE @timestamp >= NOW() - 30 days AND (duration IS NOT NULL OR business_duration IS NOT NULL)
-| STATS records = COUNT(*), newest = MAX(@timestamp) BY _index
-| SORT records DESC
-| LIMIT 20
+FROM servicenow-open-incidents-snapshots-*
+| WHERE TO_STRING(number) == "INC2692216"
+| EVAL p1_at = CASE(TO_INTEGER(priority) == 1, @timestamp)
+| STATS first_seen = MIN(@timestamp), became_p1 = MIN(p1_at), last_seen = MAX(@timestamp),
+        priorities = VALUES(TO_INTEGER(priority)), opened = MIN(TO_DATETIME(opened_at)), snapshots = COUNT(*)
 """
 }
 ```
 
-## R4f. Three of those records, whole (to see what the duration belongs to: the incident, or an SLA)
-
-Replace `INDEX` with the first index R4e lists.
+## O3. How often are snapshots taken? (how precise O2 can be)
 
 ```
-GET INDEX/_search?size=3&sort=@timestamp:desc
-{ "query": { "exists": { "field": "duration" } } }
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-open-incidents-snapshots-*
+| WHERE @timestamp >= NOW() - 2 hours
+| STATS records = COUNT(*), incidents = COUNT_DISTINCT(number) BY t = DATE_TRUNC(5 minutes, @timestamp)
+| SORT t DESC
+| LIMIT 24
+"""
+}
 ```

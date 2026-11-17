@@ -29,6 +29,23 @@
    infrastructure items.
 4. Updated the user manual.
 
+**MIM SLA / MTTR (email thread with James Patock and Dan Tautges)**
+1. Reviewed the thread (`MIM SLA update.docx`). James proposed using **MTTR for P1s** (from the ServiceNow Outage
+   record's Duration, from when the incident became P1 until resolved) and **Duration for all other priorities**
+   (Opened to Resolved), instead of the ServiceNow SLAs.
+2. Mapped it to the data: P2 duration can be built from what is already in Elastic; the P1 Outage Duration needs a
+   check that Outage records reach Elastic (queries O1–O3 in `queries_to_run.md`).
+
+**Capability Tracker**
+1. Reviewed `Capability Tracker.xlsx`: 85 Elastic observability capabilities (CAP-001 to CAP-085) with category, AI
+   type, description, metric, target, version status, priority, owner and notes.
+2. Added 20 capabilities (CAP-086 to CAP-105) from the dashboard work: ServiceNow ITSM sync, MIM command view, P1
+   MTTR from Outage records, incident duration trend, SLA tracking, change-to-incident correlation, Netcool bridge,
+   alert noise reduction, unattended alerts, data feed freshness, domain status landing page, impact mapping, F5,
+   Palo Alto, storage and backup, certificate expiry, Windows services, mainframe, executive reporting, and AI incident
+   summaries.
+
 **Open from today**
-- Decide how to show the P2 duration: the time from opened to resolved (already in the data for almost every P2), or
-  the ServiceNow SLA duration (only for incidents that have an SLA record).
+- Run O1–O3 (`queries_to_run.md`) to see whether the ServiceNow Outage records, or the time an incident became P1,
+  are available in Elastic.
+- Agree with James and Dan on the approach (P1 MTTR from Outage records, Duration for P2), then build it on MIM V5.
