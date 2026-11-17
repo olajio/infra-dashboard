@@ -2,7 +2,9 @@
 
 For James Patock's proposal (`MIM SLA update.docx`): P1 MTTR from the ServiceNow **Outage** record, Duration for all
 other priorities. Run in **Dev Tools** and upload the results as `outage_results.txt`.
-(Done: R1–R4f; R4e / R4f showed `duration` lives only on the SLA records in `servicenow-task-sla`.)
+(Done: R1–R4f; R4e / R4f showed `duration` lives only on the SLA records in `servicenow-task-sla`.
+Done: O1–O3 (`outage_results.txt`): no Outage records in Elastic; the snapshots give the became-P1 time to within
+a few minutes. Next: O4.)
 
 ## O1. Do ServiceNow Outage records reach Elastic?
 
@@ -45,4 +47,23 @@ FROM servicenow-open-incidents-snapshots-*
 | LIMIT 24
 """
 }
+```
+
+## O4. Does the incident timeline record priority changes? (exact became-P1 time)
+
+`servicenow-incident-timelines-000001` (10.3 M records) has not been looked at yet. If it logs each priority change
+with its time, it gives the exact moment an incident became a P1, better than the snapshots. Upload the results as
+`timeline_results.txt`.
+
+```
+GET servicenow-incident-timelines-000001/_search?size=0
+{ "aggs": { "newest": { "max": { "field": "@timestamp" } } } }
+```
+
+```
+GET servicenow-incident-timelines-000001/_mapping?filter_path=*.mappings.properties.*.type,*.mappings.properties.*.properties
+```
+
+```
+GET servicenow-incident-timelines-000001/_search?size=20&q=INC2692216&sort=@timestamp:asc
 ```
