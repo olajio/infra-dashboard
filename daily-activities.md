@@ -85,6 +85,8 @@
 2. MIM V5: replaced section 4 *Related dashboards* (Applications Operations and Infra Dashboard links) with an
    identical copy of the Infrastructure Overview's **Dashboard Links** section.
 3. Tested (links identical on both dashboards, order, font, link addresses) and updated both user manuals.
+4. Switched the Server Infra, Middleware and Applications Operations links on both dashboards to the short links in
+   `links.txt` (they differed from `respective_detailed_dashboards.txt`; team decision to use `links.txt`).
 
 **Capability Tracker**
 1. Reviewed `Capability Tracker.xlsx`: 85 Elastic observability capabilities (CAP-001 to CAP-085) with category, AI
