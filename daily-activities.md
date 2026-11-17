@@ -45,6 +45,10 @@
      28.5 h from opening.
    - Found an unexplored index, `servicenow-incident-timelines` (10.3 M records), that may log priority changes with
      exact times: check O4 added.
+4. Ran O4 (`timeline_results.txt`): the timeline index holds incident records with priority, state, `updated_at`,
+   a major-incident flag, the parent incident and `resolution_time` (seconds from opened to resolved, checked against
+   the dates). The search matched about 2,500 child incidents linked to the P1 INC2692216 rather than the P1 itself,
+   so check O5 was added to look at the P1's own records and whether each priority change is kept.
 
 **Capability Tracker**
 1. Reviewed `Capability Tracker.xlsx`: 85 Elastic observability capabilities (CAP-001 to CAP-085) with category, AI
@@ -56,6 +60,6 @@
    summaries.
 
 **Open from today**
-- Run O4 (`queries_to_run.md`): does the incident timeline record priority changes?
+- Run O5 (`queries_to_run.md`): does the incident timeline keep each priority change?
 - Ask the ServiceNow team whether the Outage table can be added to the integration (for the MIM-adjusted Duration).
 - Agree with James and Dan on the approach (P1 MTTR from Outage records, Duration for P2), then build it on MIM V5.

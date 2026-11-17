@@ -4,7 +4,9 @@ For James Patock's proposal (`MIM SLA update.docx`): P1 MTTR from the ServiceNow
 other priorities. Run in **Dev Tools** and upload the results as `outage_results.txt`.
 (Done: R1–R4f; R4e / R4f showed `duration` lives only on the SLA records in `servicenow-task-sla`.
 Done: O1–O3 (`outage_results.txt`): no Outage records in Elastic; the snapshots give the became-P1 time to within
-a few minutes. Next: O4.)
+a few minutes.
+Done: O4 (`timeline_results.txt`): the timeline has priority, state, `updated_at` and `resolution_time` (seconds
+from opened to resolved); the search matched INC2692216's ~2,500 child incidents, not the P1 itself. Next: O5.)
 
 ## O1. Do ServiceNow Outage records reach Elastic?
 
@@ -66,4 +68,53 @@ GET servicenow-incident-timelines-000001/_mapping?filter_path=*.mappings.propert
 
 ```
 GET servicenow-incident-timelines-000001/_search?size=20&q=INC2692216&sort=@timestamp:asc
+```
+
+## O5. The P1's own timeline records (is each priority change kept?)
+
+O4's search matched the ~2,500 child incidents linked to INC2692216, not the P1 itself. These look at the P1's own
+records and at whether the timeline keeps more than one priority per incident. Upload the results as
+`timeline_results2.txt`.
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incident-timelines-000001
+| WHERE number == "INC2692216"
+| KEEP @timestamp, updated_at, priority, state_name, is_major_incident, opened_at, resolved_at, resolution_time
+| SORT @timestamp ASC
+| LIMIT 50
+"""
+}
+```
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incident-timelines-000001
+| WHERE opened_at >= NOW() - 90 days
+| STATS records = COUNT(*), priorities = VALUES(priority), states = VALUES(state_name), first = MIN(@timestamp)
+  BY number
+| WHERE MV_MIN(priorities) == 1
+| SORT first DESC
+| LIMIT 20
+"""
+}
+```
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incident-timelines-000001
+| WHERE opened_at >= NOW() - 7 days
+| STATS records = COUNT(*), incidents = COUNT_DISTINCT(number)
+"""
+}
+```
+
+```
+GET servicenow-incidents-*/_field_caps?fields=resolution_time,is_major_incident,parent_incident.number&filter_path=fields
 ```
