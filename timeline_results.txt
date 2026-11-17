@@ -1,0 +1,3153 @@
+# 1: GET servicenow-incident-timelines-000001/_search?size=0 [200 OK]
+{
+  "took": 51,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10000,
+      "relation": "gte"
+    },
+    "max_score": null,
+    "hits": []
+  },
+  "aggregations": {
+    "newest": {
+      "value": 1794891639000,
+      "value_as_string": "2026-11-17T05:00:39.000Z"
+    }
+  }
+}
+# 3: GET servicenow-incident-timelines-000001/_mapping?filter_path=*.mappings.properties.*.type,*.mappings.properties.*.properties [200 OK]
+{
+  "servicenow-incident-timelines-000001": {
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "assigned_to": {
+          "properties": {
+            "datasource": {
+              "type": "keyword"
+            },
+            "division": {
+              "type": "keyword"
+            },
+            "email": {
+              "type": "keyword",
+              "normalizer": "lowercase"
+            },
+            "employee_id": {
+              "type": "keyword"
+            },
+            "is_active": {
+              "type": "boolean"
+            },
+            "language": {
+              "properties": {
+                "code": {
+                  "type": "keyword"
+                },
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                }
+              }
+            },
+            "mobile": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "number": {
+              "type": "keyword"
+            },
+            "sys_id": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "updated_at": {
+              "type": "date"
+            },
+            "user_id": {
+              "type": "keyword"
+            }
+          }
+        },
+        "assignment_group": {
+          "properties": {
+            "datasource": {
+              "type": "keyword"
+            },
+            "description": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "email": {
+              "type": "keyword"
+            },
+            "gdc": {
+              "type": "keyword"
+            },
+            "is_active": {
+              "type": "boolean"
+            },
+            "manager": {
+              "properties": {
+                "email": {
+                  "type": "keyword"
+                },
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                }
+              }
+            },
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "practice": {
+              "type": "keyword"
+            },
+            "rbu": {
+              "type": "keyword"
+            },
+            "service_provider": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "sub_practice": {
+              "type": "keyword"
+            },
+            "sys_id": {
+              "type": "keyword"
+            },
+            "updated_at": {
+              "type": "date"
+            }
+          }
+        },
+        "business_service": {
+          "properties": {
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "sys_id": {
+              "type": "keyword"
+            }
+          }
+        },
+        "category": {
+          "properties": {
+            "1": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "2": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "3": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            }
+          }
+        },
+        "ci": {
+          "properties": {
+            "asset_tag": {
+              "type": "keyword"
+            },
+            "assignment_group": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "category": {
+              "properties": {
+                "1": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "2": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                }
+              }
+            },
+            "class": {
+              "type": "keyword"
+            },
+            "class_name": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "company": {
+              "properties": {
+                "datasource": {
+                  "type": "keyword"
+                },
+                "industry": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "iris_code": {
+                  "type": "keyword"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "is_parent": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "parent": {
+                  "properties": {
+                    "name": {
+                      "type": "keyword",
+                      "fields": {
+                        "normalized": {
+                          "type": "keyword",
+                          "normalizer": "lowercase"
+                        }
+                      }
+                    },
+                    "sys_id": {
+                      "type": "keyword"
+                    }
+                  }
+                },
+                "rbu": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "sub_industry": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "sys_id": {
+                  "type": "keyword"
+                },
+                "updated_at": {
+                  "type": "date"
+                }
+              }
+            },
+            "created_at": {
+              "type": "date"
+            },
+            "criticality": {
+              "type": "byte"
+            },
+            "criticality_name": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "customer_id": {
+              "type": "keyword"
+            },
+            "customer_specific": {
+              "properties": {
+                "batch_job_id": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "pm_portfolio": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "customer_specific_data": {
+              "properties": {
+                "1": {
+                  "type": "keyword"
+                },
+                "2": {
+                  "type": "keyword"
+                },
+                "3": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "datasource": {
+              "type": "keyword"
+            },
+            "duplicate_of": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "environment": {
+              "type": "keyword"
+            },
+            "extracted_at": {
+              "type": "date"
+            },
+            "fqdn": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "geo": {
+              "properties": {
+                "city": {
+                  "properties": {
+                    "name": {
+                      "type": "keyword",
+                      "fields": {
+                        "normalized": {
+                          "type": "keyword",
+                          "normalizer": "lowercase"
+                        }
+                      }
+                    },
+                    "sys_id": {
+                      "type": "keyword"
+                    }
+                  }
+                },
+                "continent": {
+                  "type": "keyword"
+                },
+                "country": {
+                  "properties": {
+                    "iso_code": {
+                      "type": "keyword"
+                    },
+                    "name": {
+                      "type": "keyword",
+                      "fields": {
+                        "normalized": {
+                          "type": "keyword",
+                          "normalizer": "lowercase"
+                        }
+                      }
+                    },
+                    "sys_id": {
+                      "type": "keyword"
+                    }
+                  }
+                },
+                "datasource": {
+                  "type": "keyword"
+                },
+                "formatted_address": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "geo_point"
+                },
+                "location_code": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "name": {
+                  "type": "keyword"
+                },
+                "place_id": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "state": {
+                  "properties": {
+                    "name": {
+                      "type": "keyword",
+                      "fields": {
+                        "normalized": {
+                          "type": "keyword",
+                          "normalizer": "lowercase"
+                        }
+                      }
+                    },
+                    "sys_id": {
+                      "type": "keyword"
+                    }
+                  }
+                },
+                "sys_id": {
+                  "type": "keyword"
+                },
+                "type": {
+                  "type": "keyword"
+                },
+                "updated_at": {
+                  "type": "date"
+                }
+              }
+            },
+            "id": {
+              "type": "keyword"
+            },
+            "ingest_error": {
+              "properties": {
+                "bridge_enrichment": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "enrich_locations": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "message": {
+                  "type": "keyword",
+                  "fields": {
+                    "keywords": {
+                      "type": "text",
+                      "analyzer": "std_english"
+                    },
+                    "text": {
+                      "type": "text"
+                    }
+                  }
+                }
+              }
+            },
+            "ingested_at": {
+              "type": "date"
+            },
+            "install_status": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "ip_address": {
+              "type": "keyword"
+            },
+            "is_monitored": {
+              "type": "boolean"
+            },
+            "is_stale": {
+              "type": "boolean"
+            },
+            "is_top_level_ci": {
+              "type": "boolean"
+            },
+            "last_discovered": {
+              "type": "date"
+            },
+            "mac_address": {
+              "type": "keyword"
+            },
+            "manufacturer": {
+              "properties": {
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "sys_id": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "model": {
+              "properties": {
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "number": {
+                  "type": "keyword"
+                },
+                "sys_id": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "name_normalized": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "number": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "operational_status": {
+              "type": "keyword"
+            },
+            "os": {
+              "properties": {
+                "family": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "kernel": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "version": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                }
+              }
+            },
+            "paladin_map": {
+              "properties": {
+                "sys_id": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "parents": {
+              "properties": {
+                "class": {
+                  "type": "keyword"
+                },
+                "id": {
+                  "type": "keyword"
+                },
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                }
+              }
+            },
+            "priority": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "raw_data": {
+              "properties": {
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                }
+              }
+            },
+            "service_classification": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "short_description": {
+              "type": "keyword",
+              "fields": {
+                "keywords": {
+                  "type": "text",
+                  "analyzer": "std_english"
+                },
+                "text": {
+                  "type": "text"
+                }
+              }
+            },
+            "support_group": {
+              "properties": {
+                "l1": {
+                  "properties": {
+                    "name": {
+                      "type": "keyword",
+                      "fields": {
+                        "normalized": {
+                          "type": "keyword",
+                          "normalizer": "lowercase"
+                        }
+                      }
+                    },
+                    "sys_id": {
+                      "type": "keyword"
+                    }
+                  }
+                },
+                "l2": {
+                  "properties": {
+                    "name": {
+                      "type": "keyword",
+                      "fields": {
+                        "normalized": {
+                          "type": "keyword",
+                          "normalizer": "lowercase"
+                        }
+                      }
+                    },
+                    "sys_id": {
+                      "type": "keyword"
+                    }
+                  }
+                },
+                "l3": {
+                  "properties": {
+                    "name": {
+                      "type": "keyword",
+                      "fields": {
+                        "normalized": {
+                          "type": "keyword",
+                          "normalizer": "lowercase"
+                        }
+                      }
+                    },
+                    "sys_id": {
+                      "type": "keyword"
+                    }
+                  }
+                }
+              }
+            },
+            "sync_metadata": {
+              "properties": {
+                "id": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "timestamp": {
+                  "type": "date"
+                }
+              }
+            },
+            "sys_id": {
+              "type": "keyword"
+            },
+            "top_level_ci_depth": {
+              "type": "byte"
+            },
+            "top_level_parents": {
+              "properties": {
+                "class": {
+                  "type": "keyword"
+                },
+                "id": {
+                  "type": "keyword"
+                },
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                }
+              }
+            },
+            "unit": {
+              "type": "keyword"
+            },
+            "updated_at": {
+              "type": "date"
+            }
+          }
+        },
+        "ci_sys_id": {
+          "type": "keyword"
+        },
+        "closed_at": {
+          "type": "date"
+        },
+        "company": {
+          "properties": {
+            "datasource": {
+              "type": "keyword"
+            },
+            "industry": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "iris_code": {
+              "type": "keyword"
+            },
+            "is_active": {
+              "type": "boolean"
+            },
+            "is_parent": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "parent": {
+              "properties": {
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "sys_id": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "rbu": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "sub_industry": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "sys_id": {
+              "type": "keyword"
+            },
+            "updated_at": {
+              "type": "date"
+            }
+          }
+        },
+        "contact_type": {
+          "type": "keyword"
+        },
+        "contact_type_name": {
+          "type": "keyword"
+        },
+        "datasource": {
+          "type": "keyword"
+        },
+        "domain": {
+          "properties": {
+            "name": {
+              "type": "keyword"
+            },
+            "sys_id": {
+              "type": "keyword"
+            }
+          }
+        },
+        "extracted_at": {
+          "type": "date"
+        },
+        "has_been_handled_by_bridge": {
+          "type": "boolean"
+        },
+        "has_breached_sla": {
+          "type": "boolean"
+        },
+        "incident_type": {
+          "type": "keyword"
+        },
+        "ingest_error": {
+          "properties": {
+            "message": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "is_child_incident": {
+          "type": "boolean"
+        },
+        "is_major_incident": {
+          "type": "boolean"
+        },
+        "is_monitoring_incident": {
+          "type": "boolean"
+        },
+        "is_resolved_on_first_call": {
+          "type": "boolean"
+        },
+        "is_stale": {
+          "type": "boolean"
+        },
+        "mirrored_at": {
+          "type": "date"
+        },
+        "monitoring_event": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "number": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "keyword"
+            }
+          }
+        },
+        "number": {
+          "type": "keyword"
+        },
+        "opened_at": {
+          "type": "date"
+        },
+        "parent_incident": {
+          "properties": {
+            "number": {
+              "type": "keyword"
+            },
+            "sys_id": {
+              "type": "keyword"
+            }
+          }
+        },
+        "priority": {
+          "type": "byte"
+        },
+        "priority_name": {
+          "type": "keyword"
+        },
+        "problem": {
+          "properties": {
+            "link": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "number": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "sys_id": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "reassignment_count": {
+          "type": "byte"
+        },
+        "reopen_count": {
+          "type": "short"
+        },
+        "resolution_time": {
+          "type": "integer"
+        },
+        "resolved_at": {
+          "type": "date"
+        },
+        "resolved_by": {
+          "properties": {
+            "datasource": {
+              "type": "keyword"
+            },
+            "division": {
+              "type": "keyword"
+            },
+            "email": {
+              "type": "keyword",
+              "normalizer": "lowercase"
+            },
+            "employee_id": {
+              "type": "keyword"
+            },
+            "is_active": {
+              "type": "boolean"
+            },
+            "language": {
+              "properties": {
+                "code": {
+                  "type": "keyword"
+                },
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                }
+              }
+            },
+            "mobile": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "number": {
+              "type": "keyword"
+            },
+            "sys_id": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "updated_at": {
+              "type": "date"
+            },
+            "user_id": {
+              "type": "keyword"
+            }
+          }
+        },
+        "short_description": {
+          "type": "keyword"
+        },
+        "sla": {
+          "properties": {
+            "all": {
+              "properties": {
+                "business_duration": {
+                  "type": "date"
+                },
+                "business_pause_duration": {
+                  "type": "date"
+                },
+                "contract_name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "contract_sys_id": {
+                  "type": "keyword"
+                },
+                "contract_type": {
+                  "type": "keyword"
+                },
+                "created_at": {
+                  "type": "date"
+                },
+                "datasource": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "duration": {
+                  "type": "date"
+                },
+                "end_time": {
+                  "type": "date"
+                },
+                "original_breach_time": {
+                  "type": "date"
+                },
+                "percentage": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "planned_end_time": {
+                  "type": "date"
+                },
+                "stage": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "stage_name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "sys_id": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "task_has_breached": {
+                  "type": "boolean"
+                },
+                "task_number": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "task_planned_end_time": {
+                  "type": "date"
+                },
+                "task_stage": {
+                  "type": "keyword"
+                },
+                "task_sys_id": {
+                  "type": "keyword"
+                },
+                "updated_at": {
+                  "type": "date"
+                }
+              }
+            },
+            "count": {
+              "type": "long"
+            },
+            "primary": {
+              "properties": {
+                "contract_name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "contract_sys_id": {
+                  "type": "keyword"
+                },
+                "contract_type": {
+                  "type": "keyword"
+                },
+                "task_has_breached": {
+                  "type": "boolean"
+                },
+                "task_planned_end_time": {
+                  "type": "date"
+                },
+                "task_stage": {
+                  "type": "keyword"
+                },
+                "task_sys_id": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "response": {
+              "properties": {
+                "contract_name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "contract_sys_id": {
+                  "type": "keyword"
+                },
+                "contract_type": {
+                  "type": "keyword"
+                },
+                "task_has_breached": {
+                  "type": "boolean"
+                },
+                "task_planned_end_time": {
+                  "type": "date"
+                },
+                "task_stage": {
+                  "type": "keyword"
+                },
+                "task_sys_id": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "secondary": {
+              "properties": {
+                "contract_name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                },
+                "contract_sys_id": {
+                  "type": "keyword"
+                },
+                "contract_type": {
+                  "type": "keyword"
+                },
+                "task_has_breached": {
+                  "type": "boolean"
+                },
+                "task_planned_end_time": {
+                  "type": "date"
+                },
+                "task_stage": {
+                  "type": "keyword"
+                },
+                "task_sys_id": {
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        },
+        "state": {
+          "type": "byte"
+        },
+        "state_name": {
+          "type": "keyword"
+        },
+        "supplier_ticket_number": {
+          "type": "keyword"
+        },
+        "sys_id": {
+          "type": "keyword"
+        },
+        "tags": {
+          "type": "keyword"
+        },
+        "task_count": {
+          "type": "byte"
+        },
+        "updated_at": {
+          "type": "date"
+        },
+        "updated_by": {
+          "properties": {
+            "datasource": {
+              "type": "keyword"
+            },
+            "division": {
+              "type": "keyword"
+            },
+            "email": {
+              "type": "keyword",
+              "normalizer": "lowercase"
+            },
+            "employee_id": {
+              "type": "keyword"
+            },
+            "id": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "is_active": {
+              "type": "boolean"
+            },
+            "language": {
+              "properties": {
+                "code": {
+                  "type": "keyword"
+                },
+                "name": {
+                  "type": "keyword",
+                  "fields": {
+                    "normalized": {
+                      "type": "keyword",
+                      "normalizer": "lowercase"
+                    }
+                  }
+                }
+              }
+            },
+            "mobile": {
+              "type": "keyword"
+            },
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "number": {
+              "type": "keyword"
+            },
+            "sys_id": {
+              "type": "keyword"
+            },
+            "type": {
+              "type": "keyword",
+              "fields": {
+                "normalized": {
+                  "type": "keyword",
+                  "normalizer": "lowercase"
+                }
+              }
+            },
+            "updated_at": {
+              "type": "date"
+            },
+            "user_id": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+# 4: GET servicenow-incident-timelines-000001/_search?size=20&q=INC2692216&sort=@timestamp:asc [200 OK]
+{
+  "took": 525,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 2526,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "aRQgbbPoZqwkLftxEQVtq7GKeQHI6pBl9XoJ6HcR5TU=",
+        "_score": null,
+        "_source": {
+          "short_description": "Unable to send email in Outlook",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "0ec7f93880a897501db21d41445e8332",
+          "number": "INC2691619",
+          "contact_type": "phone",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:49:46.000Z",
+          "state_name": "New",
+          "ci_sys_id": "04bf99b51b825d101207ececbc4bcbc5",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "c372d261fbbf6a509907f99255efdcb6",
+            "name": "Ivonne Aguilar",
+            "email": "Ivonne.Aguilar@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2023-10-11T19:00:20.778Z",
+            "created_at": "2022-09-20T19:37:37.000Z",
+            "name_normalized": "microsoft 365 prod",
+            "sys_id": "04bf99b51b825d101207ececbc4bcbc5",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2023-10-11T18:21:10.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:08:03.320543656Z",
+            "name": "microsoft 365 PROD",
+            "id": "04bf99b51b825d101207ececbc4bcbc5",
+            "category": {
+              "1": "Resource",
+              "2": "Application"
+            },
+            "class": "cmdb_ci_service_auto",
+            "class_name": "Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.772Z",
+          "is_resolved_on_first_call": true,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-11T22:33:36.000Z",
+          "contact_type_name": "Phone",
+          "@timestamp": "2026-11-11T22:33:36.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:49:42.000Z",
+          "updated_by": {
+            "id": "system"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 173766
+        },
+        "sort": [
+          1794436416000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "zPymbukqKAQxFEW1CisfU/ViNuJ5M5OzDDyvY40GumQ=",
+        "_score": null,
+        "_source": {
+          "short_description": "ImageRight is Freezing ",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "f53e69c16028df5007162c3ace2e70a1",
+          "number": "INC2692112",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T23:02:21.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "c372d261fbbf6a509907f99255efdcb6",
+            "name": "Ivonne Aguilar",
+            "email": "Ivonne.Aguilar@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:19.028Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T16:31:06.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T16:31:06.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T23:02:21.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 109875
+        },
+        "sort": [
+          1794501066000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "6LqTHDyc8WudBV7L8YFXchUSMITosi3be4TxwZ/I3Ug=",
+        "_score": null,
+        "_source": {
+          "short_description": "Outlook is not working ",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "7e8f398d4d641310ebdce0bc4303d49a",
+          "number": "INC2692151",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:52:06.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "fd25851c1b9a25d41207ececbc4bcbb1",
+            "name": "EXL SERVICE (Ireland) Limited"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "b9fb4fe6fbcb6e90dbacfaba75efdc48",
+            "name": "Pristine Mirela Estrella",
+            "email": "PristineMirela.Estrella@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.884Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T17:47:40.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T17:47:40.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:52:06.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 104666
+        },
+        "sort": [
+          1794505660000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "SM2jHwgAzRPeFsTAPk4fPpJRXGEvFb7b2NUnI1I2wzk=",
+        "_score": null,
+        "_source": {
+          "short_description": "It will not open/start",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "40b1428180a01f501db21d41445e83f0",
+          "number": "INC2692162",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "6478f19c1ba87154c71921b6b04bcb6b",
+            "employee_id": "Cris Castro"
+          },
+          "updated_at": "2026-11-13T14:32:09.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "6478f19c1ba87154c71921b6b04bcb6b",
+            "name": "Cris Castro",
+            "email": "Cris.Castro@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:13.831Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T17:59:11.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T17:59:11.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T14:32:09.000Z",
+          "updated_by": {
+            "id": "CAF7889"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 73978
+        },
+        "sort": [
+          1794506351000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "MdTiEV4kw7CQqivGs8X760E5IQo/TFjXGIvSJ4mkoF0=",
+        "_score": null,
+        "_source": {
+          "short_description": "outlook unable to conect ",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "5174028919245f10cb03fcf494447d42",
+          "number": "INC2692168",
+          "contact_type": "phone",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:51:21.000Z",
+          "state_name": "New",
+          "ci_sys_id": "eb582f6593786e10dcf1f9cd1dba1033",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 2,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "3a3f39193b6d8bd0ee286524c3e45aba",
+            "name": "Carlos Ricardo Cruz",
+            "email": "carlosricardo.cruz@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "extracted_at": "2026-11-14T00:05:18.855Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:07:28.000Z",
+          "contact_type_name": "Phone",
+          "@timestamp": "2026-11-12T18:07:28.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:51:21.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103433
+        },
+        "sort": [
+          1794506848000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "kUlpgNlgtx3xK4cojotusZwxhFPQ5tWy0Q0U49KgH6I=",
+        "_score": null,
+        "_source": {
+          "short_description": "outlook will not load and open",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "676402054de41310ebdce0bc4303d457",
+          "number": "INC2692169",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "38654e0447f9529c41c076edd46d4368",
+            "employee_id": "Heather Schaibley"
+          },
+          "updated_at": "2026-11-13T21:48:10.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "4658f002934f2e14cac83b5badba106c",
+            "name": "Nicole Dalupan",
+            "email": "Nicole.Dalupan@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.494Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:08:11.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:08:11.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T21:48:10.000Z",
+          "updated_by": {
+            "id": "CAG2503"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 99599
+        },
+        "sort": [
+          1794506891000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "OCq4kSnKRGx998038/u2U4PaYby0CIckCZUpb+zy06Q=",
+        "_score": null,
+        "_source": {
+          "short_description": "Outlook not connecting, Copilot outage",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "1a84068580e01f501db21d41445e8383",
+          "number": "INC2692171",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:49:52.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "b9fb4fe6fbcb6e90dbacfaba75efdc48",
+            "name": "Pristine Mirela Estrella",
+            "email": "PristineMirela.Estrella@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.782Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:08:40.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:08:40.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:49:52.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103272
+        },
+        "sort": [
+          1794506920000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "lg7QMBTnCzmotx6j1gY4fcpYiU0j4wl4f2K+FYakKj4=",
+        "_score": null,
+        "_source": {
+          "short_description": "Can't open Outlook. There is a ! sign in red over the app.",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "85d44a854de41310ebdce0bc4303d488",
+          "number": "INC2692175",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "6478f19c1ba87154c71921b6b04bcb6b",
+            "employee_id": "Cris Castro"
+          },
+          "updated_at": "2026-11-13T14:54:34.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "6478f19c1ba87154c71921b6b04bcb6b",
+            "name": "Cris Castro",
+            "email": "Cris.Castro@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:17.017Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:10:56.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:10:56.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T14:54:34.000Z",
+          "updated_by": {
+            "id": "CAF7889"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 74618
+        },
+        "sort": [
+          1794507056000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "Hyn1v4GyOL8JkmPE89ZOajhu+9TcunrblTkAhdMpp6o=",
+        "_score": null,
+        "_source": {
+          "short_description": "Microsoft Outlook is not working/will not open ",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "b6254e8179e057505b6bac7d9f7c8468",
+          "number": "INC2692176",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T23:01:12.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "3a3f39193b6d8bd0ee286524c3e45aba",
+            "name": "Carlos Ricardo Cruz",
+            "email": "carlosricardo.cruz@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.975Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:11:04.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:11:04.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T23:01:12.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103808
+        },
+        "sort": [
+          1794507064000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "g6cMwlDCeFuhAvY9YYNH8KsfYuxqjRje8BZzKZDhmwU=",
+        "_score": null,
+        "_source": {
+          "short_description": "Outlook is not working",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "7ee48a8d6020139007162c3ace2e70dc",
+          "number": "INC2692178",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:52:09.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "fd25851c1b9a25d41207ececbc4bcbb1",
+            "name": "EXL SERVICE (Ireland) Limited"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "b9fb4fe6fbcb6e90dbacfaba75efdc48",
+            "name": "Pristine Mirela Estrella",
+            "email": "PristineMirela.Estrella@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.886Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:11:15.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:11:15.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:52:09.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103254
+        },
+        "sort": [
+          1794507075000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "sY2aGt2EFrTla5/PfyDRI8CFn3nOXk5Xrxv1ObJ22Rw=",
+        "_score": null,
+        "_source": {
+          "short_description": "Outage with Microsoft outlook and copilot ",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "cf94864919245f10cb03fcf494447dde",
+          "number": "INC2692179",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T23:01:35.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "b9fb4fe6fbcb6e90dbacfaba75efdc48",
+            "name": "Pristine Mirela Estrella",
+            "email": "PristineMirela.Estrella@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.991Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:11:16.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:11:16.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T23:01:35.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103819
+        },
+        "sort": [
+          1794507076000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "8eJ9/4J7AkcW75u5dkKIDaqKdzqQ2TIGqaKF+1nBq70=",
+        "_score": null,
+        "_source": {
+          "short_description": "Email is not working",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "6fe40e8d6020139007162c3ace2e701e",
+          "number": "INC2692180",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:51:55.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "6478f19c1ba87154c71921b6b04bcb6b",
+            "name": "Cris Castro",
+            "email": "Cris.Castro@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.876Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:11:49.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:11:49.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:51:55.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103206
+        },
+        "sort": [
+          1794507109000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "6Vd35NlkqGUXhsD6QawoO7aPXLhRpFamePAIm+pSBI8=",
+        "_score": null,
+        "_source": {
+          "short_description": "Outlook - Unable to open",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "22a50201c068db50078f7c994a7c39b0",
+          "number": "INC2692182",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:50:13.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "0e7f4bd4475887500b16ac79116d4344",
+            "name": "Kathleen Kaye Bognot",
+            "email": "kathleenkaye.bognot@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.792Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:13:20.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:13:20.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:50:13.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103013
+        },
+        "sort": [
+          1794507200000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "SGw9KvvjcXfI27Pcmut4Te7cxKdzEJ1CbDfhZEIQbuQ=",
+        "_score": null,
+        "_source": {
+          "short_description": "classic outlook has red exclaimation pt on icon and is not working properly .  the whole system has had issues all week- claim center, outlook  co pilot ",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "3965ce4980e01f501db21d41445e83ca",
+          "number": "INC2692183",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:50:52.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "4658f002934f2e14cac83b5badba106c",
+            "name": "Nicole Dalupan",
+            "email": "Nicole.Dalupan@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.827Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:13:40.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:13:40.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:50:52.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103032
+        },
+        "sort": [
+          1794507220000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "2igs9qfrOQHjsRVO9uJqI9KsFwQhHs1aca5ka5C5urg=",
+        "_score": null,
+        "_source": {
+          "short_description": "Outlook disconnected, email won't update, and Copilot isn't working",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "1f258a8179e057505b6bac7d9f7c84c1",
+          "number": "INC2692185",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "2422e84adbeacb004a65d5ab5e961953",
+            "employee_id": "Anthony (Tony) Ashbacher"
+          },
+          "updated_at": "2026-11-13T15:14:18.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "b9fb4fe6fbcb6e90dbacfaba75efdc48",
+            "name": "Pristine Mirela Estrella",
+            "email": "PristineMirela.Estrella@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:17.070Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:15:00.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:15:00.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T15:14:18.000Z",
+          "updated_by": {
+            "id": "CAC7235"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 75558
+        },
+        "sort": [
+          1794507300000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "XhB61aL5kSpTHMziP7X6kNbgnRAp6tFptkda1yw1UqA=",
+        "_score": null,
+        "_source": {
+          "short_description": "emails are not sending or receiving - error message ",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "30f5ca4d4de41310ebdce0bc4303d428",
+          "number": "INC2692186",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:50:37.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "6478f19c1ba87154c71921b6b04bcb6b",
+            "name": "Cris Castro",
+            "email": "Cris.Castro@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.813Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:15:03.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:15:03.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:50:37.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 102934
+        },
+        "sort": [
+          1794507303000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "TGxZVEei9kyCVmYwWnJYhNOgs9MeUFJJdWBwII2Hx4I=",
+        "_score": null,
+        "_source": {
+          "short_description": "outlook is not syncing - cannot use at this time.  need fixed ",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "f8668a096060139007162c3ace2e70c3",
+          "number": "INC2692187",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T23:02:24.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "ce7f4bd4475887500b16ac79116d433c",
+            "name": "Cedric James Consorte",
+            "email": "cedricjames.consorte@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:19.030Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:16:55.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:16:55.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T23:02:24.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103529
+        },
+        "sort": [
+          1794507415000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "4uvUG9V2t6QpgWJRg6qPByKloeXjmLqxVYWpQKg+d5E=",
+        "_score": null,
+        "_source": {
+          "short_description": "Not loading or updating",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "cc068ec9c068db50078f7c994a7c3945",
+          "number": "INC2692188",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T23:01:29.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "4658f002934f2e14cac83b5badba106c",
+            "name": "Nicole Dalupan",
+            "email": "Nicole.Dalupan@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.987Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:17:00.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:17:00.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T23:01:29.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103469
+        },
+        "sort": [
+          1794507420000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "G2OxpS5VNZzcQTeVvGgg/+2EunrZtJFIpCxjIxze/ks=",
+        "_score": null,
+        "_source": {
+          "short_description": "Outlook stopped working/closed, now unable to reopen",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "2f964acd80e01f501db21d41445e838d",
+          "number": "INC2692190",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T22:50:31.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "ce7f4bd4475887500b16ac79116d433c",
+            "name": "Cedric James Consorte",
+            "email": "cedricjames.consorte@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.808Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:18:01.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:18:01.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T22:50:31.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 102750
+        },
+        "sort": [
+          1794507481000
+        ]
+      },
+      {
+        "_index": "servicenow-incident-timelines-000001",
+        "_id": "tgHi7KBq0dNxxMDYWn/KxE6osEqMDq21jyGIqhMXnVY=",
+        "_score": null,
+        "_source": {
+          "short_description": "Outlook - not receiving emails ",
+          "assignment_group": {
+            "sys_id": "4946b884db474700463f38ff9d9619b2",
+            "manager": {
+              "name": "Alfred Driz",
+              "email": "Alfred.Driz@cna.com"
+            },
+            "name": "IT.I.Service_Desk",
+            "description": "The single point of contact between users and IT Service Management. This group is able to create people records if someone contacts them and they are not in the system.",
+            "service_provider": "Atos"
+          },
+          "parent_incident": {
+            "number": "INC2692216",
+            "sys_id": "5c890681796457505b6bac7d9f7c8407"
+          },
+          "sys_id": "cee5460979e057505b6bac7d9f7c84c8",
+          "number": "INC2692191",
+          "contact_type": "self-service",
+          "resolved_by": {
+            "sys_id": "7cbd2f96db7213c4854e77298c961983",
+            "employee_id": "Alejandro Yanez"
+          },
+          "updated_at": "2026-11-13T23:01:32.000Z",
+          "state_name": "New",
+          "ci_sys_id": "fadb1c3d97264a50d05375600153afce",
+          "company": {
+            "sys_id": "979e6278db2d4f00643cb96c4e9619fa",
+            "name": "CNA"
+          },
+          "reassignment_count": 0,
+          "state": 1,
+          "assigned_to": {
+            "sys_id": "0e7f4bd4475887500b16ac79116d4344",
+            "name": "Kathleen Kaye Bognot",
+            "email": "kathleenkaye.bognot@cna.com"
+          },
+          "priority_name": "3 - Medium",
+          "ingest_error": {
+            "message": ""
+          },
+          "ci": {
+            "operational_status": "Operational",
+            "extracted_at": "2024-06-15T13:53:24.661Z",
+            "created_at": "2024-06-02T23:35:44.000Z",
+            "name_normalized": "email/exchange prod",
+            "sys_id": "fadb1c3d97264a50d05375600153afce",
+            "environment": "prod",
+            "is_monitored": false,
+            "updated_at": "2024-06-10T19:24:01.000Z",
+            "install_status": "Installed",
+            "datasource": "cnaprod.service-now",
+            "ingested_at": "2025-09-15T12:00:00.703373454Z",
+            "name": "Email/Exchange PROD",
+            "id": "fadb1c3d97264a50d05375600153afce",
+            "class": "cmdb_ci_service_calculated",
+            "class_name": "Calculated Application Service"
+          },
+          "extracted_at": "2026-11-14T00:05:18.989Z",
+          "is_resolved_on_first_call": false,
+          "is_stale": false,
+          "reopen_count": 0,
+          "priority": 3,
+          "is_child_incident": true,
+          "opened_at": "2026-11-12T18:18:12.000Z",
+          "contact_type_name": "Self-service",
+          "@timestamp": "2026-11-12T18:18:12.000Z",
+          "datasource": "cnaprod.service-now",
+          "resolved_at": "2026-11-13T23:01:32.000Z",
+          "updated_by": {
+            "id": "CAE0281"
+          },
+          "is_monitoring_incident": false,
+          "resolution_time": 103400
+        },
+        "sort": [
+          1794507492000
+        ]
+      }
+    ]
+  }
+}
