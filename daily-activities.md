@@ -63,6 +63,8 @@
    alert noise reduction, unattended alerts, data feed freshness, domain status landing page, impact mapping, F5,
    Palo Alto, storage and backup, certificate expiry, Windows services, mainframe, executive reporting, and AI incident
    summaries.
+3. Updated CAP-088 (P1 MTTR) to match what was built: the became-P1 time comes from the ServiceNow incident timeline,
+   not the Outage records. Noted on CAP-090 (SLA tracking) that MIM now reports P1 MTTR / P2 Duration instead.
 
 **Open from today**
 - Only if James needs the MIM team's manual adjustments: ask the ServiceNow team to add the Outage table to the integration.
