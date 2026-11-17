@@ -11,8 +11,12 @@ date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard is
 > CI* removed. The time-to-resolve chart now shows a rolling 7-day median against the 4 h / 8 h targets. Agreed with
 > James Patock and Dan Tautges to report **P1 MTTR** (from when the incident became a P1) and **P2 Duration** (from
 > opened) instead of the ServiceNow SLAs; both are now on the dashboard, with a *Linked incidents* count for user
-> impact and On Hold P1s shown. Every active P1 and P2 is now shown whatever its age. Every change is tested, and the user manual and MIM KPI sheet are up to date.
-> **Next:** check the new MTTR columns on live data; decisions pending on alert links and the two design previews.
+> impact and On Hold P1s shown. Every active P1 and P2 is now shown whatever its age. Fixed the error on *Application
+> Health* and *Services of the Application* (a field type change in the CMDB application list), and replaced the
+> *Related dashboards* section with the same *Dashboard Links* section as the Infrastructure Overview. Every change is
+> tested, and the user manual and MIM KPI sheet are up to date.
+> **Next:** import the update and check it on live data (MTTR columns, the fixed panels, the links); decisions pending
+> on alert links, On Hold P2s and the two design previews.
 
 ## Infrastructure Dashboard progress summary (to 17 Nov), for the spreadsheet
 
@@ -24,6 +28,9 @@ date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard is
 > Domain rules were checked against every production CI class, and VMware status now comes from vSphere health. On
 > 17 Nov the team's version (*Infrastructure Overview v2*) became the basis: links are grouped into *Related
 > Dashboards* and *Detailed Dashboards*, and a *Future Releases* section shows the roadmap and planned AI insights.
+> The links now use the Portfolio dashboard's font, the Executive Dashboard (in progress) and Infrastructure Overview
+> are linked, all links match `links.txt`, and the empty Data freshness panel was removed. MIM uses the same links
+> section.
 > **Next:** import v2 and check it on live data; VMware and Cloud SQL coverage depend on their integrations.
 
 ## MIM dashboard
@@ -64,10 +71,16 @@ date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard is
 | 17 Nov | Reviewed the SLA email thread (James Patock, Dan Tautges) and found the data for James's proposal (checks O1–O5): Outage records are not in Elastic, but the incident timeline gives the exact time an incident became a P1 | MIM V5 | Done | `MIM SLA update.docx`, `outage_results.txt`, `timeline_results*.txt` |
 | 17 Nov | Built **P1 MTTR** (from when the incident became a P1) and **P2 Duration** (from opened): new *Time as P1 / Duration (h)* and *Linked incidents* columns in *Active Incidents*; On Hold P1s shown (tiles too); P1 line of *Time to Resolve* = MTTR | MIM V5 | Done; to check on live data | Patch 17c, test `test_mim_v5_2026-11-17c.py` |
 | 17 Nov | Team decision: show **every active P1 and P2 regardless of age** on every panel. *P2 over 8 h* tile → *Active P2*; *Active Incidents* shows every active P1 and P2 | MIM V5 | Done | Patch 17d, test `test_mim_v5_2026-11-17d.py` |
+| 17 Nov | Fixed the error on *Application Health* and *Services of the Application* ("Cannot use field [ci.name] due to ambiguities"): `cmdb_with_apm_flag` now stores `ci.name` as text, APM as keyword. The Application and Service controls had the same problem. Reproduced locally, fixed, same rows as before | MIM V5 | Done; to check on live data | Patch 17e, test `test_mim_v5_2026-11-17e.py`, `es_error.png` |
+| 17 Nov | Replaced section 4 *Related dashboards* with an identical copy of the Infrastructure Overview's **Dashboard Links** section (Related: Executive (in progress), Portfolio, Applications Operations, Infrastructure Overview, Major Incident Management; Detailed: Cloud, Database, Middleware, Server, VMware) | MIM V5 | Done | Patch 17e, `dashboard_links_patch_2026-11-17f.py` |
+| 17 Nov | Status reply on P1 MTTR and P2 Duration written for the team | MIM V5 | Done | `response.md` |
 | 6–17 Nov | Kept the MIM V5 user manual and the MIM KPI spreadsheet up to date with every change | MIM V5 | Done | `MIM-V5-USER-MANUAL.md`, `Dashboard Testing and Verification Template.xlsx` |
 
 **Open (MIM), as of 17 Nov:**
-- Import the updated MIM V5 and check the new MTTR / Duration and Linked incidents columns on live data.
+- Import the updated MIM V5 (then More → Reset changes) and check on live data: the MTTR / Duration and Linked
+  incidents columns, Application Health and Services of the Application load, and the Dashboard Links open the right
+  dashboards.
+- Decide whether section 1 should also show On Hold P2s (the Incident control and Escalation Channel do).
 - Go-ahead on the alert links (Discover and CMDB now; Netcool Web GUI after the Netcool team answers).
 - Decide on the MIM V5 previews (*CI at a glance*, *health distribution* bar, links to the detailed dashboards).
 - Only if James needs the MIM team's manual adjustments: ask the ServiceNow team to add the Outage table to the
@@ -106,11 +119,16 @@ date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard is
 | 17 Nov | Adopted the team's updated version (**Infrastructure Overview v2**) as the basis. Dashboard Links split into **Related Dashboards** (Executive (in progress), Portfolio, Applications Operations, Major Incident Management) and **Detailed Dashboards** (Cloud, Database, Middleware, Server, VMware) | Done | `Infrastructure Overview v2.ndjson`, `tools/infra_overview_v2_patch_2026-11-17a.py` |
 | 17 Nov | Added a **Future Releases** section: *Next Release Roadmap* and *Predictive & AI Insights* cards with the planned infrastructure items | Done | `Infrastructure Overview v2.ndjson` |
 | 17 Nov | Added 20 capabilities from the dashboard work to the Capability Tracker (CAP-086 to CAP-105) | Done | `Capability Tracker.xlsx` |
+| 17 Nov | Dashboard Links: **Executive Dashboard (In Progress)** is now a link; **Infrastructure Overview** link added before Major Incident Management; every link in the Portfolio dashboard's font (`pfv4.ndjson`), with taller tiles so labels are not cut off; the same section copied to MIM V5 | Done | `tools/infra_overview_v2_patch_2026-11-17b.py` |
+| 17 Nov | Removed the Data freshness panel (it showed only a "Last 2 days" badge above Future Releases) | Done | `tools/infra_overview_v2_patch_2026-11-17b.py` |
+| 17 Nov | Server Infra, Middleware and Applications Operations links switched to the `links.txt` short links (on MIM too) | Done | `tools/dashboard_links_patch_2026-11-17f.py` |
 | 5–17 Nov | Kept the user manuals, activity log and KPI workbook up to date with every change | Done | `INFRA-DASHBOARD-MANUAL.md`, `INFRA-OVERVIEW-MANUAL.md`, `INFRA-DASHBOARD-ACTIVITY-LOG.md` |
 
 **Open (Infrastructure Dashboard / Overview), as of 17 Nov:**
-- Import *Infrastructure Overview v2* and check it on live data (links, Future Releases cards).
-- Executive Dashboard: add its link once the dashboard exists (shown as *In Progress*).
+- Import *Infrastructure Overview v2* (then More → Reset changes) and check it on live data (links, Future Releases
+  cards).
+- Decide whether the Overview should also show every active P2, like MIM (it still shows P2 over 8 h).
+- `respective_detailed_dashboards.txt` still has the old Server Infra, Middleware and Applications Operations links.
 - VMware (#10): only 4 of 549 ESX hosts are collected; waiting for the vSphere integration to cover the main
   vCenters. CPU ready time, ballooning, swapping and packet loss are not collected.
 - Cloud health (#11): Cloud SQL blocked until the CMDB and the GCP collection cover the same databases.
@@ -118,5 +136,5 @@ date to 17 Nov (see *MIM progress, 5–17 Nov*); the Infrastructure Dashboard is
 - Custom integration health (#12): needs a definition.
 - User impact (#3): waiting for the ServiceNow user base and RUM integrations.
 
-**Closed since 4 Nov:** CG7 (GKE memory) checked and fixed (5 Nov). The demo scenes on the CI-driven dashboard are no
+**Closed since 4 Nov:** CG7 (GKE memory) checked and fixed (5 Nov). Executive Dashboard link added (17 Nov). The demo scenes on the CI-driven dashboard are no
 longer needed: it was replaced by the Infrastructure Overview on 10 Nov.
