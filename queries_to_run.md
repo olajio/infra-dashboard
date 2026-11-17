@@ -6,7 +6,10 @@ other priorities. Run in **Dev Tools** and upload the results as `outage_results
 Done: O1–O3 (`outage_results.txt`): no Outage records in Elastic; the snapshots give the became-P1 time to within
 a few minutes.
 Done: O4 (`timeline_results.txt`): the timeline has priority, state, `updated_at` and `resolution_time` (seconds
-from opened to resolved); the search matched INC2692216's ~2,500 child incidents, not the P1 itself. Next: O5.)
+from opened to resolved); the search matched INC2692216's ~2,500 child incidents, not the P1 itself.
+Done: O5 (`timeline_results2.txt`): the timeline keeps every update with its priority, so the exact became-P1 time
+is available (INC2692216: 20:10:13). `resolution_time` is also on the incident records. The second O5 query failed
+because `first` is a reserved word in ES|QL; not needed now.)
 
 ## O1. Do ServiceNow Outage records reach Elastic?
 

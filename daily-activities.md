@@ -49,6 +49,12 @@
    a major-incident flag, the parent incident and `resolution_time` (seconds from opened to resolved, checked against
    the dates). The search matched about 2,500 child incidents linked to the P1 INC2692216 rather than the P1 itself,
    so check O5 was added to look at the P1's own records and whether each priority change is kept.
+5. Ran O5 (`timeline_results2.txt`): **the timeline keeps every update with its priority and state**, so it gives the
+   exact time an incident became a P1. INC2692216: opened 18:29:32 as P3, P2 at 18:48, **P1 at 20:10:13**, resolved
+   13 Nov 22:59:10: **MTTR 26.8 h** from becoming P1, duration 28.5 h from opening. The snapshot estimate (20:12) was
+   2 minutes out. `resolution_time` (opened to resolved, in seconds) is also on the incident records the dashboard
+   already reads. About 8–9 timeline records per incident (32,518 for 3,740 incidents in 7 days).
+6. Restated the recommendations for approval before building.
 
 **Capability Tracker**
 1. Reviewed `Capability Tracker.xlsx`: 85 Elastic observability capabilities (CAP-001 to CAP-085) with category, AI
@@ -60,6 +66,5 @@
    summaries.
 
 **Open from today**
-- Run O5 (`queries_to_run.md`): does the incident timeline keep each priority change?
 - Ask the ServiceNow team whether the Outage table can be added to the integration (for the MIM-adjusted Duration).
 - Agree with James and Dan on the approach (P1 MTTR from Outage records, Duration for P2), then build it on MIM V5.
