@@ -24,6 +24,17 @@
    reproduced and fixed, links), checked in Kibana, updated the user manual and seven KPI sheet rows (122, 125,
    130–132, 142, 163).
 
+**MIM: time-to-resolve chart corrected** (`dash.png`, `trendline2.png`)
+1. Found why a solid P1 line showed while no P1 was open: the chart shows **resolved** incidents, and the rolling
+   7-day median counted each resolved incident on 7 days in a row. The only P1 resolved in the period (INC2692216,
+   resolved 13 Nov, MTTR 26.8 h) was repeated from 13 to 19 Nov as a flat line. The line style also joined points
+   across days with nothing resolved, so gaps looked like data.
+2. Changed the chart: each point is now the median of the incidents resolved **that day**, each incident counted
+   once; no point on a day with nothing resolved for that priority, and points are not joined across such days.
+   INC2692216 is now a single P1 point on 13 Nov.
+3. Tested (each P1 appears only on its resolution day; gaps not joined), checked in Kibana, updated the user manual
+   and KPI sheet row 132.
+
 **Infrastructure Overview v2**
 1. Related Dashboards: Executive Dashboard (In Progress) as text, not a link; renamed Portfolio, Application Operations
    and Infra Overview; Infra Overview and Major Incident Management swapped. Detailed Dashboards kept here.

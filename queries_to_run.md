@@ -136,7 +136,7 @@ GET _cat/indices/cmdb_with_apm_flag?v&h=index,docs.count,creation.date.string
 GET cmdb_with_apm_flag/_mapping
 ```
 
-## T1. Is P2 Duration right? (the P2 line sits near 0.3 h)
+## T1. Is P2 Duration right? (the P2 points sit near 0.3 h)
 
 For P2s resolved in the last 7 days: `resolution_time` (ServiceNow, seconds) against opened → resolved from the dates.
 The two hour columns should match. Upload the results as `p2_duration.txt`.
