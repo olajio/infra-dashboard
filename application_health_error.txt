@@ -3,22 +3,22 @@
     "root_cause": [
       {
         "type": "verification_exception",
-        "reason": "Found 1 problem\nline 5:59: Cannot use field [ci.name] due to ambiguities being mapped as [2] incompatible types: [keyword] in [.ds-metrics-apm.internal-default-2026.11.10-001075, .ds-metrics-apm.internal-default-2026.11.13-001078, .ds-metrics-apm.internal-default-2026.11.16-001081] and [31] other indices, [text] in [cmdb_with_apm_flag]"
+        "reason": "Found 1 problem\nline 20:74: Cannot use field [service.name] due to ambiguities being mapped as [2] incompatible types: [keyword] in [.ds-metrics-apm.internal-default-2026.11.10-001075, .ds-metrics-apm.internal-default-2026.11.13-001078, .ds-metrics-apm.internal-default-2026.11.16-001081] and [31] other indices, [text] in [cmdb_with_apm_flag]"
       }
     ],
     "type": "verification_exception",
-    "reason": "Found 1 problem\nline 5:59: Cannot use field [ci.name] due to ambiguities being mapped as [2] incompatible types: [keyword] in [.ds-metrics-apm.internal-default-2026.11.10-001075, .ds-metrics-apm.internal-default-2026.11.13-001078, .ds-metrics-apm.internal-default-2026.11.16-001081] and [31] other indices, [text] in [cmdb_with_apm_flag]"
+    "reason": "Found 1 problem\nline 20:74: Cannot use field [service.name] due to ambiguities being mapped as [2] incompatible types: [keyword] in [.ds-metrics-apm.internal-default-2026.11.10-001075, .ds-metrics-apm.internal-default-2026.11.13-001078, .ds-metrics-apm.internal-default-2026.11.16-001081] and [31] other indices, [text] in [cmdb_with_apm_flag]"
   },
   "rawResponse": {
     "error": {
       "root_cause": [
         {
           "type": "verification_exception",
-          "reason": "Found 1 problem\nline 5:59: Cannot use field [ci.name] due to ambiguities being mapped as [2] incompatible types: [keyword] in [.ds-metrics-apm.internal-default-2026.11.10-001075, .ds-metrics-apm.internal-default-2026.11.13-001078, .ds-metrics-apm.internal-default-2026.11.16-001081] and [31] other indices, [text] in [cmdb_with_apm_flag]"
+          "reason": "Found 1 problem\nline 20:74: Cannot use field [service.name] due to ambiguities being mapped as [2] incompatible types: [keyword] in [.ds-metrics-apm.internal-default-2026.11.10-001075, .ds-metrics-apm.internal-default-2026.11.13-001078, .ds-metrics-apm.internal-default-2026.11.16-001081] and [31] other indices, [text] in [cmdb_with_apm_flag]"
         }
       ],
       "type": "verification_exception",
-      "reason": "Found 1 problem\nline 5:59: Cannot use field [ci.name] due to ambiguities being mapped as [2] incompatible types: [keyword] in [.ds-metrics-apm.internal-default-2026.11.10-001075, .ds-metrics-apm.internal-default-2026.11.13-001078, .ds-metrics-apm.internal-default-2026.11.16-001081] and [31] other indices, [text] in [cmdb_with_apm_flag]"
+      "reason": "Found 1 problem\nline 20:74: Cannot use field [service.name] due to ambiguities being mapped as [2] incompatible types: [keyword] in [.ds-metrics-apm.internal-default-2026.11.10-001075, .ds-metrics-apm.internal-default-2026.11.13-001078, .ds-metrics-apm.internal-default-2026.11.16-001081] and [31] other indices, [text] in [cmdb_with_apm_flag]"
     },
     "status": 400
   },
