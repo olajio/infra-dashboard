@@ -34,6 +34,11 @@
 3. Tested (each P1 appears only on its resolution day; gaps not joined), checked in Kibana, updated the user manual
    and KPI sheet row 132.
 
+**MIM: time-to-resolve chart reverted** (team decision)
+1. Put the chart back to the **rolling 7-day median** (as built this morning with P3 and the Priorities control),
+   undoing the one-point-per-resolution-day change. The P1 line again shows INC2692216 (26.8 h) until 20 Nov, although
+   no P1 is open; the user manual says so. Everything else from today is kept.
+
 **Future Releases**
 1. Infrastructure Overview: removed the *partial* tags from the Database, Middleware and VMware domain tiles; why they
    were partial is now in the *Next Release Roadmap* card (Database and Middleware status from incidents and alerts
