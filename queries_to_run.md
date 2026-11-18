@@ -154,3 +154,55 @@ FROM servicenow-incidents-*
 """
 }
 ```
+
+## A1. Average time to resolve / duration of P1, P2 and P3 (last 90 days)
+
+Upload the results as `ttr_averages.txt`.
+
+Duration (opened → resolved) per priority, from the dates and from ServiceNow's `resolution_time`:
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incidents-*
+| WHERE TO_STRING(number) LIKE "INC*" AND resolved_at >= NOW() - 90 days AND TO_INTEGER(priority) IN (1, 2, 3)
+| STATS opened = MIN(TO_DATETIME(opened_at)), resolved = MAX(TO_DATETIME(resolved_at)),
+        pri = MIN(TO_INTEGER(priority)), rt = MAX(TO_INTEGER(resolution_time)) BY number
+| WHERE opened IS NOT NULL AND resolved >= opened
+| EVAL date_hours = DATE_DIFF("minutes", opened, resolved) / 60.0, rt_hours = rt / 3600.0
+| STATS incidents = COUNT(*),
+        avg_hours = ROUND(AVG(date_hours), 1), median_hours = ROUND(MEDIAN(date_hours), 1),
+        p90_hours = ROUND(PERCENTILE(date_hours, 90), 1), max_hours = ROUND(MAX(date_hours), 1),
+        avg_rt_hours = ROUND(AVG(rt_hours), 1), median_rt_hours = ROUND(MEDIAN(rt_hours), 1),
+        no_resolution_time = SUM(CASE(rt IS NULL, 1, 0))
+  BY pri
+| SORT pri ASC
+"""
+}
+```
+
+P1 MTTR from when each incident became a P1 (incident timeline), one row per P1:
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incidents-*, servicenow-incident-timelines-* METADATA _index
+| EVAL src = CASE(_index LIKE "*incident-timelines*", "tl", "inc"), num = TO_STRING(number), p = TO_INTEGER(priority),
+       upd = TO_DATETIME(updated_at), opened_d = TO_DATETIME(opened_at), resolved_d = TO_DATETIME(resolved_at)
+| WHERE num LIKE "INC*"
+| EVAL is_res = CASE(src == "inc" AND resolved_d >= NOW() - 90 days AND p == 1, 1, 0)
+| INLINE STATS in_set = MAX(is_res) BY num
+| WHERE in_set == 1 AND (is_res == 1 OR (src == "tl" AND @timestamp == upd))
+| EVAL h_p1 = CASE(src == "tl" AND p == 1, @timestamp), h_non = CASE(src == "tl" AND p != 1, @timestamp)
+| STATS opened = MIN(CASE(is_res == 1, opened_d)), resolved = MAX(CASE(is_res == 1, resolved_d)),
+        first_p1 = MIN(h_p1), first_non_p1 = MIN(h_non) BY num
+| EVAL became_p1 = CASE(first_p1 IS NOT NULL AND first_non_p1 IS NOT NULL AND first_non_p1 < first_p1 AND first_p1 >= opened, first_p1, opened)
+| EVAL mttr_hours = ROUND(DATE_DIFF("minutes", became_p1, resolved) / 60.0, 1),
+       duration_hours = ROUND(DATE_DIFF("minutes", opened, resolved) / 60.0, 1)
+| SORT resolved DESC
+| KEEP num, opened, became_p1, resolved, mttr_hours, duration_hours
+"""
+}
+```
