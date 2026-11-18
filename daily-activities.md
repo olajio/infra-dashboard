@@ -10,9 +10,8 @@
    *Escalation Channel* and the time-to-resolve chart follow it; the tiles show every priority, one tile each.
 3. **Age column** (time since opened, e.g. "1 d 16 h") in *Active Incidents* and *Escalation Channel*.
 4. **Time-to-resolve chart** (`trendline.png`): the axis covered the 30 days the panel reads while the line covers 7,
-   so the lines sat squeezed at the right edge. The days are now labels ("Nov 18"), so the 7 days fill the chart. The
-   lines are flat because the same incidents stay in the 7-day window: only one P1 (INC2692216, 26.8 h) was resolved
-   in the period, and the P2 median is steady. Added check T1 to confirm the P2 values (about 0.3 h).
+   so the lines sat squeezed at the right edge. The days are now labels ("Nov 18"), so the 7 days fill the chart.
+   Added check T1 to confirm the P2 values (about 0.3 h). (The flat lines were corrected later today, see below.)
 5. **Application Health / Services of the Application errors again** (now on `service.name`): compared the production
    dashboard (`mim_error.ndjson`) with the last version built: identical, so nobody else changed it. The cause is the
    data: `cmdb_with_apm_flag` keeps gaining text fields with the same names as APM fields (17 Nov `ci.name`, 18 Nov
@@ -50,11 +49,19 @@
    and Infra Overview; Infra Overview and Major Incident Management swapped. Detailed Dashboards kept here.
 2. Updated the user manual.
 
+**Reporting**
+1. Updated the action tracker (`ACTION-TRACKER-2026-11-03-04.md`, now 3–18 Nov) twice: P3 back, Priorities, Age, the
+   field fix and the links; then the chart correction, MIM Future Releases and the Infrastructure Overview *partial*
+   change. Both spreadsheet summaries updated.
+
 **Open from today**
 - Import the updated MIM V5 and Infrastructure Overview v2 (then More → Reset changes) and check them on real data.
 - Run F1 (`cmdb_with_apm_flag`: when it was reloaded, which fields it has) and T1 (P2 duration check).
 - Decide on the MIM V5 previews (*CI at a glance*, *health distribution* bar).
 - Decide whether the Infrastructure Overview should show every active P2 (it still shows P2 over 8 h).
+- Decide whether On Hold P2s and P3s should be shown on MIM (the Incident control and Escalation Channel show them).
+- Review the Future Releases items on both dashboards with the team (wording and priority).
+- Tell the owner of `cmdb_with_apm_flag` that new fields in it affect MIM.
 
 ## 17 Nov 2026
 
