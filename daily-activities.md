@@ -52,7 +52,8 @@
 **Infrastructure Overview v2**
 1. Related Dashboards: Executive Dashboard (In Progress) as text, not a link; renamed Portfolio, Application Operations
    and Infra Overview; Infra Overview and Major Incident Management swapped. Detailed Dashboards kept here.
-2. Updated the user manual.
+2. Shorter link names: Executive (In Progress) (still text), Cloud Infra, Database Infra, Middleware, Server Infra.
+3. Updated the user manual.
 
 **Reporting**
 1. Updated the action tracker (`ACTION-TRACKER-2026-11-03-04.md`, now 3–18 Nov) twice: P3 back, Priorities, Age, the

@@ -9,7 +9,9 @@
 > `infra_overview_v2_patch_2026-11-17b.py`) every link uses the Portfolio dashboard's link font, the Executive
 > Dashboard is a link, Infrastructure Overview was added, and the **Data freshness panel was removed**. **Since 18 Nov**
 > (patch `infra_overview_v2_patch_2026-11-18a.py`) Related Dashboards reads: Executive Dashboard (In Progress) (text,
-> no link for now), Portfolio, Application Operations, Major Incident Management, Infra Overview. MIM V5's section 4
+> no link for now), Portfolio, Application Operations, Major Incident Management, Infra Overview. Later on 18 Nov
+> (patch `infra_overview_v2_patch_2026-11-18c.py`) shorter names: Executive (In Progress), Cloud Infra, Database Infra,
+> Middleware, Server Infra. MIM V5's section 4
 > has the same Related Dashboards tiles (no Detailed Dashboards there). The rest of this manual describes the panels,
 > which are unchanged (Data freshness, below, is no longer on v2).
 
