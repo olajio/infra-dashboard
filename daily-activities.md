@@ -49,6 +49,21 @@
    correlation, breach risk, anomaly detection, blast radius), from the gaps found while building it.
 3. Tested, checked in Kibana, updated both user manuals.
 
+**Average time to resolve by priority** (A1, `ttr_averages.txt`, incidents resolved in the last 90 days)
+
+| Priority | Resolved | Average | Median | 90 % within | Longest |
+|---|---|---|---|---|---|
+| P1 (duration) | 3 | 12.6 h | 6.4 h | 24.1 h | 28.5 h |
+| P1 (MTTR from becoming P1) | 3 | 11.9 h | 6.4 h | – | 26.8 h |
+| P2 | 3,915 | 7.4 h | 0.3 h | 8.1 h | 2,519 h |
+| P3 | 37,263 | 32.1 h | 1.0 h | 97.3 h | 3,490 h |
+
+- ServiceNow's `resolution_time` matches the dates exactly, so the P2 median of 0.3 h on the chart is real (this
+  answers check T1): half of P2s are resolved within about 18 minutes; the average is pulled up by a few very long
+  ones.
+- Against the targets: P1 4 h met by 1 of 3 (INC2674345, 2.4 h); P2 8 h met by about 90 %; P3 24 h: median 1 h, but
+  more than 10 % take over 4 days.
+
 **Infrastructure Overview v2**
 1. Related Dashboards: Executive Dashboard (In Progress) as text, not a link; renamed Portfolio, Application Operations
    and Infra Overview; Infra Overview and Major Incident Management swapped. Detailed Dashboards kept here.
@@ -63,7 +78,7 @@
 
 **Open from today**
 - Import the updated MIM V5 and Infrastructure Overview v2 (then More → Reset changes) and check them on real data.
-- Run F1 (`cmdb_with_apm_flag`: when it was reloaded, which fields it has) and T1 (P2 duration check).
+- Run F1 (`cmdb_with_apm_flag`: when it was reloaded, which fields it has). (T1 answered by A1.)
 - Decide on the MIM V5 previews (*CI at a glance*, *health distribution* bar).
 - Decide whether the Infrastructure Overview should show every active P2 (it still shows P2 over 8 h).
 - Decide whether On Hold P2s and P3s should be shown on MIM (the Incident control and Escalation Channel show them).
