@@ -206,3 +206,26 @@ FROM servicenow-incidents-*, servicenow-incident-timelines-* METADATA _index
 """
 }
 ```
+
+## D1. Open incidents MIM may be missing (how long since their latest record)
+
+MIM's active-incident panels only see an incident if its latest record arrived in the last 7 days. This counts the
+open P1 / P2 / P3 incidents by how long ago their latest record arrived. Upload the results as `open_age.txt`.
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incidents-*
+| WHERE TO_STRING(number) LIKE "INC*" AND @timestamp >= NOW() - 180 days
+| INLINE STATS last_seen = MAX(@timestamp) BY number
+| WHERE @timestamp == last_seen AND TO_INTEGER(priority) IN (1, 2, 3)
+    AND TO_STRING(state_name) NOT IN ("Resolved", "Closed", "Canceled", "Cancelled")
+| EVAL idle_days = DATE_DIFF("days", last_seen, NOW()),
+       last_record = CASE(idle_days < 1, "a: < 1 day", idle_days < 7, "b: 1-7 days", idle_days < 30, "c: 7-30 days",
+                          idle_days < 90, "d: 30-90 days", "e: 90-180 days")
+| STATS open_incidents = COUNT_DISTINCT(number) BY priority = TO_INTEGER(priority), last_record
+| SORT priority ASC, last_record ASC
+"""
+}
+```
