@@ -52,7 +52,8 @@
 **Infrastructure Overview v2**
 1. Related Dashboards: Executive Dashboard (In Progress) as text, not a link; renamed Portfolio, Application Operations
    and Infra Overview; Infra Overview and Major Incident Management swapped. Detailed Dashboards kept here.
-2. Shorter link names: Executive (In Progress) (still text), Cloud Infra, Database Infra, Middleware, Server Infra.
+2. Shorter link names: Executive (In Progress) (still text), Cloud Infra, Database Infra, Middleware, Server Infra,
+   VMware Infra. MIM's Executive tile renamed too, so its Related Dashboards still match.
 3. Updated the user manual.
 
 **Reporting**

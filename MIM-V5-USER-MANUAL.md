@@ -14,7 +14,7 @@ top to bottom:
 3. **🩺 Application & Service Health, Dependencies:** *is it the application, the service, or the server?* The
    health of the CI's applications, their services and dependencies, and the server underneath.
 4. **🔗 Dashboard Links** (since 18 Nov: Related Dashboards only, the same tiles as on the Infrastructure Overview):
-   Executive Dashboard (In Progress) (text, no link yet), Portfolio, Application Operations, Major Incident Management,
+   Executive (In Progress) (text, no link yet), Portfolio, Application Operations, Major Incident Management,
    Infra Overview. Each link opens in a new tab.
 5. **🚀 Future Releases** (since 18 Nov): *Next Release Roadmap* (data and integrations still to come: user impact,
    MTTR with the MIM team's Outage adjustments, clickable alerts, the PBA flag, telemetry for every monitored

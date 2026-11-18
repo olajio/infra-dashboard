@@ -216,7 +216,7 @@ try:
     links = sorted((p['gridData']['y'], p['gridData']['x'], p['embeddableConfig']['content'])
                    for p in json.loads(a['panelsJSON']) if p['gridData'].get('sectionId') == s4)
     check('MIM Dashboard Links: Related Dashboards only', [c for *_, c in links], [
-        '**↗ Related Dashboards**', '## 📈 Executive Dashboard (In Progress)',
+        '**↗ Related Dashboards**', '## 📈 Executive (In Progress)',
         '## 📊 [Portfolio ›](https://kibana-prod.gcp.cna.com/app/dashboards#/view/7511c5d1-3326-4c7e-91f4-6c8fdb686ee0)',
         '## 🛡️ [Application Operations ›](https://kibana-prod.gcp.cna.com/app/r/s/b4Jas)',
         '## 🚨 [Major Incident Management ›](https://kibana-prod.gcp.cna.com/app/r/s/ZSMtk)',
