@@ -1,4 +1,4 @@
-# Queries to run (17 Nov 2026)
+# Queries to run (17–18 Nov 2026)
 
 For James Patock's proposal (`MIM SLA update.docx`): P1 MTTR from the ServiceNow **Outage** record, Duration for all
 other priorities. Run in **Dev Tools** and upload the results as `outage_results.txt`.
@@ -120,4 +120,37 @@ FROM servicenow-incident-timelines-000001
 
 ```
 GET servicenow-incidents-*/_field_caps?fields=resolution_time,is_major_incident,parent_incident.number&filter_path=fields
+```
+
+## F1. What changed in `cmdb_with_apm_flag`? (why Application Health started failing on 17–18 Nov)
+
+The MIM dashboard in production is identical to the last version built (`mim_error.ndjson`), so the errors come from
+the data: `cmdb_with_apm_flag` now has `ci.name` and `service.name` as text fields. These show when the index was
+created (re-created = reloaded) and which fields it has now. Upload the results as `flag_results.txt`.
+
+```
+GET _cat/indices/cmdb_with_apm_flag?v&h=index,docs.count,creation.date.string
+```
+
+```
+GET cmdb_with_apm_flag/_mapping
+```
+
+## T1. Is P2 Duration right? (the P2 line sits near 0.3 h)
+
+For P2s resolved in the last 7 days: `resolution_time` (ServiceNow, seconds) against opened → resolved from the dates.
+The two hour columns should match. Upload the results as `p2_duration.txt`.
+
+```
+POST /_query?format=txt
+{
+  "query": """
+FROM servicenow-incidents-*
+| WHERE TO_STRING(number) LIKE "INC*" AND TO_INTEGER(priority) == 2 AND resolved_at >= NOW() - 7 days
+| STATS opened = MIN(TO_DATETIME(opened_at)), resolved = MAX(TO_DATETIME(resolved_at)), rt = MAX(TO_INTEGER(resolution_time)) BY number
+| EVAL rt_hours = ROUND(rt / 3600.0, 2), date_hours = ROUND(DATE_DIFF("minutes", opened, resolved) / 60.0, 2)
+| STATS incidents = COUNT(*), median_rt_hours = MEDIAN(rt_hours), median_date_hours = MEDIAN(date_hours),
+        under_1h = SUM(CASE(date_hours < 1, 1, 0)), no_rt = SUM(CASE(rt IS NULL, 1, 0))
+"""
+}
 ```

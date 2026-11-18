@@ -1,4 +1,4 @@
-"""Check MIM V5 patches 17c and 17d (17d: P1 and P2 regardless of age; supersedes the 17c test). 17c: P1 MTTR from the time the incident became a P1 (incident timeline), P2 Duration, Linked
+"""(Superseded by test_mim_v5_2026-11-18a.py.) Check MIM V5 patches 17c and 17d (17d: P1 and P2 regardless of age; supersedes the 17c test). 17c: P1 MTTR from the time the incident became a P1 (incident timeline), P2 Duration, Linked
 incidents, On Hold P1s shown (table and tiles), Time to Resolve P1 line = MTTR.
 Local Elasticsearch (9200), own data; expected values are worked out by hand here, independently of the queries.
 Usage: test_mim_v5_2026-11-17d.py "MIM V5.ndjson"

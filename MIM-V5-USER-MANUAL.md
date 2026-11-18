@@ -13,10 +13,9 @@ top to bottom:
    what alerted, and what it is connected to in the CMDB.
 3. **🩺 Application & Service Health, Dependencies:** *is it the application, the service, or the server?* The
    health of the CI's applications, their services and dependencies, and the server underneath.
-4. **🔗 Dashboard Links** (since 17 Nov; the same section as on the Infrastructure Overview): **Related Dashboards**
-   (Executive (in progress), Portfolio, Applications Operations, Infrastructure Overview, Major Incident Management)
-   and **Detailed Dashboards** (Cloud Infra, Database Infra, Middleware, Server Infra, VMware Infra). Each opens in a
-   new tab.
+4. **🔗 Dashboard Links** (since 18 Nov: Related Dashboards only, the same tiles as on the Infrastructure Overview):
+   Executive Dashboard (In Progress) (text, no link yet), Portfolio, Application Operations, Major Incident Management,
+   Infra Overview. Each link opens in a new tab.
 
 Section 1 shows the whole estate (only its *Open alerts, no incident* tile narrows to a picked CI). Sections 2
 and 3 follow what you pick in the controls. With nothing picked,
@@ -38,8 +37,9 @@ they stay mostly empty. **That is expected, not a fault.**
 
 | Control | Where | What it does | Default |
 |---|---|---|---|
-| **🚨 Incident** | Top bar | The incident to investigate, listed as `INC number · CI name`. Lists active P1 and P2 incidents. Type the number to search | *(all incidents)* |
-| **🖥️ CI** | Top bar | A CI to investigate without an incident: CIs with a P1 or P2 incident opened in the last 31 days, and production servers that sent metrics in the last day | *(no CI selected)* |
+| **🎚️ Priorities** | Top bar | Multi-select (since 18 Nov): which priorities *Active Incidents*, *Escalation Channel* and *Time to Resolve* show. The tiles always show every priority, one tile each | P1, P2, P3 |
+| **🚨 Incident** | Top bar | The incident to investigate, listed as `INC number · CI name`. Lists active P1, P2 and P3 incidents. Type the number to search | *(all incidents)* |
+| **🖥️ CI** | Top bar | A CI to investigate without an incident: CIs with a P1, P2 or P3 incident opened in the last 31 days, and production servers that sent metrics in the last day | *(no CI selected)* |
 | **🧩 Monitored application** | Top bar | Limits the application panels to the applications MIM escalates: In Production, Operational and monitored in `cmdb_with_apm_flag` (138 on 2 Nov). Pick one to see only that application | *(all monitored applications)* |
 | **🖥️ Server** | Section 3 | The server for the health panels **when the CI is not a server** (an application service, for example). Take a server from *Server View* (section 2) | *(no server selected)* |
 | **🧩 Application** | Section 3 | One application for *Services of the Application*: monitored applications that sent APM data in the last day | *(all applications)* |
@@ -61,18 +61,18 @@ For a **server** CI, the health panels fill by themselves.
 
 | Panel | Shows | Fills when |
 |---|---|---|
-| **Needs attention now** | Every active P1 and P2, **whatever its age** (since 17 Nov), in one number, with a strip by priority. **Green at 0** | Always |
-| **Active P1**, **Active P2** | The same incidents, by priority. Green and "All clear" at 0; "Needs action" in the priority colour above 0 | Always |
+| **Needs attention now** | Every active P1, P2 and P3, **whatever its age**, in one number, with a strip by priority. **Green at 0** | Always |
+| **Active P1**, **Active P2**, **Active P3** | The same incidents, by priority. Green and "All clear" at 0; "Needs action" in the priority colour above 0 | Always |
 | **Open alerts, no incident** | How many open Netcool alerts (last 24 h) are on production CIs with no open incident, with the Critical count under it: possible blind spots. **Follows the Incident / CI controls** like the table in section 2: the CI's alerts and its CMDB-linked CIs'; every CI's when nothing is picked. Green at 0 | Always |
 | **User base · ServiceNow**, **Real users · RUM** | Placeholders: the integrations are in progress | Not yet |
-| **Active Incidents (P1 · P2)** | The incidents behind the tiles: priority, CI, state, **when opened**, **Time as P1 / Duration (h)**, **Linked incidents**, assignment group, assignee, group manager (with emails), description. Longest first. Click an incident to open it in ServiceNow | Always |
-| **P1 / P2 Time to Resolve vs Target** | **P1 MTTR and P2 Duration, rolling 7-day median**: each point is the median hours of the P1 or P2 incidents resolved in the 7 days up to that day, for the last 7 days, against the targets (P1 4 h, P2 8 h, dashed lines). **P1 line = MTTR**, from when the incident became a P1 to resolved; **P2 line = Duration**, from opened to resolved. One slow day does not make the line jump. A rising line = resolving more slowly; a resolved P1 stays in the line for 7 days. Reads 30 days | Always |
+| **Active Incidents (P1 · P2 · P3)** | The incidents behind the tiles (only the priorities picked in **Priorities**): priority, CI, state, **when opened**, **Age** (time since opened, e.g. "1 d 16 h"), **Time as P1 / Duration (h)**, **Linked incidents**, assignment group, assignee, group manager (with emails), description. Longest first. Click an incident to open it in ServiceNow | Always |
+| **P1 / P2 / P3 Time to Resolve vs Target** | **P1 MTTR, P2 and P3 Duration, rolling 7-day median**: each point is the median hours of the P1, P2 or P3 incidents resolved in the 7 days up to that day, for the last 7 days (one point per day, labelled "Nov 18"), against the targets (P1 4 h, P2 8 h, P3 24 h, dashed lines). **P1 line = MTTR**, from when the incident became a P1 to resolved; **P2 and P3 lines = Duration**, from opened to resolved. Follows **Priorities**. A flat line means resolution times are steady: the same incidents stay in the 7-day window for a week, so the line moves only when incidents resolved faster or slower enter or leave it. One slow day does not make the line jump. A rising line = resolving more slowly; a resolved P1 stays in the line for 7 days. Reads 30 days | Always |
 
 *The SLA column was removed on 13 Nov at the team's request. Since 17 Nov MIM reports P1 MTTR and P2 Duration instead
 of the ServiceNow SLAs (agreed with James Patock and Dan Tautges):*
 
 - **Time as P1 / Duration (h)** in *Active Incidents*: for a **P1**, hours since it **became a P1** (MTTR so far); for
-  a **P2**, hours since it was **opened** (Duration). The time it became a P1 comes from the ServiceNow incident timeline
+  a **P2** or **P3**, hours since it was **opened** (Duration). The time it became a P1 comes from the ServiceNow incident timeline
   (`servicenow-incident-timelines`), which keeps every update with its priority; if the incident was opened as a P1, or
   the timeline has no record yet, the opened time is used. Example: INC2692216 was opened as a P3 at 18:29, became a P1
   at 20:10 and was resolved the next day at 22:59, so its MTTR is 26.8 h (Duration 28.5 h).
@@ -81,10 +81,9 @@ of the ServiceNow SLAs (agreed with James Patock and Dan Tautges):*
 - The MIM team's manual adjustments to the ServiceNow Outage record are not included: Outage records are not sent to
   Elastic.
 
-**What section 1 leaves out:** Resolved, Closed and Canceled incidents, On Hold **P2** incidents (On Hold **P1s are
-shown**, since 17 Nov). Every other active P1 and P2 is shown **whatever its age** (since 17 Nov; before, P2s appeared
-only once open longer than 8 h). The 8 h P2 target stays on the Time to Resolve chart. **P3 incidents are not on MIM
-V5 at all** (removed 17 Nov): MIM covers P1 and P2 only.
+**What section 1 leaves out:** Resolved, Closed and Canceled incidents, and On Hold **P2** and **P3** incidents (On
+Hold **P1s are shown**). Every other active P1, P2 and P3 is shown **whatever its age**. **P3 is back since 18 Nov**
+(removed 17 Nov); P4 and P5 are not on MIM. The 8 h P2 and 24 h P3 targets are on the Time to Resolve chart.
 
 ### 🔎 2 · Investigate the CI
 
@@ -93,7 +92,7 @@ Layout: *Escalation Channel* and *Open Alerts with No Incident* side by side at 
 | Panel | Shows | Fills when |
 |---|---|---|
 | **Open Alerts with No Incident** | Open Netcool alerts on CIs with no open incident, Critical first, last 24 h. **With an incident or CI picked:** only alerts on that CI and on CIs linked to it in the CMDB; with nothing picked, every CI's. Sits next to *Escalation Channel* | Always |
-| **Escalation Channel** | **Who to call.** One row per active incident on the CI: priority, **state**, **when opened**, CI class and environment, assignment group, assignee and group manager (with emails). With a CI and no incident, one row with the CI's owners | An incident or CI is picked |
+| **Escalation Channel** | **Who to call.** One row per active P1, P2 or P3 incident on the CI (only the priorities picked in **Priorities**): priority, **state**, **when opened**, **age**, CI class and environment, assignment group, assignee and group manager (with emails). With a CI and no incident, one row with the CI's owners | An incident or CI is picked |
 | **Changes in the Last 7 Days on this CI** | Change requests in the last 7 days on the CI **and on CIs linked to it** (its ESX host, cluster, switch, applications …) | A change touched the CI or a linked CI this week |
 | **Blast radius** | How many applications depend directly on the CI. Amber from 1, red from 5 | The CI has applications linked above it in the CMDB |
 | **Applications related to this CI** | Every application linked to the CI in the CMDB, in both directions, with the relationship | The CI has CMDB links |

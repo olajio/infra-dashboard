@@ -1,5 +1,40 @@
 # Daily activities
 
+## 18 Nov 2026
+
+**MIM V5**
+1. **P3 back**, any age, with the same rules as P2 (On Hold P2s and P3s left out; On Hold P1s shown): a new *Active
+   P3* tile, P3 in the *Needs attention now* strip, *Active Incidents (P1 · P2 · P3)*, *Escalation Channel*, the
+   Incident and CI dropdowns, and a P3 line (Duration, 24 h target) on the time-to-resolve chart.
+2. **Priorities control** (multi-select: P1, P2, P3, all picked by default) in the top bar. *Active Incidents*,
+   *Escalation Channel* and the time-to-resolve chart follow it; the tiles show every priority, one tile each.
+3. **Age column** (time since opened, e.g. "1 d 16 h") in *Active Incidents* and *Escalation Channel*.
+4. **Time-to-resolve chart** (`trendline.png`): the axis covered the 30 days the panel reads while the line covers 7,
+   so the lines sat squeezed at the right edge. The days are now labels ("Nov 18"), so the 7 days fill the chart. The
+   lines are flat because the same incidents stay in the 7-day window: only one P1 (INC2692216, 26.8 h) was resolved
+   in the period, and the P2 median is steady. Added check T1 to confirm the P2 values (about 0.3 h).
+5. **Application Health / Services of the Application errors again** (now on `service.name`): compared the production
+   dashboard (`mim_error.ndjson`) with the last version built: identical, so nobody else changed it. The cause is the
+   data: `cmdb_with_apm_flag` keeps gaining text fields with the same names as APM fields (17 Nov `ci.name`, 18 Nov
+   `service.name`). All four queries that read it now convert every shared text field they use, so further fields
+   like these no longer break them. Added check F1 to see when the index was reloaded and what is in it.
+6. **Dashboard Links**: only *Related Dashboards* (Detailed Dashboards removed); Executive Dashboard (In Progress) as
+   text, not a link; same names and order as the Infrastructure Overview.
+7. Tested (P3 rows, tiles, Priorities with one and several values, Age, chart points and labels, the production error
+   reproduced and fixed, links), checked in Kibana, updated the user manual and seven KPI sheet rows (122, 125,
+   130–132, 142, 163).
+
+**Infrastructure Overview v2**
+1. Related Dashboards: Executive Dashboard (In Progress) as text, not a link; renamed Portfolio, Application Operations
+   and Infra Overview; Infra Overview and Major Incident Management swapped. Detailed Dashboards kept here.
+2. Updated the user manual.
+
+**Open from today**
+- Import the updated MIM V5 and Infrastructure Overview v2 (then More → Reset changes) and check them on real data.
+- Run F1 (`cmdb_with_apm_flag`: when it was reloaded, which fields it has) and T1 (P2 duration check).
+- Decide on the MIM V5 previews (*CI at a glance*, *health distribution* bar).
+- Decide whether the Infrastructure Overview should show every active P2 (it still shows P2 over 8 h).
+
 ## 17 Nov 2026
 
 **MIM V5**
