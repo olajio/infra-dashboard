@@ -85,6 +85,10 @@ numbers on the long tables. Rebuild after any MIM V4 change. Functional test: `t
 Opened and loses CI support group; Active Incidents gets Opened; Open Alerts with No Incident shows only the selected
 CI's alerts and its CMDB-linked CIs'. It also makes the controls hard to miss: icon titles, full-width top bar, and
 "Start here" banners. The Infrastructure Dashboard got the same control treatment in `build_infra_dashboard.py`.
+18 Nov: `mim_v5_patch_2026-11-18c.py "MIM V5.ndjson" "MIM V5.ndjson"` (section 5 Future Releases) and
+`infra_overview_v2_patch_2026-11-18b.py "Infrastructure Overview v2.ndjson" "Infrastructure Overview v2.ndjson"` ("partial"
+tags removed, the reasons in Next Release Roadmap); test `test_future_releases_2026-11-18.py "Infrastructure Overview
+v2.ndjson" "MIM V5.ndjson"`.
 18 Nov: `mim_v5_patch_2026-11-18b.py "MIM V5.ndjson" "MIM V5.ndjson"` (test `test_mim_v5_2026-11-18b.py "MIM V5.ndjson"
 "Infrastructure Overview v2.ndjson"`, which supersedes the 18a test): Time to Resolve = median of the incidents
 resolved each day, each incident once (the rolling 7-day median repeated the one P1 for 7 days); points not joined

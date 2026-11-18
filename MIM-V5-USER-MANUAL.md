@@ -16,6 +16,10 @@ top to bottom:
 4. **🔗 Dashboard Links** (since 18 Nov: Related Dashboards only, the same tiles as on the Infrastructure Overview):
    Executive Dashboard (In Progress) (text, no link yet), Portfolio, Application Operations, Major Incident Management,
    Infra Overview. Each link opens in a new tab.
+5. **🚀 Future Releases** (since 18 Nov): *Next Release Roadmap* (data and integrations still to come: user impact,
+   MTTR with the MIM team's Outage adjustments, clickable alerts, the PBA flag, telemetry for every monitored
+   application, a stable CMDB application list) and *Predictive & AI Insights* (AI incident summary, change and alert
+   correlation, breach risk, anomaly detection, blast radius).
 
 Section 1 shows the whole estate (only its *Open alerts, no incident* tile narrows to a picked CI). Sections 2
 and 3 follow what you pick in the controls. With nothing picked,

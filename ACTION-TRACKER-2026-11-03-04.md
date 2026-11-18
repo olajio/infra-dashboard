@@ -17,8 +17,10 @@ date to 18 Nov (see *MIM progress, 5–18 Nov*); the Infrastructure Dashboard is
 > the team's request, **P3 came back** (every active P3, any age, with its own tile and a 24 h line on the chart), a
 > multi-select **Priorities** control was added, the tables got an **Age** column, the time-to-resolve chart now fills
 > its width, and the dashboard was made robust to the field changes in the CMDB application list that caused the
-> Application Health errors (the dashboard itself had not been changed by anyone else). Every change is tested, and
-> the user manual and MIM KPI sheet are up to date.
+> Application Health errors (the dashboard itself had not been changed by anyone else). The time-to-resolve chart was
+> corrected to count each resolved incident once, on its resolution day, and a **Future Releases** section lists what
+> is still to come (integrations) and the planned predictive and AI insights. Every change is tested, and the user
+> manual and MIM KPI sheet are up to date.
 > **Next:** import the update and check it on live data; run checks F1 (CMDB application list) and T1 (P2 duration);
 > decisions pending on alert links and the two design previews.
 
@@ -35,7 +37,8 @@ date to 18 Nov (see *MIM progress, 5–18 Nov*); the Infrastructure Dashboard is
 > The links now use the Portfolio dashboard's font, the Executive Dashboard (in progress) and Infrastructure Overview
 > are linked, all links match `links.txt`, and the empty Data freshness panel was removed. On 18 Nov the Related
 > Dashboards were renamed and reordered (Portfolio, Application Operations, Major Incident Management, Infra Overview)
-> and the Executive Dashboard is text until it is ready. MIM uses the same Related Dashboards.
+> and the Executive Dashboard is text until it is ready. MIM uses the same Related Dashboards. The "partial" tags on the
+> Database, Middleware and VMware tiles were replaced by items in the Next Release Roadmap that say what is missing.
 > **Next:** import v2 and check it on live data; VMware and Cloud SQL coverage depend on their integrations.
 
 ## MIM dashboard
@@ -85,6 +88,8 @@ date to 18 Nov (see *MIM progress, 5–18 Nov*); the Infrastructure Dashboard is
 | 18 Nov | *Time to Resolve*: fixed the squeezed lines (the axis showed 30 days for 7 days of points); explained the flat lines (the same incidents stay in the 7-day window); check T1 for the P2 values | MIM V5 | Done; T1 to run | Patch 18a, `trendline.png`, `queries_to_run.md` |
 | 18 Nov | *Application Health* / *Services of the Application* errors again (now `service.name`): production dashboard compared with the last build (identical, no outside change); the cause is new text fields in `cmdb_with_apm_flag`. All four queries now convert every shared field, so further fields like these do not break them | MIM V5 | Done; F1 to run | Patch 18a, test `test_mim_v5_2026-11-18a_fields.py`, `mim_error.ndjson` |
 | 18 Nov | Dashboard Links: *Related Dashboards* only (Detailed Dashboards removed); Executive Dashboard (In Progress) as text | MIM V5 | Done | Patch 18a |
+| 18 Nov | *Time to Resolve* corrected: a solid P1 line showed with no P1 open because the rolling 7-day median repeated the one resolved P1 (INC2692216, 26.8 h) for 7 days. Now each point is the median of the incidents resolved that day, each incident once; no point and no joining line on days with nothing resolved | MIM V5 | Done | Patch 18b, test `test_mim_v5_2026-11-18b.py`, `dash.png`, `trendline2.png` |
+| 18 Nov | New section **5 · Future Releases**: *Next Release Roadmap* (user impact, MTTR with Outage adjustments, clickable alerts, PBA flag, telemetry for every monitored application, a stable CMDB application list, Linked incidents over a P1's life) and *Predictive & AI Insights* (AI incident summary, change / alert correlation, breach risk, anomaly detection, blast radius) | MIM V5 | Done | Patch 18c, test `test_future_releases_2026-11-18.py` |
 | 6–18 Nov | Kept the MIM V5 user manual and the MIM KPI spreadsheet up to date with every change | MIM V5 | Done | `MIM-V5-USER-MANUAL.md`, `Dashboard Testing and Verification Template.xlsx` |
 
 **Open (MIM), as of 18 Nov:**
@@ -136,6 +141,7 @@ date to 18 Nov (see *MIM progress, 5–18 Nov*); the Infrastructure Dashboard is
 | 17 Nov | Removed the Data freshness panel (it showed only a "Last 2 days" badge above Future Releases) | Done | `tools/infra_overview_v2_patch_2026-11-17b.py` |
 | 17 Nov | Server Infra, Middleware and Applications Operations links switched to the `links.txt` short links (on MIM too) | Done | `tools/dashboard_links_patch_2026-11-17f.py` |
 | 18 Nov | Related Dashboards: Executive Dashboard (In Progress) as text; renamed Portfolio, Application Operations and Infra Overview; Infra Overview and Major Incident Management swapped (MIM has the same tiles) | Done | `tools/infra_overview_v2_patch_2026-11-18a.py` |
+| 18 Nov | Removed the *partial* tags from the Database, Middleware and VMware domain tiles; the reasons are now in the *Next Release Roadmap* card (Database / Middleware status from incidents and alerts only; VMware 4 of 549 hosts, some vSphere metrics not collected) | Done | `tools/infra_overview_v2_patch_2026-11-18b.py` |
 | 5–18 Nov | Kept the user manuals, activity log and KPI workbook up to date with every change | Done | `INFRA-DASHBOARD-MANUAL.md`, `INFRA-OVERVIEW-MANUAL.md`, `INFRA-DASHBOARD-ACTIVITY-LOG.md` |
 
 **Open (Infrastructure Dashboard / Overview), as of 18 Nov:**

@@ -33,7 +33,7 @@ picker changes nothing: each panel has its own window, shown on its badge.
 | Panel | Shows |
 |---|---|
 | **Domain status** | One tile per domain: Server, Database, Middleware, VMware, Cloud, Network. **Red (Action):** an open P1, a Critical alert, a server not reporting or a GKE cluster critical / silent. **Amber (Attention):** an active P2, a Major alert, a server at 90 % CPU, memory or disk, or a GKE cluster warning. **Green (Healthy):** none of these. **Grey (Not monitored):** VMware with nothing open. Under each status: open P1 / P2, Critical / Major alerts and the domain's own facts |
-| **VMware tile** (since 12 Nov) | From the vSphere integration (the same data as the VMware Infra Dashboard), last hour: hosts, VMs (red ones), datastores at 80 % or more, and the hosts' peak CPU, memory and disk latency. **Red:** a host silent 15 min, host CPU ≥ 90 %, memory ≥ 95 % or disk latency ≥ 25 ms, a datastore ≥ 90 %, or a red VM. **Amber:** host CPU ≥ 75 %, memory ≥ 85 % or latency ≥ 10 ms, a datastore ≥ 80 %, or a yellow VM (thresholds from `vmware_data.xlsx`). Plus incidents and alerts on VMware CIs, as for every domain. **Grey** only when vSphere sends nothing. Tagged *partial*: vSphere covers only part of the estate (4 of 549 ESX hosts on 2 Nov) |
+| **VMware tile** (since 12 Nov) | From the vSphere integration (the same data as the VMware Infra Dashboard), last hour: hosts, VMs (red ones), datastores at 80 % or more, and the hosts' peak CPU, memory and disk latency. **Red:** a host silent 15 min, host CPU ≥ 90 %, memory ≥ 95 % or disk latency ≥ 25 ms, a datastore ≥ 90 %, or a red VM. **Amber:** host CPU ≥ 75 %, memory ≥ 85 % or latency ≥ 10 ms, a datastore ≥ 80 %, or a yellow VM (thresholds from `vmware_data.xlsx`). Plus incidents and alerts on VMware CIs, as for every domain. **Grey** only when vSphere sends nothing. vSphere covers only part of the estate (4 of 549 ESX hosts on 2 Nov); since 18 Nov this is listed in the *Next Release Roadmap* card instead of a *partial* tag on the tile |
 | **Links under the tiles** | Each domain's detailed dashboard. Network has none yet: its alerts are in section 2 |
 | **Active P1 (infrastructure)** | Open P1 incidents on infrastructure CIs (not application services). Green at 0 |
 | **P2 over 8 h (infrastructure)** | Active P2 incidents open longer than 8 h, MIM's target |
@@ -164,7 +164,7 @@ is unchanged since 2 Nov: one vSphere cluster.
 
 - **VMware:** health comes from what vSphere collects (4 of 549 ESX hosts on 2 Nov; check VM1). CPU ready time,
   ballooning, swapping and packet loss are not collected (`vmware_data.xlsx`), so they are not in the status.
-- **Database / Middleware:** marked *partial*: their status comes from incidents and alerts; the detailed health is on
+- **Database / Middleware:** their status comes from incidents and alerts (the *partial* tag was replaced on 18 Nov by an item in the *Next Release Roadmap* card); the detailed health is on
   their own dashboards.
 - **Network:** no detailed dashboard yet.
 - **Failed changes** counts the close code *unsuccessful* (IO2); *canceled* is not a failure.

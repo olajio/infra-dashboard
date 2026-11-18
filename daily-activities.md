@@ -35,6 +35,16 @@
 3. Tested (each P1 appears only on its resolution day; gaps not joined), checked in Kibana, updated the user manual
    and KPI sheet row 132.
 
+**Future Releases**
+1. Infrastructure Overview: removed the *partial* tags from the Database, Middleware and VMware domain tiles; why they
+   were partial is now in the *Next Release Roadmap* card (Database and Middleware status from incidents and alerts
+   only; VMware: 4 of 549 ESX hosts, some vSphere metrics not collected).
+2. MIM: new section **5 · Future Releases** with *Next Release Roadmap* (user impact, MTTR with the MIM team's Outage
+   adjustments, clickable alerts, PBA flag, telemetry for every monitored application, a stable CMDB application list,
+   Linked incidents over a P1's whole life) and *Predictive & AI Insights* (AI incident summary, change and alert
+   correlation, breach risk, anomaly detection, blast radius), from the gaps found while building it.
+3. Tested, checked in Kibana, updated both user manuals.
+
 **Infrastructure Overview v2**
 1. Related Dashboards: Executive Dashboard (In Progress) as text, not a link; renamed Portfolio, Application Operations
    and Infra Overview; Infra Overview and Major Incident Management swapped. Detailed Dashboards kept here.
