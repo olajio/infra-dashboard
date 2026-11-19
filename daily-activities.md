@@ -33,6 +33,11 @@
    (`MIM-USER-MANUAL-SUGGESTED-UPDATES.md`): section 5.3 still describes early-November MIM (P2 over 8 h, SLA column,
    Escalate, Alerts on this CI, an average-age chart); missing the controls, P1 MTTR tile, Dashboard Links and Future
    Releases; plus tidy-up (duplicate 5.3, list numbering, a personal OneDrive link with an email address in it).
+3. Made the updated copy "CNA Observability Dashboard - User Manual - Major Incident Management - updated.docx" (the
+   original untouched), with every change as a tracked change (author "Claude") to accept or reject: section 5.3
+   brought up to MIM V5 (intro, the three panel tables, new 5.3.2 controls table, notes, Dashboard Links, Future
+   Releases), the personal OneDrive link replaced, Time Selector note, glossary (7 terms), troubleshooting (4 rows),
+   FAQ (4 answers), catalogue (Infrastructure Overview, Executive), version 1.1. Validated and rendered.
 
 ## 18 Nov 2026
 
