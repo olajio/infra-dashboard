@@ -9,6 +9,15 @@
 2. Ran D1 (`open_age.txt`): of the open incidents, **1 of 7 P2s and 193 of 648 P3s (30 %)** had no new record in the
    last 7 days, so today's 7-day window leaves them off the active panels (17 P3s last updated 30–90 days ago, 26
    90–180 days ago). ServiceNow does not re-send an open incident unless it changes.
+3. Discussed with the team: P3 is only on MIM for the demo, so a 1-year window for the active panels is not needed (90
+   days suggested for P1 / P2); confirmed CMDB relationships are re-sent daily, so the 6 CMDB panels stay at 5 years.
+4. Applied item 3: *Time to Resolve* shows **30 days** of points (rolling 7-day median, reads 40 days); checked the day
+   labels stay in date order across the month change.
+5. Applied item 6: the 7 section 3 health panels read **30 days** instead of 5 years (what they show is unchanged:
+   the Health window).
+6. Made a preview of the proposed **P1 MTTR (90 days)** tile (`previews/mim-v5-p1-mttr-tile-preview.png`): median MTTR,
+   count, average, how many within 4 h; to fit the row, the two user-impact placeholders become one tile. Not on the
+   dashboard yet.
 
 ## 18 Nov 2026
 

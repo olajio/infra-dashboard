@@ -1,4 +1,4 @@
-"""(Current again after patch 18d; test_mim_v5_2026-11-18b.py checks the undone 18b.) Check MIM V5 patch 18a (P3 back, Priorities control, Age columns, Time to Resolve day labels and P3 line, Dashboard
+"""(Superseded by test_mim_v5_2026-11-19a.py.) Check MIM V5 patch 18a (P3 back, Priorities control, Age columns, Time to Resolve day labels and P3 line, Dashboard
 Links) on top of 17c / 17d (supersedes the 17d test). 17c: P1 MTTR from the time the incident became a P1 (incident timeline), P2 Duration, Linked
 incidents, On Hold P1s shown (table and tiles), Time to Resolve P1 line = MTTR.
 Local Elasticsearch (9200), own data; expected values are worked out by hand here, independently of the queries.
