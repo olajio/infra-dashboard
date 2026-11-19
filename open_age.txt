@@ -1,0 +1,11 @@
+#! No limit defined, adding default limit of [1000]
+open_incidents |   priority    |  last_record  
+---------------+---------------+---------------
+2              |2              |a: < 1 day     
+4              |2              |b: 1-7 days    
+1              |2              |c: 7-30 days   
+193            |3              |a: < 1 day     
+262            |3              |b: 1-7 days    
+150            |3              |c: 7-30 days   
+17             |3              |d: 30-90 days  
+26             |3              |e: 90-180 days 
