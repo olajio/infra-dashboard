@@ -67,6 +67,7 @@ For a **server** CI, the health panels fill by themselves.
 |---|---|---|
 | **Needs attention now** | Every active P1, P2 and P3, **whatever its age**, in one number, with a strip by priority. **Green at 0** | Always |
 | **Active P1**, **Active P2**, **Active P3** | The same incidents, by priority. Green and "All clear" at 0; "Needs action" in the priority colour above 0 | Always |
+| **P1 MTTR (90 days)** | Median MTTR of the P1s resolved in the last 90 days, from when each became a P1 to resolved, with how many there were, the average and how many were within the 4 h target. **Red** above 4 h, **green** at or under, "–" when no P1 was resolved (since 19 Nov) | Always |
 | **Open alerts, no incident** | How many open Netcool alerts (last 24 h) are on production CIs with no open incident, with the Critical count under it: possible blind spots. **Follows the Incident / CI controls** like the table in section 2: the CI's alerts and its CMDB-linked CIs'; every CI's when nothing is picked. Green at 0 | Always |
 | **User base · ServiceNow**, **Real users · RUM** | Placeholders: the integrations are in progress | Not yet |
 | **Active Incidents (P1 · P2 · P3)** | The incidents behind the tiles (only the priorities picked in **Priorities**): priority, CI, state, **when opened**, **Age** (time since opened, e.g. "1 d 16 h"), **Time as P1 / Duration (h)**, **Linked incidents**, assignment group, assignee, group manager (with emails), description. Longest first. Click an incident to open it in ServiceNow | Always |

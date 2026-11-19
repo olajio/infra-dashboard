@@ -85,6 +85,8 @@ numbers on the long tables. Rebuild after any MIM V4 change. Functional test: `t
 Opened and loses CI support group; Active Incidents gets Opened; Open Alerts with No Incident shows only the selected
 CI's alerts and its CMDB-linked CIs'. It also makes the controls hard to miss: icon titles, full-width top bar, and
 "Start here" banners. The Infrastructure Dashboard got the same control treatment in `build_infra_dashboard.py`.
+19 Nov: `mim_v5_patch_2026-11-19b.py "MIM V5.ndjson" "MIM V5.ndjson"`: P1 MTTR (90 days) tile, 5th in the tile row (both
+"In progress" placeholders kept); checked by `test_mim_v5_2026-11-19a.py`. KPI sheet: `update_mim_kpi_sheet_2026-11-19b.py`.
 19 Nov: `mim_v5_patch_2026-11-19a.py "MIM V5.ndjson" "MIM V5.ndjson"` (test `test_mim_v5_2026-11-19a.py "MIM V5.ndjson"
 "Infrastructure Overview v2.ndjson"`, which supersedes 18a): Time to Resolve with 30 days of points (reads 40 days); the 7
 section 3 health panels read 30 days instead of 5 years. Preview only, not on the dashboard:

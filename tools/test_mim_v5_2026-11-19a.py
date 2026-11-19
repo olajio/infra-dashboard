@@ -1,4 +1,4 @@
-"""Check MIM V5 patch 19a (Time to Resolve: 30 days of points, rolling 7-day median; health panels read 30 days) on top
+"""Check MIM V5 patches 19a and 19b (19b: P1 MTTR tile). 19a: (Time to Resolve: 30 days of points, rolling 7-day median; health panels read 30 days) on top
 of 18a / 18d (supersedes the 18a test). Earlier: MIM V5 patch 18a (P3 back, Priorities control, Age columns, Time to Resolve day labels and P3 line, Dashboard
 Links) on top of 17c / 17d (supersedes the 17d test). 17c: P1 MTTR from the time the incident became a P1 (incident timeline), P2 Duration, Linked
 incidents, On Hold P1s shown (table and tiles), Time to Resolve P1 line = MTTR.
@@ -179,8 +179,15 @@ try:
     check('Needs attention now strip has P3', ("'P3  ' + p3" in na_spec, '"P1 · P2 · P3"' in na_spec), (True, True))
     row = sorted((P[t]['gridData']['x'], P[t]['gridData']['w']) for t in P if P[t]['gridData'].get('y') == P['Active P1']['gridData']['y']
                  and P[t]['gridData'].get('sectionId') == P['Active P1']['gridData']['sectionId'])
-    check('tile row: 7 tiles across the full width, no overlap', (len(row), sum(w for _, w in row),
-                                                                   all(a + w <= b for (a, w), (b, _) in zip(row, row[1:]))), (7, 48, True))
+    check('tile row: 8 tiles across the full width, no overlap', (len(row), sum(w for _, w in row),
+                                                                   all(a + w <= b for (a, w), (b, _) in zip(row, row[1:]))), (8, 48, True))
+    tec = P['P1 MTTR (90 days)']['embeddableConfig']
+    mt = esql(json.loads(tec['savedVis']['params']['spec'])['data'][0]['url']['query'], tec['time_range'])[0]
+    p1h = sorted(h for n, p, r, h in CHART if p == 1)
+    check('P1 MTTR tile: count, median, average, within 4 h (P1s resolved in 90 days)',
+          (mt['p1s'], mt['median_h'], mt['avg_h'], mt['met']),
+          (len(p1h), round(statistics.median(p1h), 1), round(sum(p1h) / len(p1h), 1), sum(h <= 4 for h in p1h)))
+    check('placeholders kept', ('User base · ServiceNow' in P, 'Real users · RUM' in P), (True, True))
 
     ec = P['Escalation Channel']['embeddableConfig']
     eq = ec['attributes']['state']['query']['esql']

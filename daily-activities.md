@@ -18,6 +18,10 @@
 6. Made a preview of the proposed **P1 MTTR (90 days)** tile (`previews/mim-v5-p1-mttr-tile-preview.png`): median MTTR,
    count, average, how many within 4 h; to fit the row, the two user-impact placeholders become one tile. Not on the
    dashboard yet.
+7. Added the **P1 MTTR (90 days)** tile to MIM, 5th in the tile row, keeping both "In progress" placeholders (row 7 5 5
+   5 8 8 5 5). Tested (count, median, average and within-4 h against hand-worked values), checked in Kibana, updated
+   the user manual and KPI sheet rows 123 and 132. On today's data it would read 6.4 h (3 P1s, avg 11.9 h, 1 within
+   4 h).
 
 ## 18 Nov 2026
 
