@@ -25,6 +25,15 @@
 8. Health panels: kept at 30 days (team decision), not 24 hours (24 hours would cut off the Health window's 3- and
    7-day options and could miss a late daily CMDB load).
 
+**MIM KPI sheet and user manual**
+1. Brought the MIM KPI sheet fully up to date: 12 rows updated (Active P1, Open Alerts with No Incident, Escalation
+   Channel, Application Health, Services of the Application, the 7 health panels) and 5 KPIs added (Active P2, Active
+   P3, Priority filter, Incident age, Linked incidents); evidence pictures kept.
+2. Reviewed "CNA Observability Dashboard - User Manual - Major Incident Management.docx" and wrote suggested updates
+   (`MIM-USER-MANUAL-SUGGESTED-UPDATES.md`): section 5.3 still describes early-November MIM (P2 over 8 h, SLA column,
+   Escalate, Alerts on this CI, an average-age chart); missing the controls, P1 MTTR tile, Dashboard Links and Future
+   Releases; plus tidy-up (duplicate 5.3, list numbering, a personal OneDrive link with an email address in it).
+
 ## 18 Nov 2026
 
 **MIM V5**
