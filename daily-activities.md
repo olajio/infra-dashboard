@@ -49,6 +49,20 @@ Metrics Coverage*, Persona Infra / Template Overview)
    brought up to MIM V5 (intro, the three panel tables, new 5.3.2 controls table, notes, Dashboard Links, Future
    Releases), the personal OneDrive link replaced, Time Selector note, glossary (7 terms), troubleshooting (4 rows),
    FAQ (4 answers), catalogue (Infrastructure Overview, Executive), version 1.1. Validated and rendered.
+4. Listed the follow-ups to do by hand in Word in `MIM-USER-MANUAL-TODO.md` (update the table of contents, retake two
+   screenshots, list numbering and empty headings, support email spelling, the SharePoint link).
+
+**Other**
+1. PBA: not a standard ServiceNow term or field, and no PBA field reaches Elastic (check R1); asked the team what it
+   stands for and which field holds it. It is on MIM's Future Releases roadmap.
+
+**Open from today**
+- Re-import MIM V5 (P1 MTTR tile, 30-day Time to Resolve, health panels at 30 days) and check it on real data.
+- Accept or reject the tracked changes in the updated MIM user manual, then do the items in `MIM-USER-MANUAL-TODO.md`.
+- Add new evidence screenshots for the 12 Infra / Overview rows of the KPI sheet.
+- Relabel the Infrastructure Overview Servers tile (its subtitle describes the servers-down number).
+- Item 2 (90 days for MIM's active-incident panels) left as it is for now; F1 (`cmdb_with_apm_flag`) still to run.
+- Find out what PBA is and which ServiceNow field holds it.
 
 ## 18 Nov 2026
 
