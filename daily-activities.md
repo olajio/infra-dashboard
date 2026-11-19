@@ -22,6 +22,8 @@
    5 8 8 5 5). Tested (count, median, average and within-4 h against hand-worked values), checked in Kibana, updated
    the user manual and KPI sheet rows 123 and 132. On today's data it would read 6.4 h (3 P1s, avg 11.9 h, 1 within
    4 h).
+8. Health panels: kept at 30 days (team decision), not 24 hours (24 hours would cut off the Health window's 3- and
+   7-day options and could miss a late daily CMDB load).
 
 ## 18 Nov 2026
 
