@@ -25,6 +25,17 @@
 8. Health panels: kept at 30 days (team decision), not 24 hours (24 hours would cut off the Health window's 3- and
    7-day options and could miss a late daily CMDB load).
 
+**Infrastructure Overview KPIs** (`Dashboard Testing and Verification Template-updated.xlsx`, sheet *Persona KPI
+Metrics Coverage*, Persona Infra / Template Overview)
+1. The 11 Infra / Overview rows described an earlier overview. Removed the 7 that are not on the current dashboard
+   (Servers Up, Fleet Availability, P3 Incident count, Windows / Linux servers with high CPU / memory).
+2. Updated the 4 still on it (Total Servers Monitored, Servers Down, P1 and P2 incident counts) and added the 8
+   missing KPIs (Domain status, Critical alerts, Servers under pressure, Failed changes (7 days), Active P1 · P2
+   table, Open alerts by domain, Change Request Summary, Infrastructure incidents per domain), all Pass.
+3. Rows below moved down by one with their pictures, filter and colour rules intact; the old evidence pictures of
+   the block were removed (new evidence screenshots to be added). Noted that the Servers tile's subtitle describes
+   the servers-down number, not the main number.
+
 **MIM KPI sheet and user manual**
 1. Brought the MIM KPI sheet fully up to date: 12 rows updated (Active P1, Open Alerts with No Incident, Escalation
    Channel, Application Health, Services of the Application, the 7 health panels) and 5 KPIs added (Active P2, Active

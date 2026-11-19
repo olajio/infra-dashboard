@@ -85,6 +85,9 @@ numbers on the long tables. Rebuild after any MIM V4 change. Functional test: `t
 Opened and loses CI support group; Active Incidents gets Opened; Open Alerts with No Incident shows only the selected
 CI's alerts and its CMDB-linked CIs'. It also makes the controls hard to miss: icon titles, full-width top bar, and
 "Start here" banners. The Infrastructure Dashboard got the same control treatment in `build_infra_dashboard.py`.
+19 Nov: `update_infra_overview_kpis_2026-11-19.py SRC.xlsx OUT.xlsx`: the Infra / Overview rows of "Dashboard Testing and
+Verification Template-updated.xlsx" (sheet4) brought to the current Infrastructure Overview v2: 7 removed, 4 updated, 8
+added.
 19 Nov: `update_mim_kpi_sheet_2026-11-19c.py SRC.xlsx OUT.xlsx`: MIM KPI sheet brought up to date (12 rows) and 5 KPIs added
 after row 165 (Active P2, Active P3, Priority filter, Incident age, Linked incidents), with the row-insert method of
 `update_mim_kpi_sheet_v5.py`.
