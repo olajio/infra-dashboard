@@ -1,5 +1,15 @@
 # Daily activities
 
+## 19 Nov 2026
+
+**MIM: time windows**
+1. Recommended time windows for every MIM panel group from the 90-day resolution figures (A1): keep the dashboard
+   picker at 7 days; active-incident panels longer than 7 days; Time to Resolve with 30 days of points and a 90-day
+   P1 MTTR tile; CMDB and health panels down from 5 years to 7 days.
+2. Ran D1 (`open_age.txt`): of the open incidents, **1 of 7 P2s and 193 of 648 P3s (30 %)** had no new record in the
+   last 7 days, so today's 7-day window leaves them off the active panels (17 P3s last updated 30–90 days ago, 26
+   90–180 days ago). ServiceNow does not re-send an open incident unless it changes.
+
 ## 18 Nov 2026
 
 **MIM V5**
