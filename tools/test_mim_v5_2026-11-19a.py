@@ -1,4 +1,4 @@
-"""Check MIM V5 patches 19a and 19b (19b: P1 MTTR tile). 19a: (Time to Resolve: 30 days of points, rolling 7-day median; health panels read 30 days) on top
+"""(Superseded by test_mim_v5_2026-11-19d.py.) Check MIM V5 patches 19a and 19b (19b: P1 MTTR tile). 19a: (Time to Resolve: 30 days of points, rolling 7-day median; health panels read 30 days) on top
 of 18a / 18d (supersedes the 18a test). Earlier: MIM V5 patch 18a (P3 back, Priorities control, Age columns, Time to Resolve day labels and P3 line, Dashboard
 Links) on top of 17c / 17d (supersedes the 17d test). 17c: P1 MTTR from the time the incident became a P1 (incident timeline), P2 Duration, Linked
 incidents, On Hold P1s shown (table and tiles), Time to Resolve P1 line = MTTR.
