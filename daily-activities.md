@@ -1,6 +1,68 @@
 # Daily activities
 
+## 24 Nov 2026
+
+**Observability Incident Management Operations 2** (new dashboard, from the uploaded "Observability Incident
+Management Operations", the renamed MIM)
+1. Created it with its own id so the existing dashboard stayed untouched while testing.
+2. **Application Health** made light on the cluster: the query applied its APM / CMDB limits only after reading, so
+   it read every APM and CMDB document in its range, once per INLINE STATS. Added a filter right after FROM that
+   Elasticsearch applies while reading (KQL for the CMDB relations, safe with `cmdb_with_apm_flag`'s text-mapped
+   fields). Range back to 5 years: the uploaded 24-hour range dropped CMDB records older than a day, which is why
+   an incident on eFile PROD showed no application. Same rows as before; about 31x fewer documents read in the test.
+3. **Tiles and banners at any zoom**: Kibana sizes a Vega panel when it draws it and drops resizes made meanwhile, so
+   a panel drawn while the layout was moving (page load, zoom, controls) kept a wrong size (banner text hidden behind
+   a scrollbar, tiles out of line). The 8 Vega panels now take their size from their own panel and stay inside it.
+   Pixel-identical at a normal size; tested with a slowed CPU during load and a zoom sweep from 33 % to 500 %.
+4. **Query review** of every panel and control for what Elasticsearch filters while reading. Most were already
+   efficient (health panels, CMDB panels, Open alerts, controls).
+5. **Downstream** and **Upstream** read only the data of the picked host or service (Downstream had read every APM
+   trace of the last hour, even with nothing picked; about 4x fewer documents in the test). **Services of the
+   Application** range back to 5 years (same CMDB issue as Application Health). Same rows as before; the Downstream
+   drill-down to the APM Service Map checked outside edit mode.
+6. Tested by the team and confirmed good; "Observability Incident Management Operations" made identical to it (own
+   id and name kept, so importing it replaces the existing dashboard). MIM V5 not changed.
+
+**Other**
+1. `cmdb_relations_fix.md`: the CMDB relationship index redesign (no timestamp, kept in sync with the CMDB by fixed
+   document ids or a rebuild on each load), written for management.
+
+**Open from today**
+- Re-import "Observability Incident Management Operations".
+- CMDB relationship index redesign: with ATOS.
+
+## 23 Nov 2026
+
+**Observability Incident Management Operations** (uploaded, the renamed MIM)
+1. Compared it with MIM V5: besides the cosmetic changes (Child Incidents column, auto-refresh off, name, layout,
+   links), the only query-related change was Application Health and Services of the Application cut from 5 years to
+   24 hours; explained why that empties Application Health and gave two Discover checks.
+2. Found why the cluster suffers: Application Health read every APM document in its range several times (see 24
+   Nov).
+3. Explained the CMDB relationship index problem (results depend on the time range) and wrote the fix for management.
+
+**Open from today**
+- MIM V5 preview decision (CI at a glance, application health bar): daily reminder still running.
+
+## 20 Nov 2026
+
+**MIM V5**
+1. Removed the Linked incidents column from Active Incidents and the P1 MTTR (90 days) tile (tile row back to its
+   earlier widths). Drill-downs checked outside edit mode.
+2. Next Release Roadmap: added the six ingestion items (Critical outage record, Critical start time, Critical Impact
+   Mitigated, P1 Duration, PBA field, Managed-P2 incidents).
+3. `email_atos.md`: email to ATOS asking for that data in Elastic.
+
 ## 19 Nov 2026
+
+**MIM V5: fixes asked by the team** (later in the day)
+1. Drill-downs on Active Incidents worked only in edit mode: the table rebuilt the Incident and Affected CI columns in
+   the query; it now uses the original fields. Removed the "Time as P1 / Duration" column. Active now means New, In
+   Progress or On Hold for every priority.
+2. Section 2: CMDB panels in one row (new_row.png); Escalation Channel, Changes and Open Alerts with No Incident in
+   one row. Every drill-down, including APM, checked outside edit mode.
+3. Tiles and banners misaligned after zooming out and back: Vega's canvas kept its zoomed-out size; switched them to
+   SVG.
 
 **MIM: time windows**
 1. Recommended time windows for every MIM panel group from the 90-day resolution figures (A1): keep the dashboard
